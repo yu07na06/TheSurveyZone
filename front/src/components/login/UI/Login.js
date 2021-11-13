@@ -35,6 +35,7 @@ const Login = ({theme, handleSubmit}) => {
                     </Typography>
                         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                             <TextField
+                            type="email"
                             margin="normal"
                             required
                             fullWidth
@@ -48,15 +49,11 @@ const Login = ({theme, handleSubmit}) => {
                             margin="normal"
                             required
                             fullWidth
+                            type='password'
                             name="User_Password"
                             label="비밀번호"
-                            type="User_Password"
                             id="User_Password"
                             autoComplete="off"
-                            />
-                            <FormControlLabel
-                            control={<Checkbox value="remember" color="primary" />}
-                            label="Remember me"
                             />
                             <Button
                             type="submit"
