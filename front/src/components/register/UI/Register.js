@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 
   
   
-  const Register = ({onSubmit, PWNOTMATCH, onChange, phoneNumber,}) => {
+  const Register = ({onSubmit, PWNOTMATCH, onChange, phoneNumber, errorText, }) => {
     const classes = useStyles();
     return (
       <Container component="main" maxWidth="xs">
@@ -152,7 +152,12 @@ const useStyles = makeStyles((theme) => ({
             >
               회원가입
             </Button>
-  
+            {errorText &&
+              <Grid item xs={12}>
+              <Typography variant="h7" style={{color:"#FF5555"}}>{errorText}</Typography>
+              </Grid> 
+              }
+              <br/>
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <Link href="#" variant="body2">
