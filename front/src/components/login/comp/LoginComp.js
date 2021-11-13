@@ -23,10 +23,10 @@ const LoginComp = () => {
 
         // 로그인 요청
         loginAPI({User_Eamil: email, User_Password: password})
-            .then( () => {
+            .then(() => {
                 dispatch(LoginStateAction(true)); // login 상태 유지
                 dispatch(UserEmailAction(email)); // user pk 저장
-                history.push('LoginPage'); // 로그인 화면으로 이동
+                history.push('/'); // 메인 화면으로 이동
             }).catch(()=>{ // DB에 존재하지 않는 데이터로 판정
                 Swal.fire({
                     icon: 'error',
