@@ -10,15 +10,17 @@ const RegisterComp = () => {
     const [User_Password, setUser_Password] = useState();
     const [passWordConfirm, setPassWordConfirm] = useState();
     const [phoneNumber, setPhoneNumber] = useState();
+    const [errorText, setErrorText] = useState();
     const history = useHistory();
 
     const onSubmit = (event) => {
         event.preventDefault();
-        console.log(emailResult.current);
-        console.log(pwResult.current);
-        console.log(phoneResult.current);
-        console.log(checkResult.current);
-        console.log(PWNOTMATCH);
+        console.log("emailResult.current", emailResult.current);
+        console.log("pwResult.current", pwResult.current);
+        console.log("phoneResult.current", phoneResult.current);
+        console.log("checkResult.current", checkResult.current);
+        console.log("PWNOTMATCH", PWNOTMATCH);
+        
         if(pwResult.current&& emailResult.current&&phoneResult.current&&checkResult.current&&PWNOTMATCH){
         const data = new FormData(event.currentTarget);
         const User_Email = data.get('User_Email');
@@ -34,12 +36,14 @@ const RegisterComp = () => {
         .catch(()=>{
             Swal.fire({
                 icon: 'error',
-                title: '회원가입 오류',
-                // text: '백앤드 잘못!'
+                title: 'server error',
+                text: 'error code [500]'
             })
         })
+        setErrorText()
         return console.log("회원가입 성공!");
         }
+        setErrorText("*회원가입 양식에 맞게 작성되지 않았습니다.");
         return console.log("회원가입 실패");;
       };
 
@@ -99,6 +103,7 @@ const RegisterComp = () => {
             PWNOTMATCH={PWNOTMATCH}
             onChange={onChange}
             phoneNumber={phoneNumber}
+            errorText={errorText}
             />   
         </>
     );
