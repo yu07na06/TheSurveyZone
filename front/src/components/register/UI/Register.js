@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -160,7 +160,7 @@ const useStyles = makeStyles((theme) => ({
               <br/>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/LoginPage" variant="body2">
                   이미 계정이 있나요? 로그인 하러가기
                 </Link>
               </Grid>
