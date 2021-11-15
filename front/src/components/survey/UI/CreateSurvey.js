@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import AppBar from '@mui/material/AppBar';
 import Container from '@mui/material/Container';
@@ -15,40 +15,13 @@ import Fab from '@mui/material/Fab';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Switch from '@mui/material/Switch';
+import Box from '@mui/material/Box';
 
-const CreateSurvey = ({theme, onClick, startDate, setStartDate, endDate, setEndDate}) => {
-    const [anchorEl, setAnchorEl] = useState(null);
-    const open = Boolean(anchorEl);
-    const handleClick = (event) => {
-      setAnchorEl(event.currentTarget);
-    };
-    const handleClose = (e) => {
-        switch(e.target.id){
-            case '객관식':
-                break;
-            case '주관식':
-                break;
-            case '선형배율':
-                break;
-            default : break;
-        }
-        console.log(e.target.id);
-        setAnchorEl(null);
-    };
-    const label = { inputProps: { 'aria-label': 'Switch demo' } };
-
-    const [question, setQuestion] = useState([]);
-
-    const generate = (element) => {
-        return question.map((value) =>
-          React.cloneElement(element, {
-            key: value,
-          }),
-        );
-      }
+const CreateSurvey = ({theme, onClick, startDate, setStartDate, endDate, setEndDate, onCheckChange, question, open, anchorEl, handleClick, label, handleClose }) => {
     return (
         <>
             <ThemeProvider theme={theme}>
+                <Box component="form" onSubmit={onClick}>
                 <CssBaseline />
                 <AppBar
                     position="absolute"
@@ -61,14 +34,14 @@ const CreateSurvey = ({theme, onClick, startDate, setStartDate, endDate, setEndD
                 >
                 </AppBar>
                 <Container component="main" maxWidth="md" sx={{ mb: 4 }} >
-                    <Paper elevation={3} sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+                    <Paper elevation={3} sx={{ bgcolor: '#C9CBE0', my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
                     <Typography component="h1" variant="h4" align="center">
                         설문지
                     </Typography>
+                    <Switch id="Sur_Publishs" x={{ left: '85%' }} {...label} color="secondary" onChange={onCheckChange}/> {/*false: 공개, true: (잠금)비공개*/}
                     <br/>
                     <hr />
                     <br/>
-
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                     &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;
                             <DesktopDatePicker
@@ -84,6 +57,7 @@ const CreateSurvey = ({theme, onClick, startDate, setStartDate, endDate, setEndD
                             <DesktopDatePicker
                                 label="마감일"
                                 value={endDate}
+                                sx={{bgcolor: '#FFFFFF'}}
                                 minDate={new Date(startDate)}
                                 onChange={(newValue) => {
                                     setEndDate(newValue);
@@ -95,32 +69,32 @@ const CreateSurvey = ({theme, onClick, startDate, setStartDate, endDate, setEndD
                     <React.Fragment>
                         <Grid item xs={12} my={3}>
                             <TextField
-                            variant="outlined"
-                            required
-                            fullWidth
-                            name="userId"
-                            id="userId"
-                            label="제목"
-                            autoComplete="userId"
+                                variant="outlined"
+                                required
+                                fullWidth
+                                sx={{bgcolor: '#FFFFFF'}}
+                                name="Sur_Title"
+                                id="Sur_Title"
+                                label="제목"
                             />
                         </Grid>
                         <Grid item xs={12} my={3}>
                             <TextField
-                            variant="outlined"
-                            required
-                            fullWidth
-                            name="userId"
-                            id="userId"
-                            label="본문"
-                            autoComplete="userId"
+                                variant="outlined"
+                                required
+                                fullWidth
+                                sx={{bgcolor: '#FFFFFF'}}
+                                name="Sur_Content"
+                                id="Sur_Content"
+                                label="본문"
                             />
                         </Grid>
 
-
                         <br/><br/>
                         {/* <List> */}
-                        {generate(
-                            <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+                        {question.map((value) => value)}
+
+                        <Paper variant="outlined" palette={{ mode: 'dark' }} sx={{ bgcolor: '#FFFFFF', my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
                                 <Grid container spacing={2}>
                                     <br/>
                                     <Button
@@ -130,9 +104,9 @@ const CreateSurvey = ({theme, onClick, startDate, setStartDate, endDate, setEndD
                                         aria-expanded={open ? 'true' : undefined}
                                         onClick={handleClick}
                                     >
-                                        <Fab size="small" color="secondary" aria-label="add">
-                                            <AddIcon />
-                                        </Fab>
+                                    <Fab size="small" color="secondary" aria-label="add">
+                                        <AddIcon />
+                                    </Fab>
                                     </Button>
                                     <Switch sx={{ left: '85%' }} {...label} defaultChecked color="secondary" />
                                     <Menu
@@ -144,65 +118,27 @@ const CreateSurvey = ({theme, onClick, startDate, setStartDate, endDate, setEndD
                                         'aria-labelledby': 'basic-button',
                                         }}
                                     >
-                                        <MenuItem id='객관식' onClick={e => handleClose(e)}>객관식</MenuItem>
-                                        <MenuItem id='주관식' onClick={e => handleClose(e)}>주관식</MenuItem>
-                                        <MenuItem id='선형배율' onClick={e => handleClose(e)}>선형배율</MenuItem>
-                                    </Menu>
-                                    <Grid item xs={12}>
-                                        <TextField
-                                        variant="outlined"
-                                        required
-                                        fullWidth
-                                        name="userId"
-                                        id="userId"
-                                        label="질문"
-                                        autoComplete="userId"
-                                        />
-                                    </Grid>
-                                </Grid>
-                            </Paper>
-                        )}
-                        <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-                                <Grid container spacing={2}>
-                                    <br/>
-                                    <Button
-                                        id="basic-button"
-                                        aria-controls="basic-menu"
-                                        aria-haspopup="true"
-                                        aria-expanded={open ? 'true' : undefined}
-                                        onClick={handleClick}
-                                    >
-                                        <Fab size="small" color="secondary" aria-label="add">
-                                            <AddIcon />
-                                        </Fab>
-                                    </Button>
-                                    <Switch sx={{ left: '85%' }} {...label} defaultChecked color="secondary" />
-                                    <Menu
-                                        id="basic-menu"
-                                        anchorEl={anchorEl}
-                                        open={open}
-                                        onClose={handleClose}
-                                        MenuListProps={{
-                                        'aria-labelledby': 'basic-button',
-                                        }}
-                                    >
-                                        <MenuItem id='객관식' onClick={e => handleClose(e)}>객관식</MenuItem>
-                                        <MenuItem id='주관식' onClick={e => handleClose(e)}>주관식</MenuItem>
-                                        <MenuItem id='선형배율' onClick={e => handleClose(e)}>선형배율</MenuItem>
-                                    </Menu>
-                                </Grid>
-                            </Paper>
+                                    <MenuItem id='객관식' onClick={e => handleClose(e)}>객관식</MenuItem>
+                                    <MenuItem id='주관식' onClick={e => handleClose(e)}>주관식</MenuItem>
+                                    <MenuItem id='선형배율' onClick={e => handleClose(e)}>선형배율</MenuItem>
+                                </Menu>
+                            </Grid>
+                        </Paper>
                         {/* </List> */}
+                        
                     </React.Fragment>
                 
-                    <Button
-                        variant="contained"
-                        onClick={onClick}
-                        sx={{ mt: 3, ml: 1 ,left: '90%'}}
-                    >완료</Button>
+                        <Button
+                            variant="contained"
+                            type="submit"
+                            sx={{ mt: 3, ml: 1 ,left: '90%'}}
+                            >
+                            완료
+                        </Button>
                     </Paper>
                 </Container>
-            </ThemeProvider>
+            </Box>
+        </ThemeProvider>
         </>
     );
 };

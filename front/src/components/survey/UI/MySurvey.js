@@ -11,14 +11,25 @@ import Container from '@mui/material/Container';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import InsertChartIcon from '@mui/icons-material/InsertChart';
 import CreateIcon from '@mui/icons-material/Create';
+// import { styled } from 'style'
 
 function generate(element) {
-    return [0, 1, 2, 3,4, 5].map((value) =>
+    return [0, 1, 2, 3, 4, 5].map((value) =>
       React.cloneElement(element, {
         key: value,
       }),
     );
-  }
+}
+
+const handleCopyClipBoard = async (text) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      
+      alert('복사 성공!');
+    } catch (error) {
+      alert('복사 실패!');
+    }
+  };
 
 const MySurvey = () => {
     return (
@@ -36,11 +47,12 @@ const MySurvey = () => {
                             <ListItemText
                                 primary="Single-line item"
                             />
+                            <input id='myInput' value='야호' type='hidden'/>
                             <CreateIcon color="action" />
                             <InsertChartIcon color="action"/>
                             <DeleteIcon color="action" />
-                            <ContentCopyIcon color="action"/>
-                        </ListItem>,
+                            <ContentCopyIcon color="action" onClick={()=>handleCopyClipBoard('고마워')}/>
+                        </ListItem>
                     )}
                     </List>
                 </Paper>
