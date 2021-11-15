@@ -11,7 +11,6 @@ import Container from '@mui/material/Container';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import InsertChartIcon from '@mui/icons-material/InsertChart';
 import CreateIcon from '@mui/icons-material/Create';
-// import { styled } from 'style'
 
 function generate(element) {
     return [0, 1, 2, 3, 4, 5].map((value) =>
