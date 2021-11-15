@@ -8,8 +8,8 @@ const LinearMagnification = ({number}) => {
         <>
             <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
                 <Grid container spacing={2}>
+                <Switch id={`SurQue_Essential${number}`} name={`SurQue_Essential${number}`} sx={{ left: '92%' }} defaultChecked color="secondary" />
                     <br/>
-                    선형배율 틀입니다 {number}
                     <Grid item xs={12}>
                         <TextField
                         variant="outlined"
@@ -17,7 +17,7 @@ const LinearMagnification = ({number}) => {
                         fullWidth
                         name={`SurQue_Content${number}`}
                         id={`SurQue_Content${number}`}
-                        label={`질문${number}`}
+                        label={`선형배율${number}`}
                         />
                     </Grid>
                         <Button
