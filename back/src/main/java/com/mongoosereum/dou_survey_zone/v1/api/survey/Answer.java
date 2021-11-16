@@ -15,12 +15,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 public class Answer {
     @Id
-    private String SurQue_ID;
+    private String SurAns_ID;
     private String SurAns_Content;
+    //private String User_Email;
 
     @Builder
     public Answer(String SurAns_Content) {
-        this.SurQue_ID = new ObjectId().toString();
         this.SurAns_Content = SurAns_Content;
     }
 }
