@@ -10,7 +10,8 @@ const CreateSurveyComp = () => {
   const [Sur_Publish, setSur_Publish] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [question, setQuestion] = useState([]); // 질문 덩어리(객관식, 주관식, 선형배율)
-  const [question_ans, setQuestion_Ans] = useState([]); // 질문에 대한 보기 이름에 대한 배열을 보내기 위해
+  const [question_ans, setQuestion_Ans] = useState({}); // 질문에 대한 보기 이름에 대한 배열을 보내기 위해
+  const [check, setCheck] = useState({});
   const theme = createTheme();
   const todayDate = new Date();
   const open = Boolean(anchorEl);
@@ -28,7 +29,7 @@ const CreateSurveyComp = () => {
     setAnchorEl(null); // 메뉴 닫기
     switch(e.target.id){
       case '객관식':
-        setQuestion([...question, <MultipleChoiceComp number={count.current} setQuestion_Ans={setQuestion_Ans}/>]);
+        setQuestion([...question, <MultipleChoiceComp number={count.current} setCheck={setCheck} />]);
         break;
       case '주관식':
         setQuestion([...question, <SubjectiveComp number={count.current}/>]);
@@ -42,8 +43,16 @@ const CreateSurveyComp = () => {
   };
 
   useEffect(()=>{
+    setQuestion_Ans({...question_ans, ...check});
+  },[check]);
+
+  useEffect(()=>{
     console.log("부모는 이거 삭제된 것까지 알까?", question_ans);
-  },[question_ans])
+  },[question_ans]);
+
+  useEffect(()=>{
+    console.log(question);
+  },[question])
   
   const onClick = (e) => { // node에게 보냄
     e.preventDefault(); // 화면 유지
@@ -53,14 +62,35 @@ const CreateSurveyComp = () => {
     const Sur_Content = data.get('Sur_Content'); // 설문 본문
 
     let Question = question.map((value, index)=>{
+      let SurType = null;
+      switch(value.type.name){
+        case 'SubjectiveComp':
+          SurType=0; // 주관식
+          break;
+        case 'MultipleChoiceComp':
+          SurType=1; // 객관식
+          break;
+        case 'LinearMagnificationComp': 
+          SurType=2; // 선형배율
+          break;
+        default: break;
+      }
       return [{
         SurQue_Content: data.get(`SurQue_Content${index}`),
-        SurQue_QType: question[index].key,
+        SurQue_QType: SurType,
         SurQue_Essential: data.get(`SurQue_Essential${index}`)==='on'?true:false,
 
         SurQue_Order: index,
+        Select: question_ans[index].map((v, idx)=>{ // 객관식만 처리한 상태이므로, 주관식과 선형배율 error(수정 부탁)
+          return {
+            SurSel_Content: data.get(v),
+            SurSel_Order: idx
+          };
+        })
       }];
     });
+
+    console.log(Question);
 
     let obj = {
       Form: {
