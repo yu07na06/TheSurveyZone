@@ -4,6 +4,7 @@ import { createTheme } from '@mui/material/styles';
 import MultipleChoiceComp from '../comp/MultipleChoiceComp';
 import SubjectiveComp from './SubjectiveComp';
 import LinearMagnificationComp from './LinearMagnificationComp';
+import { createsurvey as createsurveyAPI } from '../../../lib/api/survey';
 
 const CreateSurveyComp = () => {
   const [day, setDay] = useState([new Date(), new Date()]);
@@ -61,7 +62,7 @@ const CreateSurveyComp = () => {
     const Sur_Title = data.get('Sur_Title'); // 설문 제목
     const Sur_Content = data.get('Sur_Content'); // 설문 본문
 
-    let Question = question.map((value, index)=>{
+    let questionList = question.map((value, index)=>{
       let SurType = null;
       switch(value.type.name){
         case 'SubjectiveComp':
@@ -75,22 +76,21 @@ const CreateSurveyComp = () => {
           break;
         default: break;
       }
-      return [{
-        SurQue_Content: data.get(`SurQue_Content${index}`),
-        SurQue_QType: SurType,
-        SurQue_Essential: data.get(`SurQue_Essential${index}`)==='on'?true:false,
-
-        SurQue_Order: index,
-        Select: question_ans[index].map((v, idx)=>{ // 객관식만 처리한 상태이므로, 주관식과 선형배율 error(수정 부탁)
+      return {
+        surQue_Content: data.get(`SurQue_Content${index}`),
+        surQue_QType: SurType,
+        surQue_Essential: data.get(`SurQue_Essential${index}`)==='on'?true:false,
+        surQue_MaxAns: 3,
+        surQue_Order: index,
+        answerList : [],
+        selectList: question_ans[index].map((v, idx)=>{ // 객관식만 처리한 상태이므로, 주관식과 선형배율 error(수정 부탁)
           return {
-            SurSel_Content: data.get(v),
-            SurSel_Order: idx
+            surSel_Content: data.get(v),
+            surSel_Order: idx
           };
         })
-      }];
+      };
     });
-
-    console.log(Question);
 
     let obj = {
       Form: {
@@ -102,8 +102,8 @@ const CreateSurveyComp = () => {
           Sur_Publish: !Sur_Publish, // 공개 여부                ---> comp에서 state로 관리중 [ !false: 공개, !true: (잠금)비공개 ]
           Sur_Img: "image", // 이미지 추후에 현재는 제외
           User_ID:"woong"  // 작성자 ID
-      },
-      Question,
+      }, 
+      questionList,
       // Question: [ // 질문들어가는 배열인데
       //   {
       //     SurQue_Content: "", // 질문 내용
@@ -124,6 +124,10 @@ const CreateSurveyComp = () => {
       //   },
       
     }
+    console.log(questionList);
+    createsurveyAPI({questionList})
+      .then((res)=>console.log(res))
+      .catch((err)=>console.log(err));
   };
 
   return (
