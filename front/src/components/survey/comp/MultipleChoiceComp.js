@@ -3,7 +3,7 @@ import React, { useRef, useState } from 'react';
 import MultipleChoice from '../UI/MultipleChoice';
 import {useEffect} from 'react';
 
-const MultipleChoiceComp = ({number, setQuestion_Ans }) => {
+const MultipleChoiceComp = ({number, setCheck }) => {
     const [select, setSelect] = useState([]); // 보기 덩어리가 들어가있음
     const [deleteIndex, setDeleteIndex] = useState(null);
     const [temp, setTemp] = useState([]);
@@ -15,7 +15,6 @@ const MultipleChoiceComp = ({number, setQuestion_Ans }) => {
 
     const addText = (number) => {
         count.current+=1;
-        
         setTemp([...temp, `SurQue_Ans${number}_${count.current}`]) // 질문에 대한 보기 이름 덩어리 합치는 중
         return(
             <div key={`SurQue_Ans${number}_${count.current}`}>
@@ -36,7 +35,7 @@ const MultipleChoiceComp = ({number, setQuestion_Ans }) => {
     }
 
     useEffect(()=>{
-        setQuestion_Ans([...temp]); // 부모에게 보기 name을 보내기 위해
+        setCheck({[number]:temp});
     },[temp]);
 
     useEffect(()=>{
