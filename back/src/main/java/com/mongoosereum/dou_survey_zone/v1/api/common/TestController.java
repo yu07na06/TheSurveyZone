@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(path = "/api/v1", produces = MediaType.APPLICATION_JSON_VALUE)
 public class TestController{
-    @GetMapping(path="/")
+    @GetMapping(path="/ddd")
     public String test1(){
         return "success";
     }

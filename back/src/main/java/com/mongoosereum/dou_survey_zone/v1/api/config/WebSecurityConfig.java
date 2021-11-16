@@ -1,4 +1,4 @@
-package com.mongoosereum.dou_survey_zone;
+package com.mongoosereum.dou_survey_zone.v1.api.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
