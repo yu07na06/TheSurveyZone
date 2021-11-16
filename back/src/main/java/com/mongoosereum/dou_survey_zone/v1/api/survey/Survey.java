@@ -17,11 +17,9 @@ public class Survey {
     @Id
     private String Sur_ID;
     private List<Question> questionList;
-    private List<Answer> answerList;
 
     @Builder
-    public Survey(List<Question> questionList, List<Answer>answerList){
+    public Survey(List<Question> questionList){
         this.questionList= questionList;
-        this.answerList = answerList;
     }
 }
