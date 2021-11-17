@@ -12,14 +12,14 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Setter
 @Document(collection="select")
 public class Select {
-    @Id
-    private String SurSel_ID;
+//    @Id
+//    private String SurSel_ID;
     private String SurSel_Content;
     private Long SurSel_Order;
 
     @Builder
     public Select(String SurSel_Content, Long SurSel_Order) {
-        this.SurSel_ID = new ObjectId().toString();
+//        this.SurSel_ID = new ObjectId().toString();
         this.SurSel_Content = SurSel_Content;
         this.SurSel_Order = SurSel_Order;
     }

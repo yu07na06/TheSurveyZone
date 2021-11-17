@@ -16,21 +16,22 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class Question {
-    @Id
-    private String SurQue_ID;
+//    @Id
+//    private String SurQue_ID;
     private String SurQue_Content;
     private QType SurQue_QType;
     private Long SurQue_MaxAns;
     private Long SurQue_Order;
     private List<Select> selectList;
+    private List<Answer> answerList;
 
     @Builder
-    public Question(String SurQue_Content, QType SurQue_QType, Long SurQue_MaxAns, Long SurQue_Order,List<Select>selectList) {
-        this.SurQue_ID = new ObjectId().toString();
+    public Question(String SurQue_Content, QType SurQue_QType, Long SurQue_MaxAns, Long SurQue_Order,List<Select>selectList, List<Answer>answerList) {
         this.SurQue_Content = SurQue_Content;
         this.SurQue_QType = SurQue_QType;
         this.SurQue_MaxAns = SurQue_MaxAns;
         this.SurQue_Order = SurQue_Order;
         this.selectList = selectList;
+        this.answerList = answerList;
     }
 }

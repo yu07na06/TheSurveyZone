@@ -22,7 +22,6 @@ public class DouSurveyZoneApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(DouSurveyZoneApplication.class, args);
 	}
-
 //	@Bean
 //	CommandLineRunner runner(SurveyRepository surveyRepository, MongoTemplate mongoTemplate) {
 //		return args -> {
