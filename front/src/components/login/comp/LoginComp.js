@@ -22,8 +22,9 @@ const LoginComp = () => {
         const password = data.get('User_Password');
 
         // 로그인 요청
-        loginAPI({User_Eamil: email, User_Password: password})
-            .then(() => {
+        loginAPI({"user_Email": email, "user_Password": password})
+            .then((res) => {
+                console.log(res);                
                 dispatch(LoginStateAction(true)); // login 상태 유지
                 dispatch(UserEmailAction(email)); // user pk 저장
                 history.push('/'); // 메인 화면으로 이동

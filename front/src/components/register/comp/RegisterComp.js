@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Register from '../UI/Register';
-import { register as registerAPI } from '../../../lib/api/auth'; 
+import { email as emailAPI, register as registerAPI } from '../../../lib/api/auth'; 
 import { useHistory } from 'react-router';
 import Swal from 'sweetalert2';
 
@@ -15,11 +15,11 @@ const RegisterComp = () => {
 
     const onSubmit = (event) => {
         event.preventDefault();
-        console.log("emailResult.current", emailResult.current);
-        console.log("pwResult.current", pwResult.current);
-        console.log("phoneResult.current", phoneResult.current);
-        console.log("checkResult.current", checkResult.current);
-        console.log("PWNOTMATCH", PWNOTMATCH);
+        console.log("이미 존재하는 이메일 인지의 여부 : ", emailResult.current);
+        console.log("비밀번호 유효성을 만족하는지의 여부 : ", pwResult.current);
+        console.log("전화번호 유효성을 만족하는지의 여부 : ", phoneResult.current);
+        console.log("체크박스에 체크를 했는지의 여부 : ", checkResult.current);
+        console.log("비밀번호가 서로 일치하는지의 여부 : ", PWNOTMATCH);
         
         if(pwResult.current&& emailResult.current&&phoneResult.current&&checkResult.current&&PWNOTMATCH){
         const data = new FormData(event.currentTarget);
@@ -65,13 +65,16 @@ const RegisterComp = () => {
     const pwResult = useRef(null);
     const emailResult = useRef(null);
     const phoneResult = useRef(null);
-    const checkResult = useRef(null)
+    const checkResult = useRef(null);
+
     const onChange = (e) => {
         switch(e.target.name){
             case 'User_Email' : 
                 emailResult.current = regexEmail.test(e.target.value)
                 // 서버에 아이디 보내고 있는지 없는지 값 받아와서 처리할 예정
-                // axios.get(e.target.value)
+                emailAPI({"user_Eamil": e.target.value})
+                    .then(res=>console.log(res))
+                    .catch(err=>console.log(err));
                 break;
             case 'User_Password' : 
                 setUser_Password(e.target.value)
