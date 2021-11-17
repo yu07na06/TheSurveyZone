@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // email 중복 확인
-export const email = ({user_Email}) =>
+export const email = ({user_Email}) => 
     axios.get('/api/vi/usr/checkEmail', {user_Email});
 
 // 회원가입

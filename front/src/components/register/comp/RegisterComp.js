@@ -67,7 +67,7 @@ const RegisterComp = () => {
     const phoneResult = useRef(null);
     const checkResult = useRef(null);
 
-    const onChange = (e) => {
+    const onChange = (e) => { 
         switch(e.target.name){
             case 'User_Email' : 
                 emailResult.current = regexEmail.test(e.target.value)

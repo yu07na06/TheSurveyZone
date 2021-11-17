@@ -19,7 +19,7 @@ const LoginComp = () => {
         // 기입한 이메일, 비밀번호 가져오기
         const data = new FormData(e.currentTarget);
         const email = data.get('User_Email');
-        const password = data.get('User_Password');
+        const password = data.get('User_Password'); 
 
         // 로그인 요청
         loginAPI({"user_Email": email, "user_Password": password})
