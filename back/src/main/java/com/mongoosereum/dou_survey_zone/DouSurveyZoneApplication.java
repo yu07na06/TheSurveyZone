@@ -1,6 +1,7 @@
 package com.mongoosereum.dou_survey_zone;
 
-import com.mongodb.MongoCredential;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.QType;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.Question;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.Select;
@@ -8,19 +9,14 @@ import com.mongoosereum.dou_survey_zone.v1.api.survey.Survey;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.repository.SurveyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @SpringBootApplication
-@EnableMongoRepositories
+//@EnableMongoRepositories
 public class DouSurveyZoneApplication {
 
 	public static void main(String[] args) {
