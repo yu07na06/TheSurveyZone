@@ -37,10 +37,11 @@ const useStyles = makeStyles((theme) => ({
       },
     },
   }));
-  
-const Register = ({onSubmit, NOTMATCH, onChange, inputText, }) => {
-    const classes = useStyles();
 
+  
+  
+  const Register = ({onSubmit, PWNOTMATCH, onChange, phoneNumber, errorText, }) => {
+    const classes = useStyles();
     return (
       <Container component="main" maxWidth="xs">
         <CssBaseline />
@@ -51,11 +52,12 @@ const Register = ({onSubmit, NOTMATCH, onChange, inputText, }) => {
           <Typography component="h1" variant="h5">
             회원가입
           </Typography>
-          <form className={classes.form} noValidate onSubmit={onSubmit}>
+          <form className={classes.form} noValidate onSubmit={(e)=>onSubmit(e)}>
             <Grid container spacing={2}>
   
               <Grid item xs={12}>
                 <TextField
+                  onChange ={onChange}
                   variant="outlined"
                   required
                   fullWidth
@@ -77,6 +79,7 @@ const Register = ({onSubmit, NOTMATCH, onChange, inputText, }) => {
                   id="User_Password"
                   autocomplete="new-password"
                   onChange={onChange}   // onChange를 통해서 비밀번호 2개를 일치하게 작성했는지 검사한다
+                  inputProps={{maxLength: 15}}  // 최대 15자 까지 입력가능
                 />
               </Grid>
   
@@ -91,11 +94,12 @@ const Register = ({onSubmit, NOTMATCH, onChange, inputText, }) => {
                   id="passWordConfirm"
                   autoComplete="off"
                   onChange={onChange}   //onChange를 통해서 비밀번호 2개를 일치하게 작성했는지 검사한다
+                  inputProps={{maxLength: 15}}  // 최대 15자 까지 입력가능
                 />
               </Grid>
   
-              {/* NOTMATCH 값에 따라 비밀번호 일치 불일치 표시 보여줄거에요! */}
-              {NOTMATCH &&
+              {/* PWNOTMATCH 값에 따라 비밀번호 일치 불일치 표시 보여줄거에요! */}
+              {!PWNOTMATCH &&
               <Grid item xs={12}>
               <Typography variant="h7" style={{color:"#FF5555"}}>* 비밀번호가 일치하지 않습니다.</Typography>
               </Grid> 
@@ -103,6 +107,8 @@ const Register = ({onSubmit, NOTMATCH, onChange, inputText, }) => {
   
               <Grid item xs={12} sm={4}>
                   <TextField
+                      type="text"
+                      maxRows='5'
                       variant="outlined"
                       required
                       fullWidth
@@ -110,6 +116,7 @@ const Register = ({onSubmit, NOTMATCH, onChange, inputText, }) => {
                       label="성함"
                       name="User_Name"
                       autocomplete="false"
+                      inputProps={{maxLength: 15}}
                     />
               </Grid>
   
@@ -122,13 +129,15 @@ const Register = ({onSubmit, NOTMATCH, onChange, inputText, }) => {
                   id="User_Tel"
                   label="전화번호"
                   name="User_Tel"
-                  value={inputText}     // 유효성 검사를 거친 값을 보여주기 위함
+                  onChange={onChange}
+                  value={phoneNumber} 
+                  inputProps={{maxLength: 13}}
                 />
               </Grid>
   
               <Grid item xs={12}>
                 <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
+                  control={<Checkbox  name="checkbox" value="allowExtraEmails" color="primary"  onChange={onChange}/>}
                   label="목숨을 우리에게 주는것을 동의합니까?"
                 />
               </Grid>
@@ -139,13 +148,19 @@ const Register = ({onSubmit, NOTMATCH, onChange, inputText, }) => {
               variant="contained"
               color="primary"
               className={classes.submit}
+              // onSubmit={onSubmit}
             >
               회원가입
             </Button>
-  
+            {errorText &&
+              <Grid item xs={12}>
+              <Typography variant="h7" style={{color:"#FF5555"}}>{errorText}</Typography>
+              </Grid> 
+              }
+              <br/>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/LoginPage" variant="body2">
                   이미 계정이 있나요? 로그인 하러가기
                 </Link>
               </Grid>
