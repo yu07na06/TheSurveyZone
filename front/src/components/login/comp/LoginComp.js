@@ -19,11 +19,12 @@ const LoginComp = () => {
         // 기입한 이메일, 비밀번호 가져오기
         const data = new FormData(e.currentTarget);
         const email = data.get('User_Email');
-        const password = data.get('User_Password');
+        const password = data.get('User_Password'); 
 
         // 로그인 요청
-        loginAPI({User_Eamil: email, User_Password: password})
-            .then(() => {
+        loginAPI({"user_Email": email, "user_Password": password})
+            .then((res) => {
+                console.log(res);                
                 dispatch(LoginStateAction(true)); // login 상태 유지
                 dispatch(UserEmailAction(email)); // user pk 저장
                 history.push('/'); // 메인 화면으로 이동
