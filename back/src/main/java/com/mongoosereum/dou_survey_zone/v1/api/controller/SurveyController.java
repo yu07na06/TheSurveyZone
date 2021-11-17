@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.Survey;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.dao.SurveyDAO;
+import com.mongoosereum.dou_survey_zone.v1.api.survey.dto.AnswerInsertDTO;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.dto.SurveyInsertDTO;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.repository.SurveyRepository;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.service.SurveyService;
@@ -25,12 +26,18 @@ public class SurveyController{
 
     @GetMapping(path="/")
     public List<Survey> getSurvey(){
-        return surveyDAO.findAll();
+        return surveyService.findAll();
     }
 
     @PostMapping(path="/")
     public String insertSurvey(@RequestBody SurveyInsertDTO surveyInsertDTO){
         System.out.println(surveyInsertDTO.toString());
         return surveyService.save(surveyInsertDTO);
+    }
+
+    @PostMapping("/submit")
+    public String insertSurveyAnswer(@RequestBody AnswerInsertDTO answerInsertDTO){
+        System.out.println(answerInsertDTO.get_id());
+        return surveyService.insertAnswer(answerInsertDTO);
     }
 }

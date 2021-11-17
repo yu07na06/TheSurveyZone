@@ -15,7 +15,7 @@ import java.util.List;
 @Setter
 public class Survey {
     @Id
-    private String Sur_ID;
+    private String _id;
     private List<Question> questionList;
 
     @Builder

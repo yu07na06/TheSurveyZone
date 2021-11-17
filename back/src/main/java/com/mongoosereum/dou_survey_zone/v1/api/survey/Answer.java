@@ -14,8 +14,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Setter
 @NoArgsConstructor
 public class Answer {
-    @Id
-    private String SurAns_ID;
+//    @Id
+//    private String SurAns_ID;
     private String SurAns_Content;
     //private String User_Email;
 
