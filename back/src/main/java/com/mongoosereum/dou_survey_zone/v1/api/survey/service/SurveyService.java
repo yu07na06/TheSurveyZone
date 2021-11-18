@@ -1,5 +1,6 @@
 package com.mongoosereum.dou_survey_zone.v1.api.survey.service;
 
+import com.mongoosereum.dou_survey_zone.v1.api.survey.dto.SurveySelectDTO;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mongo.Survey_Mongo;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.dao.SurveyDAO;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.dto.AnswerInsertDTO;
@@ -24,7 +25,14 @@ public class SurveyService {
     public List<Survey_Mongo> findAll(){
         return surveyDAO.findAll();
     }
-    public Integer surveyInsert(SurveyInsertDTO surveyInsertDTO){
+
+    public SurveySelectDTO findById(String sur_ID){
+        return surveyDAO.findById(sur_ID);
+    }
+    public List<Survey_MySQL> selectSurveyList() {
+        return surveyDAO.selectSurveyList();
+    }
+    public String insertSurvey(SurveyInsertDTO surveyInsertDTO){
         System.out.println(surveyInsertDTO.toString());
         // MongoDB insert
         Survey_Mongo survey_Mongo = Survey_Mongo.builder()
@@ -45,7 +53,8 @@ public class SurveyService {
                         .user_Email(surveyInsertDTO.getUser_Email())
                         .surveyType(surveyInsertDTO.getSur_Type())
                         .build();
-        return surveyDAO.surveyInsert_MySQL(survey_MySQL);
+        Integer result = surveyDAO.surveyInsert_MySQL(survey_MySQL);
+        return ( (result==1) ? surveyID: "Insert Fail");
     }
 
     public String insertAnswer(AnswerInsertDTO answerInsertDTO){

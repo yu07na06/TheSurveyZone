@@ -4,10 +4,12 @@ import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.SurveyProgressType;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.SurveyType;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
+@Getter
 @NoArgsConstructor
 public class Survey_MySQL {
     private String _id;
