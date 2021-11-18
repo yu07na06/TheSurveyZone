@@ -3,12 +3,18 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="survey">
-    <select id="findsurveyAll" resultType="UserDTO">
-        select
-        *
-        from
-        user
+    <select id="findById" parameterType="String" resultType="Survey_MySQL">
+        select *
+        from survey
+        where Sur_ID = #{sur_ID};
     </select>
-
-
+    <select id="selectSurveyList" resultType="Survey_MySQL">
+        select *
+        from survey
+        where Sur_Publish = true
+        order by Sur_State;
+    </select>
+    <insert id="insertSurvey" parameterType="Survey_MySQL">
+        insert into survey values (#{_id},#{sur_Title},#{sur_Content},#{sur_State},#{sur_StartDate},#{sur_EndDate},#{sur_Publish},#{sur_Image},#{user_Email},#{sur_Type} );
+    </insert>
 </mapper>

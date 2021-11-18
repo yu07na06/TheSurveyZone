@@ -1,13 +1,12 @@
 package com.mongoosereum.dou_survey_zone.v1.api.controller;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.mongoosereum.dou_survey_zone.v1.api.survey.Survey;
+import com.mongoosereum.dou_survey_zone.v1.api.survey.dto.SurveySelectDTO;
+import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mongo.Survey_Mongo;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.dao.SurveyDAO;
+import com.mongoosereum.dou_survey_zone.v1.api.survey.dto.AnswerInsertDTO;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.dto.SurveyInsertDTO;
-import com.mongoosereum.dou_survey_zone.v1.api.survey.repository.SurveyRepository;
+import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mysql.Survey_MySQL;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.service.SurveyService;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -20,17 +19,34 @@ public class SurveyController{
     @Autowired
     private SurveyService surveyService;
 
-    @Autowired
-    private SurveyDAO surveyDAO;
-
-    @GetMapping(path="/")
-    public List<Survey> getSurvey(){
-        return surveyDAO.findAll();
+    @GetMapping(path="/ddd")
+    public List<Survey_Mongo> getSurvey(){
+        return surveyService.findAll();
     }
 
+    // selectSurveyList 설문지 리스트 출력
+    @GetMapping(path="/")
+    public List<Survey_MySQL> selectSurveyList(){
+        return surveyService.selectSurveyList();
+    }
+    // FindById 설문 참여할 때 설문 출력
+    @GetMapping(path="/{sur_ID}")
+    public SurveySelectDTO findById(@PathVariable("sur_ID") String sur_ID){
+        return surveyService.findById(sur_ID);
+    }
+
+    // 설문지 생성
     @PostMapping(path="/")
-    public String insertSurvey(@RequestBody SurveyInsertDTO surveyInsertDTO){
+    public String surveyInsert(@RequestBody SurveyInsertDTO surveyInsertDTO){
+        System.out.println("surveyInsert 실행!");
         System.out.println(surveyInsertDTO.toString());
-        return surveyService.save(surveyInsertDTO);
+        // 성공시 1 return
+        return surveyService.insertSurvey(surveyInsertDTO);
+    }
+
+    @PostMapping("/submit")
+    public String insertSurveyAnswer(@RequestBody AnswerInsertDTO answerInsertDTO){
+        System.out.println(answerInsertDTO.get_id());
+        return surveyService.insertAnswer(answerInsertDTO);
     }
 }
