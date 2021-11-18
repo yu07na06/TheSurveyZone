@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 public class Survey_Mongo {
     @Id
-    private String _id;
+    private String sur_ID;
     private List<Question> questionList;
 
     @Builder

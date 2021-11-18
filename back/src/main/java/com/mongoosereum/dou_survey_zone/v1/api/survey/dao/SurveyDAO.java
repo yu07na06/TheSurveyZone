@@ -1,6 +1,7 @@
 package com.mongoosereum.dou_survey_zone.v1.api.survey.dao;
 
 import com.mongodb.client.result.UpdateResult;
+import com.mongoosereum.dou_survey_zone.v1.api.survey.dto.SurveySelectDTO;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mongo.Answer;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mongo.Survey_Mongo;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.dto.AnswerInsertDTO;
@@ -28,17 +29,31 @@ public class SurveyDAO {
     public List<Survey_Mongo> findAll(){
         return mongoTemplate.findAll(Survey_Mongo.class);
     }
-    public List<Survey_MySQL> surveyList(){
+
+    public SurveySelectDTO findById(String sur_ID){
+        // findById MySQL
+        Survey_MySQL resultSQL = sqlSession.selectOne("findById",sur_ID);
+        System.out.println(resultSQL);
+
+        // findById Mongo
+        Survey_Mongo resultMongo = mongoTemplate.findOne(new Query(Criteria.where("_id").is(sur_ID)),Survey_Mongo.class);
+        System.out.println(resultMongo);
+
+        SurveySelectDTO surveySelectDTO = new SurveySelectDTO();
+        surveySelectDTO.setter(resultMongo,resultSQL);
+        System.out.println(surveySelectDTO.toString());
+        return surveySelectDTO;
+    }
+    public List<Survey_MySQL> selectSurveyList(){
         return sqlSession.selectList("selectSurveyList");
     }
 
     public String surveyInsert_Mongo(final Survey_Mongo survey){
-        return mongoTemplate.save(survey,"survey").get_id();
+        return mongoTemplate.save(survey,"survey").getSur_ID();
     }
 
     public Integer surveyInsert_MySQL(final Survey_MySQL survey){
         return sqlSession.insert("insertSurvey",survey);
-        // 6196028862a1013a6187f586
     }
 
     public String insertAnswer(final AnswerInsertDTO answerInsertDTO) {
