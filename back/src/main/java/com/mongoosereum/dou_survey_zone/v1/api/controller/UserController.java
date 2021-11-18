@@ -88,10 +88,8 @@ public class UserController{
     /* 테스트용 */
     @PostMapping(path="/test")
     public String greeting(@RequestBody UserDTO userDTO) {
-
         System.out.println(userDTO.getUser_Email());
         System.out.println(userDTO.getUser_Password());
-
         return "success";
     }
 

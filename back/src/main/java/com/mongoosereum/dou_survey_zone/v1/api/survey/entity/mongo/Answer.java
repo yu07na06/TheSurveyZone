@@ -1,4 +1,4 @@
-package com.mongoosereum.dou_survey_zone.v1.api.survey;
+package com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mongo;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;

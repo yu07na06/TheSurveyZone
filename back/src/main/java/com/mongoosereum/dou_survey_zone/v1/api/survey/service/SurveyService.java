@@ -1,25 +1,16 @@
 package com.mongoosereum.dou_survey_zone.v1.api.survey.service;
 
-import com.mongoosereum.dou_survey_zone.v1.api.survey.Answer;
-import com.mongoosereum.dou_survey_zone.v1.api.survey.Question;
-import com.mongoosereum.dou_survey_zone.v1.api.survey.Survey;
+import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mongo.Survey_Mongo;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.dao.SurveyDAO;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.dto.AnswerInsertDTO;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.dto.SurveyInsertDTO;
+import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mysql.Survey_MySQL;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.repository.SurveyRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
-import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 @AllArgsConstructor
 @Service
@@ -30,20 +21,31 @@ public class SurveyService {
     @Autowired
     private final SurveyDAO surveyDAO;
 
-//    @Autowired
-//    private final SurveyMySqlDAO surveyMySqlDAO;
-
-    public List<Survey> findAll(){
+    public List<Survey_Mongo> findAll(){
         return surveyDAO.findAll();
     }
-    public String save(SurveyInsertDTO surveyInsertDTO){
-        Survey survey = Survey.builder()
+    public Integer surveyInsert(SurveyInsertDTO surveyInsertDTO){
+        System.out.println(surveyInsertDTO.toString());
+        // MongoDB insert
+        Survey_Mongo survey_Mongo = Survey_Mongo.builder()
                 .questionList(surveyInsertDTO.getQuestionList())
                 .build();
-        return surveyDAO.save(survey);
-        // String surveyID = surveyDAO.save(survey);
-        // TODO surveyID 이용해서 mySQL에 데이터 삽입
-        // surveyMySqlDAO.insertSurvey();
+        String surveyID = surveyDAO.surveyInsert_Mongo(survey_Mongo);
+
+        // MySQL insert by MongoDB.id
+        Survey_MySQL survey_MySQL = Survey_MySQL.builder()
+                        ._id(surveyID)
+                        .sur_Title(surveyInsertDTO.getSur_Title())
+                        .sur_Content(surveyInsertDTO.getSur_Content())
+                        .sur_State(surveyInsertDTO.getSur_State())
+                        .sur_StartDate(surveyInsertDTO.getSur_StartDate())
+                        .sur_EndDate(surveyInsertDTO.getSur_EndDate())
+                        .sur_Publish(surveyInsertDTO.getSur_Publish())
+                        .sur_Image(surveyInsertDTO.getSur_Image())
+                        .user_Email(surveyInsertDTO.getUser_Email())
+                        .surveyType(surveyInsertDTO.getSur_Type())
+                        .build();
+        return surveyDAO.surveyInsert_MySQL(survey_MySQL);
     }
 
     public String insertAnswer(AnswerInsertDTO answerInsertDTO){
