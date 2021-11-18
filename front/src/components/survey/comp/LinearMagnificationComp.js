@@ -4,7 +4,7 @@ import LinearMagnification from '../UI/LinearMagnification';
 
 const LinearMagnificationComp = ({number, setCheck}) => {
     const [minValue, setMinValue] = useState(0);
-    const [maxValue, setMaxValue] = useState(minValue+1);
+    const [maxValue, setMaxValue] = useState(1);
     const [temp, setTemp] = useState('');
     let value = [1,2,3,4,5,6,7,8,9];
     const valuetext = (value) => {
