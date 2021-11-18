@@ -5,6 +5,8 @@ import MultipleChoiceComp from '../comp/MultipleChoiceComp';
 import SubjectiveComp from './SubjectiveComp';
 import LinearMagnificationComp from './LinearMagnificationComp';
 import { createsurvey as createsurveyAPI } from '../../../lib/api/survey';
+import Swal from 'sweetalert2';
+import { useHistory } from 'react-router-dom';
 
 const CreateSurveyComp = () => {
   const [day, setDay] = useState([new Date(), new Date()]);
@@ -13,11 +15,13 @@ const CreateSurveyComp = () => {
   const [question, setQuestion] = useState([]); // 질문 덩어리(객관식, 주관식, 선형배율)
   const [question_ans, setQuestion_Ans] = useState({}); // 질문에 대한 보기 이름에 대한 배열을 보내기 위해
   const [check, setCheck] = useState({});
+  const [tag, setTag] = useState('');
   const theme = createTheme();
   const todayDate = new Date();
   const open = Boolean(anchorEl);
   const count = useRef(0);
-
+  const history = useHistory();
+  
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -33,10 +37,10 @@ const CreateSurveyComp = () => {
         setQuestion([...question, <MultipleChoiceComp number={count.current} setCheck={setCheck} />]);
         break;
       case '주관식':
-        setQuestion([...question, <SubjectiveComp number={count.current}/>]);
+        setQuestion([...question, <SubjectiveComp number={count.current} setCheck={setCheck}/>]);
         break;
       case '선형배율':
-        setQuestion([...question, <LinearMagnificationComp number={count.current} />]);
+        setQuestion([...question, <LinearMagnificationComp number={count.current} setCheck={setCheck}/>]);
         break;
       default : break;
     }
@@ -44,16 +48,12 @@ const CreateSurveyComp = () => {
   };
 
   useEffect(()=>{
-    setQuestion_Ans({...question_ans, ...check});
+    setQuestion_Ans({...question_ans, ...check}); // 객관식, 주관식, 선형 배율의 보기들을 합치는 곳
   },[check]);
 
   useEffect(()=>{
-    console.log("부모는 이거 삭제된 것까지 알까?", question_ans);
-  },[question_ans]);
-
-  useEffect(()=>{
-    console.log(question);
-  },[question])
+    console.log('부모야 어때', question_ans);
+  },[question_ans])
   
   const onClick = (e) => { // node에게 보냄
     e.preventDefault(); // 화면 유지
@@ -62,7 +62,7 @@ const CreateSurveyComp = () => {
     const Sur_Title = data.get('Sur_Title'); // 설문 제목
     const Sur_Content = data.get('Sur_Content'); // 설문 본문
 
-    let questionList = question.map((value, index)=>{
+    let questionList = question.map((value, index)=>{ // 질문 들어가는 배열
       let SurType = null;
       switch(value.type.name){
         case 'SubjectiveComp':
@@ -77,16 +77,16 @@ const CreateSurveyComp = () => {
         default: break;
       }
       return {
-        surQue_Content: data.get(`SurQue_Content${index}`),
-        surQue_QType: SurType,
-        surQue_Essential: data.get(`SurQue_Essential${index}`)==='on'?true:false,
-        surQue_MaxAns: 3,
-        surQue_Order: index,
+        surQue_Content: data.get(`SurQue_Content${index}`), // 질문 내용
+        surQue_QType: SurType, // 질문 타입 주관식(0), 객관식(1), 선형배율(2)
+        surQue_Essential: data.get(`SurQue_Essential${index}`)==='on'?true:false, // true:필수, false:옵션
+        surQue_MaxAns: data.get(`surQue_MaxAns`), // 최대 선택갯수, 이건 아마 객관식에만 들어갈예정
+        surQue_Order: index, // 질문의 순서
         answerList : [],
         selectList: question_ans[index].map((v, idx)=>{ // 객관식만 처리한 상태이므로, 주관식과 선형배율 error(수정 부탁)
           return {
-            surSel_Content: data.get(v),
-            surSel_Order: idx
+            surSel_Content: v!=null?data.get(v):'', // 보기 내용 --> 주관식의 경우, ''빈값으로 보냄
+            surSel_Order: v!=null?idx:'' // 보기 순서 --> 주관식의 경우, ''빈값으로 보냄
           };
         })
       };
@@ -101,33 +101,34 @@ const CreateSurveyComp = () => {
           Sur_EndDate: day[1].getFullYear()+"-"+ ('0'+(day[1].getMonth()+1)).slice(-2) +"-"+('0'+(day[1].getDate())).slice(-2),                               // ---> comp에서 state로 관리중
           Sur_Publish: !Sur_Publish, // 공개 여부                ---> comp에서 state로 관리중 [ !false: 공개, !true: (잠금)비공개 ]
           Sur_Img: "image", // 이미지 추후에 현재는 제외
-          User_ID:"woong"  // 작성자 ID
+          User_ID:"woong",  // 작성자 ID
+          tag_Name: data.get(`tag_Name`)
       }, 
       questionList,
-      // Question: [ // 질문들어가는 배열인데
-      //   {
-      //     SurQue_Content: "", // 질문 내용
-      //     SurQue_QType: "", // 질문 타입 주관식(0), 객관식(1), 선형배율(2)
-      //     SurQue_Essential: "", // true:필수, false:옵션
-      //     SurQue_MaxAns: '', // 최대 선택갯수, 이건 아마 객관식에만 들어갈예정
-      //     SurQue_Order: '', // 질문의 순서
-      //     Select: [ // 주관식인 경우, 보내지 말것.
-      //       {
-      //           SurSel_Content: "1번 보기", // 보기 내용
-      //           SurSel_Order: 1 // 보기 순서
-      //       },
-      //       {
-      //           SurSel_Content: "2번 보기",
-      //           SurSel_Order: 2
-      //       }
-      //     ]
-      //   },
-      
     }
-    console.log(questionList);
+
+    console.log(obj);
     createsurveyAPI({questionList})
       .then((res)=>console.log(res))
       .catch((err)=>console.log(err));
+    
+    let serverText = 'http://localhost:3000/CreateSurveyPage';
+    Swal.fire({
+        icon: 'info',
+        title: '설문지 생성 완료',
+        text: serverText,
+        showDenyButton: true,
+        denyButtonText: '복사',
+        confirmButtonText: '확인'
+    }).then(async(result)=>{
+      if (result.isDenied) {
+        await navigator.clipboard.writeText(serverText);
+        Swal.fire('복사 완료', '', 'success')
+        history.push('/MySurveyPage');
+      }else if(result.isConfirmed){
+        history.push('/MySurveyPage');
+      }
+    })
   };
 
   return (
@@ -143,6 +144,8 @@ const CreateSurveyComp = () => {
           anchorEl={anchorEl}
           handleClick={handleClick}
           handleClose={handleClose}
+          tag={tag}
+          setTag={setTag}
         />  
       </>
   );
