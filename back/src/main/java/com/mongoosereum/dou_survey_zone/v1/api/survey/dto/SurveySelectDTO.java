@@ -17,16 +17,16 @@ public class SurveySelectDTO {
     private String sur_ID;
     private String sur_Title; // 설문 제목
     private String sur_Content; // 설문 본문
-    private SurveyProgressType sur_State;
+    private Integer sur_State;
     private Date sur_StartDate;
     private Date sur_EndDate;
     private Boolean sur_Publish;
     private String sur_Image;
     private String user_Email;
-    private SurveyType sur_Type;
+    private Integer sur_Type;
     private List<Question> questionList;
 
-    public void setter(Survey_Mongo survey_mongo, Survey_MySQL survey_mySQL){
+    public void set(Survey_Mongo survey_mongo, Survey_MySQL survey_mySQL){
         this.sur_ID = survey_mongo.getSur_ID();
         this.sur_Title = survey_mySQL.getSur_Title();
         this.sur_Content = survey_mySQL.getSur_Content();
@@ -35,6 +35,7 @@ public class SurveySelectDTO {
         this.sur_EndDate = survey_mySQL.getSur_EndDate();
         this.sur_Image = survey_mySQL.getSur_Image();
         this.user_Email = survey_mySQL.getUser_Email();
+        this.sur_Publish = survey_mySQL.getSur_Publish();
         this.sur_Type = survey_mySQL.getSur_Type();
         this.questionList = survey_mongo.getQuestionList();
     }
