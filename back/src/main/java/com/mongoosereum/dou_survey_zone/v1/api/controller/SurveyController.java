@@ -23,7 +23,6 @@ public class SurveyController{
     public List<Survey_Mongo> getSurvey(){
         return surveyService.findAll();
     }
-
     // selectSurveyList 설문지 리스트 출력
     @GetMapping(path="/")
     public List<Survey_MySQL> selectSurveyList(){
@@ -34,19 +33,14 @@ public class SurveyController{
     public SurveySelectDTO findById(@PathVariable("sur_ID") String sur_ID){
         return surveyService.findById(sur_ID);
     }
-
     // 설문지 생성
     @PostMapping(path="/")
     public String surveyInsert(@RequestBody SurveyInsertDTO surveyInsertDTO){
-        System.out.println("surveyInsert 실행!");
-        System.out.println(surveyInsertDTO.toString());
-        // 성공시 1 return
         return surveyService.insertSurvey(surveyInsertDTO);
     }
 
     @PostMapping("/submit")
-    public String insertSurveyAnswer(@RequestBody AnswerInsertDTO answerInsertDTO){
-        System.out.println(answerInsertDTO.get_id());
+    public String answerInsert(@RequestBody AnswerInsertDTO answerInsertDTO){
         return surveyService.insertAnswer(answerInsertDTO);
     }
 }

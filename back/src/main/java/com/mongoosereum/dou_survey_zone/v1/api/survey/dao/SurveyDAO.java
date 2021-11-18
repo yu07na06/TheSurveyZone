@@ -33,15 +33,10 @@ public class SurveyDAO {
     public SurveySelectDTO findById(String sur_ID){
         // findById MySQL
         Survey_MySQL resultSQL = sqlSession.selectOne("findById",sur_ID);
-        System.out.println(resultSQL);
-
         // findById Mongo
         Survey_Mongo resultMongo = mongoTemplate.findOne(new Query(Criteria.where("_id").is(sur_ID)),Survey_Mongo.class);
-        System.out.println(resultMongo);
-
         SurveySelectDTO surveySelectDTO = new SurveySelectDTO();
-        surveySelectDTO.setter(resultMongo,resultSQL);
-        System.out.println(surveySelectDTO.toString());
+        surveySelectDTO.set(resultMongo,resultSQL);
         return surveySelectDTO;
     }
     public List<Survey_MySQL> selectSurveyList(){
@@ -56,19 +51,9 @@ public class SurveyDAO {
         return sqlSession.insert("insertSurvey",survey);
     }
 
-    public String insertAnswer(final AnswerInsertDTO answerInsertDTO) {
-        // { questionList : [
-        //          {
-        //          ...,
-        //          answerList : [
-        //              {
-        //              }
-        //          ]
-        //          }
-        //      ]
-        Query query = new Query(Criteria.where("_id").is(answerInsertDTO.get_id()));
+    public String insertAnswer(final String _id, final List<Answer>answerList) {
+        Query query = new Query(Criteria.where("_id").is(_id));
         // findById
-        List<Answer>answerList = answerInsertDTO.getAnswerList(); // TODO 정환. Optional 추가해야함
         UpdateResult updateResult = null;
         for(int i=0;i<answerList.size();i++) {
             Update update = new Update().push("questionList.$[element].answerList")

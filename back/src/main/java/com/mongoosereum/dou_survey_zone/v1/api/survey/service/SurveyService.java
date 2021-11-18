@@ -1,6 +1,7 @@
 package com.mongoosereum.dou_survey_zone.v1.api.survey.service;
 
 import com.mongoosereum.dou_survey_zone.v1.api.survey.dto.SurveySelectDTO;
+import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mongo.Answer;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mongo.Survey_Mongo;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.dao.SurveyDAO;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.dto.AnswerInsertDTO;
@@ -45,24 +46,26 @@ public class SurveyService {
                         ._id(surveyID)
                         .sur_Title(surveyInsertDTO.getSur_Title())
                         .sur_Content(surveyInsertDTO.getSur_Content())
-                        .sur_State(surveyInsertDTO.getSur_State())
+                        .sur_State(surveyInsertDTO.getSur_State().getNum())
                         .sur_StartDate(surveyInsertDTO.getSur_StartDate())
                         .sur_EndDate(surveyInsertDTO.getSur_EndDate())
                         .sur_Publish(surveyInsertDTO.getSur_Publish())
                         .sur_Image(surveyInsertDTO.getSur_Image())
                         .user_Email(surveyInsertDTO.getUser_Email())
-                        .surveyType(surveyInsertDTO.getSur_Type())
+                        .surveyType(surveyInsertDTO.getSur_Type().getNum())
                         .build();
         Integer result = surveyDAO.surveyInsert_MySQL(survey_MySQL);
         return ( (result==1) ? surveyID: "Insert Fail");
     }
 
     public String insertAnswer(AnswerInsertDTO answerInsertDTO){
+        String _id = answerInsertDTO.get_id();
+        List<Answer> answerList = answerInsertDTO.getAnswerList();
 //        Optional<Survey> optSurvey = surveyRepository.findById(answerInsertDTO.get_id());
 //        if(optSurvey.isPresent()) {
 //            System.out.println("###### 존재하지 않는 ID값 ######");
 //            return "존재하지 않는 설문입니다";
 //        }
-        return surveyDAO.insertAnswer(answerInsertDTO);
+        return surveyDAO.insertAnswer(_id,answerList);
     }
 }

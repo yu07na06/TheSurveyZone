@@ -1,6 +1,7 @@
 package com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mongo;
 
 import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.QuestionType;
+import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.SurveyType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,6 @@ public class Question {
     private Long SurQue_Order;
     private List<Select> selectList;
     private List<Answer> answerList;
-
     @Builder
     public Question(String SurQue_Content, QuestionType SurQue_QType, Long SurQue_MaxAns, Long SurQue_Order, List<Select>selectList, List<Answer>answerList) {
         this.SurQue_Content = SurQue_Content;
