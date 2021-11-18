@@ -1,9 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Paper from '@mui/material/Paper';
-import { Button, Grid, Menu, TextField } from '@mui/material';
+import { Grid, TextField } from '@mui/material';
 import Switch from '@mui/material/Switch';
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import Slider from '@mui/material/Slider';
+import Rating from '@mui/material/Rating';
+import Radio from "@mui/material/Radio";
 
-const LinearMagnification = ({number}) => {
+const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxValue, value, valuetext, controlProps, setTemp}) => {
     return (
         <>
             <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
@@ -12,33 +20,117 @@ const LinearMagnification = ({number}) => {
                     <br/>
                     <Grid item xs={12}>
                         <TextField
-                        variant="outlined"
-                        required
-                        fullWidth
-                        name={`SurQue_Content${number}`}
-                        id={`SurQue_Content${number}`}
-                        label={`선형배율${number}`}
+                            variant="outlined"
+                            required
+                            fullWidth
+                            name={`SurQue_Content${number}`}
+                            id={`SurQue_Content${number}`}
+                            label={`선형배율${number}`}
                         />
                     </Grid>
-                        <Button
-                            id="basic-button"
-                            aria-controls="basic-menu"
-                            aria-haspopup="true"
-                            // onClick={handleClick}
-                        >
-                            Dashboard
-                        </Button>
-                        <Menu
-                            id="basic-menu"
-                            // anchorEl={anchorEl}
-                            // onClose={handleClose}
-                            MenuListProps={{'aria-labelledby': 'basic-button'}}
-                            >
-                            {/* <MenuItem onClick={handleClose}>Profile</MenuItem>
-                            <MenuItem onClick={handleClose}>My account</MenuItem>
-                            <MenuItem onClick={handleClose}>Logout</MenuItem> */}
-                        </Menu>
-                    <Grid>
+                    <Grid item xs={3}>
+                        <TextField
+                            variant="filled"
+                            name={`start_Step${number}`}
+                            label="시작"
+                            onChange={e=>setTemp(e.target.value)}
+                        />
+                    </Grid>
+                    <Grid item xs={3}>
+                        <Box>
+                            <FormControl fullWidth>
+                                <InputLabel id="demo-simple-select-label">시작 값</InputLabel>
+                                    <Select
+                                        labelId={`start_Name${number}_${minValue}`}
+                                        id={`start_Name${number}_${minValue}`}
+                                        name={`start_Name${number}_${minValue}`}
+                                        value={minValue}
+                                        label={`start_Name${number}_${minValue}`}
+                                        onChange={e => setMinValue(e.target.value)}
+                                        >
+                                    <MenuItem value="0">0</MenuItem>
+                                    <MenuItem value="1">1</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Box>
+                    </Grid>
+                    <Grid item xs={3}>
+                        <TextField
+                            variant="filled"
+                            name={`end_Step${number}`}
+                            label="끝"
+                            onChange={e=>setTemp(e.target.value)}
+                        />
+                    </Grid>
+                    <Grid item xs={3}>
+                        <Box>
+                            <FormControl fullWidth>
+                                <InputLabel id="demo-simple-select-label">끝 값</InputLabel>
+                                    <Select
+                                        labelId={`end_Name${number}_${maxValue}`}
+                                        id={`end_Name${number}_${maxValue}`}
+                                        name={`end_Name${number}_${maxValue}`}
+                                        value={maxValue}
+                                        label={`end_Name${number}_${maxValue}`}
+                                        onChange={e => setMaxValue(e.target.value)}
+                                        >
+                                    {value.map((v,i)=>
+                                        (minValue==0)?<MenuItem value={v}>{v}</MenuItem>:<MenuItem value={v+1}>{v+1}</MenuItem>
+                                    )}
+                                </Select>
+                            </FormControl>
+                        </Box>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Box sx={{ mx:4,  width: 300 }}>
+                            <Slider
+                                track={false}
+                                aria-label="Custom marks"
+                                defaultValue={1}
+                                getAriaValueText={valuetext}
+                                step={1}
+                                valueLabelDisplay="auto"
+                                marks={
+                                    [{
+                                        value: minValue,
+                                        label: minValue,
+                                    },
+                                    {
+                                        value: maxValue,
+                                        label: maxValue,
+                                    }]}
+                                min={minValue}
+                                max={maxValue}
+                            />
+                        </Box>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Radio {...controlProps("a")} size="small" />
+                        <Radio {...controlProps("b")} />
+                        <Radio
+                            {...controlProps("c")}
+                            sx={{
+                            "& .MuiSvgIcon-root": {
+                                fontSize: 28
+                            }
+                            }}
+                        />
+                        <Radio
+                            {...controlProps("d")}
+                            sx={{
+                            "& .MuiSvgIcon-root": {
+                                fontSize: 35
+                            }
+                            }}
+                        />
+                        <Radio
+                            {...controlProps("e")}
+                            sx={{
+                            "& .MuiSvgIcon-root": {
+                                fontSize: 40
+                            }
+                            }}
+                        />
                     </Grid>
                 </Grid>
             </Paper>

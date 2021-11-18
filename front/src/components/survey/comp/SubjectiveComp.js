@@ -1,7 +1,8 @@
 import React from 'react';
 import Subjective from '../UI/Subjective';
 
-const SubjectiveComp = ({number}) => {
+const SubjectiveComp = ({number, setCheck}) => {
+    setCheck({[number]:[null]});
     return (
         <>
             <Subjective
