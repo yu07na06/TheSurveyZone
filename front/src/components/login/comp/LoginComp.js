@@ -12,7 +12,7 @@ const LoginComp = () => {
     const history = useHistory();
     const theme = createTheme();
 
-    // 로그인 버튼 클릭 시,
+    // 로그인 버튼 클릭 시,,
     const handleSubmit = (e) => {
         e.preventDefault(); // 화면 유지
 
