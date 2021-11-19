@@ -4,17 +4,27 @@ import SurveySubmit from '../UI/SurveySubmit';
 import BeforeSurveyComp from '../comp/BeforeSurveyComp'; 
 import MainSurveyComp from '../comp/MainSurveyComp';
 import { createTheme } from '@mui/material/styles';
+import { useEffect } from 'react';
+import { getSurvey as getSurveyAPI } from '../../../lib/api/survey';
+import { useState } from 'react';
 
-const SurveySubmitComp = () => {
+const SurveySubmitComp = ({surveykey}) => {
     const [activeStep, setActiveStep] = React.useState(0);
     const steps = ['데이터 수집', '설문지', '제출 완료'];
+    const [surveyReqForm, setSurveyReqForm] = useState(null);
+
+    useEffect(()=>{
+        getSurveyAPI(surveykey)
+           .then(res =>setSurveyReqForm(res.data))
+           .catch(err => console.log(err));
+   },[surveykey])
 
     const getStepContent = (step) => {
         switch (step) {
         case 0:
             return <BeforeSurveyComp />;
         case 1:
-            return <MainSurveyComp />;
+            return <MainSurveyComp surveykey={surveyReqForm}/>;
         case 2:
             return  finalStep();
         default:
@@ -26,7 +36,7 @@ const SurveySubmitComp = () => {
     return(
     <React.Fragment>
         <Typography variant="h5" gutterBottom>
-        설문 감사합니다 :)
+            설문 감사합니다 :)
         </Typography>
     </React.Fragment>);
     }
