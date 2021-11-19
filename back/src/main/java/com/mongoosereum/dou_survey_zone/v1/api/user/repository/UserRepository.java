@@ -1,13 +1,14 @@
 package com.mongoosereum.dou_survey_zone.v1.api.user.repository;
 
 import com.mongoosereum.dou_survey_zone.v1.api.user.dto.UserDTO;
+import com.mongoosereum.dou_survey_zone.v1.api.user.entity.User_MySQL;
 
 public interface UserRepository {
 
-    int createUser(UserDTO userDTO);
+    int createUser_MySQL(User_MySQL User_MySQL);
 
-    String selectEmail(String param);
+    String existsByEmail_MySQL(String email);
 
-    UserDTO login(UserDTO userDTO);
+    User_MySQL findByEmailAndPassword_MySQL (User_MySQL User_MySQL);
 
 }

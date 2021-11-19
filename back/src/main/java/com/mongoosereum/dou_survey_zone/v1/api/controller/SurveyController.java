@@ -49,4 +49,10 @@ public class SurveyController{
         System.out.println(answerInsertDTO.get_id());
         return surveyService.insertAnswer(answerInsertDTO);
     }
+
+    //접근 권한 테스트용
+    @GetMapping(path="/test")
+    public String testabc() {
+        return "test OK!";
+    }
 }
