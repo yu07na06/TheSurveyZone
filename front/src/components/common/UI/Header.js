@@ -1,4 +1,4 @@
-import React, { useEffect} from 'react';
+import React  from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import SearchIcon from '@material-ui/icons/Search';
@@ -7,7 +7,6 @@ import { Tab, Tabs } from '@mui/material';
 import { alpha, makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
-import Swal from 'sweetalert2';
 
 const useStyles = makeStyles((theme) => ({
     search: {
