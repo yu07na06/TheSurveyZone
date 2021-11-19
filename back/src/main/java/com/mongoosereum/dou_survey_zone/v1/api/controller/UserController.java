@@ -33,11 +33,9 @@ public class UserController{
 
     /* 이메일 유효성 체크 */
     @PostMapping(path="/checkEmail")
-    public ResponseEntity<?> CheckEmail(@RequestBody  UserDTO userDTO) {
-        System.out.println(userDTO.getUser_Email());
-        System.out.println("controller");
-        boolean result = Service.checkEmail(userDTO.getUser_Email());
-        return !result ? ResponseEntity.ok().body("True") : ResponseEntity.badRequest().body("False");
+    public ResponseEntity CheckEmail(@RequestBody UserDTO userDTO) {
+        System.out.println("check : " + userDTO.getUser_Email());
+        return ResponseEntity.ok().body(Service.checkEmail(userDTO.getUser_Email()));
     }
 
     /* 회원가입 */
