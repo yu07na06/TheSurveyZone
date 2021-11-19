@@ -22,13 +22,4 @@ public class TestController{
     public String test1( @AuthenticationPrincipal String userEmail){
         return userEmail;
     }
-    // selectSurveyList 설문지 리스트 출력
-    @GetMapping(path="/list")
-    public ResponseEntity selectSurveyList(){
-        List<Survey_MySQL> surveyList = surveyService.selectSurveyList();
-        if(surveyList != null){
-            return ResponseEntity.status(HttpStatus.OK).body(surveyList);
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("설문 리스트가 존재하지 않습니다.");
-    }
 }

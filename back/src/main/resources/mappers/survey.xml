@@ -14,6 +14,13 @@
         where Sur_Publish = true
         order by Sur_State;
     </select>
+
+    <select id="selectMySurveyList" resultType="Survey_MySQL" parameterType="String">
+        select *
+        from survey
+        where User_Email = #{User_Email}
+    </select>
+
     <insert id="insertSurvey" parameterType="Survey_MySQL">
         insert into survey values (#{_id},#{sur_Title},#{sur_Content},#{sur_State},#{sur_StartDate},#{sur_EndDate},#{sur_Publish},#{sur_Image},#{user_Email},#{sur_Type} );
     </insert>

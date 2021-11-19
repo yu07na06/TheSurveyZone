@@ -24,8 +24,10 @@ public class SurveyService {
     public List<Survey_MySQL> selectSurveyList() {
         return surveyDAO.selectSurveyList();
     }
+    public List<Survey_MySQL> selectMySurveyList(String User_Email) {
+        return surveyDAO.selectMySurveyList(User_Email);
+    }
 
-    @Transactional(rollbackFor=Exception.class)
     public String insertSurvey(InsertSurveyDTO surveyInsertDTO){
        // MongoDB insert
         Survey_Mongo survey_Mongo = Survey_Mongo.builder()
@@ -33,7 +35,6 @@ public class SurveyService {
                 .build();
         String surveyID = surveyDAO.surveyInsert_Mongo(survey_Mongo);
 
-        System.out.println(surveyInsertDTO.toString());
         // MySQL insert by MongoDB.id
         Survey_MySQL survey_MySQL = Survey_MySQL.builder()
                         ._id(surveyID)
@@ -47,8 +48,14 @@ public class SurveyService {
                         .user_Email(surveyInsertDTO.getUser_Email())
                         .surveyType(surveyInsertDTO.getSur_Type().getNum())
                         .build();
-        Integer result = surveyDAO.surveyInsert_MySQL(survey_MySQL);
-        return ( (result==1) ? surveyID: "Insert Fail");
+        try {
+            surveyDAO.surveyInsert_MySQL(survey_MySQL);
+        }catch(Exception e) {
+            // Insert에 실패한경우 생성된 MongoDB의 Document를 삭제해줘야함
+            surveyDAO.deleteSurvey_Mongo(surveyID);
+            return "FAIL";
+        }
+        return surveyID;
     }
 
     public SelectSurveyDTO findById(String _id){
@@ -65,12 +72,13 @@ public class SurveyService {
         return surveyDAO.insertAnswer(_id,answerList);
     }
     @Transactional(rollbackFor=Exception.class)
-    public Integer deleteSurvey(String _id, String User_Email){
+    public Long deleteSurvey(String _id, String User_Email){
         String owner = surveyDAO.selectOwner(_id);
         if(!owner.equals(User_Email)) {
-            return null;
+            return 0L;
         }
-        return surveyDAO.deleteSurvey(_id);
+        surveyDAO.deleteSurvey_MySQL(_id);
+        return surveyDAO.deleteSurvey_Mongo(_id);
     }
 
     @Transactional(rollbackFor=Exception.class)

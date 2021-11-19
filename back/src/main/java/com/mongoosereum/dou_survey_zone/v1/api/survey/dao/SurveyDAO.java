@@ -1,5 +1,6 @@
 package com.mongoosereum.dou_survey_zone.v1.api.survey.dao;
 
+import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mongo.Answer;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mongo.Question;
@@ -24,14 +25,13 @@ public class SurveyDAO {
 
     @Autowired
     private SqlSession sqlSession;
-
-    //    public List<Survey_MySQL> findAll(){
-    //        return sqlSession.selectList("selectSurveyList",Survey_MySQL.class);
-    //    }
-
+    
     // Select MySQL SurveyList
     public List<Survey_MySQL> selectSurveyList(){
         return sqlSession.selectList("selectSurveyList");
+    }
+    public List<Survey_MySQL> selectMySurveyList(String User_Email){
+        return sqlSession.selectList("selectSurveyList",User_Email);
     }
 
     // Insert MongoDB Survey Document
@@ -39,7 +39,7 @@ public class SurveyDAO {
         return mongoTemplate.save(survey,"survey").get_id();
     }
     // Insert MySQL Survey Entity
-    public Integer surveyInsert_MySQL(final Survey_MySQL survey){
+    public int surveyInsert_MySQL(final Survey_MySQL survey){
         return sqlSession.insert("insertSurvey",survey);
     }
 
@@ -75,8 +75,14 @@ public class SurveyDAO {
         return sqlSession.selectOne("selectOwner", _id);
     }
 
-    public Integer deleteSurvey(String _id){
+    public int deleteSurvey_MySQL(String _id){
         return sqlSession.delete("deleteSurvey",_id);
+    }
+    public Long deleteSurvey_Mongo(String _id){
+        DeleteResult deleteResult = mongoTemplate.remove(
+                new Query(Criteria.where("_id").is(_id)),
+                Survey_Mongo.class);
+        return deleteResult.getDeletedCount();
     }
     public Long updateSurvey_Mongo(Survey_Mongo survey){
         List<Question> questionList = survey.getQuestionList();
