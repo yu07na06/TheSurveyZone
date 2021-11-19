@@ -23,23 +23,25 @@ const RegisterComp = () => {
         
         if(pwResult.current&& emailResult.current&&phoneResult.current&&checkResult.current&&PWNOTMATCH){
         const data = new FormData(event.currentTarget);
-        const User_Email = data.get('User_Email');
-        const User_Password = data.get('User_Password');
-        const User_Name = data.get('User_Name');
-        const User_Tel = data.get('User_Tel');
-        // console.log("User_Email : ", User_Email, "User_Password : ", User_Password);
-        registerAPI({User_Email,User_Password,User_Name,User_Tel})
+        const user_Email = data.get('User_Email');
+        const user_Password = data.get('User_Password');
+        const user_Name = data.get('User_Name');
+        const user_Tel = data.get('User_Tel');
+        registerAPI({user_Email,user_Password,user_Name,user_Tel})
         .then(()=>{
             console.log("회원가입에 성공(server요청 잘되고 잘받았음)");
             history.push('/LoginPage')
         })
-        .catch(()=>{
-            Swal.fire({
-                icon: 'error',
-                title: 'server error',
-                text: 'error code [500]'
-            })
+        .catch((err)=>{
+            console.log(err);
         })
+        // .catch(()=>{
+        //     Swal.fire({
+        //         icon: 'error',
+        //         title: 'server error',
+        //         text: 'error code [500]'
+        //     })
+        // })
         setErrorText()
         return console.log("회원가입 성공!");
         }
@@ -71,8 +73,9 @@ const RegisterComp = () => {
         switch(e.target.name){
             case 'User_Email' : 
                 emailResult.current = regexEmail.test(e.target.value)
+                // console.log({user_Email: e.target.value});
                 // 서버에 아이디 보내고 있는지 없는지 값 받아와서 처리할 예정
-                emailAPI({"user_Eamil": e.target.value})
+                emailAPI({"user_Email": e.target.value})
                     .then(res=>console.log(res))
                     .catch(err=>console.log(err));
                 break;
