@@ -4,7 +4,7 @@ import { createTheme } from '@mui/material/styles';
 import MultipleChoiceComp from '../comp/MultipleChoiceComp';
 import SubjectiveComp from './SubjectiveComp';
 import LinearMagnificationComp from './LinearMagnificationComp';
-import { createsurvey as createsurveyAPI } from '../../../lib/api/survey';
+import { createSurvey as createSurveyAPI } from '../../../lib/api/survey';
 import Swal from 'sweetalert2';
 import { useHistory } from 'react-router-dom';
 
@@ -55,10 +55,14 @@ const CreateSurveyComp = () => {
     console.log('부모야 어때', question_ans);
   },[question_ans])
   
-  const onClick = (e) => { // node에게 보냄
+  const onClick = (e) => { // 완료 버튼 클릭 시, node에게 보냄
     e.preventDefault(); // 화면 유지
-    const data = new FormData(e.currentTarget);
+    if(question.length==0){
+      alert('최소 하나의 질문이 필요합니다.')
+      return;
+    }
 
+    const data = new FormData(e.currentTarget);
     const Sur_Title = data.get('Sur_Title'); // 설문 제목
     const Sur_Content = data.get('Sur_Content'); // 설문 본문
 
@@ -93,42 +97,40 @@ const CreateSurveyComp = () => {
     });
 
     let obj = {
-      Form: {
-          Sur_Title: Sur_Title, // 설문 제목
-          Sur_Content: Sur_Content, // 설문 본문
-          Sur_State: todayDate<day[0]?0:1, // 0 : 진행전, 1 : 진행중 , 2 : 마감
-          Sur_StartDate: day[0].getFullYear()+"-"+ ('0'+(day[0].getMonth()+1)).slice(-2) +"-"+('0'+(day[0].getDate())).slice(-2), // Date 객체로 던지세요.     ---> comp에서 state로 관리중
-          Sur_EndDate: day[1].getFullYear()+"-"+ ('0'+(day[1].getMonth()+1)).slice(-2) +"-"+('0'+(day[1].getDate())).slice(-2),                               // ---> comp에서 state로 관리중
-          Sur_Publish: !Sur_Publish, // 공개 여부                ---> comp에서 state로 관리중 [ !false: 공개, !true: (잠금)비공개 ]
-          Sur_Img: "image", // 이미지 추후에 현재는 제외
-          User_ID:"woong",  // 작성자 ID
-          tag_Name: data.get(`tag_Name`)
-      }, 
+      sur_Type:1, // 오정환 주입! 일단 하라고 하시넹 오키
+      sur_Title: Sur_Title, // 설문 제목
+      sur_Content: Sur_Content, // 설문 본문
+      sur_State: todayDate<day[0]?0:1, // 0 : 진행전, 1 : 진행중 , 2 : 마감
+      sur_StartDate: day[0].getFullYear()+"-"+ ('0'+(day[0].getMonth()+1)).slice(-2) +"-"+('0'+(day[0].getDate())).slice(-2), // Date 객체로 던지세요.     ---> comp에서 state로 관리중
+      sur_EndDate: day[1].getFullYear()+"-"+ ('0'+(day[1].getMonth()+1)).slice(-2) +"-"+('0'+(day[1].getDate())).slice(-2),                               // ---> comp에서 state로 관리중
+      sur_Publish: !Sur_Publish, // 공개 여부                ---> comp에서 state로 관리중 [ !false: 공개, !true: (잠금)비공개 ]
+      sur_Image: "image", // 이미지 추후에 현재는 제외
+      user_Email: "ojh2134@gmail.com",  // 작성자 ID
+      tag_Name: data.get(`tag_Name`), 
       questionList,
     }
 
+    let shareURL="http://localhost:3000/SurveySubmitPage/";
     console.log(obj);
-    createsurveyAPI({questionList})
-      .then((res)=>console.log(res))
+    console.log(JSON.stringify(obj));
+    createSurveyAPI(obj)
+      .then((res)=>{ 
+        Swal.fire({
+          icon: 'info',
+          title: '설문지 생성 완료',
+          text: shareURL+res.data,
+          showDenyButton: true,
+          denyButtonText: '복사',
+          confirmButtonText: '확인'
+        }).then(async(result)=>{
+          if (result.isDenied) {
+            await navigator.clipboard.writeText(shareURL+res.data);
+            Swal.fire('복사 완료', '', 'success')
+          }
+          // history.push('/MySurveyPage'); // test 기간까지 history 사용하지 않겠다.
+        })
+      })
       .catch((err)=>console.log(err));
-    
-    let serverText = 'http://localhost:3000/CreateSurveyPage';
-    Swal.fire({
-        icon: 'info',
-        title: '설문지 생성 완료',
-        text: serverText,
-        showDenyButton: true,
-        denyButtonText: '복사',
-        confirmButtonText: '확인'
-    }).then(async(result)=>{
-      if (result.isDenied) {
-        await navigator.clipboard.writeText(serverText);
-        Swal.fire('복사 완료', '', 'success')
-        history.push('/MySurveyPage');
-      }else if(result.isConfirmed){
-        history.push('/MySurveyPage');
-      }
-    })
   };
 
   return (

@@ -30,6 +30,7 @@ const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxVal
                     </Grid>
                     <Grid item xs={3}>
                         <TextField
+                            required
                             variant="filled"
                             name={`start_Step${number}`}
                             label="시작"
@@ -41,6 +42,7 @@ const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxVal
                             <FormControl fullWidth>
                                 <InputLabel id="demo-simple-select-label">시작 값</InputLabel>
                                     <Select
+                                        required
                                         labelId={`start_Name${number}_${minValue}`}
                                         id={`start_Name${number}_${minValue}`}
                                         name={`start_Name${number}_${minValue}`}
@@ -56,6 +58,7 @@ const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxVal
                     </Grid>
                     <Grid item xs={3}>
                         <TextField
+                            required
                             variant="filled"
                             name={`end_Step${number}`}
                             label="끝"
@@ -67,6 +70,7 @@ const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxVal
                             <FormControl fullWidth>
                                 <InputLabel id="demo-simple-select-label">끝 값</InputLabel>
                                     <Select
+                                        required
                                         labelId={`end_Name${number}_${maxValue}`}
                                         id={`end_Name${number}_${maxValue}`}
                                         name={`end_Name${number}_${maxValue}`}

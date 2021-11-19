@@ -13,10 +13,10 @@ const BeforeSurvey = ({marks, valuetext, Separator}) => {
             <Separator />
             <FormControl component="fieldset">
                 <Typography style={{fontWeight:'bold'}}>성별</Typography>
-                <RadioGroup sx={{ mx:3 }} row aria-label="gender" name="row-radio-buttons-group">
-                    <FormControlLabel value="male" control={<Radio />} label="남성" />
-                    <FormControlLabel value="female" control={<Radio />} label="여성" />
-                </RadioGroup>
+                    <RadioGroup defaultValue="male" sx={{ mx:3 }} row aria-label="gender" name="row-radio-buttons-group">
+                        <FormControlLabel value="male" control={<Radio />} label="남성" />
+                        <FormControlLabel value="female" control={<Radio />} label="여성" />
+                    </RadioGroup>
             </FormControl>
             <Separator />
             <Separator />

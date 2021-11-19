@@ -30,6 +30,7 @@ const MultipleChoice = ({number, select, setSelect, addText, maxNum, setMaxNum})
                         <FormControl fullWidth>
                             <InputLabel id="demo-simple-select-label">중복답변개수</InputLabel>
                                 <Select
+                                    required
                                     labelId="surQue_MaxAns"
                                     id="surQue_MaxAns"
                                     value={maxNum}
