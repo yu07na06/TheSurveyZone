@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 
   
   
-  const Register = ({onSubmit, PWNOTMATCH, onChange, phoneNumber, errorText, }) => {
+  const Register = ({onSubmit, PWNOTMATCH, onChange, phoneNumber, errorText, emailText, }) => {
     const classes = useStyles();
     return (
       <Container component="main" maxWidth="xs">
@@ -67,6 +67,12 @@ const useStyles = makeStyles((theme) => ({
                   autoComplete="off"
                 />
               </Grid>
+
+              {emailText ==="사용불가능"?
+                <Grid item xs={12}>
+                  <Typography variant="h7" style={{color:"#FF5555"}}>* 이미 존재하는 이메일입니다.</Typography>
+                </Grid> : null
+              }
   
               <Grid item xs={12}>
                 <TextField
