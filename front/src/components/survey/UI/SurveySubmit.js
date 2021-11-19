@@ -27,16 +27,16 @@ const SurveySubmit = ({steps, getStepContent, finalStep, theme, activeStep, setA
                     }}
                 >
                 </AppBar>
-                <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
+                <Container component="main" maxWidth="md" sx={{ mb: 4 }}>
                     <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
                     <Typography component="h1" variant="h4" align="center">
                         Survey
                     </Typography>
                     <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
                         {steps.map((label) => (
-                        <Step key={label}>
-                            <StepLabel>{label}</StepLabel>
-                        </Step>
+                            <Step key={label}>
+                                <StepLabel>{label}</StepLabel>
+                            </Step>
                         ))}
                     </Stepper>
                     <React.Fragment>
@@ -53,13 +53,13 @@ const SurveySubmit = ({steps, getStepContent, finalStep, theme, activeStep, setA
                         <React.Fragment>
                             {getStepContent(activeStep)}
                             <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                            <Button
-                                variant="contained"
-                                onClick={handleNext}
-                                sx={{ mt: 3, ml: 1 }}
-                            >
+                                <Button
+                                    variant="contained"
+                                    onClick={handleNext}
+                                    sx={{ mt: 3, ml: 1 }}
+                                >
                                 {activeStep === steps.length - 1 ? '제출' : '다음'}
-                            </Button>
+                                </Button>
                             </Box>
                         </React.Fragment>
                         )}
