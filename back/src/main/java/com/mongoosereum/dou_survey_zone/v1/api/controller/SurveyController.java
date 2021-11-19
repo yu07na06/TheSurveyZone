@@ -21,16 +21,6 @@ public class SurveyController{
     @Autowired
     private SurveyService surveyService;
 
-    // selectSurveyList 설문지 리스트 출력
-    @GetMapping(path="/")
-    public ResponseEntity selectSurveyList(){
-        List<Survey_MySQL> surveyList = surveyService.selectSurveyList();
-        if(surveyList != null){
-            return ResponseEntity.status(HttpStatus.OK).body(surveyList);
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("설문 리스트가 존재하지 않습니다.");
-    }
-
     // 설문지 생성
     @PostMapping(path="/")
     public ResponseEntity insertSurvey(@RequestBody InsertSurveyDTO surveyInsertDTO){
@@ -67,7 +57,7 @@ public class SurveyController{
                     ResponseEntity.status(HttpStatus.OK).body("Success"):
                     ResponseEntity.status(HttpStatus.NOT_FOUND).body("NOT FOUND");
         }catch(Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("NOT FOUND");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("UPDATE FAIL");
         }
     }
 

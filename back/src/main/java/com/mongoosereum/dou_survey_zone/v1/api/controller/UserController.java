@@ -95,10 +95,8 @@ public class UserController{
     /* 테스트용 */
     @GetMapping(path="/test")
     public String test(@RequestBody UserDTO userDTO) {
-
         System.out.println(userDTO.getUser_Email());
         System.out.println(userDTO.getUser_Password());
-
         return "success";
     }
 
