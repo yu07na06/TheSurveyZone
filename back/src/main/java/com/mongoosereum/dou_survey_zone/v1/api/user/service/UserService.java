@@ -20,8 +20,8 @@ public class UserService {
         return Dao.createUser_MySQL(user_mySQL);
     }
 
-    public boolean checkEmail(final String Email){
-        return Objects.equals(Email, Dao.existsByEmail_MySQL(Email));
+    public boolean checkEmail(final String User_Email){
+        return Objects.equals(User_Email, Dao.existsByEmail_MySQL(User_Email));
     }
 
     public User_MySQL login(final String email, final String password, PasswordEncoder passwordEncoder){
