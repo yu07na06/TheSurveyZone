@@ -28,8 +28,9 @@ public class UserDAO implements UserRepository {
     }
 
     @Override
-    public User_MySQL findByEmailAndPassword_MySQL(User_MySQL User_MySQL) {
-        return sqlSession.selectOne("findByEmailAndPassword", User_MySQL);
+    public User_MySQL findByEmailAndPassword_MySQL(String email) {
+        System.out.println("dao:"+email);
+        return sqlSession.selectOne("findByEmailAndPassword", email);
     }
 //
 //    @Autowired

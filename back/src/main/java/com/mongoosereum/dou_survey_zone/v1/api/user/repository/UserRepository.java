@@ -9,6 +9,6 @@ public interface UserRepository {
 
     String existsByEmail_MySQL(String email);
 
-    User_MySQL findByEmailAndPassword_MySQL (User_MySQL User_MySQL);
+    User_MySQL findByEmailAndPassword_MySQL (String email);
 
 }

@@ -11,7 +11,7 @@
         insert into User values(#{user_Email},#{user_Password},#{user_Name},#{user_Tel})
     </insert>
 
-    <select id="findByEmailAndPassword" parameterType="User_MySQL" resultType="User_MySQL">
-        select User_Email, User_Password, User_Name from user where User_Email = #{user_Email};
+    <select id="findByEmailAndPassword" parameterType="String" resultType="User_MySQL">
+        select User_Email, User_Password, User_Name from user where User_Email = #{param};
     </select>
 </mapper>

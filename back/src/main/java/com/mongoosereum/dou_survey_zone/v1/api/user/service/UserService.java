@@ -26,13 +26,12 @@ public class UserService {
 
     public User_MySQL login(final String email, final String password, PasswordEncoder passwordEncoder){
 
-        final User_MySQL findEmailandPassword = User_MySQL.builder()
-                .user_Email(email)
-                .user_Password(password)
-                .build();
-        User_MySQL searchUser =  Dao.findByEmailAndPassword_MySQL(findEmailandPassword);
+        User_MySQL searchUser =  Dao.findByEmailAndPassword_MySQL(email);
+        System.out.println(searchUser.getUser_Email());
+        System.out.println(searchUser.getUser_Password());
 
         if(searchUser != null && passwordEncoder.matches(password, searchUser.getUser_Password())){
+
             return searchUser;
         }
         return null;
