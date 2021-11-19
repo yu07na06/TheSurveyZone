@@ -9712,6 +9712,11 @@ react-is@^17.0.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.1.tgz#5b3531bd76a645a4c9fb6e693ed36419e3301339"
   integrity sha512-NAnt2iGDXohE5LI7uBnLnqvLQMtzhkiAOLXTmv+qnF9Ky7xAPcX8Up/xWIhxvLVGJvuLiNc4xQLtuqDRzb4fSA==
 
+react-minimal-pie-chart@^8.2.0:
+  version "8.2.0"
+  resolved "https://registry.yarnpkg.com/react-minimal-pie-chart/-/react-minimal-pie-chart-8.2.0.tgz#22b53af2363f040d818331721658dfa7a1ea847a"
+  integrity sha512-RhrHzprJt3KfBe4L3sE0Ha6fj4kYcwQtesQgscnld9Umf64+nZnxxInycnbimKsbIjxJONv77JIZp+qRbJD+bA==
+
 react-redux@^7.2.6:
   version "7.2.6"
   resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-7.2.6.tgz#49633a24fe552b5f9caf58feb8a138936ddfe9aa"
