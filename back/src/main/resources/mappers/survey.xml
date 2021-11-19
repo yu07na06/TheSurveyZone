@@ -6,7 +6,7 @@
     <select id="findById" parameterType="String" resultType="Survey_MySQL">
         select *
         from survey
-        where Sur_ID = #{sur_ID};
+        where _id = #{_id};
     </select>
     <select id="selectSurveyList" resultType="Survey_MySQL">
         select *
@@ -17,4 +17,21 @@
     <insert id="insertSurvey" parameterType="Survey_MySQL">
         insert into survey values (#{_id},#{sur_Title},#{sur_Content},#{sur_State},#{sur_StartDate},#{sur_EndDate},#{sur_Publish},#{sur_Image},#{user_Email},#{sur_Type} );
     </insert>
+
+    <select id="selectOwner" parameterType="String" resultType="String">
+        select User_Email from survey where _id = #{_id};
+    </select>
+
+    <delete id="deleteSurvey" parameterType = "String">
+        delete from Survey where _id = #{_id};
+    </delete>
+
+    <update id="updateSurvey" parameterType = "Survey_MySQL">
+        update survey
+        set Sur_Title = #{sur_Title}, Sur_Content = #{sur_Content}, Sur_State = #{sur_State},
+            Sur_StartDate = #{sur_StartDate}, Sur_EndDate = #{sur_EndDate},
+            Sur_Publish = #{sur_Publish}, Sur_Image = #{sur_Image},
+            User_Email = #{user_Email}, Sur_Type = #{sur_Type}
+        where _id = #{_id}
+    </update>
 </mapper>

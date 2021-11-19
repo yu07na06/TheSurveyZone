@@ -8,8 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @NoArgsConstructor
-@Getter
-@Setter
+@Data
 @Document(collection="select")
 public class Select {
 //    @Id

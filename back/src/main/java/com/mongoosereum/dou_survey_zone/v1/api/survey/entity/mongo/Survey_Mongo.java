@@ -7,16 +7,14 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.List;
 
 @Document(collection = "survey")
-@ToString
-@Getter
-@Setter
+@Data
 public class Survey_Mongo {
     @Id
-    private String sur_ID;
+    private String _id;
     private List<Question> questionList;
-
     @Builder
-    public Survey_Mongo(List<Question> questionList){
+    public Survey_Mongo(String _id, List<Question> questionList){
+        this._id = _id;
         this.questionList= questionList;
     }
 }

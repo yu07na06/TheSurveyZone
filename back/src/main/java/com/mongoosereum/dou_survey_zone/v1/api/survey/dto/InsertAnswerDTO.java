@@ -5,7 +5,6 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class AnswerInsertDTO {
-    private String _id;
+public class InsertAnswerDTO {
     private List<Answer> answerList;
 }

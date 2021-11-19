@@ -2,15 +2,11 @@ package com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mongo;
 
 import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.QuestionType;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.SurveyType;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 public class Question {
 //    @Id
