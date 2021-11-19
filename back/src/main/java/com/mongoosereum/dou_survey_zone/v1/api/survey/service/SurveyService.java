@@ -62,23 +62,14 @@ public class SurveyService {
 
     @Transactional(rollbackFor=Exception.class)
     public Integer insertAnswer(String _id, List<Answer> answerList){
-//        Optional<Survey> optSurvey = surveyRepository.findById(answerInsertDTO.get_id());
-//        if(optSurvey.isPresent()) {
-//            System.out.println("###### 존재하지 않는 ID값 ######");
-//            return "존재하지 않는 설문입니다";
-//        }
         return surveyDAO.insertAnswer(_id,answerList);
     }
     @Transactional(rollbackFor=Exception.class)
     public Integer deleteSurvey(String _id, String User_Email){
-        // 해당 설문의 작성자 확인
         String owner = surveyDAO.selectOwner(_id);
-
-        // 현재 유저와 불일치 -> 실패
         if(!owner.equals(User_Email)) {
             return null;
         }
-        // 현재 유저와 일치 -> 성공
         return surveyDAO.deleteSurvey(_id);
     }
 

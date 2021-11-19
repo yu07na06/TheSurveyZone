@@ -50,14 +50,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }catch (Exception e){
                 logger.error("Could not set user authentication in security context" , e);
             }
-
         filterChain.doFilter(request, response);
         }
 
         private String parseBearerToken(HttpServletRequest request){
         // Http 요청의 헤더를 파싱해 Bearar 토큰을 리턴한다.
             String bearerToken = request.getHeader("Authorization");
-
             if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
                 return bearerToken.substring(7);
             }
