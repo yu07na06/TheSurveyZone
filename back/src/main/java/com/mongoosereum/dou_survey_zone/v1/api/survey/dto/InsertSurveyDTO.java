@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-public class SurveyInsertDTO {
+public class InsertSurveyDTO {
     private String sur_Title;
     private String sur_Content;
     private SurveyProgressType sur_State;

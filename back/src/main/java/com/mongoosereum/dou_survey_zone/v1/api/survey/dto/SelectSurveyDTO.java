@@ -13,8 +13,8 @@ import java.util.List;
 
 @Data
 @ToString
-public class SurveySelectDTO {
-    private String sur_ID;
+public class SelectSurveyDTO {
+    private String _id;
     private String sur_Title; // 설문 제목
     private String sur_Content; // 설문 본문
     private Integer sur_State;
@@ -27,7 +27,7 @@ public class SurveySelectDTO {
     private List<Question> questionList;
 
     public void set(Survey_Mongo survey_mongo, Survey_MySQL survey_mySQL){
-        this.sur_ID = survey_mongo.getSur_ID();
+        this._id = survey_mongo.get_id();
         this.sur_Title = survey_mySQL.getSur_Title();
         this.sur_Content = survey_mySQL.getSur_Content();
         this.sur_State = survey_mySQL.getSur_State();
