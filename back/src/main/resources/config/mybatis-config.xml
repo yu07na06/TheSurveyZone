@@ -4,7 +4,7 @@
 <configuration>
 
     <typeAliases>
-        <typeAlias type="com.mongoosereum.dou_survey_zone.v1.api.user.dto.UserDTO" alias="UserDTO"/>
+        <typeAlias type="com.mongoosereum.dou_survey_zone.v1.api.user.entity.User_MySQL" alias="User_MySQL"/>
         <typeAlias type="com.mongoosereum.dou_survey_zone.v1.api.participation.dto.ParticipationDTO" alias="ParticipationDTO"/>
         <typeAlias type="com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mysql.Survey_MySQL" alias="Survey_MySQL"/>
         <typeAlias type="com.mongoosereum.dou_survey_zone.v1.api.tag.dto.TagDTO" alias="TagDTO"/>

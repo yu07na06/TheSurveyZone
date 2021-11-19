@@ -43,4 +43,10 @@ public class SurveyController{
     public String answerInsert(@RequestBody AnswerInsertDTO answerInsertDTO){
         return surveyService.insertAnswer(answerInsertDTO);
     }
+
+    //접근 권한 테스트용
+    @GetMapping(path="/test")
+    public String testabc() {
+        return "test OK!";
+    }
 }
