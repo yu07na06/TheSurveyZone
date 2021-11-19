@@ -11,7 +11,7 @@ const RegisterComp = () => {
     const [passWordConfirm, setPassWordConfirm] = useState();
     const [phoneNumber, setPhoneNumber] = useState();
     const [errorText, setErrorText] = useState();
-    const [emailText, setEmailText] = useState("사용가능");
+    const [emailText, setEmailText] = useState();
     const history = useHistory();
 
     const onSubmit = (event) => {
@@ -36,13 +36,7 @@ const RegisterComp = () => {
         .catch((err)=>{
             console.log(err);
         })
-        // .catch(()=>{
-        //     Swal.fire({
-        //         icon: 'error',
-        //         title: 'server error',
-        //         text: 'error code [500]'
-        //     })
-        // })
+
         setErrorText()
         return console.log("회원가입 성공!");
         }
@@ -74,15 +68,8 @@ const RegisterComp = () => {
         switch(e.target.name){
             case 'User_Email' : 
                 emailResult.current = regexEmail.test(e.target.value)
-                console.log(e.target.value);
-                // console.log({user_Email: e.target.value});
-                // 서버에 아이디 보내고 있는지 없는지 값 받아와서 처리할 예정
-                emailAPI({"user_Email": e.target.value})
-                    .then(res=>{if(res.data==="True")
-                                    setEmailText("사용가능")
-                                else
-                                    setEmailText("사용불가능")
-                                })
+                emailAPI({user_Email: e.target.value})
+                    .then(res=>{  setEmailText(res.data)})
                     .catch(err=>console.log(err));
                 break;
             case 'User_Password' : 

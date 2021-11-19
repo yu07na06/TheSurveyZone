@@ -68,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
                 />
               </Grid>
 
-              {emailText ==="사용불가능"?
+              {emailText ?
                 <Grid item xs={12}>
                   <Typography variant="h7" style={{color:"#FF5555"}}>* 이미 존재하는 이메일입니다.</Typography>
                 </Grid> : null
