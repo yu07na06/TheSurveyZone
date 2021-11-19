@@ -7,8 +7,10 @@ import LinearMagnificationComp from './LinearMagnificationComp';
 import { createSurvey as createSurveyAPI } from '../../../lib/api/survey';
 import Swal from 'sweetalert2';
 import { useHistory } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 
 const CreateSurveyComp = () => {
+  const [cookies] = useCookies(['user_Token']);
   const [day, setDay] = useState([new Date(), new Date()]);
   const [Sur_Publish, setSur_Publish] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -21,6 +23,16 @@ const CreateSurveyComp = () => {
   const open = Boolean(anchorEl);
   const count = useRef(0);
   const history = useHistory();
+
+  useEffect(()=>{
+    if(cookies.user_Token==null){
+      Swal.fire({
+        icon:'info',
+        title:'로그인이 필요한 페이지입니다.'
+      })
+      history.push('/LoginPage');
+    }
+  },[])
   
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
