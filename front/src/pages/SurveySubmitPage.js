@@ -3,11 +3,11 @@ import Footer from '../components/common/UI/Footer';
 import Header from '../components/common/UI/Header';
 import SurveySubmitComp from '../components/survey/comp/SurveySubmitComp';
 
-const SurveySubmitPage = () => {
+const SurveySubmitPage = (props) => {
     return (
         <>
             <Header />
-                <SurveySubmitComp />
+                <SurveySubmitComp surveykey={props.match.params.surveykey}/>
             <Footer />
         </>
     );
