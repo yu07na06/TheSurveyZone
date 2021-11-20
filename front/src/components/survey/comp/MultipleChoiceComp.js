@@ -3,7 +3,7 @@ import React, { useRef, useState } from 'react';
 import MultipleChoice from '../UI/MultipleChoice';
 import {useEffect} from 'react';
 
-const MultipleChoiceComp = ({number, setCheck, setDelIndex,  }) => {
+const MultipleChoiceComp = ({number, setCheck, setDelIndex, ReadOnlyState, ReadOnlyData, }) => {
 
     const [select, setSelect] = useState([]); // 보기 덩어리가 들어가있음
     const [deleteIndex, setDeleteIndex] = useState(null);
@@ -12,7 +12,7 @@ const MultipleChoiceComp = ({number, setCheck, setDelIndex,  }) => {
     const count = useRef(-1);
     
     useEffect(()=>{
-        setCheck({[number]:temp});
+        !ReadOnlyState&&setCheck({[number]:temp});
     },[temp]);
 
     useEffect(()=>{
@@ -49,25 +49,27 @@ const MultipleChoiceComp = ({number, setCheck, setDelIndex,  }) => {
                     variant="standard"
                     required
                     fullWidth
+                    disabled={ReadOnlyState}
                     name={`SurQue_Ans${number}_${count.current}`}
                     id={`SurQue_Ans${number}_${count.current}`}
                     label={`선택지${number}_${count.current}`}
+                    value={ReadOnlyState?ReadOnlyData.selectList[number].surSel_Content:null} // 아직 객체 참조 안함
                     >
                 </TextField>
                 </Grid>
-                <Grid item xs={1}>
+                {!ReadOnlyState&&<Grid item xs={1}>
                 <Button 
                     id={`SurQue_Ans${number}_${count.current}`}
                     onClick={(e)=>deleteBtn(e)}
                     >삭제</Button><br/>
-                </Grid>
+                </Grid>}
             </Grid>
             // </div>
         );
     }
 
     return (
-        <>
+        <div key="hi">
             <MultipleChoice 
                 number={number}
                 select={select}
@@ -76,8 +78,10 @@ const MultipleChoiceComp = ({number, setCheck, setDelIndex,  }) => {
                 maxNum={maxNum}
                 setMaxNum={setMaxNum}
                 deleteQue={deleteQue}
+                ReadOnlyState={ReadOnlyState}
+                ReadOnlyData={ReadOnlyData}
             />
-        </>
+        </div>
     );
 };
 
