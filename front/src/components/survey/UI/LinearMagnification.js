@@ -11,22 +11,25 @@ import Slider from '@mui/material/Slider';
 import Rating from '@mui/material/Rating';
 import Radio from "@mui/material/Radio";
 
-const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxValue, value, valuetext, controlProps, setTemp, deleteQue, }) => {
+const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxValue, value, valuetext, controlProps, setTemp, deleteQue, ReadOnlyState, ReadOnlyData, }) => {
     return (
         <>
             <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
                 <Grid container spacing={2}>
-                <Switch id={`SurQue_Essential${number}`} name={`SurQue_Essential${number}`} sx={{ left: '92%' }} defaultChecked color="secondary" />
-                <Button id={number} sx={{ left: '74%' }} onClick={(e)=>deleteQue(e)}>삭제</Button><br/>
+                {!ReadOnlyState&&
+                <><Switch id={`SurQue_Essential${number}`} name={`SurQue_Essential${number}`} sx={{ left: '92%' }} defaultChecked color="secondary" />
+                <Button id={number} sx={{ left: '74%' }} onClick={(e)=>deleteQue(e)}>삭제</Button></>}
                     <br/>
                     <Grid item xs={12}>
                         <TextField
                             variant="outlined"
                             required
                             fullWidth
+                            disabled={ReadOnlyState}
                             name={`SurQue_Content${number}`}
                             id={`SurQue_Content${number}`}
                             label={`선형배율${number}`}
+                            value={ReadOnlyState?ReadOnlyData.surQue_Content:null} // 객체 참조 안함
                         />
                     </Grid>
                     <Grid item xs={3}>
@@ -36,8 +39,11 @@ const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxVal
                             name={`start_Step${number}`}
                             label="시작"
                             onChange={e=>setTemp(e.target.value)}
+                            disabled={ReadOnlyState}
+                            value={ReadOnlyState?ReadOnlyData.selectList[number].surSel_Content:null} // 객체 참조 안함
                         />
                     </Grid>
+                    {!ReadOnlyState&&
                     <Grid item xs={3}>
                         <Box>
                             <FormControl fullWidth>
@@ -47,15 +53,48 @@ const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxVal
                                         labelId={`start_Name${number}_${minValue}`}
                                         id={`start_Name${number}_${minValue}`}
                                         name={`start_Name${number}_${minValue}`}
-                                        value={minValue}
                                         label={`start_Name${number}_${minValue}`}
                                         onChange={e => setMinValue(e.target.value)}
+                                        disabled={ReadOnlyState}
+                                        value={minValue} // 객체 참조 안함
                                         >
                                     <MenuItem value="0">0</MenuItem>
                                     <MenuItem value="1">1</MenuItem>
                                 </Select>
                             </FormControl>
                         </Box>
+                    </Grid>}
+                    <Grid item xs={6}>
+                        {ReadOnlyState&&
+                            <Grid item xs={12}>
+                                <Radio {...controlProps("a")} size="small" />
+                                <Radio {...controlProps("b")} />
+                                <Radio
+                                    {...controlProps("c")}
+                                    sx={{
+                                    "& .MuiSvgIcon-root": {
+                                        fontSize: 28
+                                    }
+                                    }}
+                                />
+                                <Radio
+                                    {...controlProps("d")}
+                                    sx={{
+                                    "& .MuiSvgIcon-root": {
+                                        fontSize: 35
+                                    }
+                                    }}
+                                />
+                                <Radio
+                                    {...controlProps("e")}
+                                    sx={{
+                                    "& .MuiSvgIcon-root": {
+                                        fontSize: 40
+                                    }
+                                    }}
+                                />
+                            </Grid>
+                        }
                     </Grid>
                     <Grid item xs={3}>
                         <TextField
@@ -64,8 +103,11 @@ const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxVal
                             name={`end_Step${number}`}
                             label="끝"
                             onChange={e=>setTemp(e.target.value)}
+                            disabled={ReadOnlyState}
+                            value={ReadOnlyState?ReadOnlyData.selectList[number].surSel_Content:null} // 객체 참조 안함
                         />
                     </Grid>
+                    {!ReadOnlyState&&
                     <Grid item xs={3}>
                         <Box>
                             <FormControl fullWidth>
@@ -75,68 +117,18 @@ const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxVal
                                         labelId={`end_Name${number}_${maxValue}`}
                                         id={`end_Name${number}_${maxValue}`}
                                         name={`end_Name${number}_${maxValue}`}
-                                        value={maxValue}
                                         label={`end_Name${number}_${maxValue}`}
                                         onChange={e => setMaxValue(e.target.value)}
+                                        disabled={ReadOnlyState}
+                                        value={maxValue} // 객체 참조 안함
                                         >
                                     {value.map((v,i)=>
-                                        (minValue==0)?<MenuItem value={v}>{v}</MenuItem>:<MenuItem value={v+1}>{v+1}</MenuItem>
+                                        (minValue===0)?<MenuItem value={v}>{v}</MenuItem>:<MenuItem value={v+1}>{v+1}</MenuItem>
                                     )}
                                 </Select>
                             </FormControl>
                         </Box>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Box sx={{ mx:4,  width: 300 }}>
-                            <Slider
-                                track={false}
-                                aria-label="Custom marks"
-                                defaultValue={1}
-                                getAriaValueText={valuetext}
-                                step={1}
-                                valueLabelDisplay="auto"
-                                marks={
-                                    [{
-                                        value: minValue,
-                                        label: minValue,
-                                    },
-                                    {
-                                        value: maxValue,
-                                        label: maxValue,
-                                    }]}
-                                min={minValue}
-                                max={maxValue}
-                            />
-                        </Box>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Radio {...controlProps("a")} size="small" />
-                        <Radio {...controlProps("b")} />
-                        <Radio
-                            {...controlProps("c")}
-                            sx={{
-                            "& .MuiSvgIcon-root": {
-                                fontSize: 28
-                            }
-                            }}
-                        />
-                        <Radio
-                            {...controlProps("d")}
-                            sx={{
-                            "& .MuiSvgIcon-root": {
-                                fontSize: 35
-                            }
-                            }}
-                        />
-                        <Radio
-                            {...controlProps("e")}
-                            sx={{
-                            "& .MuiSvgIcon-root": {
-                                fontSize: 40
-                            }
-                            }}
-                        />
-                    </Grid>
+                    </Grid>}
                 </Grid>
             </Paper>
         </>

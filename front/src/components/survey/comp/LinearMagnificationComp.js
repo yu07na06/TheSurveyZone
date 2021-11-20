@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useEffect } from 'react/cjs/react.development';
 import LinearMagnification from '../UI/LinearMagnification';
 
-const LinearMagnificationComp = ({number, setCheck, setDelIndex, }) => {
+const LinearMagnificationComp = ({number, setCheck, setDelIndex, ReadOnlyState, ReadOnlyData, }) => {
     const [minValue, setMinValue] = useState(0);
     const [maxValue, setMaxValue] = useState(null);
     const [temp, setTemp] = useState('');
@@ -27,7 +27,7 @@ const LinearMagnificationComp = ({number, setCheck, setDelIndex, }) => {
     }
 
     useEffect(()=>{
-        setCheck({[number]:[ `start_Step${number}`, `start_Name${number}_${minValue}`, `end_Step${number}`, `end_Name${number}_${maxValue}`]});
+        !ReadOnlyState&&setCheck({[number]:[ `start_Step${number}`, `start_Name${number}_${minValue}`, `end_Step${number}`, `end_Name${number}_${maxValue}`]});
     },[minValue, maxValue, temp])
     
     return (
@@ -43,6 +43,9 @@ const LinearMagnificationComp = ({number, setCheck, setDelIndex, }) => {
                 controlProps={controlProps}
                 setTemp={setTemp}
                 deleteQue={deleteQue}
+                ReadOnlyState={ReadOnlyState}
+                ReadOnlyData={ReadOnlyData}
+
             />
         </>
     );

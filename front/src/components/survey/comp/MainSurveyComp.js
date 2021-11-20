@@ -4,15 +4,8 @@ import { useEffect } from 'react/cjs/react.development';
 import { getSurvey as getSurveyAPI } from '../../../lib/api/survey';
 import MainSurvey from '../UI/MainSurvey';
 
-const MainSurveyComp = ({surveykey}) => {
-    // const [surveyReqForm, setSurveyReqForm] = useState(null);
-    console.log("여기는 메인!! key", surveykey.sur_ID);
-
-    // useEffect(()=>{
-    //      getSurveyAPI(surveykey)
-    //         .then(res =>setSurveyReqForm(res.data))
-    //         .catch(err => console.log(err));
-    // },[surveykey])
+const MainSurveyComp = ({surveyReqForm}) => {
+    console.log("여기는 메인!! key", surveyReqForm);
 
     const theme = createTheme();
 
@@ -20,7 +13,7 @@ const MainSurveyComp = ({surveykey}) => {
         <>
             <MainSurvey 
                 theme={theme}
-                surveyReqForm={surveykey}
+                surveyReqForm={surveyReqForm}
             />
         </>
     );

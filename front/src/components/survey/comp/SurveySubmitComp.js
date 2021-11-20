@@ -24,7 +24,7 @@ const SurveySubmitComp = ({surveykey}) => {
         case 0:
             return <BeforeSurveyComp />;
         case 1:
-            return <MainSurveyComp surveykey={surveyReqForm}/>;
+            return <MainSurveyComp surveyReqForm={surveyReqForm}/>;
         case 2:
             return  finalStep();
         default:
