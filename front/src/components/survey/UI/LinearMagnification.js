@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Paper from '@mui/material/Paper';
-import { Grid, TextField } from '@mui/material';
+import { Button, Grid, TextField } from '@mui/material';
 import Switch from '@mui/material/Switch';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
@@ -11,12 +11,13 @@ import Slider from '@mui/material/Slider';
 import Rating from '@mui/material/Rating';
 import Radio from "@mui/material/Radio";
 
-const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxValue, value, valuetext, controlProps, setTemp}) => {
+const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxValue, value, valuetext, controlProps, setTemp, deleteQue, }) => {
     return (
         <>
             <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
                 <Grid container spacing={2}>
                 <Switch id={`SurQue_Essential${number}`} name={`SurQue_Essential${number}`} sx={{ left: '92%' }} defaultChecked color="secondary" />
+                <Button id={number} sx={{ left: '74%' }} onClick={(e)=>deleteQue(e)}>삭제</Button><br/>
                     <br/>
                     <Grid item xs={12}>
                         <TextField
