@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useEffect } from 'react/cjs/react.development';
 import LinearMagnification from '../UI/LinearMagnification';
 
-const LinearMagnificationComp = ({number, setCheck}) => {
+const LinearMagnificationComp = ({number, setCheck, setDelIndex, }) => {
     const [minValue, setMinValue] = useState(0);
     const [maxValue, setMaxValue] = useState(null);
     const [temp, setTemp] = useState('');
@@ -22,6 +22,10 @@ const LinearMagnificationComp = ({number, setCheck}) => {
         inputProps: { "aria-label": item }
     });
 
+    const deleteQue = (e) => {
+        setDelIndex(e.target.id);
+    }
+
     useEffect(()=>{
         setCheck({[number]:[ `start_Step${number}`, `start_Name${number}_${minValue}`, `end_Step${number}`, `end_Name${number}_${maxValue}`]});
     },[minValue, maxValue, temp])
@@ -38,6 +42,7 @@ const LinearMagnificationComp = ({number, setCheck}) => {
                 valuetext={valuetext}
                 controlProps={controlProps}
                 setTemp={setTemp}
+                deleteQue={deleteQue}
             />
         </>
     );

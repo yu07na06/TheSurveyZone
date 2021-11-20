@@ -16,6 +16,7 @@ const CreateSurveyComp = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [question, setQuestion] = useState([]); // 질문 덩어리(객관식, 주관식, 선형배율)
   const [question_ans, setQuestion_Ans] = useState({}); // 질문에 대한 보기 이름에 대한 배열을 보내기 위해
+  const [delIndex, setDelIndex] = useState();
   const [check, setCheck] = useState({});
   const [tag, setTag] = useState('');
   const theme = createTheme();
@@ -33,6 +34,11 @@ const CreateSurveyComp = () => {
       history.push('/LoginPage');
     }
   },[])
+
+  useEffect(()=>{
+    const newQuestionList = question.filter((value)=>value.key!==delIndex);
+    setQuestion(newQuestionList);
+  },[delIndex]);
   
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -46,13 +52,13 @@ const CreateSurveyComp = () => {
     setAnchorEl(null); // 메뉴 닫기
     switch(e.target.id){
       case '객관식':
-        setQuestion([...question, <MultipleChoiceComp number={count.current} setCheck={setCheck} />]);
+        setQuestion([...question, <div key={count.current}><MultipleChoiceComp setDelIndex={setDelIndex} number={count.current} setCheck={setCheck} /></div>  ]);
         break;
       case '주관식':
-        setQuestion([...question, <SubjectiveComp number={count.current} setCheck={setCheck}/>]);
+        setQuestion([...question, <div key={count.current}><SubjectiveComp setDelIndex={setDelIndex} number={count.current} setCheck={setCheck}/></div>  ]);
         break;
       case '선형배율':
-        setQuestion([...question, <LinearMagnificationComp number={count.current} setCheck={setCheck}/>]);
+        setQuestion([...question, <div key={count.current}><LinearMagnificationComp setDelIndex={setDelIndex} number={count.current} setCheck={setCheck}/></div>  ]);
         break;
       default : break;
     }
@@ -64,8 +70,10 @@ const CreateSurveyComp = () => {
   },[check]);
 
   useEffect(()=>{
-    console.log('부모야 어때', question_ans);
-  },[question_ans])
+    question.map((v)=>{
+      console.log("question값에 변동이 일어났다  : ", v);
+    })
+  },[question])
   
   const onClick = (e) => { // 완료 버튼 클릭 시, node에게 보냄
     e.preventDefault(); // 화면 유지

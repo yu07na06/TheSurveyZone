@@ -24,7 +24,7 @@ const LoginComp = () => {
         const email = data.get("User_Email");
         const password = data.get("User_Password"); 
         const timer = new Date();
-        timer.setSeconds(timer.getSeconds()+10);
+        timer.setMinutes(timer.getMinutes()+60);
 
         console.log({"user_Email": email, "user_Password": password});
         // 로그인 요청

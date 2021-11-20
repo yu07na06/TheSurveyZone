@@ -10,10 +10,11 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-const MultipleChoice = ({number, select, setSelect, addText, maxNum, setMaxNum}) => {
+const MultipleChoice = ({number, select, setSelect, addText, maxNum, setMaxNum, deleteQue, }) => {
     return (
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-            <Switch id={`SurQue_Essential${number}`} name={`SurQue_Essential${number}`} sx={{ left: '94%' }} defaultChecked color="secondary" /><br/><br/>
+            <Switch id={`SurQue_Essential${number}`} name={`SurQue_Essential${number}`} sx={{ left: '94%' }} defaultChecked color="secondary" />
+            <Button id={number} sx={{ left: '74%' }} onClick={(e)=>deleteQue(e)}>삭제</Button><br/>
             <Grid container spacing={2}><br/>
                 <Grid item xs={10}>
                     <TextField

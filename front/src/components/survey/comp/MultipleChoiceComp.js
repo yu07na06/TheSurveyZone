@@ -3,15 +3,39 @@ import React, { useRef, useState } from 'react';
 import MultipleChoice from '../UI/MultipleChoice';
 import {useEffect} from 'react';
 
-const MultipleChoiceComp = ({number, setCheck }) => {
+const MultipleChoiceComp = ({number, setCheck, setDelIndex,  }) => {
+
     const [select, setSelect] = useState([]); // 보기 덩어리가 들어가있음
     const [deleteIndex, setDeleteIndex] = useState(null);
     const [temp, setTemp] = useState([]);
     const [maxNum, setMaxNum] = useState('');
     const count = useRef(-1);
+    
+    useEffect(()=>{
+        setCheck({[number]:temp});
+    },[temp]);
 
+    useEffect(()=>{
+        if(deleteIndex != null){
+            let newSelect = select.filter((value)=> value.key !== deleteIndex)
+            setSelect(newSelect);
+            let newTemp = temp.filter((value)=> value !== deleteIndex)
+            setTemp(newTemp);
+        }
+    },[deleteIndex])
+
+    useEffect(()=>{
+        console.log("select 확인", select);
+        setDeleteIndex(null); // 인덱스 중복될 수 있으니
+    },[select])
+
+        
     const deleteBtn = (e) => {
         setDeleteIndex(e.target.id);
+    }
+
+    const deleteQue = (e) => {
+        setDelIndex(e.target.id);
     }
 
     const addText = (number) => {
@@ -42,24 +66,6 @@ const MultipleChoiceComp = ({number, setCheck }) => {
         );
     }
 
-    useEffect(()=>{
-        setCheck({[number]:temp});
-    },[temp]);
-
-    useEffect(()=>{
-        if(deleteIndex != null){
-            let newSelect = select.filter((value)=> value.key !== deleteIndex)
-            setSelect(newSelect);
-            let newTemp = temp.filter((value)=> value !== deleteIndex)
-            setTemp(newTemp);
-        }
-    },[deleteIndex])
-
-    useEffect(()=>{
-        console.log("select 확인", select);
-        setDeleteIndex(null); // 인덱스 중복될 수 있으니
-    },[select])
-
     return (
         <>
             <MultipleChoice 
@@ -69,6 +75,7 @@ const MultipleChoiceComp = ({number, setCheck }) => {
                 addText={addText}
                 maxNum={maxNum}
                 setMaxNum={setMaxNum}
+                deleteQue={deleteQue}
             />
         </>
     );
