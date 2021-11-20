@@ -52,13 +52,13 @@ const CreateSurveyComp = () => {
     setAnchorEl(null); // 메뉴 닫기
     switch(e.target.id){
       case '객관식':
-        setQuestion([...question, <div key={count.current}><MultipleChoiceComp setDelIndex={setDelIndex} number={count.current} setCheck={setCheck} /></div>  ]);
+        setQuestion([...question, <div key={count.current}><MultipleChoiceComp ReadOnlyState={false} ReadOnlyData={null} setDelIndex={setDelIndex} number={count.current} setCheck={setCheck} /></div>  ]);
         break;
       case '주관식':
-        setQuestion([...question, <div key={count.current}><SubjectiveComp setDelIndex={setDelIndex} number={count.current} setCheck={setCheck}/></div>  ]);
+        setQuestion([...question, <div key={count.current}><SubjectiveComp ReadOnlyState={false} ReadOnlyData={null} setDelIndex={setDelIndex} number={count.current} setCheck={setCheck}/></div>  ]);
         break;
       case '선형배율':
-        setQuestion([...question, <div key={count.current}><LinearMagnificationComp setDelIndex={setDelIndex} number={count.current} setCheck={setCheck}/></div>  ]);
+        setQuestion([...question, <div key={count.current}><LinearMagnificationComp ReadOnlyState={false} ReadOnlyData={null} setDelIndex={setDelIndex} number={count.current} setCheck={setCheck}/></div>  ]);
         break;
       default : break;
     }
@@ -71,7 +71,7 @@ const CreateSurveyComp = () => {
 
   useEffect(()=>{
     question.map((v)=>{
-      console.log("question값에 변동이 일어났다  : ", v);
+      console.log("question값에 변동이 일어났다  : ", v.props.children.type.name);
     })
   },[question])
   
@@ -88,7 +88,7 @@ const CreateSurveyComp = () => {
 
     let questionList = question.map((value, index)=>{ // 질문 들어가는 배열
       let SurType = null;
-      switch(value.type.name){
+      switch(value.props.children.type.name){
         case 'SubjectiveComp':
           SurType=0; // 주관식
           break;
