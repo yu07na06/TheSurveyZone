@@ -2,28 +2,26 @@ package com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mongo;
 
 import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.QuestionType;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.SurveyType;
+import io.swagger.annotations.ApiParam;
 import lombok.*;
 
 import java.util.List;
 
 @Data
-@NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class Question {
 //    @Id
 //    private String SurQue_ID;
     private String SurQue_Content;
+
     private QuestionType SurQue_QType;
+
     private Long SurQue_MaxAns;
+
     private Long SurQue_Order;
+
     private List<Select> selectList;
+
     private List<Answer> answerList;
-    @Builder
-    public Question(String SurQue_Content, QuestionType SurQue_QType, Long SurQue_MaxAns, Long SurQue_Order, List<Select>selectList, List<Answer>answerList) {
-        this.SurQue_Content = SurQue_Content;
-        this.SurQue_QType = SurQue_QType;
-        this.SurQue_MaxAns = SurQue_MaxAns;
-        this.SurQue_Order = SurQue_Order;
-        this.selectList = selectList;
-        this.answerList = answerList;
-    }
 }

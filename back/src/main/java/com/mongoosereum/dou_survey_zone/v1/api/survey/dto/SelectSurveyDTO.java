@@ -8,6 +8,7 @@ import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mysql.Survey_MySQL;
 import lombok.Data;
 import lombok.ToString;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -18,8 +19,8 @@ public class SelectSurveyDTO {
     private String sur_Title; // 설문 제목
     private String sur_Content; // 설문 본문
     private Integer sur_State;
-    private Date sur_StartDate;
-    private Date sur_EndDate;
+    private LocalDate sur_StartDate;
+    private LocalDate sur_EndDate;
     private Boolean sur_Publish;
     private String sur_Image;
     private String user_Email;

@@ -5,6 +5,8 @@ import com.mongoosereum.dou_survey_zone.v1.api.user.dao.UserDAO;
 import com.mongoosereum.dou_survey_zone.v1.api.user.dto.UserDTO;
 import com.mongoosereum.dou_survey_zone.v1.api.user.entity.User_MySQL;
 import com.mongoosereum.dou_survey_zone.v1.api.user.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.el.parser.Token;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Api(value="사용자 API", tags = {"User API"})
 @RestController
 @Slf4j
 @RequestMapping(path = "/api/v1/user", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -33,6 +36,7 @@ public class UserController{
 
     /* 이메일 유효성 체크 */
     @PostMapping(path="/checkEmail")
+    @ApiOperation(value = "이메일 중복검사")
     public ResponseEntity CheckEmail(@RequestBody UserDTO userDTO) {
         System.out.println("check : " + userDTO.getUser_Email());
         return ResponseEntity.ok().body(Service.checkEmail(userDTO.getUser_Email()));
@@ -40,6 +44,7 @@ public class UserController{
 
     /* 회원가입 */
     @PostMapping(path="/signup")
+    @ApiOperation(value = "회원 가입")
     public ResponseEntity<?> registerUser(@RequestBody UserDTO userDTO) {
 
         System.out.println("signup");
@@ -68,6 +73,7 @@ public class UserController{
 
     /* 로그인 */
     @PostMapping(path="/signin")
+    @ApiOperation(value = "로그인")
     public ResponseEntity<?> signin(@RequestBody UserDTO userDTO) {
 
         System.out.println("signin");
@@ -89,7 +95,6 @@ public class UserController{
         }
     }
 
-
     /* 테스트용 */
     @GetMapping(path="/test")
     public String test(@RequestBody UserDTO userDTO) {
@@ -97,6 +102,4 @@ public class UserController{
         System.out.println(userDTO.getUser_Password());
         return "success";
     }
-
-
 }
