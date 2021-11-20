@@ -1,20 +1,22 @@
 package com.mongoosereum.dou_survey_zone.v1.api.controller;
 
 import com.mongoosereum.dou_survey_zone.v1.api.survey.dto.SelectSurveyDTO;
-import com.mongoosereum.dou_survey_zone.v1.api.survey.dto.InsertAnswerDTO;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.dto.InsertSurveyDTO;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mongo.Answer;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mysql.Survey_MySQL;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.service.SurveyService;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 
 import java.util.List;
 
+@Api(value="설문조사 API", tags = {"Survey API"})
 @RestController
 @RequestMapping(path = "/api/v1", produces = MediaType.APPLICATION_JSON_VALUE)
 public class SurveyController{
@@ -22,22 +24,20 @@ public class SurveyController{
     @Autowired
     private SurveyService surveyService;
 
-    // selectSurveyList 설문지 리스트 출력
     @GetMapping(path="/main/list")
+    @ApiOperation(value = "설문지 리스트 출력",notes="메인 페이지용, 페이징 미완성")
     public ResponseEntity selectSurveyList(){
         List<Survey_MySQL> surveyList = surveyService.selectSurveyList();
-        if(surveyList != null){
-            return ResponseEntity.status(HttpStatus.OK).body(surveyList);
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("설문 리스트가 존재하지 않습니다.");
+        return ResponseEntity.ok(surveyList);
     }
     @GetMapping(path="/survey/myPage")
-    public ResponseEntity selectMySurveyList(/*@AuthenticationPrincipal String userEmail*/@RequestParam String userEmail){
+    @ApiOperation(value = "내 설문지 리스트 출력")
+    public ResponseEntity selectMySurveyList(/*@AuthenticationPrincipal String userEmail*/@RequestParam @ApiParam(value="사용자 이메일 정보", required = true) String userEmail){
         List<Survey_MySQL> surveyList = surveyService.selectMySurveyList(userEmail);
         return ResponseEntity.ok().body(surveyList);
     }
-    // 설문지 생성
     @PostMapping(path="/survey/")
+    @ApiOperation(value = "설문 생성")
     public ResponseEntity insertSurvey(@RequestBody InsertSurveyDTO surveyInsertDTO){
         // TODO 정환 로그인 상태 확인 if( )
         // return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Fail Insert survey");
@@ -47,15 +47,15 @@ public class SurveyController{
         return ResponseEntity.status(HttpStatus.OK).body(surveyID);
     }
 
-    // FindById 설문 참여할 때 설문 출력
     @GetMapping(path="/survey/{_id}")
+    @ApiOperation(value = "설문 조회", notes="설문 조사 참여할때 설문 조사 출력")
     public ResponseEntity findById(@PathVariable("_id") String _id){
         SelectSurveyDTO result = surveyService.findById(_id);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    // 설문 제출
     @PostMapping("/survey/{_id}")
+    @ApiOperation(value = "설문 제출", notes="설문 조사 참여할때 작성한 설문 제출")
     public ResponseEntity insertAnswer(@PathVariable("_id") String _id, @RequestBody List<Answer> answerList){
         switch(surveyService.insertAnswer(_id,answerList)){
             case 0: return ResponseEntity.status(HttpStatus.NOT_FOUND).body("NOT FOUND");
@@ -65,6 +65,7 @@ public class SurveyController{
     }
     // 설문지 수정
     @PutMapping(path="/survey/{id}")
+    @ApiOperation(value = "설문 수정", notes="작성한 설문 조사 수정")
     public ResponseEntity updateSurvey(@PathVariable("id") String _id, @RequestBody InsertSurveyDTO surveyInsertDTO){
         // TODO 정환, 현재 로그인한 유저로 확인하는 로직 추가해야함
         try{
@@ -78,6 +79,7 @@ public class SurveyController{
 
     // 설문지 삭제
     @DeleteMapping(path="/survey/{_id}")
+    @ApiOperation(value = "설문 수정", notes="작성한 설문 조사 삭제")
     public ResponseEntity surveyDelete(@PathVariable("_id") String _id, @RequestBody String User_Email) {
         // TODO 정환, 현재 로그인한 유저로 확인하는 로직 추가해야함
         if (surveyService.deleteSurvey(_id, User_Email) == 0)
