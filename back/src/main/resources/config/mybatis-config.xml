@@ -9,6 +9,8 @@
         <typeAlias type="com.mongoosereum.dou_survey_zone.v1.api.participation.entity.ACC.ACC_Age" alias="ACC_Age"/>
         <typeAlias type="com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mysql.Survey_MySQL" alias="Survey_MySQL"/>
         <typeAlias type="com.mongoosereum.dou_survey_zone.v1.api.tag.dto.TagDTO" alias="TagDTO"/>
+        <typeAlias type="com.mongoosereum.dou_survey_zone.v1.api.tag.entity.SurveyTag" alias="SurveyTag"/>
+        <typeAlias type="com.mongoosereum.dou_survey_zone.v1.api.tag.entity.Tag" alias="Tag"/>
     </typeAliases>
 
 </configuration>

@@ -5,6 +5,7 @@ import com.mongoosereum.dou_survey_zone.v1.api.survey.dto.InsertSurveyDTO;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mongo.Answer;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mysql.Survey_MySQL;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.service.SurveyService;
+import com.mongoosereum.dou_survey_zone.v1.api.tag.entity.Tag;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,6 +36,16 @@ public class SurveyController{
     public ResponseEntity selectMySurveyList(/*@AuthenticationPrincipal String userEmail*/@RequestParam @ApiParam(value="사용자 이메일 정보", required = true) String userEmail){
         List<Survey_MySQL> surveyList = surveyService.selectMySurveyList(userEmail);
         return ResponseEntity.ok().body(surveyList);
+    }
+    @GetMapping(path="/survey/tags")
+    @ApiOperation(value="현재 존재하는 태그 리스트 출력", notes = "설문 생성시 존재하는 태그 리스트 출력")
+    public ResponseEntity selectTagList(){
+        return ResponseEntity.ok(surveyService.selectTagList());
+    }
+    @GetMapping(path="/survey/tags-exist")
+    @ApiOperation(value="게시물이 존재하는 태그 리스트 출력", notes="메인 페이지에서 보여줄 태그 리스트 출력")
+    public ResponseEntity selectTagExistList(){
+        return ResponseEntity.ok(surveyService.selectTagExistList(""));
     }
     @PostMapping(path="/survey/")
     @ApiOperation(value = "설문 생성")

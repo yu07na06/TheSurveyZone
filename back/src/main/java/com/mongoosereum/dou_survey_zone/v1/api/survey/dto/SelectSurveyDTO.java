@@ -5,6 +5,7 @@ import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.SurveyType;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mongo.Question;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mongo.Survey_Mongo;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mysql.Survey_MySQL;
+import com.mongoosereum.dou_survey_zone.v1.api.tag.entity.Tag;
 import lombok.Data;
 import lombok.ToString;
 
@@ -26,8 +27,9 @@ public class SelectSurveyDTO {
     private String user_Email;
     private Integer sur_Type;
     private List<Question> questionList;
+    private List<Tag> tagList;
 
-    public void set(Survey_Mongo survey_mongo, Survey_MySQL survey_mySQL){
+    public void set(Survey_Mongo survey_mongo, Survey_MySQL survey_mySQL, List<Tag> tagList){
         this._id = survey_mongo.get_id();
         this.sur_Title = survey_mySQL.getSur_Title();
         this.sur_Content = survey_mySQL.getSur_Content();
@@ -39,5 +41,6 @@ public class SelectSurveyDTO {
         this.sur_Publish = survey_mySQL.getSur_Publish();
         this.sur_Type = survey_mySQL.getSur_Type();
         this.questionList = survey_mongo.getQuestionList();
+        this.tagList = tagList;
     }
 }

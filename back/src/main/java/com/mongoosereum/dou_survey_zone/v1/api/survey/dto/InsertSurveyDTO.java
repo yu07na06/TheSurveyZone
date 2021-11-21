@@ -21,4 +21,5 @@ public class InsertSurveyDTO {
     private String user_Email;
     private List<Question> questionList;
     private SurveyType sur_Type;
+    private Long sur_Tag; // TODO [정환] 여러개로 변경해야함.
 }
