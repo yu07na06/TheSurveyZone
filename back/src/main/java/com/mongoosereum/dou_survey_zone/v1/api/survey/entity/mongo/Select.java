@@ -2,24 +2,24 @@ package com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mongo;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@NoArgsConstructor
+@Builder
+@AllArgsConstructor
 @Data
 @Document(collection="select")
+@ApiModel("질문 선택지, 객관식 선형배율 전용")
 public class Select {
 //    @Id
 //    private String SurSel_ID;
+    @ApiModelProperty(name="SurSel_Content", value="보기 내용", example = "햄버거")
     private String SurSel_Content;
-    private Long SurSel_Order;
 
-    @Builder
-    public Select(String SurSel_Content, Long SurSel_Order) {
-//        this.SurSel_ID = new ObjectId().toString();
-        this.SurSel_Content = SurSel_Content;
-        this.SurSel_Order = SurSel_Order;
-    }
+    @ApiModelProperty(name="SurSel_Content", value="보기 순서", example = "1")
+    private Long SurSel_Order;
 }

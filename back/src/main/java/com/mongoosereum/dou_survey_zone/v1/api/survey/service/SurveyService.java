@@ -57,7 +57,7 @@ public class SurveyService {
                         .sur_Publish(insertSurveyDTO.getSur_Publish())
                         .sur_Image(insertSurveyDTO.getSur_Image())
                         .user_Email(insertSurveyDTO.getUser_Email())
-                        .surveyType(insertSurveyDTO.getSur_Type().getNum())
+                        .sur_Type(insertSurveyDTO.getSur_Type().getNum())
                         .build();
         try {
             surveyDAO.surveyInsert_MySQL(survey_MySQL);
@@ -115,7 +115,7 @@ public class SurveyService {
                 .sur_Publish(surveyInsertDTO.getSur_Publish())
                 .sur_Image(surveyInsertDTO.getSur_Image())
                 .user_Email(surveyInsertDTO.getUser_Email())
-                .surveyType(surveyInsertDTO.getSur_Type().getNum())
+                .sur_Type(surveyInsertDTO.getSur_Type().getNum())
                 .build();
 
         Long resultMongo = surveyDAO.updateSurvey_Mongo(survey_Mongo);
