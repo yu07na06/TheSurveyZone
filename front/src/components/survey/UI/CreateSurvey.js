@@ -48,6 +48,7 @@ const CreateSurvey = ({theme, onClick, day, setDay, onCheckChange, question, ope
                     <div style={{marginLeft:160}}>
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <DateRangePicker
+                                minDate={new Date()}
                                 startText="시작일"
                                 endText="마감일"
                                 value={day}
@@ -94,7 +95,6 @@ const CreateSurvey = ({theme, onClick, day, setDay, onCheckChange, question, ope
                                         <FormControl fullWidth>
                                             <InputLabel id="demo-simple-select-label">태그</InputLabel>
                                                 <Select
-                                                    required
                                                     labelId="tag_Name"
                                                     id="tag_Name"
                                                     name="tag_Name"

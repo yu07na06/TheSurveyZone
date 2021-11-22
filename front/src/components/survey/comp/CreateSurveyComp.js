@@ -25,15 +25,15 @@ const CreateSurveyComp = () => {
   const count = useRef(0);
   const history = useHistory();
 
-  useEffect(()=>{
-    if(cookies.user_Token==null){
-      Swal.fire({
-        icon:'info',
-        title:'로그인이 필요한 페이지입니다.'
-      })
-      history.push('/LoginPage');
-    }
-  },[])
+  // useEffect(()=>{
+  //   if(cookies.user_Token==null){
+  //     Swal.fire({
+  //       icon:'info',
+  //       title:'로그인이 필요한 페이지입니다.'
+  //     })
+  //     history.push('/LoginPage');
+  //   }
+  // },[])
 
   useEffect(()=>{
     const newQuestionList = question.filter((value)=>value.key!==delIndex);
@@ -104,7 +104,7 @@ const CreateSurveyComp = () => {
         surQue_Content: data.get(`SurQue_Content${index}`), // 질문 내용
         surQue_QType: SurType, // 질문 타입 주관식(0), 객관식(1), 선형배율(2)
         surQue_Essential: data.get(`SurQue_Essential${index}`)==='on'?true:false, // true:필수, false:옵션
-        surQue_MaxAns: data.get(`surQue_MaxAns`), // 최대 선택갯수, 이건 아마 객관식에만 들어갈예정
+        surQue_MaxAns: data.get(`surQue_MaxAns${index}`), // 최대 선택갯수, 이건 아마 객관식에만 들어갈예정
         surQue_Order: index, // 질문의 순서
         answerList : [],
         selectList: question_ans[index].map((v, idx)=>{ // 객관식만 처리한 상태이므로, 주관식과 선형배율 error(수정 부탁)
@@ -129,6 +129,8 @@ const CreateSurveyComp = () => {
       tag_Name: data.get(`tag_Name`), 
       questionList,
     }
+
+    console.log("생성 시, 객체 확인합니다.", obj);
 
     let shareURL="http://localhost:3000/SurveySubmitPage/";
     console.log(obj);

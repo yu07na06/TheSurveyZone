@@ -9,8 +9,10 @@ import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import Typography from '@mui/material/Typography';
 
 const MultipleChoice = ({number, select, setSelect, addText, maxNum, setMaxNum, deleteQue, ReadOnlyState, ReadOnlyData, }) => {
+    console.log("ReadOnlyData.surQue_MaxAns", ReadOnlyData);
     return (
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
             {!ReadOnlyState&&
@@ -32,22 +34,24 @@ const MultipleChoice = ({number, select, setSelect, addText, maxNum, setMaxNum, 
                 <Grid item xs={2}>
                     <Box>
                         <FormControl fullWidth>
-                            <InputLabel id="demo-simple-select-label">중복답변개수</InputLabel>
+                            {ReadOnlyState&&<Typography>중복답변{ReadOnlyData.surQue_MaxAns}개</Typography>}
+                            {!ReadOnlyState&&
+                                <><InputLabel id="demo-simple-select-label">중복답변개수</InputLabel>
                                 <Select
                                     required
-                                    labelId="surQue_MaxAns"
-                                    id="surQue_MaxAns"
-                                    value={maxNum}
-                                    defaultValue={ReadOnlyState?ReadOnlyData.surQue_MaxAns:null} // 아직 객체 참조 안함
+                                    labelId={`surQue_MaxAns${number}`}
+                                    id={`surQue_MaxAns${number}`}
+                                    value={maxNum} // 아직 객체 참조 안함
                                     disabled={ReadOnlyState}
-                                    name="surQue_MaxAns"
-                                    label="surQue_MaxAns"
+                                    name={`surQue_MaxAns${number}`}
+                                    label={`surQue_MaxAns${number}`}
                                     onChange={e => setMaxNum(e.target.value)}
                                     >
                                 {select.map((value, index)=>
                                     <MenuItem value={index+1}>{index+1}</MenuItem>
                                 )}
-                            </Select>
+                                </Select></>
+                            }
                         </FormControl>
                     </Box>
                 </Grid>
@@ -58,7 +62,7 @@ const MultipleChoice = ({number, select, setSelect, addText, maxNum, setMaxNum, 
                 </Grid>
                 {!ReadOnlyState&&
                 <Grid item xs={12}>
-                    <Button onClick={()=>setSelect([...select, addText(number)])}>
+                    <Button onClick={()=>setSelect([...select, addText(number, ReadOnlyData, null)])}>
                         <AddIcon/>
                     </Button>
                 </Grid>}
