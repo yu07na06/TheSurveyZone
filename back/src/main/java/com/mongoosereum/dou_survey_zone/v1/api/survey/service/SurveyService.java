@@ -10,6 +10,10 @@ import com.mongoosereum.dou_survey_zone.v1.api.survey.dao.SurveyDAO;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.dto.InsertSurveyDTO;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mysql.Survey_MySQL;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mysql.Surveylist_MySQL;
+import com.mongoosereum.dou_survey_zone.v1.api.survey.repository.SurveyRepository;
+import com.mongoosereum.dou_survey_zone.v1.api.tag.dao.TagDAO;
+import com.mongoosereum.dou_survey_zone.v1.api.tag.entity.SurveyTag;
+import com.mongoosereum.dou_survey_zone.v1.api.tag.entity.Tag;
 import lombok.AllArgsConstructor;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +28,8 @@ import java.util.List;
 public class SurveyService {
     @Autowired
     private final SurveyDAO surveyDAO;
+    @Autowired
+    private final TagDAO tagDAO;
 
     public Surveylist_MySQL selectSurveyList(SurveylistDTO surveylistDTO) {
 
@@ -82,28 +88,39 @@ public class SurveyService {
         return response;
     }
 
-    public String insertSurvey(InsertSurveyDTO surveyInsertDTO){
+    public List<Tag> selectTagList(){
+        return tagDAO.selectTagList();
+    }
+    public List<Tag> selectTagExistList(String _id){
+        return tagDAO.findById(_id);
+    }
+    public String insertSurvey(InsertSurveyDTO insertSurveyDTO){
        // MongoDB insert
         Survey_Mongo survey_Mongo = Survey_Mongo.builder()
-                .questionList(surveyInsertDTO.getQuestionList())
+                .questionList(insertSurveyDTO.getQuestionList())
                 .build();
         String surveyID = surveyDAO.surveyInsert_Mongo(survey_Mongo);
 
         // MySQL insert by MongoDB.id
         Survey_MySQL survey_MySQL = Survey_MySQL.builder()
                         ._id(surveyID)
-                        .sur_Title(surveyInsertDTO.getSur_Title())
-                        .sur_Content(surveyInsertDTO.getSur_Content())
-                        .sur_State(surveyInsertDTO.getSur_State().getNum())
-                        .sur_StartDate(surveyInsertDTO.getSur_StartDate())
-                        .sur_EndDate(surveyInsertDTO.getSur_EndDate())
-                        .sur_Publish(surveyInsertDTO.getSur_Publish())
-                        .sur_Image(surveyInsertDTO.getSur_Image())
-                        .user_Email(surveyInsertDTO.getUser_Email())
-                        .surveyType(surveyInsertDTO.getSur_Type().getNum())
+                        .sur_Title(insertSurveyDTO.getSur_Title())
+                        .sur_Content(insertSurveyDTO.getSur_Content())
+                        .sur_State(insertSurveyDTO.getSur_State().getNum())
+                        .sur_StartDate(insertSurveyDTO.getSur_StartDate())
+                        .sur_EndDate(insertSurveyDTO.getSur_EndDate())
+                        .sur_Publish(insertSurveyDTO.getSur_Publish())
+                        .sur_Image(insertSurveyDTO.getSur_Image())
+                        .user_Email(insertSurveyDTO.getUser_Email())
+                        .sur_Type(insertSurveyDTO.getSur_Type().getNum())
                         .build();
         try {
             surveyDAO.surveyInsert_MySQL(survey_MySQL);
+            SurveyTag surveyTag = SurveyTag.builder()
+                                    ._id(surveyID)
+                                    .Tag_ID(insertSurveyDTO.getSur_Tag())
+                                    .build();
+            tagDAO.insertTag(surveyTag);
         }catch(Exception e) {
             // Insert에 실패한경우 생성된 MongoDB의 Document를 삭제해줘야함
             surveyDAO.deleteSurvey_Mongo(surveyID);
@@ -115,9 +132,9 @@ public class SurveyService {
     public SelectSurveyDTO findById(String _id){
         Survey_MySQL resultMySQL = surveyDAO.findById_MySQL(_id);
         Survey_Mongo resultMongo = surveyDAO.findById_Mongo(_id);
-
+        List<Tag> tagList = tagDAO.findById(_id);
         SelectSurveyDTO surveySelectDTO = new SelectSurveyDTO();
-        surveySelectDTO.set(resultMongo,resultMySQL);
+        surveySelectDTO.set(resultMongo,resultMySQL,tagList);
         return surveySelectDTO;
     }
 
@@ -153,7 +170,7 @@ public class SurveyService {
                 .sur_Publish(surveyInsertDTO.getSur_Publish())
                 .sur_Image(surveyInsertDTO.getSur_Image())
                 .user_Email(surveyInsertDTO.getUser_Email())
-                .surveyType(surveyInsertDTO.getSur_Type().getNum())
+                .sur_Type(surveyInsertDTO.getSur_Type().getNum())
                 .build();
 
         Long resultMongo = surveyDAO.updateSurvey_Mongo(survey_Mongo);
