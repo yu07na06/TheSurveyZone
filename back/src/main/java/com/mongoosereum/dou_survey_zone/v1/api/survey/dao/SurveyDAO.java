@@ -2,6 +2,8 @@ package com.mongoosereum.dou_survey_zone.v1.api.survey.dao;
 
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
+import com.mongoosereum.dou_survey_zone.v1.api.common.paging.Criteria_MySQL;
+import com.mongoosereum.dou_survey_zone.v1.api.common.paging.PaginationInfo_MySQL;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mongo.Answer;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mongo.Question;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mongo.Survey_Mongo;
@@ -27,9 +29,14 @@ public class SurveyDAO {
     private SqlSession sqlSession;
     
     // Select MySQL SurveyList
-    public List<Survey_MySQL> selectSurveyList(){
-        return sqlSession.selectList("selectSurveyList");
+    public List<Survey_MySQL> selectSurveyList(PaginationInfo_MySQL paginationInfo){
+        return sqlSession.selectList("selectSurveyList", paginationInfo);
     }
+
+    public int selectSurveyTotalCount(Criteria_MySQL Criteria){
+        return sqlSession.selectOne("selectSurveyTotalCount", Criteria);
+    };
+
     public List<Survey_MySQL> selectMySurveyList(String User_Email){
         return sqlSession.selectList("selectSurveyList",User_Email);
     }
