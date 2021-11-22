@@ -12,6 +12,9 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/api/v1", produces = MediaType.APPLICATION_JSON_VALUE)
 public class TestController{
+    @Autowired
+    SurveyService surveyService;
+
     @GetMapping(path="/ddd")
     public String test1( @AuthenticationPrincipal String userEmail){
         return userEmail;
