@@ -116,11 +116,11 @@ public class SurveyService {
                         .build();
         try {
             surveyDAO.surveyInsert_MySQL(survey_MySQL);
-            SurveyTag surveyTag = SurveyTag.builder()
-                                    ._id(surveyID)
-                                    .Tag_ID(insertSurveyDTO.getSur_Tag())
-                                    .build();
-            tagDAO.insertTag(surveyTag);
+//            SurveyTag surveyTag = SurveyTag.builder()
+//                                    ._id(surveyID)
+//                                    .Tag_ID(insertSurveyDTO.getSur_Tag())
+//                                    .build();
+//            tagDAO.insertTag(surveyTag);
         }catch(Exception e) {
             // Insert에 실패한경우 생성된 MongoDB의 Document를 삭제해줘야함
             surveyDAO.deleteSurvey_Mongo(surveyID);

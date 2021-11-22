@@ -20,7 +20,10 @@ public class Question {
     private String SurQue_Content;
 
     @ApiModelProperty(name="SurQue_QType", notes = "질문 유형 (0:객관식, 1:주관식, 2:선형배율)")
-    private QuestionType SurQue_QType;
+    private Integer SurQue_QType;
+
+    // @ApiModelProperty(name="SurQue_QType", notes = "질문 유형 (0:객관식, 1:주관식, 2:선형배율)")
+    // private QuestionType SurQue_QType;
 
     @ApiModelProperty(name="SurQue_MaxAns", notes = "객관식 전용 - 질문 최대 답변 개수")
     private Long SurQue_MaxAns;

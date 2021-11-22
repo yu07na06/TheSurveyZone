@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@Repository
 public class SurveyDAO {
     @Autowired
     private MongoTemplate mongoTemplate;

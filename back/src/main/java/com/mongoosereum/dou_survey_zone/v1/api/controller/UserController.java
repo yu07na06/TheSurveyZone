@@ -81,11 +81,9 @@ public class UserController{
     @PostMapping(path="/signin")
     @ApiOperation(value = "로그인")
     public ResponseEntity<?> signin(@RequestBody UserDTO userDTO) {
-
         System.out.println("signin");
         System.out.println(userDTO.getUser_Email());
         System.out.println(userDTO.getUser_Password());
-
         User_MySQL user = Service.login(userDTO.getUser_Email(), userDTO.getUser_Password(), passwordEncoder);
 
         if(user != null){
