@@ -1,16 +1,16 @@
 package com.mongoosereum.dou_survey_zone.v1.api.controller;
 
 import com.mongoosereum.dou_survey_zone.v1.api.survey.dto.SelectSurveyDTO;
-import com.mongoosereum.dou_survey_zone.v1.api.survey.dto.InsertAnswerDTO;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.dto.InsertSurveyDTO;
+import com.mongoosereum.dou_survey_zone.v1.api.survey.dto.SurveylistDTO;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mongo.Answer;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mysql.Survey_MySQL;
+import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mysql.Surveylist_MySQL;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.service.SurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,17 +23,27 @@ public class SurveyController{
     private SurveyService surveyService;
 
     // selectSurveyList 설문지 리스트 출력
-    @GetMapping(path="/main/list")
-    public ResponseEntity selectSurveyList(){
-        List<Survey_MySQL> surveyList = surveyService.selectSurveyList();
-        if(surveyList != null){
+    @GetMapping(path="/main/list/")
+    public ResponseEntity selectSurveyList(SurveylistDTO surveylistDTO){
+
+        // test print keyword and tag
+        //System.out.println(surveylistDTO.getSearch_Key());
+        //System.out.println(surveylistDTO.getSearch_Tag());
+
+        Surveylist_MySQL surveyList = surveyService.selectSurveyList(surveylistDTO);
+
+        if(surveyList.getSurveylist() != null){
             return ResponseEntity.status(HttpStatus.OK).body(surveyList);
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("설문 리스트가 존재하지 않습니다.");
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(surveylistDTO);
+
     }
     @GetMapping(path="/survey/myPage")
     public ResponseEntity selectMySurveyList(/*@AuthenticationPrincipal String userEmail*/@RequestParam String userEmail){
-        List<Survey_MySQL> surveyList = surveyService.selectMySurveyList(userEmail);
+
+        Surveylist_MySQL surveyList = surveyService.selectMySurveyList(userEmail);
+
         return ResponseEntity.ok().body(surveyList);
     }
     // 설문지 생성

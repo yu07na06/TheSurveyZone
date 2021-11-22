@@ -8,6 +8,8 @@
         <typeAlias type="com.mongoosereum.dou_survey_zone.v1.api.participation.entity.ACC.ACC_Gender" alias="ACC_Gender"/>
         <typeAlias type="com.mongoosereum.dou_survey_zone.v1.api.participation.entity.ACC.ACC_Age" alias="ACC_Age"/>
         <typeAlias type="com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mysql.Survey_MySQL" alias="Survey_MySQL"/>
+        <typeAlias type="com.mongoosereum.dou_survey_zone.v1.api.common.paging.Criteria_MySQL" alias="Criteria_MySQL"/>
+        <typeAlias type="com.mongoosereum.dou_survey_zone.v1.api.common.paging.PaginationInfo_MySQL" alias="PaginationInfo_MySQL"/>
         <typeAlias type="com.mongoosereum.dou_survey_zone.v1.api.tag.dto.TagDTO" alias="TagDTO"/>
     </typeAliases>
 
