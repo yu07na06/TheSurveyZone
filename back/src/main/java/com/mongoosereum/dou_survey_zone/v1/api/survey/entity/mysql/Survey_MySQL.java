@@ -10,7 +10,6 @@ import java.time.LocalDate;
 import java.util.Date;
 
 @Data
-@AllArgsConstructor
 @Builder
 public class Survey_MySQL {
     private String _id;
@@ -25,7 +24,7 @@ public class Survey_MySQL {
     private Integer sur_Type;
     private Integer tag_ID;
     @Builder
-    public Survey_MySQL(String _id, String sur_Title, String sur_Content, Integer sur_State, Date sur_StartDate, Date sur_EndDate, Boolean sur_Publish, String sur_Image, String user_Email, Integer surveyType,Integer tag_ID) {
+    public Survey_MySQL(String _id, String sur_Title, String sur_Content, Integer sur_State, LocalDate sur_StartDate, LocalDate sur_EndDate, Boolean sur_Publish, String sur_Image, String user_Email, Integer surveyType,Integer tag_ID) {
         this._id = _id;
         this.sur_Title = sur_Title;
         this.sur_Content = sur_Content;
