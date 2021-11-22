@@ -1,21 +1,26 @@
 package com.mongoosereum.dou_survey_zone.v1.api.survey.service;
 
+import com.mongoosereum.dou_survey_zone.v1.api.common.paging.Criteria_MySQL;
+import com.mongoosereum.dou_survey_zone.v1.api.common.paging.PaginationInfo_MySQL;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.dto.SelectSurveyDTO;
+import com.mongoosereum.dou_survey_zone.v1.api.survey.dto.SurveylistDTO;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mongo.Answer;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mongo.Survey_Mongo;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.dao.SurveyDAO;
-import com.mongoosereum.dou_survey_zone.v1.api.survey.dto.InsertAnswerDTO;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.dto.InsertSurveyDTO;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mysql.Survey_MySQL;
+import com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mysql.Surveylist_MySQL;
 import com.mongoosereum.dou_survey_zone.v1.api.survey.repository.SurveyRepository;
 import com.mongoosereum.dou_survey_zone.v1.api.tag.dao.TagDAO;
 import com.mongoosereum.dou_survey_zone.v1.api.tag.entity.SurveyTag;
 import com.mongoosereum.dou_survey_zone.v1.api.tag.entity.Tag;
 import lombok.AllArgsConstructor;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 @AllArgsConstructor
@@ -26,11 +31,61 @@ public class SurveyService {
     @Autowired
     private final TagDAO tagDAO;
 
-    public List<Survey_MySQL> selectSurveyList() {
-        return surveyDAO.selectSurveyList();
+    public Surveylist_MySQL selectSurveyList(SurveylistDTO surveylistDTO) {
+
+        //criteria insert
+        Criteria_MySQL criteria = new Criteria_MySQL();
+        criteria.setPage_Num(surveylistDTO.getPage_Num());
+        criteria.setSearch_Key(surveylistDTO.getSearch_Key());
+        criteria.setSearch_Tag(surveylistDTO.getSearch_Tag());
+
+        // paginationInfo insert
+        PaginationInfo_MySQL paginationInfo = new PaginationInfo_MySQL(criteria);
+
+        // total count
+        int surveyTotalCount = surveyDAO.selectSurveyTotalCount(criteria);
+
+        // surveylist
+        List<Survey_MySQL> surveyList = Collections.emptyList();
+        if(0 < surveyTotalCount) {
+            paginationInfo.setTotalRecordCount(surveyTotalCount);
+            surveyList = surveyDAO.selectSurveyList(paginationInfo);
+        }
+
+        // insert total info
+        Surveylist_MySQL response = Surveylist_MySQL.builder()
+                .paginationInfo(paginationInfo)
+                .surveylist(surveyList)
+                .build();
+
+        return response;
     }
-    public List<Survey_MySQL> selectMySurveyList(String User_Email) {
-        return surveyDAO.selectMySurveyList(User_Email);
+
+    public Surveylist_MySQL selectMySurveyList(String User_Email) {
+        //criteria insert
+        Criteria_MySQL criteria = new Criteria_MySQL();
+        criteria.setUser_Email(User_Email);
+
+        // paginationInfo insert
+        PaginationInfo_MySQL paginationInfo = new PaginationInfo_MySQL(criteria);
+
+        // total count
+        int surveyTotalCount = surveyDAO.selectSurveyTotalCount(criteria);
+
+        // surveylist
+        List<Survey_MySQL> surveyList = Collections.emptyList();
+        if(0 < surveyTotalCount) {
+            paginationInfo.setTotalRecordCount(surveyTotalCount);
+            surveyList =  surveyDAO.selectSurveyList(paginationInfo);
+        }
+
+        // insert total info
+        Surveylist_MySQL response = Surveylist_MySQL.builder()
+                .paginationInfo(paginationInfo)
+                .surveylist(surveyList)
+                .build();
+
+        return response;
     }
 
     public List<Tag> selectTagList(){
@@ -57,7 +112,7 @@ public class SurveyService {
                         .sur_Publish(insertSurveyDTO.getSur_Publish())
                         .sur_Image(insertSurveyDTO.getSur_Image())
                         .user_Email(insertSurveyDTO.getUser_Email())
-                        .surveyType(insertSurveyDTO.getSur_Type().getNum())
+                        .sur_Type(insertSurveyDTO.getSur_Type().getNum())
                         .build();
         try {
             surveyDAO.surveyInsert_MySQL(survey_MySQL);
@@ -115,7 +170,7 @@ public class SurveyService {
                 .sur_Publish(surveyInsertDTO.getSur_Publish())
                 .sur_Image(surveyInsertDTO.getSur_Image())
                 .user_Email(surveyInsertDTO.getUser_Email())
-                .surveyType(surveyInsertDTO.getSur_Type().getNum())
+                .sur_Type(surveyInsertDTO.getSur_Type().getNum())
                 .build();
 
         Long resultMongo = surveyDAO.updateSurvey_Mongo(survey_Mongo);
@@ -133,3 +188,4 @@ public class SurveyService {
             throw new Exception("IMPOSSIBLE TO UPDATE");
     }
 }
+

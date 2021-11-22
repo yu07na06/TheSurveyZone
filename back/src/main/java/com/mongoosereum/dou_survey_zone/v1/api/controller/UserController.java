@@ -7,6 +7,7 @@ import com.mongoosereum.dou_survey_zone.v1.api.user.entity.User_MySQL;
 import com.mongoosereum.dou_survey_zone.v1.api.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.el.parser.Token;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,19 +35,25 @@ public class UserController{
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    /* 이메일 유효성 체크 */
     @PostMapping(path="/checkEmail")
     @ApiOperation(value = "이메일 중복검사")
-    public ResponseEntity CheckEmail(@RequestBody UserDTO userDTO) {
+    public ResponseEntity CheckEmail(
+            @RequestBody
+            @ApiParam(value="UserDTO",required = true )
+                    UserDTO userDTO
+    ) {
         System.out.println("check : " + userDTO.getUser_Email());
         return ResponseEntity.ok().body(Service.checkEmail(userDTO.getUser_Email()));
     }
 
-    /* 회원가입 */
     @PostMapping(path="/signup")
     @ApiOperation(value = "회원 가입")
-    public ResponseEntity<?> registerUser(@RequestBody UserDTO userDTO) {
-
+    public ResponseEntity<?> registerUser(
+            @RequestBody
+            @ApiParam(value="UserDTO",required = true )
+                    UserDTO userDTO
+    ) {
+        // TODO 정환, 서비스로 이동 필요
         System.out.println("signup");
         System.out.println("username : " + userDTO.getUser_Name());
         String encodedPassword = passwordEncoder.encode(userDTO.getUser_Password());
@@ -71,7 +78,6 @@ public class UserController{
         return ResponseEntity.badRequest().body("fail");
     }
 
-    /* 로그인 */
     @PostMapping(path="/signin")
     @ApiOperation(value = "로그인")
     public ResponseEntity<?> signin(@RequestBody UserDTO userDTO) {

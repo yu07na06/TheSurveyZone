@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Answer {
 //    @Id
 //    private String SurAns_ID;
-    @ApiParam(value = "", required = true)
+    @ApiParam(value = "설문 답변 내용", required = true)
     private String SurAns_Content;
     //private String User_Email;
 
