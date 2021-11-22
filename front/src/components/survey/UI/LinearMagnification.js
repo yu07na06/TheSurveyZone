@@ -7,11 +7,9 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import Slider from '@mui/material/Slider';
-import Rating from '@mui/material/Rating';
 import Radio from "@mui/material/Radio";
 
-const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxValue, value, valuetext, controlProps, setTemp, deleteQue, ReadOnlyState, ReadOnlyData, }) => {
+const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxValue, value, setTemp, deleteQue, ReadOnlyState, ReadOnlyData, makeCircles}) => {
     return (
         <>
             <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
@@ -40,7 +38,7 @@ const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxVal
                             label="시작"
                             onChange={e=>setTemp(e.target.value)}
                             disabled={ReadOnlyState}
-                            value={ReadOnlyState?ReadOnlyData.selectList[number].surSel_Content:null} // 객체 참조 안함
+                            value={ReadOnlyState?ReadOnlyData.selectList.surSel_Content:null} // 객체 참조 안함
                         />
                     </Grid>
                     {!ReadOnlyState&&
@@ -66,34 +64,7 @@ const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxVal
                     </Grid>}
                     <Grid item xs={6}>
                         {ReadOnlyState&&
-                            <Grid item xs={12}>
-                                <Radio {...controlProps("a")} size="small" />
-                                <Radio {...controlProps("b")} />
-                                <Radio
-                                    {...controlProps("c")}
-                                    sx={{
-                                    "& .MuiSvgIcon-root": {
-                                        fontSize: 28
-                                    }
-                                    }}
-                                />
-                                <Radio
-                                    {...controlProps("d")}
-                                    sx={{
-                                    "& .MuiSvgIcon-root": {
-                                        fontSize: 35
-                                    }
-                                    }}
-                                />
-                                <Radio
-                                    {...controlProps("e")}
-                                    sx={{
-                                    "& .MuiSvgIcon-root": {
-                                        fontSize: 40
-                                    }
-                                    }}
-                                />
-                            </Grid>
+                            makeCircles.map(value=>value)
                         }
                     </Grid>
                     <Grid item xs={3}>
@@ -104,7 +75,7 @@ const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxVal
                             label="끝"
                             onChange={e=>setTemp(e.target.value)}
                             disabled={ReadOnlyState}
-                            value={ReadOnlyState?ReadOnlyData.selectList[number].surSel_Content:null} // 객체 참조 안함
+                            value={ReadOnlyState?ReadOnlyData.selectList.surSel_Content:null} // 객체 참조 안함
                         />
                     </Grid>
                     {!ReadOnlyState&&

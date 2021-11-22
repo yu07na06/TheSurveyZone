@@ -1,17 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import { Grid, TextField } from '@mui/material';
-import Radio from "@mui/material/Radio";
-import { useEffect } from 'react/cjs/react.development';
 import SubjectiveComp from '../comp/SubjectiveComp';
 import MultipleChoiceComp from '../comp/MultipleChoiceComp';
 import LinearMagnificationComp from '../comp/LinearMagnificationComp';
 
-const MainSurvey = ({theme, surveyReqForm}) => {
+const MainSurvey = ({theme, surveyReqForm, }) => {
+
     return (
         <>
             <ThemeProvider theme={theme}>
@@ -72,7 +70,7 @@ const MainSurvey = ({theme, surveyReqForm}) => {
                                     case 1:
                                         return <MultipleChoiceComp ReadOnlyState={true} ReadOnlyData={value} setDelIndex={null} number={value.surQue_Order} setCheck={null} />
                                     case 2:
-                                        return <LinearMagnificationComp ReadOnlyState={true} ReadOnlyData={value} setDelIndex={null} number={value.surQue_Order} setCheck={null}/>
+                                        return <LinearMagnificationComp ReadOnlyState={true} ReadOnlyData={value} setDelIndex={null} number={value.surQue_Order} setCheck={null} />
                                     default: break;
                                 }
                                 console.log("질문타입 확인", value);

@@ -23,6 +23,15 @@ const Subjective = ({number, deleteQue, ReadOnlyState, ReadOnlyData, }) => {
                     value={ReadOnlyState?ReadOnlyData.surQue_Content:null} // 객체 참조 안함
                     />
                 </Grid>
+                {ReadOnlyState&&
+                    <Grid item xs={12}>
+                        <TextField
+                            variant="outlined"
+                            required
+                            fullWidth
+                        />
+                    </Grid>
+                }
             </Grid>
         </Paper>
     );
