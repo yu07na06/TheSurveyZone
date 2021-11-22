@@ -31,10 +31,7 @@ public class UserController{
 
     @Autowired
     private TokenProvider tokenProvider;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
+    // TODO
     @PostMapping(path="/checkEmail")
     @ApiOperation(value = "이메일 중복검사")
     public ResponseEntity CheckEmail(
@@ -42,7 +39,6 @@ public class UserController{
             @ApiParam(value="UserDTO",required = true )
                     UserDTO userDTO
     ) {
-        System.out.println("check : " + userDTO.getUser_Email());
         return ResponseEntity.ok().body(Service.checkEmail(userDTO.getUser_Email()));
     }
 
@@ -53,21 +49,11 @@ public class UserController{
             @ApiParam(value="UserDTO",required = true )
                     UserDTO userDTO
     ) {
-        // TODO 정환, 서비스로 이동 필요
-        System.out.println("signup");
-        System.out.println("username : " + userDTO.getUser_Name());
-        String encodedPassword = passwordEncoder.encode(userDTO.getUser_Password());
-
-        User_MySQL user = User_MySQL.builder()
-                .user_Email(userDTO.getUser_Email())
-                .user_Password(encodedPassword)
-                .user_Name(userDTO.getUser_Name())
-                .user_Tel(userDTO.getUser_Tel())
-                .build();
+        // TODO 정환, 서비스로 이동 필요(--> 도훈 완료)
 
         Integer result;
         try{
-        result = Service.createUser(user);
+        result = Service.createUser(userDTO);
         }catch (Exception e){
             return ResponseEntity.badRequest().body(e.toString());
         }
@@ -82,11 +68,7 @@ public class UserController{
     @ApiOperation(value = "로그인")
     public ResponseEntity<?> signin(@RequestBody UserDTO userDTO) {
 
-        System.out.println("signin");
-        System.out.println(userDTO.getUser_Email());
-        System.out.println(userDTO.getUser_Password());
-
-        User_MySQL user = Service.login(userDTO.getUser_Email(), userDTO.getUser_Password(), passwordEncoder);
+        User_MySQL user = Service.login(userDTO.getUser_Email(), userDTO.getUser_Password());
 
         if(user != null){
             final String token = tokenProvider.create(user);
@@ -100,6 +82,14 @@ public class UserController{
             return ResponseEntity.badRequest().body("Login fail");
         }
     }
+
+    @PostMapping(path="/searchID")
+    @ApiOperation(value = "ID찾기")
+    public ResponseEntity<?> searchID(@RequestBody UserDTO userDTO) {
+        List<String> user = Service.searchID(userDTO.getUser_Name(), userDTO.getUser_Tel());
+    return (user != null) ? ResponseEntity.ok().body(user) :  ResponseEntity.badRequest().body("NO User");
+    }
+
 
     /* 테스트용 */
     @GetMapping(path="/test")

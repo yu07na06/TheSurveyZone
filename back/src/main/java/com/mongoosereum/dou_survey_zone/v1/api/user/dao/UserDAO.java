@@ -7,54 +7,29 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
-public class UserDAO implements UserRepository {
+public class UserDAO  {
 
     @Autowired
     SqlSession sqlSession;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Override
-    public int createUser_MySQL(User_MySQL User_MySQL) {
-        return sqlSession.insert("createUser", User_MySQL);
+    public int createUser_MySQL(User_MySQL user_MySQL) {
+        return sqlSession.insert("createUser", user_MySQL);
     }
 
-    @Override
     public String existsByEmail_MySQL(String email) {
         return sqlSession.selectOne("existsByEmail", email);
     }
 
-    @Override
     public User_MySQL findByEmailAndPassword_MySQL(String email) {
-        System.out.println("dao:"+email);
         return sqlSession.selectOne("findByEmailAndPassword", email);
     }
-//
-//    @Autowired
-//    SqlSession sqlSession;
-//
-//    @Autowired
-//    private UserRepository userRepository;
-//
-//    @Override
-//    public int createUser_MySQL(User_MySQL User_MySQL) {
-//        return sqlSession.insert("createUser", User_MySQL);
-//    }
-//
-//    @Override
-//    public String selectEmail_MySQL(String param){
-//        System.out.println("SelectEmail==========");
-//        System.out.println(param);
-//        return sqlSession.selectOne("selectEmail",param);
-//    }
-//
-//    @Override
-//    public UserDTO login_MySQL(UserDTO userDTO) {
-//        return sqlSession.selectOne("login", userDTO);
-//    }
 
+    public List<String> findByEmail(User_MySQL user_MySQL) {
+        return sqlSession.selectList("findByEmail", user_MySQL);
+    }
 
 }
