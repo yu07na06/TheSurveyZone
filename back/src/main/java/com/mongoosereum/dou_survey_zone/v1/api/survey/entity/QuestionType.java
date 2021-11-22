@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import org.apache.ibatis.type.MappedTypes;
 
 public enum QuestionType {
-    MULTIPLE(0),
-    SHORT_ANSWER(1),
-    ESSAY(2);
+    ESSAY(0), //주관식
+    MULTIPLE(1), // 객관식
+    LINEAR(2); // 선형배율
     private int num;
     QuestionType(int num){
         this.num = num;

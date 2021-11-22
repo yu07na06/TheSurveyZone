@@ -50,5 +50,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 jwtAuthenticationFilter,
                 CorsFilter.class
         );
+        // 토큰 보낼때 쿠키로 보낸다음 response cookie setcookie
+        // 토큰이 담겨있으니까 읽을때 헤더의 토큰을 읽어오는데 쿠키에서 getCookie를 가져와서 확인함
+        // 모르겠으면 진우형한테 물어보기
     }
 }
