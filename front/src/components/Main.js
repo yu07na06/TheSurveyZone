@@ -9,6 +9,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import Chart from 'react-google-charts';
+import Pagination from '@mui/material/Pagination';
 
 const Main = ({cards, data}) => {
     return (
@@ -126,6 +127,9 @@ const Main = ({cards, data}) => {
                         </Grid>
                     ))}
 
+                    <Grid item xs={12}>
+                        <Pagination count={5} color="primary" />
+                    </Grid>
                 </Grid>
             </Container>
         </>
