@@ -15,6 +15,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import javax.sql.DataSource;
 
+
 @Configuration
 @PropertySource("classpath:/application.properties")
 public class MySQLDBConfig {

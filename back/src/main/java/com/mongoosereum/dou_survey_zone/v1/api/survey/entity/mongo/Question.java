@@ -15,7 +15,7 @@ public class Question {
 //    private String SurQue_ID;
     private String SurQue_Content;
 
-    private QuestionType SurQue_QType;
+    private Integer SurQue_QType;
 
     private Long SurQue_MaxAns;
 
