@@ -43,9 +43,7 @@ public class UserService {
         User_MySQL searchUser =  Dao.findByEmailAndPassword_MySQL(email);
         System.out.println(searchUser.getUser_Email());
         System.out.println(searchUser.getUser_Password());
-
         if(searchUser != null && passwordEncoder.matches(password, searchUser.getUser_Password())){
-
             return searchUser;
         }
         return null;

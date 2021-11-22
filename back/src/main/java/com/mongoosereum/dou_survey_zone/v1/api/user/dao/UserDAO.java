@@ -5,6 +5,7 @@ import com.mongoosereum.dou_survey_zone.v1.api.user.entity.User_MySQL;
 import com.mongoosereum.dou_survey_zone.v1.api.user.repository.UserRepository;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
