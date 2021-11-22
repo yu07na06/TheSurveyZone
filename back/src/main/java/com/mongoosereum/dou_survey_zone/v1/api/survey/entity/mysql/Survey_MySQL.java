@@ -10,8 +10,8 @@ import java.time.LocalDate;
 import java.util.Date;
 
 @Data
-@AllArgsConstructor
 @Builder
+@AllArgsConstructor
 public class Survey_MySQL {
     private String _id;
     private String sur_Title; // 설문 제목

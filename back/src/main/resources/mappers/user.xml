@@ -14,4 +14,8 @@
     <select id="findByEmailAndPassword" parameterType="String" resultType="User_MySQL">
         select User_Email, User_Password, User_Name from user where User_Email = #{param};
     </select>
+
+    <select id="findByEmail" parameterType="User_MySQL" resultType="String">
+        select User_Email from user where User_Name = #{user_Name} and User_Tel = #{user_Tel};
+    </select>
 </mapper>
