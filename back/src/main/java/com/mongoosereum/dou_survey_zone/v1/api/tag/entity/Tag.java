@@ -8,6 +8,6 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor
 public class Tag {
-    private String Tag_ID;
+    private Integer Tag_ID;
     private String Tag_Name;
 }

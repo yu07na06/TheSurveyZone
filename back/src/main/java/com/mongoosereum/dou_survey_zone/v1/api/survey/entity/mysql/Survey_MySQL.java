@@ -11,6 +11,7 @@ import java.util.Date;
 
 @Data
 @Builder
+@NoArgsConstructor
 public class Survey_MySQL {
     private String _id;
     private String sur_Title; // 설문 제목
@@ -35,7 +36,11 @@ public class Survey_MySQL {
         this.sur_Image = sur_Image;
         this.user_Email = user_Email;
         this.sur_Type = surveyType;
-        this.tag_ID = tag_ID;
+    }
+
+    public Survey_MySQL setSur_State(int sur_State) {
+        this.sur_State = sur_State;
+        return this;
     }
 
 }

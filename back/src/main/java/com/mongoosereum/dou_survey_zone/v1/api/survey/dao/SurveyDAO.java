@@ -17,6 +17,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -53,6 +54,7 @@ public class SurveyDAO {
     public Survey_MySQL findById_MySQL(String _id){
         return sqlSession.selectOne("findById",_id);
     }
+
     public Survey_Mongo findById_Mongo(String _id){
         return mongoTemplate.findOne(new Query(Criteria.where("_id").is(_id)),Survey_Mongo.class);
     }
@@ -105,4 +107,11 @@ public class SurveyDAO {
     public Integer updateSurvey_MySQL(Survey_MySQL survey){
         return sqlSession.update("updateSurvey",survey);
     }
+
+
+    //search  today start survey list Mail send list
+    public List<Survey_MySQL> todaystartlist() {
+        LocalDate currentDate = LocalDate.now();
+        return sqlSession.selectList("todaystartlist",currentDate); }
+
 }

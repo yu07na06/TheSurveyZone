@@ -1,6 +1,6 @@
 package com.mongoosereum.dou_survey_zone.v1.api.config;
 
-import com.mongoosereum.dou_survey_zone.v1.api.security.JwtAuthenticationFilter;
+import com.mongoosereum.dou_survey_zone.v1.api.Security.JwtAuthenticationFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

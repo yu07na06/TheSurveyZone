@@ -15,7 +15,7 @@ public class Criteria_MySQL {
         }
 
         /** 현재 페이지 번호 */
-        private int page_Num;
+        private Integer page_Num;
 
         /** 페이지당 출력할 데이터 개수 */
         private int records_Perpage;

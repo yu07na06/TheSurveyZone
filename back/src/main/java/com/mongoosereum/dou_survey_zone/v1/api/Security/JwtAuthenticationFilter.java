@@ -1,4 +1,4 @@
-package com.mongoosereum.dou_survey_zone.v1.api.security;
+package com.mongoosereum.dou_survey_zone.v1.api.Security;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,9 +55,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         private String parseBearerToken(HttpServletRequest request){
         // Http 요청의 헤더를 파싱해 Bearar 토큰을 리턴한다.
-            String bearerToken = request.getHeader("Authorization");
-            if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-                return bearerToken.substring(7);
+            String bearerToken = request.getHeader("Cookie");
+            System.out.println(bearerToken);
+            System.out.println(bearerToken.substring(18));
+            if (StringUtils.hasText(bearerToken)) {
+                return bearerToken.substring(11);
             }
             return null;
     }
