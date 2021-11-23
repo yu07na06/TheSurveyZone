@@ -26,7 +26,16 @@ const CreateSurveyComp = () => {
   const [tags, setTags] = useState();
   const history = useHistory();
 
-  
+  useEffect(()=>{
+    if(cookies.user_Token==null){
+      Swal.fire({
+        icon:'info',
+        title:'로그인이 필요한 페이지입니다.'
+      })
+      history.push('/LoginPage');
+    }
+  },[])
+
   useEffect(()=>{
     getTagsAPI()
     .then((res)=>{setTags(res.data);})
@@ -123,7 +132,7 @@ const CreateSurveyComp = () => {
       sur_EndDate: day[1].getFullYear()+"-"+ ('0'+(day[1].getMonth()+1)).slice(-2) +"-"+('0'+(day[1].getDate())).slice(-2),                               // ---> comp에서 state로 관리중
       sur_Publish: !Sur_Publish, // 공개 여부                ---> comp에서 state로 관리중 [ !false: 공개, !true: (잠금)비공개 ]
       sur_Image: "image", // 이미지 추후에 현재는 제외
-      user_Email: "ojh2134@gmail.com",  // 작성자 ID
+      user_Email: "dbsk7885@daum.net",  // 작성자 ID
       tag_Name: data.get(`tag_Name`), 
       questionList,
     }

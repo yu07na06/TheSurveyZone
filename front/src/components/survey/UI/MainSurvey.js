@@ -9,9 +9,10 @@ import MultipleChoiceComp from '../comp/MultipleChoiceComp';
 import LinearMagnificationComp from '../comp/LinearMagnificationComp';
 
 const MainSurvey = ({theme, surveyReqForm, }) => {
-
+console.log("뭐나오냐??",surveyReqForm);
     return (
         <>
+        {surveyReqForm&&
             <ThemeProvider theme={theme}>
                 <Container component="main" maxWidth="md" sx={{ mb: 4 }} >
                     <Paper levation={3} sx={{ bgcolor: '#C9CBE0', my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
@@ -78,6 +79,7 @@ const MainSurvey = ({theme, surveyReqForm, }) => {
                         </Paper>
                     </Container>
                 </ThemeProvider>
+            }
         </>
   );
 };

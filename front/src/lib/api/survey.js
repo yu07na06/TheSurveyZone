@@ -16,7 +16,8 @@ export const postSurvey = (sur_ID) =>
 export const getTags = () => 
     axios.get('/api/v1/survey/tags');
 
-// 설문 생성시 태그 목록 불러오기
-export const getMySurveyList = () => 
-    axios.get('/api/v1/survey/myPage');
+// 설문 생성시 태그 목록 불러오기  
+// 추후 쿠키 및 토큰을 사용하게 되면 email보내는짓은 안함
+export const getMySurveyList = (page_Num) => 
+    axios.get(`/api/v1/survey/myPage?page_Num=${page_Num}`);
 
