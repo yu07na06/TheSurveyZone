@@ -4,7 +4,7 @@ import { createTheme } from '@mui/material/styles';
 import MultipleChoiceComp from '../comp/MultipleChoiceComp';
 import SubjectiveComp from './SubjectiveComp';
 import LinearMagnificationComp from './LinearMagnificationComp';
-import { createSurvey as createSurveyAPI } from '../../../lib/api/survey';
+import { createSurvey as createSurveyAPI, getTags as getTagsAPI } from '../../../lib/api/survey';
 import Swal from 'sweetalert2';
 import { useHistory } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
@@ -23,17 +23,15 @@ const CreateSurveyComp = () => {
   const todayDate = new Date();
   const open = Boolean(anchorEl);
   const count = useRef(0);
+  const [tags, setTags] = useState();
   const history = useHistory();
 
-  // useEffect(()=>{
-  //   if(cookies.user_Token==null){
-  //     Swal.fire({
-  //       icon:'info',
-  //       title:'로그인이 필요한 페이지입니다.'
-  //     })
-  //     history.push('/LoginPage');
-  //   }
-  // },[])
+  
+  useEffect(()=>{
+    getTagsAPI()
+    .then((res)=>{setTags(res.data);})
+    .catch(err=>console.log(err))
+  },[])
 
   useEffect(()=>{
     const newQuestionList = question.filter((value)=>value.key!==delIndex);
@@ -170,6 +168,7 @@ const CreateSurveyComp = () => {
           handleClose={handleClose}
           tag={tag}
           setTag={setTag}
+          tags={tags}
         />  
       </>
   );
