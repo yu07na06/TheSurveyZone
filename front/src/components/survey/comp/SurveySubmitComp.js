@@ -11,17 +11,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { beforeAction, submitAction } from '../../../modules/submitReducer';
 
 const SurveySubmitComp = ({surveykey}) => {
-
     const sss = useSelector(state=>state.submitReducer.beforeData)
-    useEffect(()=>{
-        console.log("제발 제발 제발 제발 ㅅㅂ 제발",sss);
-    },[sss])
+
     const [activeStep, setActiveStep] = React.useState(0);
     const steps = ['데이터 수집', '설문지', '제출 완료'];
     const [surveyReqForm, setSurveyReqForm] = useState(null);
     const dispatch = useDispatch()
+
     useEffect(()=>{
         getSurveyAPI(surveykey)
+        //    .then(res =>console.log("요청 결과: ",res.data))
            .then(res =>setSurveyReqForm(res.data))
            .catch(err => console.log(err));
    },[surveykey])
@@ -29,7 +28,7 @@ const SurveySubmitComp = ({surveykey}) => {
 
    const [sex,setSex] = useState();
    const [age,setAge] = useState();
-    const getStepContent = (step, setAge, setSex) => {
+    const getStepContent = (step) => {
         switch (step) {
         case 0:
             return <BeforeSurveyComp setAge={setAge} setSex={setSex}/>;
