@@ -20,7 +20,7 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-const CreateSurvey = ({theme, onClick, day, setDay, onCheckChange, question, open, anchorEl, handleClick, handleClose, tag, setTag }) => {
+const CreateSurvey = ({theme, onClick, day, setDay, onCheckChange, question, open, anchorEl, handleClick, handleClose, tag, setTag, tags }) => {
     return (
         <>
             <ThemeProvider theme={theme}>
@@ -102,12 +102,7 @@ const CreateSurvey = ({theme, onClick, day, setDay, onCheckChange, question, ope
                                                     label="tag_Name"
                                                     onChange={e => setTag(e.target.value)}
                                                     >
-                                                <MenuItem value="운동">운동</MenuItem>
-                                                <MenuItem value="연애">연애</MenuItem>
-                                                <MenuItem value="공부">공부</MenuItem>
-                                                <MenuItem value="음식">음식</MenuItem>
-                                                <MenuItem value="취미">취미</MenuItem>
-                                                <MenuItem value="패션">패션</MenuItem>
+                                                    {tags&&tags.map(v=><MenuItem value={v.tag_ID}>{v.tag_Name}</MenuItem>)}
                                             </Select>
                                         </FormControl>
                                     </Box>
