@@ -1,18 +1,14 @@
-package com.mongoosereum.dou_survey_zone.v1.api.common.mail;
+package com.mongoosereum.dou_survey_zone.api.v1.common.mail;
 
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.multipart.MultipartFile;
-import javax.activation.DataHandler;
-import javax.activation.FileDataSource;
+
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
+
 public class MailHandler {
     private JavaMailSender sender;
     private MimeMessage message;

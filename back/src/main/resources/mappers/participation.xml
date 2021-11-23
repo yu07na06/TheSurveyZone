@@ -4,13 +4,13 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="participation">
     <select id="countTotal" resultType="int">
-        select count(*) from participation;
+        select count(*) from survey.participation;
     </select>
 
     <select id="countGender" resultType="ACC_Gender">
         select count(case when Part_Gender='M' then 1 end) as man,
         count(case when Part_Gender='W' then 1 end) as woman
-        from participation;
+        from survey.participation;
     </select>
 
     <select id="countAge" resultType="ACC_AGE">
@@ -20,7 +20,7 @@
         count(case when Part_Age=40 then 1 end) as age_40,
         count(case when Part_Age=50 then 1 end) as age_50,
         count(case when Part_Age=60 then 1 end) as age_60
-        from participation;
+        from survey.participation;
     </select>
 
 </mapper>
