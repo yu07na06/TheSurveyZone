@@ -8,12 +8,11 @@ const rootReducer = combineReducers({
     loginReducer,
     submitReducer,
     chartReducer,
-
 });
 
 export function* rootSaga() {
     yield all([mainViewSaga()]);
-  }
+}
   
   
 export default rootReducer;

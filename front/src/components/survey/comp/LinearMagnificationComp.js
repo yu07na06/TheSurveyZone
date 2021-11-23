@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import LinearMagnification from '../UI/LinearMagnification';
 import Radio from "@mui/material/Radio";
+import { FormControlLabel, Grid } from '@mui/material';
 
 
 const LinearMagnificationComp = ({number, setCheck, setDelIndex, ReadOnlyState, ReadOnlyData, }) => {
@@ -26,17 +27,26 @@ const LinearMagnificationComp = ({number, setCheck, setDelIndex, ReadOnlyState, 
 
     const circle = (id, number, size) => {
         return(
-            <Radio
-                onChange={(e)=>setChangeCircle(e.target.value)}
-                value={`radio_${id}_${number}`}
-                name={`radio_${number}`}
-                checked={ changeCircle === `radio_${id}_${number}` }
-                sx={{
-                    "& .MuiSvgIcon-root": {
-                        fontSize: size
-                    }
-                }}
+            <Grid item xs={1}>
+                <FormControlLabel
+                style={{marginLeft:"0", marginRight:"0"}}
+                value="top"
+                control={<Radio
+                    onChange={(e)=>setChangeCircle(e.target.value)}
+                    value={`radio_${id}_${number}`}
+                    name={`radio_${number}`}
+                    checked={ changeCircle === `radio_${id}_${number}` }
+                    sx={{
+                        "& .MuiSvgIcon-root": {
+                            fontSize: size
+                        }
+                    }}
+                />}
+                label={id}
+                labelPlacement="top"
             />
+            </Grid>
+
         );
     }
 
