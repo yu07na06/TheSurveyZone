@@ -7,14 +7,14 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Slider from '@mui/material/Slider';
 
-const BeforeSurvey = ({marks, valuetext, Separator}) => {
+const BeforeSurvey = ({marks, valuetext, Separator, addStore}) => {
     return (
         <>
             <Separator />
-            <FormControl component="fieldset">
+            <FormControl onChange={(e)=>addStore(e)} component="fieldset" name ="zzz">
                 <Typography style={{fontWeight:'bold'}}>성별</Typography>
-                    <RadioGroup defaultValue="male" sx={{ mx:3 }} row aria-label="gender" name="row-radio-buttons-group">
-                        <FormControlLabel value="male" control={<Radio />} label="남성" />
+                    <RadioGroup defaultValue="male" sx={{ mx:3 }} row aria-label="gender" name="gender">
+                        <FormControlLabel value="male"  control={<Radio/>} label="남성" />
                         <FormControlLabel value="female" control={<Radio />} label="여성" />
                     </RadioGroup>
             </FormControl>
@@ -23,6 +23,8 @@ const BeforeSurvey = ({marks, valuetext, Separator}) => {
             <Typography style={{fontWeight:'bold'}}>연령대</Typography>
             <Box sx={{ mx:4,  width: 300 }}>
                 <Slider
+                    onChange={(e)=>addStore(e)}
+                    name="연령대"
                     track={false}
                     aria-label="Custom marks"
                     defaultValue={20}
@@ -37,5 +39,7 @@ const BeforeSurvey = ({marks, valuetext, Separator}) => {
         </>
     );
 };
+
+
 
 export default BeforeSurvey;

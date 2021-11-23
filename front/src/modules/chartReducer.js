@@ -3,7 +3,7 @@ import produce from 'immer';
 import { createAction } from "redux-actions";
 import { takeLatest } from '@redux-saga/core/effects';
 import createRequestSaga, { createRequestActionTypes } from "../lib/createRequestSaga";
-import { mainUser as mainUserAPI} from "../lib/api/survey";
+import { mainUser as mainUserAPI} from "../lib/api/home";
 
 const [CHARTDATA, CHARTDATA_SUCCESS, CHARTDATA_FAILURE] = createRequestActionTypes("CHARTDATA")
 
@@ -31,7 +31,8 @@ const initialState = {
             age_40: 0,
             age_50: 0,
             age_60: 0
-        }
+        },
+        sur_Tag:[]
     },
     err: null,
 }

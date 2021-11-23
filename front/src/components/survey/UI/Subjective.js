@@ -26,6 +26,7 @@ const Subjective = ({number, deleteQue, ReadOnlyState, ReadOnlyData, }) => {
                 {ReadOnlyState&&
                     <Grid item xs={12}>
                         <TextField
+                            name="answer"
                             variant="outlined"
                             required
                             fullWidth

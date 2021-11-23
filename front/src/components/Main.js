@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
@@ -25,12 +25,9 @@ const Main = ({cards, data}) => {
                     direction="row"
                     justifyContent="center"
                     >
-                    <Button >#운동</Button>
-                    <Button >#연애</Button>
-                    <Button >#공부</Button>
-                    <Button >#음식</Button>
-                    <Button >#취미</Button>
-                    <Button >#패션</Button>
+                    { data.sur_Tag && data.sur_Tag.map((value) => 
+                        <Button id={`${value.tag_ID}`}>#{value.tag_Name}</Button>
+                        )}
                     </Stack>
                 </Container>
             </Box>

@@ -7,25 +7,32 @@ import { createTheme } from '@mui/material/styles';
 import { useEffect } from 'react';
 import { getSurvey as getSurveyAPI } from '../../../lib/api/survey';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { beforeAction, submitAction } from '../../../modules/submitReducer';
 
 const SurveySubmitComp = ({surveykey}) => {
+
+    const sss = useSelector(state=>state.submitReducer.beforeData)
+    useEffect(()=>{
+        console.log("제발 제발 제발 제발 ㅅㅂ 제발",sss);
+    },[sss])
     const [activeStep, setActiveStep] = React.useState(0);
     const steps = ['데이터 수집', '설문지', '제출 완료'];
     const [surveyReqForm, setSurveyReqForm] = useState(null);
-
+    const dispatch = useDispatch()
     useEffect(()=>{
         getSurveyAPI(surveykey)
            .then(res =>setSurveyReqForm(res.data))
            .catch(err => console.log(err));
    },[surveykey])
 
-    //const surveyReqFormTest = {"_id":"619b39da46f35902f0cc7757","questionList":[{"SurQue_Content":"웅아 이건 객관식 0번이야, 선택지는 4개고, 중복답변은 3이라구","SurQue_QType":1,"SurQue_MaxAns":{"$numberLong":"3"},"SurQue_Order":{"$numberLong":"0"},"selectList":[{"SurSel_Content":"선택지 0-0","SurSel_Order":{"$numberLong":"0"}},{"SurSel_Content":"선택지 0-1","SurSel_Order":{"$numberLong":"1"}},{"SurSel_Content":"선택지 0-2","SurSel_Order":{"$numberLong":"2"}},{"SurSel_Content":"선택지 0-3","SurSel_Order":{"$numberLong":"3"}}],"answerList":[]},{"SurQue_Content":"웅아 이건 객관식 1번이야, 선택지는 3개고, 중복답변은 2이라구","SurQue_QType":1,"SurQue_MaxAns":{"$numberLong":"3"},"SurQue_Order":{"$numberLong":"1"},"selectList":[{"SurSel_Content":"선택지 1-0","SurSel_Order":{"$numberLong":"0"}},{"SurSel_Content":"선택지 1-1","SurSel_Order":{"$numberLong":"1"}},{"SurSel_Content":"선택지 1-2","SurSel_Order":{"$numberLong":"2"}}],"answerList":[]},{"SurQue_Content":"주관식 2번이야 난 아무것도 없어","SurQue_QType":0,"SurQue_MaxAns":{"$numberLong":"3"},"SurQue_Order":{"$numberLong":"2"},"selectList":[{"SurSel_Content":""}],"answerList":[]},{"SurQue_Content":"주관식 3번이야. 가진게 없어.. ","SurQue_QType":0,"SurQue_MaxAns":{"$numberLong":"3"},"SurQue_Order":{"$numberLong":"3"},"selectList":[{"SurSel_Content":""}],"answerList":[]},{"SurQue_Content":"선형배율 4번이야. 시작은 행복이고, 끝은 불행으로 (0~4)","SurQue_QType":2,"SurQue_MaxAns":{"$numberLong":"3"},"SurQue_Order":{"$numberLong":"4"},"selectList":[{"SurSel_Content":"행복","SurSel_Order":{"$numberLong":"0"}},{"SurSel_Content":"0","SurSel_Order":{"$numberLong":"1"}},{"SurSel_Content":"불행","SurSel_Order":{"$numberLong":"2"}},{"SurSel_Content":"6","SurSel_Order":{"$numberLong":"3"}}],"answerList":[]},{"SurQue_Content":"선형배율 5번이야. 시작은 커피이고, 끝은 유자차야 (1~5)","SurQue_QType":2,"SurQue_MaxAns":{"$numberLong":"3"},"SurQue_Order":{"$numberLong":"5"},"selectList":[{"SurSel_Content":"커피","SurSel_Order":{"$numberLong":"0"}},{"SurSel_Content":"1","SurSel_Order":{"$numberLong":"1"}},{"SurSel_Content":"유자차","SurSel_Order":{"$numberLong":"2"}},{"SurSel_Content":"5","SurSel_Order":{"$numberLong":"3"}}],"answerList":[]}]}
 
-
-    const getStepContent = (step) => {
+   const [sex,setSex] = useState();
+   const [age,setAge] = useState();
+    const getStepContent = (step, setAge, setSex) => {
         switch (step) {
         case 0:
-            return <BeforeSurveyComp />;
+            return <BeforeSurveyComp setAge={setAge} setSex={setSex}/>;
         case 1:
             return <MainSurveyComp surveyReqForm={surveyReqForm} />;
         case 2:
@@ -49,6 +56,21 @@ const SurveySubmitComp = ({surveykey}) => {
       setActiveStep(activeStep + 1);
     };
 
+    const lastSubmit = (e) => {
+        e.preventDefault();
+        const data = new FormData(e.currentTarget);
+        const aa = data.get('answer')
+        const bb = data.get('연령대')
+        const cc = data.get("gender")
+        console.log("주관식 답변 : ", aa);
+        console.log("나이대를 보여다오!! : ", bb);
+        console.log("너의 성별을 보여다오!! : ", cc);
+        
+    }
+    const nextPage = () => {
+        console.log("나를 눌렀느냐? 나는 다음이란다!");
+        dispatch(beforeAction({age:age,sex:sex}))
+    }
     return (
         <>
             <SurveySubmit 
@@ -59,6 +81,8 @@ const SurveySubmitComp = ({surveykey}) => {
                 activeStep={activeStep}
                 setActiveStep={setActiveStep}
                 handleNext={handleNext}
+                lastSubmit={lastSubmit}
+                nextPage={nextPage}
             />   
         </>
     );
