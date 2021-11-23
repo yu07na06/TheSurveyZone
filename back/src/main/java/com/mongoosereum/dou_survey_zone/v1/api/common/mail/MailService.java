@@ -1,5 +1,6 @@
 package com.mongoosereum.dou_survey_zone.v1.api.common.mail;
 
+import com.mongoosereum.dou_survey_zone.api.v1.dto.MailDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
