@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
@@ -9,70 +9,55 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import Chart from 'react-google-charts';
+// import BarChart from 'rechart';
 import Pagination from '@mui/material/Pagination';
+import { Link } from 'react-router-dom';
 
-const Main = ({cards, data}) => {
+const Main = ({ data, accUserData, accAgeData, accSexData, reqMain, callPage, }) => {
     return (
         <>
-            <Box
-                sx={{
-                    bgcolor: 'background.paper',
-                    pt: 2,
-                }}
-            >
+            {/* 태그 출력 */}
+            <Box sx={{ bgcolor: 'background.paper', pt: 2 }}>
                 <Container maxWidth="sm">
                     <Stack
-                    direction="row"
-                    justifyContent="center"
+                        direction="row"
+                        justifyContent="center"
                     >
                     { data.sur_Tag && data.sur_Tag.map((value) => 
                         <Button id={`${value.tag_ID}`}>#{value.tag_Name}</Button>
-                        )}
+                    )}
                     </Stack>
                 </Container>
             </Box>
+
+            
             <Container sx={{ py: 5 }} maxWidth="md">
                 <Grid container spacing={4}>
+                    {/* 누적 이용자 */}
                     <Grid item xs={4}>
                         <Chart
-                            width={'400px'}
+                            width={'450px'}
                             height={'300px'}
-                            chartType="AreaChart"
+                            chartType="BarChart"
                             loader={<div>Loading Chart</div>}
-                            data={[
-                                ['Year', 'Sales'],
-                                ['6월', 3],
-                                ['7월', 8],
-                                ['8월', 9],
-                                ['9월', 10],
-                                ['10월', 12],
-                                ['11월', data.part_Total],
-                            ]}
+                            data={accUserData}
                             options={{
-                                title: '누적 이용자 수',
+                                title: '11월 누적 이용자 수',
                                 titleFontSize: "18",
                                 captionFontSize: "20px",
-                                vAxis: { minValue: 0 },
                                 chartArea: { width: '90%', height: '70%' },
                             }}
-                            rootProps={{ 'data-testid': '1' }}
                             />
                     </Grid>
+
+                    {/* 누적 이용자 연령 비율 */}
                     <Grid item xs={4}>
                         <Chart
                             width={'400px'}
                             height={'300px'}
                             chartType="PieChart"
                             loader={<div>Loading Chart</div>}
-                            data={[
-                                ['연령', '연령수'],
-                                ['10대', data.part_Age.age_10],
-                                ['20대', data.part_Age.age_20],
-                                ['30대', data.part_Age.age_30],
-                                ['40대', data.part_Age.age_40],
-                                ['50대', data.part_Age.age_50],
-                                ['60대', data.part_Age.age_60],
-                            ]}
+                            data={accAgeData}
                             options={{
                                 title: '누적 이용자 연령 비율',
                                 titleFontSize: "18",
@@ -82,50 +67,51 @@ const Main = ({cards, data}) => {
                             rootProps={{ 'data-testid': '1' }}
                             />
                     </Grid>
+
+                    {/* 누적 이용자 성별 비율 */}
                     <Grid item xs={4}>
                         <Chart
                             width={'400px'}
                             height={'300px'}
                             chartType="PieChart"
                             loader={<div>Loading Chart</div>}
-                            data={[
-                                ['성별', '성별수'],
-                                ['여성', data.part_Gender.woman],
-                                ['남성', data.part_Gender.man],
-                            ]}
+                            data={accSexData}
                             options={{
                                 title: '누적 이용자 성별 비율',
                                 titleFontSize: "18",
                                 pieHole: 0.5,
                                 chartArea: { width: '80%', height: '70%' },
                             }}
-                            rootProps={{ 'data-testid': '1' }}
                             />
                     </Grid>
 
-                    {cards.map((card) => (
-                        <Grid item key={card} xs={12} sm={6} md={4}>
-                            <Card
-                                sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
-                                >
+
+                    {/* 설문 리스트 출력 */}
+                    {reqMain && reqMain.surveylist.map((value) => (
+                        <Grid item key={value._id} xs={12} sm={6} md={4}>
+                            <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }} >
                                 <CardContent sx={{ flexGrow: 1 }}>
                                     <Typography gutterBottom variant="h5" component="h2">
-                                    Heading
+                                        {value.sur_Title}
                                     </Typography>
                                     <Typography>
-                                    This is a media card. You can use this section to describe the
-                                    content.
+                                        {value.sur_Content}
                                     </Typography>
                                 </CardContent>
+
                                 <CardActions>
-                                    <Button size="small">참여</Button>
+                                    {/* 설문 참여 링크 이동 */}
+                                    <Link to={`/SurveySubmitPage/${value._id}`} style={{textDecoration:'none', color:'blue', fontWeight:'bold' }}><Button>참여</Button></Link>
+                                        <Typography style={{ color:'red' }}>
+                                            {value.sur_State === 1? "진행중" : "마감"}
+                                        </Typography>
                                 </CardActions>
                             </Card>
                         </Grid>
                     ))}
 
-                    <Grid item xs={12}>
-                        <Pagination count={5} color="primary" />
+                    <Grid item xs={12} marginLeft="40%" >
+                        {reqMain&&<Pagination onChange={(e)=>callPage((e.target.ariaLabel).split(' ')[3])} count={reqMain.paginationInfo.lastPage} color="primary" />}
                     </Grid>
                 </Grid>
             </Container>
