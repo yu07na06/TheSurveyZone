@@ -1,15 +1,15 @@
-package com.mongoosereum.dou_survey_zone.v1.api.common.paging;
+package com.mongoosereum.dou_survey_zone.api.v1.common.paging;
 
 import lombok.*;
 
 @Data
 @Builder
 @AllArgsConstructor
-public class Criteria_MySQL {
+public class PageCriteria {
 
 
         /** 생성자 **/
-        public Criteria_MySQL() {
+        public PageCriteria() {
         this.page_Size=5;
         this.records_Perpage =12;
         }

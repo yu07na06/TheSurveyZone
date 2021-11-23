@@ -2,8 +2,8 @@ package com.mongoosereum.dou_survey_zone.api.v1.dao;
 
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
-import com.mongoosereum.dou_survey_zone.v1.api.common.paging.Criteria_MySQL;
-import com.mongoosereum.dou_survey_zone.v1.api.common.paging.PaginationInfo_MySQL;
+import com.mongoosereum.dou_survey_zone.api.v1.common.paging.PageCriteria;
+import com.mongoosereum.dou_survey_zone.api.v1.common.paging.PaginationInfo;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.Answer;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.Question;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.Survey_Mongo;
@@ -11,7 +11,6 @@ import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.Survey_MySQL;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
@@ -28,22 +27,22 @@ public class SurveyDAO {
     private SqlSession sqlSession;
 
     // Select MySQL SurveyList
-    public List<Survey_MySQL> selectSurveyList(PaginationInfo_MySQL paginationInfo) {
+    public List<Survey_MySQL> selectSurveyList(PaginationInfo paginationInfo) {
         return sqlSession.selectList("selectSurveyList", paginationInfo);
     }
 
-    public int selectSurveyTotalCount(Criteria_MySQL Criteria) {
+    public int selectSurveyTotalCount(PageCriteria Criteria) {
         return sqlSession.selectOne("selectSurveyTotalCount", Criteria);
     }
 
     ;
 
-    public List<Survey_MySQL> selectMySurveyList(PaginationInfo_MySQL paginationInfo) {
+    public List<Survey_MySQL> selectMySurveyList(PaginationInfo paginationInfo) {
         System.out.println(paginationInfo.getCriteria().getUser_Email());
         return sqlSession.selectList("selectMySurveyList", paginationInfo);
     }
 
-    public int selectMySurveyTotalCount(Criteria_MySQL Criteria) {
+    public int selectMySurveyTotalCount(PageCriteria Criteria) {
         return sqlSession.selectOne("selectMySurveyTotalCount", Criteria);
     }
 
@@ -65,17 +64,17 @@ public class SurveyDAO {
     }
 
     public Survey_Mongo findById_Mongo(String _id) {
-        return mongoTemplate.findOne(new Query(Criteria.where("_id").is(_id)), Survey_Mongo.class);
+        return mongoTemplate.findOne(new Query(org.springframework.data.mongodb.core.query.Criteria.where("_id").is(_id)), Survey_Mongo.class);
     }
 
     // Insert MongoDB Survey:AnswerList
     public Integer insertAnswer(final String _id, final List<Answer> answerList) {
         UpdateResult updateResult = null;
-        Query query = new Query(Criteria.where("_id").is(_id));
+        Query query = new Query(org.springframework.data.mongodb.core.query.Criteria.where("_id").is(_id));
         for (int i = 0; i < answerList.size(); i++) {
             Update update = new Update().push("questionList.$[element].answerList")
                     .each(answerList.get(i))
-                    .filterArray(Criteria.where("element.SurQue_Order").is(i));
+                    .filterArray(org.springframework.data.mongodb.core.query.Criteria.where("element.SurQue_Order").is(i));
             try {
                 updateResult = mongoTemplate.updateMulti(query, update, Survey_Mongo.class);
                 System.out.println(updateResult);
@@ -98,14 +97,14 @@ public class SurveyDAO {
 
     public Long deleteSurvey_Mongo(String _id) {
         DeleteResult deleteResult = mongoTemplate.remove(
-                new Query(Criteria.where("_id").is(_id)),
+                new Query(org.springframework.data.mongodb.core.query.Criteria.where("_id").is(_id)),
                 Survey_Mongo.class);
         return deleteResult.getDeletedCount();
     }
 
     public Long updateSurvey_Mongo(Survey_Mongo survey) {
         List<Question> questionList = survey.getQuestionList();
-        Query query = new Query(Criteria.where("_id").is(survey.get_id()));
+        Query query = new Query(org.springframework.data.mongodb.core.query.Criteria.where("_id").is(survey.get_id()));
         Update update = new Update().set("questionList", questionList);
         UpdateResult updateResult = null;
         try {

@@ -1,4 +1,4 @@
-package com.mongoosereum.dou_survey_zone.v1.api.common.paging;
+package com.mongoosereum.dou_survey_zone.api.v1.common.paging;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,10 +7,10 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class PaginationInfo_MySQL {
+public class PaginationInfo {
 
     /** 페이징 계산에 필요한 파라미터들이 담긴 클래스 */
-    private Criteria_MySQL criteria;
+    private PageCriteria criteria;
 
     /** 전체 데이터 개수 */
     private int totalRecordCount;
@@ -36,7 +36,7 @@ public class PaginationInfo_MySQL {
     /** 다음 페이지 존재 여부 */
     private boolean hasNextPage;
 
-    public PaginationInfo_MySQL(Criteria_MySQL criteria) {
+    public PaginationInfo(PageCriteria criteria) {
         if (criteria.getPage_Num() < 1) {
             criteria.setPage_Num(1);
         }

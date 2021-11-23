@@ -6,8 +6,8 @@ import com.mongoosereum.dou_survey_zone.api.v1.dto.InsertSurveyDTO;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.SelectSurveyDTO;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.SurveyResultDTO;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.SurveylistDTO;
-import com.mongoosereum.dou_survey_zone.v1.api.common.paging.Criteria_MySQL;
-import com.mongoosereum.dou_survey_zone.v1.api.common.paging.PaginationInfo_MySQL;
+import com.mongoosereum.dou_survey_zone.api.v1.common.paging.PageCriteria;
+import com.mongoosereum.dou_survey_zone.api.v1.common.paging.PaginationInfo;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.Surveylist_MySQL;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.tag.Tag;
 import lombok.AllArgsConstructor;
@@ -29,13 +29,13 @@ public class SurveyService {
     public Surveylist_MySQL selectSurveyList(SurveylistDTO surveylistDTO) {
 
         //criteria insert
-        Criteria_MySQL criteria = new Criteria_MySQL();
+        PageCriteria criteria = new PageCriteria();
         criteria.setPage_Num(surveylistDTO.getPage_Num());
         criteria.setSearch_Key(surveylistDTO.getSearch_Key());
         criteria.setSearch_Tag(surveylistDTO.getSearch_Tag());
 
         // paginationInfo insert
-        PaginationInfo_MySQL paginationInfo = new PaginationInfo_MySQL(criteria);
+        PaginationInfo paginationInfo = new PaginationInfo(criteria);
 
         // total count
         int surveyTotalCount = surveyDAO.selectSurveyTotalCount(criteria);
@@ -59,12 +59,12 @@ public class SurveyService {
     public Surveylist_MySQL selectMySurveyList(String User_Email, SurveylistDTO surveylistDTO) {
         //criteria insert
         System.out.println(User_Email);
-        Criteria_MySQL criteria = new Criteria_MySQL();
+        PageCriteria criteria = new PageCriteria();
         criteria.setPage_Num(surveylistDTO.getPage_Num());
         criteria.setUser_Email(User_Email);
 
         // paginationInfo insert
-        PaginationInfo_MySQL paginationInfo = new PaginationInfo_MySQL(criteria);
+        PaginationInfo paginationInfo = new PaginationInfo(criteria);
 
         // total count
         int surveyTotalCount = surveyDAO.selectMySurveyTotalCount(criteria);

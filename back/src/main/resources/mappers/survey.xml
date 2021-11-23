@@ -9,9 +9,9 @@
         where _id = #{_id};
     </select>
 
-    <select id="selectSurveyList" parameterType="PaginationInfo_MySQL" resultType="Survey_MySQL">
+    <select id="selectSurveyList" parameterType="PaginationInfo" resultType="Survey_MySQL">
         select survey._id, survey.Sur_Title, survey.Sur_Content, survey.Sur_State, survey.Sur_StartDate, survey.Sur_EndDate, survey.Sur_Publish, survey.Sur_Img, survey.User_Email, survey.Sur_Type, surveytag.Tag_ID
-        from survey left OUTER JOIN surveytag
+        from survey.survey left OUTER JOIN survey.surveytag
         on survey._id = surveytag._id
         where Sur_Publish = true
         and (survey.Sur_State = 1 or survey.Sur_State = 2)
@@ -29,9 +29,9 @@
         limit #{firstRecordIndex}, #{criteria.records_Perpage};
     </select>
 
-    <select id="selectSurveyTotalCount" parameterType="Criteria_MySQL" resultType="int">
+    <select id="selectSurveyTotalCount" parameterType="PageCriteria" resultType="int">
         select count(survey._id)
-        from survey left OUTER JOIN surveytag
+        from survey.survey left OUTER JOIN survey.surveytag
         on survey._id = surveytag._id
         where Sur_Publish = true
         and (survey.Sur_State = 1 or survey.Sur_State = 2)
@@ -48,9 +48,9 @@
     </select>
 
 
-    <select id="selectMySurveyList" parameterType="PaginationInfo_MySQL" resultType="Survey_MySQL">
+    <select id="selectMySurveyList" parameterType="PaginationInfo" resultType="Survey_MySQL">
         select survey._id, survey.Sur_Title, survey.Sur_Content, survey.Sur_State, survey.Sur_StartDate, survey.Sur_EndDate, survey.Sur_Publish, survey.Sur_Img, survey.User_Email, survey.Sur_Type, surveytag.Tag_ID
-        from survey left OUTER JOIN surveytag
+        from survey.survey left OUTER JOIN survey.surveytag
         on survey._id = surveytag._id
         where (survey.Sur_State = 1 or survey.Sur_State = 2)
         <if test="criteria.search_Key != null">
@@ -65,9 +65,9 @@
         limit #{firstRecordIndex}, #{criteria.records_Perpage};
     </select>
 
-    <select id="selectMySurveyTotalCount" parameterType="Criteria_MySQL" resultType="int">
+    <select id="selectMySurveyTotalCount" parameterType="PageCriteria" resultType="int">
         select count(survey._id)
-        from survey left OUTER JOIN surveytag
+        from survey.survey left OUTER JOIN survey.surveytag
         on survey._id = surveytag._id
         where (survey.Sur_State = 1 or survey.Sur_State = 2)
         <if test="search_Key != null">
@@ -80,19 +80,19 @@
     </select>
 
     <insert id="insertSurvey" parameterType="Survey_MySQL">
-        insert into survey values (#{_id},#{sur_Title},#{sur_Content},#{sur_State},#{sur_StartDate},#{sur_EndDate},#{sur_Publish},#{sur_Image},#{user_Email},#{sur_Type} );
+        insert into survey.survey values (#{_id},#{sur_Title},#{sur_Content},#{sur_State},#{sur_StartDate},#{sur_EndDate},#{sur_Publish},#{sur_Image},#{user_Email},#{sur_Type} );
     </insert>
 
     <select id="selectOwner" parameterType="String" resultType="String">
-        select User_Email from survey where _id = #{_id};
+        select User_Email from survey.survey where _id = #{_id};
     </select>
 
     <delete id="deleteSurvey" parameterType = "String">
-        delete from Survey where _id = #{_id};
+        delete from survey.Survey where _id = #{_id};
     </delete>
 
     <update id="updateSurvey" parameterType = "Survey_MySQL">
-        update survey
+        update survey.survey
         set Sur_Title = #{sur_Title}, Sur_Content = #{sur_Content}, Sur_State = #{sur_State},
             Sur_StartDate = #{sur_StartDate}, Sur_EndDate = #{sur_EndDate},
             Sur_Publish = #{sur_Publish}, Sur_Image = #{sur_Image},
@@ -101,7 +101,7 @@
     </update>
 
     <select id="todaystartlist" resultType="Survey_MySQL">
-        select User_Email from survey;
+        select User_Email from survey.survey;
     </select>
 
 </mapper>

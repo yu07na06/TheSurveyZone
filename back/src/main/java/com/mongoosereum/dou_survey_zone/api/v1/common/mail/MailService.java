@@ -1,4 +1,4 @@
-package com.mongoosereum.dou_survey_zone.v1.api.common.mail;
+package com.mongoosereum.dou_survey_zone.api.v1.common.mail;
 
 import com.mongoosereum.dou_survey_zone.api.v1.dto.MailDTO;
 import lombok.AllArgsConstructor;
