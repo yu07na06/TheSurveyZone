@@ -29,13 +29,13 @@ public class SurveyController{
     private SurveyService surveyService;
 
     // selectSurveyList 설문지 리스트 출력
-    @GetMapping(path="/main/list/")
+    @GetMapping(path="/main/list")
     @ApiOperation(value = "설문지 리스트 출력",notes="메인 페이지용, 페이징 작업중")
     public ResponseEntity selectSurveyList(SurveylistDTO surveylistDTO){
 
         // test print keyword and tag
-        //System.out.println(surveylistDTO.getSearch_Key());
-        //System.out.println(surveylistDTO.getSearch_Tag());
+        System.out.println(surveylistDTO.getSearch_Key());
+        System.out.println(surveylistDTO.getSearch_Tag());
 
         Surveylist_MySQL surveyList = surveyService.selectSurveyList(surveylistDTO);
 

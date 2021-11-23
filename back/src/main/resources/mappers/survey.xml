@@ -73,4 +73,10 @@
             User_Email = #{user_Email}, Sur_Type = #{sur_Type}
         where _id = #{_id}
     </update>
+
+    <select id="todaystartlist" resultType="Survey_MySQL">
+        select User_Email from survey;
+    </select>
+
 </mapper>
+

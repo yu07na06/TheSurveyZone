@@ -1,4 +1,4 @@
-package com.mongoosereum.dou_survey_zone.v1.api.security;
+package com.mongoosereum.dou_survey_zone.v1.api.Security;
 
 import com.mongoosereum.dou_survey_zone.v1.api.user.entity.User_MySQL;
 import io.jsonwebtoken.Claims;
