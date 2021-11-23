@@ -1,6 +1,5 @@
 package com.mongoosereum.dou_survey_zone.api.v1.controller;
 
-import com.mongoosereum.dou_survey_zone.api.v1.dto.MailDTO;
 import com.mongoosereum.dou_survey_zone.api.v1.common.mail.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -21,11 +20,6 @@ public class TestController{
     @PostMapping(path="/ddd")
     public String test1( @AuthenticationPrincipal String userEmail){
         return userEmail;
-    }
-
-    @PostMapping("/mail")
-    public void execMail(@RequestBody MailDTO mailDTO) {
-        mailService.mailSend(mailDTO);
     }
 
 
