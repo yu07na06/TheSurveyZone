@@ -2,13 +2,13 @@ package com.mongoosereum.dou_survey_zone.api.v1.domain.survey;
 
 import com.mongoosereum.dou_survey_zone.api.v1.dao.SurveyDAO;
 import com.mongoosereum.dou_survey_zone.api.v1.dao.TagDAO;
-import com.mongoosereum.dou_survey_zone.api.v1.dto.InsertSurveyDTO;
-import com.mongoosereum.dou_survey_zone.api.v1.dto.SelectSurveyDTO;
-import com.mongoosereum.dou_survey_zone.api.v1.dto.SurveyResultDTO;
-import com.mongoosereum.dou_survey_zone.api.v1.dto.SurveylistDTO;
+import com.mongoosereum.dou_survey_zone.api.v1.dto.request.InsertSurveyReq;
+import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SelectSurveyRes;
+import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SurveyResultRes;
+import com.mongoosereum.dou_survey_zone.api.v1.dto.request.SurveyListPageReq;
 import com.mongoosereum.dou_survey_zone.api.v1.common.paging.PageCriteria;
 import com.mongoosereum.dou_survey_zone.api.v1.common.paging.PaginationInfo;
-import com.mongoosereum.dou_survey_zone.api.v1.dto.Surveylist_MySQL;
+import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SurveyListPageRes;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.tag.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class SurveyService {
     @Autowired
     private final TagDAO tagDAO;
 
-    public Surveylist_MySQL selectSurveyList(SurveylistDTO surveylistDTO) {
+    public SurveyListPageRes selectSurveyList(SurveyListPageReq surveylistDTO) {
 
         //criteria insert
         PageCriteria criteria = new PageCriteria();
@@ -48,7 +48,7 @@ public class SurveyService {
         }
 
         // insert total info
-        Surveylist_MySQL response = Surveylist_MySQL.builder()
+        SurveyListPageRes response = SurveyListPageRes.builder()
                 .paginationInfo(paginationInfo)
                 .surveylist(surveyList)
                 .build();
@@ -56,7 +56,7 @@ public class SurveyService {
         return response;
     }
 
-    public Surveylist_MySQL selectMySurveyList(String User_Email, SurveylistDTO surveylistDTO) {
+    public SurveyListPageRes selectMySurveyList(String User_Email, SurveyListPageReq surveylistDTO) {
         //criteria insert
         System.out.println(User_Email);
         PageCriteria criteria = new PageCriteria();
@@ -77,7 +77,7 @@ public class SurveyService {
         }
 
         // insert total info
-        Surveylist_MySQL response = Surveylist_MySQL.builder()
+        SurveyListPageRes response = SurveyListPageRes.builder()
                 .paginationInfo(paginationInfo)
                 .surveylist(surveyList)
                 .build();
@@ -93,7 +93,7 @@ public class SurveyService {
         return tagDAO.findById(_id);
     }
 
-    public String insertSurvey(InsertSurveyDTO insertSurveyDTO) {
+    public String insertSurvey(InsertSurveyReq insertSurveyDTO) {
         // MongoDB insert
         Survey_Mongo survey_Mongo = Survey_Mongo.builder()
                 .questionList(insertSurveyDTO.getQuestionList())
@@ -128,11 +128,11 @@ public class SurveyService {
         return surveyID;
     }
 
-    public SelectSurveyDTO findById(String _id) {
+    public SelectSurveyRes findById(String _id) {
         Survey_MySQL resultMySQL = surveyDAO.findById_MySQL(_id);
         Survey_Mongo resultMongo = surveyDAO.findById_Mongo(_id);
         List<Tag> tagList = tagDAO.findById(_id);
-        SelectSurveyDTO surveySelectDTO = new SelectSurveyDTO();
+        SelectSurveyRes surveySelectDTO = new SelectSurveyRes();
         surveySelectDTO.set(resultMongo, resultMySQL, tagList);
         return surveySelectDTO;
     }
@@ -153,7 +153,7 @@ public class SurveyService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public Boolean updateSurvey(String _id, InsertSurveyDTO surveyInsertDTO) throws Exception {
+    public Boolean updateSurvey(String _id, InsertSurveyReq surveyInsertDTO) throws Exception {
         // MongoDB insert
         Survey_Mongo survey_Mongo = Survey_Mongo.builder()
                 ._id(_id)
@@ -188,12 +188,12 @@ public class SurveyService {
             throw new Exception("IMPOSSIBLE TO UPDATE");
     }
 
-    public SurveyResultDTO resultSurvey(String _id) {
+    public SurveyResultRes resultSurvey(String _id) {
         Survey_Mongo survey_mongo = surveyDAO.findById_Mongo(_id);
         if(survey_mongo == null)
             return null;
         List<Question> questionList = survey_mongo.getQuestionList();
-        SurveyResultDTO surveyResultDTO = new SurveyResultDTO();
+        SurveyResultRes surveyResultDTO = new SurveyResultRes();
         for (int i = 0; i < questionList.size(); i++) {
             Question nowQuestion = questionList.get(i);
             surveyResultDTO.getQuestionList().add(questionList.get(i).getSurQue_Content()); // 질문추가

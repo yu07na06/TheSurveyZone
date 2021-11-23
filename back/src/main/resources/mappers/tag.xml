@@ -9,13 +9,13 @@
     <select id="selectTagList" resultType="Tag">
         select * from survey.Tag;
     </select>
-    <select id="selectTagExistList" resultType="Tag" parameterType="String">
+    <select id="selectExistTagList" resultType="Tag" parameterType="String">
     <choose>
         <when test='_id == ""'>
-            Select * from survey.Tag where Tag_ID in (select Tag_ID from SurveyTag);
+            Select * from survey.Tag where Tag_ID in (select Tag_ID from survey.SurveyTag);
         </when>
         <otherwise>
-            select * from survey.Tag where Tag_ID in (select Tag_ID from SurveyTag where _id = #{_id});
+            select * from survey.Tag where Tag_ID in (select Tag_ID from survey.SurveyTag where _id = #{_id});
         </otherwise>
     </choose>
     </select>

@@ -22,11 +22,11 @@ import java.util.List;
 public class UserController{
 
     @Autowired
-    private UserService Service;
+    private UserService userService;
 
     @Autowired
     private TokenProvider tokenProvider;
-    // TODO
+
     @PostMapping(path="/checkEmail")
     @ApiOperation(value = "이메일 중복검사")
     public ResponseEntity CheckEmail(
@@ -34,7 +34,7 @@ public class UserController{
             @ApiParam(value="UserDTO",required = true )
                     UserDTO userDTO
     ) {
-        return ResponseEntity.ok().body(Service.checkEmail(userDTO.getUser_Email()));
+        return ResponseEntity.ok().body(userService.checkEmail(userDTO.getUser_Email()));
     }
 
     @PostMapping(path="/signup")
@@ -44,11 +44,9 @@ public class UserController{
             @ApiParam(value="UserDTO",required = true )
                     UserDTO userDTO
     ) {
-        // TODO 정환, 서비스로 이동 필요(--> 도훈 완료)
-
         Integer result;
         try{
-        result = Service.createUser(userDTO);
+            result = userService.createUser(userDTO);
         }catch (Exception e){
             return ResponseEntity.badRequest().body(e.toString());
         }
@@ -61,9 +59,9 @@ public class UserController{
 
     @PostMapping(path="/signin")
     @ApiOperation(value = "로그인")
-    public ResponseEntity<?> signin(@RequestBody UserDTO userDTO) {
+    public ResponseEntity signin(@RequestBody UserDTO userDTO) {
 
-        User user = Service.login(userDTO.getUser_Email(), userDTO.getUser_Password());
+        User user = userService.login(userDTO.getUser_Email(), userDTO.getUser_Password());
 
         if(user != null){
             final String token = tokenProvider.create(user);
@@ -81,7 +79,7 @@ public class UserController{
     @PostMapping(path="/searchID")
     @ApiOperation(value = "ID찾기")
     public ResponseEntity<?> searchID(@RequestBody UserDTO userDTO) {
-        List<String> user = Service.searchID(userDTO.getUser_Name(), userDTO.getUser_Tel());
+        List<String> user = userService.searchID(userDTO.getUser_Name(), userDTO.getUser_Tel());
     return (user != null) ? ResponseEntity.ok().body(user) :  ResponseEntity.badRequest().body("NO User");
     }
 

@@ -1,4 +1,4 @@
-package com.mongoosereum.dou_survey_zone.api.v1.dto;
+package com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey;
 
 import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.Select;
 import io.swagger.annotations.ApiModel;
@@ -11,7 +11,7 @@ import java.util.Map;
 
 @Data
 @ApiModel("설문 결과 조회 Response DTO")
-public class SurveyResultDTO {
+public class SurveyResultRes {
     @ApiModelProperty(name = "userList", notes = "설문 참가 유저 List \n0번째 index엔 0번째로 참여한 User 정보")
     private List<String> userList;
 
@@ -26,7 +26,7 @@ public class SurveyResultDTO {
 
     @ApiModelProperty(name = "resultMap", notes = "객관식 답변 빈도수\n0번째 index엔 0번 질문에 해당하는 답변들의 Key,Value 쌍\n객관식의 경우에만 존재, 주관식인 경우 null")
     private List<Map<String,Long> >resultMap;
-    public SurveyResultDTO(){
+    public SurveyResultRes(){
         this.userList = new ArrayList<String>();
         this.questionList = new ArrayList<String>();
         this.selectList = new ArrayList<List<Select> >();

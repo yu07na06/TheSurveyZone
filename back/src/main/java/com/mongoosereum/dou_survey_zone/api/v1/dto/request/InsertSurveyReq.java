@@ -1,4 +1,4 @@
-package com.mongoosereum.dou_survey_zone.api.v1.dto;
+package com.mongoosereum.dou_survey_zone.api.v1.dto.request;
 
 import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.type.SurveyType;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.Question;
@@ -12,7 +12,7 @@ import java.util.List;
 
 @Data
 @ApiModel("설문 생성 or 수정 Request DTO")
-public class InsertSurveyDTO {
+public class InsertSurveyReq {
     @ApiModelProperty(name = "sur_Title", notes = "설문 제목")
     private String sur_Title;
 

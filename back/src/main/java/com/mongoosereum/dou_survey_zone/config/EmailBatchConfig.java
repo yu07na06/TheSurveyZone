@@ -27,10 +27,7 @@ public class EmailBatchConfig {
     SurveyDAO surveyDAO;
 
     @Bean
-    public Job sendMailJob(
-            JobBuilderFactory jobBuilderFactory,
-            Step sendMailJobStep
-    ) {
+    public Job sendMailJob(JobBuilderFactory jobBuilderFactory, Step sendMailJobStep) {
         log.info("********** Mail send");
         return jobBuilderFactory.get("sendMail")  // 1_1
                 //.preventRestart()  // 1_2
@@ -39,9 +36,7 @@ public class EmailBatchConfig {
     }
 
     @Bean
-    public Step sendMailJobStep(
-            StepBuilderFactory stepBuilderFactory
-    ) {
+    public Step sendMailJobStep(StepBuilderFactory stepBuilderFactory) {
         log.info("********** This is sendMailJobStep");
         return stepBuilderFactory.get("sendMailJobStep")  // 2_1
                 .<Survey_MySQL, Survey_MySQL> chunk(10)  // 2_2

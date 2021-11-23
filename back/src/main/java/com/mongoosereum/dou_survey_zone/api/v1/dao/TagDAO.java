@@ -22,7 +22,7 @@ public class TagDAO {
 
     /* survey에 사용된 태그들  */
     public List<Tag> findById(String _id){
-        return sqlSession.selectList("selectTagExistList",_id);
+        return sqlSession.selectList("selectExistTagList",_id);
     }
 
     /*태그 생성*/
