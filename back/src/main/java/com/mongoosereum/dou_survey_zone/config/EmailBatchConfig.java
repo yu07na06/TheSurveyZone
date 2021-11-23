@@ -1,5 +1,6 @@
 package com.mongoosereum.dou_survey_zone.config;
 
+import com.mongoosereum.dou_survey_zone.api.v1.common.mail.MailService;
 import com.mongoosereum.dou_survey_zone.api.v1.dao.SurveyDAO;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.Survey_MySQL;
 import lombok.AllArgsConstructor;
@@ -26,21 +27,24 @@ public class EmailBatchConfig {
     @Autowired
     SurveyDAO surveyDAO;
 
+    @Autowired
+    MailService mailService;
+
+    private final JobBuilderFactory jobBuilderFactory;
+    private final StepBuilderFactory stepBuilderFactory;
+
     @Bean
     public Job sendMailJob(
-            JobBuilderFactory jobBuilderFactory,
-            Step sendMailJobStep
     ) {
         log.info("********** Mail send");
         return jobBuilderFactory.get("sendMail")  // 1_1
                 //.preventRestart()  // 1_2
-                .start(sendMailJobStep)  // 1_3
+                .start(sendMailJobStep())  // 1_3
                 .build();  // 1_4
     }
 
     @Bean
     public Step sendMailJobStep(
-            StepBuilderFactory stepBuilderFactory
     ) {
         log.info("********** This is sendMailJobStep");
         return stepBuilderFactory.get("sendMailJobStep")  // 2_1
@@ -55,8 +59,9 @@ public class EmailBatchConfig {
     @StepScope  // 1
     public ListItemReader<Survey_MySQL> sendMailReader() {
         log.info("********** This is sendMailReader");
+
         List<Survey_MySQL> sendMembers = surveyDAO.todaystartlist();
-        log.info("          - activeMember SIZE : " + sendMembers.size());  // 2
+        log.info(" - activeMember SIZE : " + sendMembers.size());  // 2
         return new ListItemReader<>(sendMembers);  // 3
     }
 
@@ -65,7 +70,20 @@ public class EmailBatchConfig {
             @Override
             public Survey_MySQL process(Survey_MySQL survey_MySQL) throws Exception {
                 log.info("********** This sendMailProcessor");
-                return survey_MySQL.setSur_State(1);
+
+                if(survey_MySQL.getSur_State()==0){
+                    System.out.println("시작메일 전송");
+                    mailService.surveyStartMail(survey_MySQL);
+                    return survey_MySQL.setSur_State(1);
+                }
+
+                if(survey_MySQL.getSur_State()==1){
+                    System.out.println("종료메일 전송");
+                    mailService.surveyEndMail(survey_MySQL);
+                    return survey_MySQL.setSur_State(2);
+                }
+
+                return survey_MySQL;
             }
         };
     }

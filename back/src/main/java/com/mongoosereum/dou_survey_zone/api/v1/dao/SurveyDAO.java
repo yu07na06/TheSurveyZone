@@ -122,7 +122,6 @@ public class SurveyDAO {
 
     //search  today start survey list Mail send list
     public List<Survey_MySQL> todaystartlist() {
-        LocalDate currentDate = LocalDate.now();
-        return sqlSession.selectList("todaystartlist", currentDate);
+        return sqlSession.selectList("todaystartlist");
     }
 }
