@@ -4,15 +4,15 @@
 <configuration>
 
     <typeAliases>
-        <typeAlias type="com.mongoosereum.dou_survey_zone.v1.api.user.entity.User_MySQL" alias="User_MySQL"/>
-        <typeAlias type="com.mongoosereum.dou_survey_zone.v1.api.participation.entity.ACC.ACC_Gender" alias="ACC_Gender"/>
-        <typeAlias type="com.mongoosereum.dou_survey_zone.v1.api.participation.entity.ACC.ACC_Age" alias="ACC_Age"/>
-        <typeAlias type="com.mongoosereum.dou_survey_zone.v1.api.survey.entity.mysql.Survey_MySQL" alias="Survey_MySQL"/>
+        <typeAlias type="com.mongoosereum.dou_survey_zone.api.v1.domain.user.User" alias="User_MySQL"/>
+        <typeAlias type="com.mongoosereum.dou_survey_zone.api.v1.dto.ACC_Gender" alias="ACC_Gender"/>
+        <typeAlias type="com.mongoosereum.dou_survey_zone.api.v1.dto.ACC_Age" alias="ACC_Age"/>
+        <typeAlias type="com.mongoosereum.dou_survey_zone.api.v1.domain.survey.Survey_MySQL" alias="Survey_MySQL"/>
         <typeAlias type="com.mongoosereum.dou_survey_zone.v1.api.common.paging.Criteria_MySQL" alias="Criteria_MySQL"/>
         <typeAlias type="com.mongoosereum.dou_survey_zone.v1.api.common.paging.PaginationInfo_MySQL" alias="PaginationInfo_MySQL"/>
         <typeAlias type="com.mongoosereum.dou_survey_zone.v1.api.tag.dto.TagDTO" alias="TagDTO"/>
-        <typeAlias type="com.mongoosereum.dou_survey_zone.v1.api.tag.entity.SurveyTag" alias="SurveyTag"/>
-        <typeAlias type="com.mongoosereum.dou_survey_zone.v1.api.tag.entity.Tag" alias="Tag"/>
+        <typeAlias type="com.mongoosereum.dou_survey_zone.api.v1.domain.tag.SurveyTag" alias="SurveyTag"/>
+        <typeAlias type="com.mongoosereum.dou_survey_zone.api.v1.domain.tag.Tag" alias="Tag"/>
     </typeAliases>
 
 </configuration>
