@@ -194,6 +194,8 @@ public class SurveyService {
 
     public SurveyResultDTO resultSurvey(String _id) {
         Survey_Mongo survey_mongo = surveyDAO.findById_Mongo(_id);
+        if(survey_mongo == null)
+            return null;
         List<Question> questionList = survey_mongo.getQuestionList();
         SurveyResultDTO surveyResultDTO = new SurveyResultDTO();
         for (int i = 0; i < questionList.size(); i++) {
@@ -204,41 +206,62 @@ public class SurveyService {
 
             List<Object> ansList = new ArrayList<>(); // 제출한 응답을 담을 ArrayList
             //객관식 유형
-            if (nowQuestion.getSurQue_QType() != Integer.valueOf(QuestionType.ESSAY.getNum())) {
-                Map<String, Long> resultMap = new HashMap<>(); // 객관식용 HashMap
-                surveyResultDTO.getSelectList().add(nowQuestion.getSelectList()); // DTO에 selectList추가
-                for (int j = 0; j < nowQuestion.getAnswerList().size(); j++) {
-                    String ans[] = nowQuestion.getAnswerList().get(j).getSurAns_Content().split("Θ");
-                    if(ans.length==1) { // 중복응답이 아닌경우
-                        ansList.add(ans[0]); // 제출한 응답 리스트에 추가
-                        if (resultMap.containsKey(ans[0])) // Map에 답변이 존재
-                            resultMap.put(ans[0], resultMap.get(ans[0]) + 1);
-                        else { // Map에 답변이 존재하지 않음
-                            resultMap.put(ans[0], 1L);
-                        }
-                    }
-                    else{ // 중복응답인 경우
+            switch (nowQuestion.getSurQue_QType()) {
+                /*case QuestionType.ESSAY: 주관식 */
+                case 0: {
+                    surveyResultDTO.getSelectList().add(null); // Select가 없으므로 null
+                    for (int j = 0; j < nowQuestion.getAnswerList().size(); j++) {
+                        String ans = nowQuestion.getAnswerList().get(j).getSurAns_Content();
                         ansList.add(ans);
-                        for(int k=0;k<ans.length;k++){ // 중복응답의 갯수만큼 for문 반복
-                            if (resultMap.containsKey(ans[k])) // Map에 답변이 존재
-                                resultMap.put(ans[k], resultMap.get(ans[k]) + 1);
-                            else // Map에 답변이 존재하지 않음
-                                resultMap.put(ans[k], 1L);
+                    }
+                    surveyResultDTO.getResultMap().add(null); // Select가 없으므로 resultMap도 null
+                    break;
+                }
+                /*case QuestionType.MULTIPLE : 객관식 */
+                case 1: {
+                    Map<String, Long> resultMap = new HashMap<>(); // 객관식용 HashMap
+                    for (int j = 0; j < nowQuestion.getSelectList().size(); j++)
+                        resultMap.put(nowQuestion.getSelectList().get(j).getSurSel_Content(), 0L);
+                    surveyResultDTO.getSelectList().add(nowQuestion.getSelectList()); // DTO에 selectList추가
+                    for (int j = 0; j < nowQuestion.getAnswerList().size(); j++) {
+                        String ans[] = nowQuestion.getAnswerList().get(j).getSurAns_Content().split("Θ");
+                        if (ans.length == 1) { // 중복응답이 아닌경우
+                            ansList.add(ans[0]); // 제출한 응답 리스트에 추가
+                            if (resultMap.containsKey(ans[0])) // Map에 답변이 존재
+                                resultMap.put(ans[0], resultMap.get(ans[0]) + 1);
+                        } else { // 중복응답인 경우
+                            ansList.add(ans);
+                            for (int k = 0; k < ans.length; k++) { // 중복응답의 갯수만큼 for문 반복
+                                if (resultMap.containsKey(ans[k])) // Map에 답변이 존재
+                                    resultMap.put(ans[k], resultMap.get(ans[k]) + 1);
+                            }
                         }
                     }
+                    surveyResultDTO.getResultMap().add(resultMap);
+                    break;
                 }
-                surveyResultDTO.getResultMap().add(resultMap);
-            } else { // 주관식 유형
-                surveyResultDTO.getSelectList().add(null); // Select가 없으므로 null
-                for (int j = 0; j < nowQuestion.getAnswerList().size(); j++) {
-                    String ans = nowQuestion.getAnswerList().get(j).getSurAns_Content();
-                    ansList.add(ans);
+                /* case QuestionType.LINEAR : 선형배율*/
+                case 2: {
+                    Map<String, Long> resultMap = new HashMap<>();
+                    int min = Integer.parseInt(nowQuestion.getSelectList().get(1).getSurSel_Content());
+                    int max = Integer.parseInt(nowQuestion.getSelectList().get(3).getSurSel_Content());
+                    // value 최소 index(1), value 최대 index(3)
+                    for (int j = min; j <= max; j++)
+                        resultMap.put(String.valueOf(j), 0L);
+
+                    surveyResultDTO.getSelectList().add(nowQuestion.getSelectList()); // DTO에 selectList추가
+                    for (int j = 0; j < nowQuestion.getAnswerList().size(); j++) {
+                        String ans = nowQuestion.getAnswerList().get(j).getSurAns_Content();
+                        ansList.add(ans); // 제출한 응답 리스트에 추가
+                        if (resultMap.containsKey(ans)) // Map에 답변이 존재
+                            resultMap.put(ans, resultMap.get(ans) + 1);
+                    }
+                    surveyResultDTO.getResultMap().add(resultMap);
+                    break;
                 }
-                surveyResultDTO.getResultMap().add(null); // Select가 없으므로 resultMap도 null
             }
             surveyResultDTO.getAnswerList().add(ansList); // 이번 질문에 대한 모든 ansList를 추가
         }
         return surveyResultDTO;
     }
 }
-
