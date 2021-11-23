@@ -10,6 +10,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Radio from "@mui/material/Radio";
 
 const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxValue, value, setTemp, deleteQue, ReadOnlyState, ReadOnlyData, makeCircles}) => {
+    console.log("저를 이용해주세요~~~ : ", ReadOnlyData);
     return (
         <>
             <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
@@ -30,7 +31,8 @@ const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxVal
                             value={ReadOnlyState?ReadOnlyData.surQue_Content:null} // 객체 참조 안함
                         />
                     </Grid>
-                    <Grid item xs={3}>
+
+                    <Grid item xs={2}>
                         <TextField
                             required
                             variant="filled"
@@ -38,11 +40,12 @@ const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxVal
                             label="시작"
                             onChange={e=>setTemp(e.target.value)}
                             disabled={ReadOnlyState}
-                            value={ReadOnlyState?ReadOnlyData.selectList.surSel_Content:null} // 객체 참조 안함
+                            value={ReadOnlyState?ReadOnlyData.selectList[0].surSel_Content:null} // 객체 참조 안함
                         />
                     </Grid>
+                    
                     {!ReadOnlyState&&
-                    <Grid item xs={3}>
+                    <Grid item xs={4}>
                         <Box>
                             <FormControl fullWidth>
                                 <InputLabel id="demo-simple-select-label">시작 값</InputLabel>
@@ -62,12 +65,16 @@ const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxVal
                             </FormControl>
                         </Box>
                     </Grid>}
-                    <Grid item xs={6}>
-                        {ReadOnlyState&&
-                            makeCircles.map(value=>value)
-                        }
-                    </Grid>
-                    <Grid item xs={3}>
+
+                    {ReadOnlyState&&
+                    <Grid container xs={8} 
+                    justifyContent="center"
+                    alignItems="center">
+                    {ReadOnlyState&&
+                    makeCircles.map(value=>value)}
+                    </Grid>}
+
+                    <Grid item xs={2}>
                         <TextField
                             required
                             variant="filled"
@@ -75,11 +82,11 @@ const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxVal
                             label="끝"
                             onChange={e=>setTemp(e.target.value)}
                             disabled={ReadOnlyState}
-                            value={ReadOnlyState?ReadOnlyData.selectList.surSel_Content:null} // 객체 참조 안함
+                            value={ReadOnlyState?ReadOnlyData.selectList[2].surSel_Content:null} // 객체 참조 안함
                         />
                     </Grid>
                     {!ReadOnlyState&&
-                    <Grid item xs={3}>
+                    <Grid item xs={4}>
                         <Box>
                             <FormControl fullWidth>
                                 <InputLabel id="demo-simple-select-label">끝 값</InputLabel>

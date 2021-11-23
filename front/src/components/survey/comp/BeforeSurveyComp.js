@@ -2,7 +2,7 @@ import React from 'react';
 import BeforeSurvey from '../UI/BeforeSurvey';
 import { styled } from '@mui/material/styles';
 
-const BeforeSurveyComp = () => {
+const BeforeSurveyComp = ({setAge,setSex }) => {
     const marks = [
         {
           value: 10,
@@ -40,6 +40,11 @@ const BeforeSurveyComp = () => {
       height: ${theme.spacing(3)};
       `,
     );
+    
+    // 성별, 나이 state에 저장
+    const addStore = (e) => {
+      (e._reactName==='onChange')?setSex(e.target._wrapperState.initialValue):setAge(e.target.value)
+    }
 
     return (
         <>
@@ -47,6 +52,7 @@ const BeforeSurveyComp = () => {
                 marks={marks}
                 valuetext={valuetext}
                 Separator={Separator}
+                addStore={addStore}
             />
         </>
     );
