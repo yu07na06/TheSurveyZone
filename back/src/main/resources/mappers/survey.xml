@@ -100,8 +100,8 @@
         where _id = #{_id}
     </update>
 
-    <select id="todaystartlist" resultType="Survey_MySQL">
-        select User_Email from survey.survey;
+    <select id="todaystartlist" parameterType = "String" resultType="Survey_MySQL">
+        select * from survey.survey where (Sur_State = 0 and  Sur_StartDate like CURDATE()) or (Sur_State = 1 and  Sur_EndDate like date_add(curdate(), interval -1 day));
     </select>
 
 </mapper>
