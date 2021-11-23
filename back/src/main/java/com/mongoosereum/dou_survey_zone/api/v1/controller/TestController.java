@@ -21,6 +21,4 @@ public class TestController{
     public String test1( @AuthenticationPrincipal String userEmail){
         return userEmail;
     }
-
-
 }

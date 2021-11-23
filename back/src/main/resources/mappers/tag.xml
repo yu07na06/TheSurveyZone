@@ -9,7 +9,7 @@
     <select id="selectTagList" resultType="Tag">
         select * from survey.Tag;
     </select>
-    <select id="selectTagExistList" resultType="Tag" parameterType="String">
+    <select id="selectExistTagList" resultType="Tag" parameterType="String">
     <choose>
         <when test='_id == ""'>
             Select * from survey.Tag where Tag_ID in (select Tag_ID from survey.SurveyTag);

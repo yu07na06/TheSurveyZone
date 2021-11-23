@@ -62,6 +62,5 @@ public class MailService {
             System.out.println("메일 전송 실패");
         }
     }
-
 }
 

@@ -1,11 +1,11 @@
 package com.mongoosereum.dou_survey_zone.api.v1.controller;
 
-import com.mongoosereum.dou_survey_zone.api.v1.dto.SelectSurveyDTO;
-import com.mongoosereum.dou_survey_zone.api.v1.dto.InsertSurveyDTO;
-import com.mongoosereum.dou_survey_zone.api.v1.dto.SurveyResultDTO;
-import com.mongoosereum.dou_survey_zone.api.v1.dto.SurveylistDTO;
+import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SelectSurveyRes;
+import com.mongoosereum.dou_survey_zone.api.v1.dto.request.InsertSurveyReq;
+import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SurveyResultRes;
+import com.mongoosereum.dou_survey_zone.api.v1.dto.request.SurveyListPageReq;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.Answer;
-import com.mongoosereum.dou_survey_zone.api.v1.dto.Surveylist_MySQL;
+import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SurveyListPageRes;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.SurveyService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,13 +30,13 @@ public class SurveyController{
     // selectSurveyList 설문지 리스트 출력
     @GetMapping(path="/main/list")
     @ApiOperation(value = "설문지 리스트 출력",notes="메인 페이지용, 페이징 작업중")
-    public ResponseEntity selectSurveyList(SurveylistDTO surveylistDTO){
+    public ResponseEntity selectSurveyList(SurveyListPageReq surveylistDTO){
 
         // test print keyword and tag
         System.out.println(surveylistDTO.getSearch_Key());
         System.out.println(surveylistDTO.getSearch_Tag());
 
-        Surveylist_MySQL surveyList = surveyService.selectSurveyList(surveylistDTO);
+        SurveyListPageRes surveyList = surveyService.selectSurveyList(surveylistDTO);
 
         if(surveyList.getSurveylist() != null){
             return ResponseEntity.status(HttpStatus.OK).body(surveyList);
@@ -47,9 +47,9 @@ public class SurveyController{
     }
     @GetMapping(path="/survey/myPage")
     @ApiOperation(value = "내 설문지 리스트 출력")
-    public ResponseEntity selectMySurveyList(@AuthenticationPrincipal String userEmail, SurveylistDTO surveylistDTO ){
+    public ResponseEntity selectMySurveyList(@AuthenticationPrincipal String userEmail, SurveyListPageReq surveylistDTO ){
 
-        Surveylist_MySQL surveyList = surveyService.selectMySurveyList(userEmail, surveylistDTO);
+        SurveyListPageRes surveyList = surveyService.selectMySurveyList(userEmail, surveylistDTO);
 
         return ResponseEntity.ok().body(surveyList);
     }
@@ -68,7 +68,7 @@ public class SurveyController{
     public ResponseEntity insertSurvey(
             @RequestBody
             @ApiParam(value="설문 생성 DTO", required = true)
-                    InsertSurveyDTO surveyInsertDTO
+                    InsertSurveyReq surveyInsertDTO
     ){
         // TODO 정환 로그인 상태 확인 if( )
         // return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Fail Insert survey");
@@ -81,7 +81,7 @@ public class SurveyController{
     @GetMapping(path="/survey/{_id}")
     @ApiOperation(value = "설문 조회", notes="설문 조사 참여할때 설문 조사 출력")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "성공", response = SelectSurveyDTO.class),
+            @ApiResponse(code = 200, message = "성공", response = SelectSurveyRes.class),
             @ApiResponse(code = 404, message = "해당 설문 없음", response = HttpClientErrorException.NotFound.class),
             @ApiResponse(code = 500, message = "서버 오류", response = HttpServerErrorException.InternalServerError.class)
     })
@@ -90,7 +90,7 @@ public class SurveyController{
             @ApiParam(value="설문조사 PK (영어+숫자 24글자)",required = true, example = "619775a6f9517400e97e30e2")
                     String _id
     ){
-        SelectSurveyDTO result = surveyService.findById(_id);
+        SelectSurveyRes result = surveyService.findById(_id);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
@@ -129,7 +129,7 @@ public class SurveyController{
                     String _id,
             @RequestBody
             @ApiParam(value="설문 수정 DTO", required = true)
-                    InsertSurveyDTO surveyInsertDTO
+                    InsertSurveyReq surveyInsertDTO
     ){
         // TODO 정환, 현재 로그인한 유저로 확인하는 로직 추가해야함
         try{
@@ -166,7 +166,7 @@ public class SurveyController{
     @GetMapping(path="/survey/{_id}/result")
     @ApiOperation(value = "설문 결과 조회", notes="작성한 설문 조사의 결과 조회, 작성자만 실행 가능 \n미구현 : 공개인 경우(모든 사람 조회가능) 실행 가능")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "설문 결과", response = SurveyResultDTO.class),
+            @ApiResponse(code = 200, message = "설문 결과", response = SurveyResultRes.class),
             @ApiResponse(code = 404, message = "해당 설문 없음"),
             @ApiResponse(code = 500, message = "서버 오류")
     })
@@ -179,7 +179,7 @@ public class SurveyController{
 //                    String User_Email // TODO security로 확인하게끔 변경해야함
     ) {
         // TODO 정환, 현재 로그인한 유저로 확인하는 로직 필요
-        SurveyResultDTO surveyResultDTO = surveyService.resultSurvey(_id);
+        SurveyResultRes surveyResultDTO = surveyService.resultSurvey(_id);
         if(surveyResultDTO == null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당하는 설문이 존재하지 않습니다");
         return ResponseEntity.status(HttpStatus.OK).body(surveyResultDTO);

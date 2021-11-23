@@ -24,7 +24,7 @@ public class SwaggerConfig {
                 .produces(getProduceContentTypes()) // Response
                 .apiInfo(getApiInfo()) // Swagger API 문서정보
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.mongoosereum.dou_survey_zone.v1.api"))
+                .apis(RequestHandlerSelectors.basePackage("com.mongoosereum.dou_survey_zone.api.v1"))
                 //api 문서로 만들려는 basePackage 지정
                 .paths(PathSelectors.ant("/api/v1/**")) // URL 경로지정, 해당 URL에 해당하는 요청만 API문서로
                 .build();

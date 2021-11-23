@@ -6,8 +6,6 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 public class PageCriteria {
-
-
         /** 생성자 **/
         public PageCriteria() {
         this.page_Size=5;

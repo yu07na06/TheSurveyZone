@@ -1,4 +1,4 @@
-package com.mongoosereum.dou_survey_zone.api.v1.dto;
+package com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey;
 
 import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.Question;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.Survey_Mongo;
@@ -15,7 +15,7 @@ import java.util.List;
 @Data
 @ToString
 @ApiModel("설문 조회 Response DTO")
-public class SelectSurveyDTO {
+public class SelectSurveyRes {
     @ApiModelProperty(name="_id",notes = "설문 PK 24자")
     private String _id;
 
