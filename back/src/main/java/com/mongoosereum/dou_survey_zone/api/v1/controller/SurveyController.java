@@ -62,6 +62,7 @@ public class SurveyController{
     public ResponseEntity selectTagList(){
         return ResponseEntity.ok(surveyService.selectTagList());
     }
+
     @PostMapping(path="/survey/")
     @ApiOperation(value = "설문 생성")
     public ResponseEntity insertSurvey(
