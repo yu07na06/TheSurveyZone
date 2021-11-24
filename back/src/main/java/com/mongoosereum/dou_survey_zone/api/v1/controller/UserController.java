@@ -1,6 +1,6 @@
 package com.mongoosereum.dou_survey_zone.api.v1.controller;
 
-import com.mongoosereum.dou_survey_zone.v1.api.Security.TokenProvider;
+import com.mongoosereum.dou_survey_zone.security.TokenProvider;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.UserDTO;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.user.User;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.user.UserService;

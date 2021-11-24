@@ -1,4 +1,4 @@
-package com.mongoosereum.dou_survey_zone.api.v1.dto.request;
+package com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey;
 
 import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.type.SurveyType;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.Question;

@@ -1,4 +1,4 @@
-package com.mongoosereum.dou_survey_zone.v1.api.Security;
+package com.mongoosereum.dou_survey_zone.security;
 
 import com.mongoosereum.dou_survey_zone.api.v1.domain.user.User;
 import io.jsonwebtoken.Claims;
