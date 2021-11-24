@@ -1,3 +1,4 @@
+
 package com.mongoosereum.dou_survey_zone.config;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;

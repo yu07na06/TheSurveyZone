@@ -136,6 +136,7 @@ public class SurveyService {
                 .user_Email(insertSurveyDTO.getUser_Email())
                 .sur_Type(insertSurveyDTO.getSur_Type().getNum())
                 .build();
+
             try {
                 surveyDAO.surveyInsert_MySQL(survey_MySQL);
                 if(insertSurveyDTO.getSur_Tag() != null) {
@@ -149,6 +150,7 @@ public class SurveyService {
                 // Insert에 실패한경우 생성된 MongoDB의 Document를 삭제해줘야함
                 surveyDAO.deleteSurvey_Mongo(surveyID);
                 return "FAIL";
+
         }
         return surveyID;
     }

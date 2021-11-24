@@ -28,6 +28,7 @@ public class ParticipationDAO{
         System.out.println(ip+ " "+_id);
         map.put("Part_IP",ip);
         map.put("_id",_id);
+        System.out.println(ip+ " " + _id);
         return sqlSession.selectOne("findByIP", map);
     }
     public int insertParticipation(Participation participation){

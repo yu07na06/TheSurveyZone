@@ -49,10 +49,10 @@ public class SurveyController{
     @ApiOperation(value = "내 설문지 리스트 출력")
     public ResponseEntity selectMySurveyList(
             @AuthenticationPrincipal String userEmail,
-            @RequestBody
             @ApiParam(value="페이징 처리 정보 DTO",required = true)
             SurveyListPageReq surveyListPageReq){
 
+        System.out.println(userEmail);
         SurveyListPageRes surveyList = surveyService.selectMySurveyList(userEmail, surveyListPageReq);
 
         return ResponseEntity.ok().body(surveyList);
