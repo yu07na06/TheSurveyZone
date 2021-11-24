@@ -1,10 +1,10 @@
 package com.mongoosereum.dou_survey_zone.api.v1.controller;
 
+import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.InsertAnswerReq;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SelectSurveyRes;
-import com.mongoosereum.dou_survey_zone.api.v1.dto.request.InsertSurveyReq;
+import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.InsertSurveyReq;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SurveyResultRes;
-import com.mongoosereum.dou_survey_zone.api.v1.dto.request.SurveyListPageReq;
-import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.Answer;
+import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.SurveyListPageReq;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SurveyListPageRes;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.SurveyService;
 import io.swagger.annotations.*;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 
 @Api(value="설문조사 API",tags = {"Survey API"})
 @RestController
@@ -47,9 +47,13 @@ public class SurveyController{
     }
     @GetMapping(path="/survey/myPage")
     @ApiOperation(value = "내 설문지 리스트 출력")
-    public ResponseEntity selectMySurveyList(@AuthenticationPrincipal String userEmail, SurveyListPageReq surveylistDTO ){
+    public ResponseEntity selectMySurveyList(
+            @AuthenticationPrincipal String userEmail,
+            @RequestBody
+            @ApiParam(value="페이징 처리 정보 DTO",required = true)
+            SurveyListPageReq surveyListPageReq){
 
-        SurveyListPageRes surveyList = surveyService.selectMySurveyList(userEmail, surveylistDTO);
+        SurveyListPageRes surveyList = surveyService.selectMySurveyList(userEmail, surveyListPageReq);
 
         return ResponseEntity.ok().body(surveyList);
     }
@@ -57,11 +61,6 @@ public class SurveyController{
     @ApiOperation(value="현재 존재하는 태그 리스트 출력", notes = "설문 생성시 존재하는 태그 리스트 출력")
     public ResponseEntity selectTagList(){
         return ResponseEntity.ok(surveyService.selectTagList());
-    }
-    @GetMapping(path="/survey/tags-exist")
-    @ApiOperation(value="게시물이 존재하는 태그 리스트 출력", notes="메인 페이지에서 보여줄 태그 리스트 출력")
-    public ResponseEntity selectTagExistList(){
-        return ResponseEntity.ok(surveyService.selectTagExistList(""));
     }
     @PostMapping(path="/survey/")
     @ApiOperation(value = "설문 생성")
@@ -106,15 +105,19 @@ public class SurveyController{
             @ApiParam(value="설문조사 PK (영어+숫자 24글자)",required = true, example = "619775a6f9517400e97e30e2")
                     String _id,
             @RequestBody
-            @ApiParam(value="작성 답변 List (해당 설문의 질문 개수와 동일한 length)",required = true)
-                    List<Answer> answerList
+            @ApiParam(value="작성 답변 DTO ",required = true)
+                    InsertAnswerReq insertAnswerReq,
+            @ApiParam(hidden = true)
+            HttpServletRequest request
     ){
-        switch(surveyService.insertAnswer(_id,answerList)){
-            case 0: return ResponseEntity.status(HttpStatus.NOT_FOUND).body("NOT FOUND");
+        switch(surveyService.insertAnswer(_id,insertAnswerReq,request)){
+            case -1: return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 응답이 존재하는 IP입니다.");
             case 1: return ResponseEntity.status(HttpStatus.CREATED).body("Success");
-            default: return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Fail Insert survey");
+            case 0 :
+            default : return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("설문 제출 실패");
         }
     }
+
     // 설문지 수정
     @PutMapping(path="/survey/{id}")
     @ApiOperation(value = "설문 수정", notes="작성한 설문 조사 수정")

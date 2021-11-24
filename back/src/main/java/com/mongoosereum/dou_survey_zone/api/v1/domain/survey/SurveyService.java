@@ -1,11 +1,14 @@
 package com.mongoosereum.dou_survey_zone.api.v1.domain.survey;
 
+import com.mongoosereum.dou_survey_zone.api.v1.dao.ParticipationDAO;
 import com.mongoosereum.dou_survey_zone.api.v1.dao.SurveyDAO;
 import com.mongoosereum.dou_survey_zone.api.v1.dao.TagDAO;
-import com.mongoosereum.dou_survey_zone.api.v1.dto.request.InsertSurveyReq;
+import com.mongoosereum.dou_survey_zone.api.v1.domain.participation.Participation;
+import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.InsertAnswerReq;
+import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.InsertSurveyReq;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SelectSurveyRes;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SurveyResultRes;
-import com.mongoosereum.dou_survey_zone.api.v1.dto.request.SurveyListPageReq;
+import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.SurveyListPageReq;
 import com.mongoosereum.dou_survey_zone.api.v1.common.paging.PageCriteria;
 import com.mongoosereum.dou_survey_zone.api.v1.common.paging.PaginationInfo;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SurveyListPageRes;
@@ -15,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @AllArgsConstructor
@@ -25,6 +29,9 @@ public class SurveyService {
     private final SurveyDAO surveyDAO;
     @Autowired
     private final TagDAO tagDAO;
+
+    @Autowired
+    private final ParticipationDAO participationDAO;
 
     public SurveyListPageRes selectSurveyList(SurveyListPageReq surveylistDTO) {
 
@@ -136,10 +143,22 @@ public class SurveyService {
         surveySelectDTO.set(resultMongo, resultMySQL, tagList);
         return surveySelectDTO;
     }
-
+    
     @Transactional(rollbackFor = Exception.class)
-    public Integer insertAnswer(String _id, List<Answer> answerList) {
-        return surveyDAO.insertAnswer(_id, answerList);
+    public Integer insertAnswer(String _id, InsertAnswerReq insertAnswerReq, HttpServletRequest request) {
+        String ip = getIP(request);
+        int findByIP = participationDAO.findByIP(_id,ip);
+        if(findByIP == 1) // 이미 응답한 IP.
+            return -1;
+        int result = participationDAO.insertParticipation(
+                Participation.builder()
+                        ._id(_id)
+                        .Part_Age(insertAnswerReq.getAge())
+                        .Part_Gender(insertAnswerReq.getGender().charAt(0))
+                        .Part_IP(ip)
+                        .build()
+                );
+        return result == 0 ? 0 : surveyDAO.insertAnswer(_id, insertAnswerReq.getAnswerList());
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -259,5 +278,21 @@ public class SurveyService {
             surveyResultDTO.getAnswerList().add(ansList); // 이번 질문에 대한 모든 ansList를 추가
         }
         return surveyResultDTO;
+    }
+    public String getIP(HttpServletRequest request){
+        String ip = null;
+        String[] header = new String []{
+                "X-Forwarded-For",
+                "Proxy-Client-IP",
+                "WL-Proxy-Client-IP",
+                "HTTP_CLIENT_IP",
+                "HTTP_X_FORWARDED_FOR"
+        };
+        for(int i=0;i<header.length;i++){
+            ip = request.getHeader(header[i]);
+            if(ip != null)
+                return ip;
+        }
+        return request.getRemoteAddr();
     }
 }

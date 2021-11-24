@@ -1,4 +1,4 @@
-package com.mongoosereum.dou_survey_zone.v1.api.Security;
+package com.mongoosereum.dou_survey_zone.security;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
