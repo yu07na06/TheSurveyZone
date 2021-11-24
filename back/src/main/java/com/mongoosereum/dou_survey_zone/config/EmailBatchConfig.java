@@ -114,7 +114,7 @@ public class EmailBatchConfig {
     public ItemWriter<Survey_MySQL> sendMailWriter() {
         log.info("********** This is sendMailWriter");
         return (List<? extends Survey_MySQL> sendMailList) -> {
-//            surveyDAO.todaySurveyUpdate(sendMailList); // 1
+            surveyDAO.todaySurveyUpdate(sendMailList); // 1
         };
     }
 

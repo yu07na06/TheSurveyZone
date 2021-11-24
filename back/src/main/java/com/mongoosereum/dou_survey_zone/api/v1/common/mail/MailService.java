@@ -71,11 +71,9 @@ public class MailService {
             String htmlContent = "<p>" + html +"<p>";
             mailHandler.setText(htmlContent, true);
             mailHandler.send();
-//            System.out.println("메일 전송 완료");
         }
         catch (Exception e){
             e.printStackTrace();
-//            System.out.println("메일 전송 실패");
         }
     }
 }
