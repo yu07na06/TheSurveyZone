@@ -19,7 +19,6 @@ const initialState = {
 const submitReducer = handleActions({
     // main설문 응답 data를 surAns_Content배열에 차곡차곡 쌓기 위함
     [SUBMIT]:(state, { payload: data}) =>{
-        console.log(data);
         return ({
         ...state,
         surAns_Content: state.surAns_Content.concat(data)
