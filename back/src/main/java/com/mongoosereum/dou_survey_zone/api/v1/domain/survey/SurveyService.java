@@ -184,18 +184,19 @@ public class SurveyService {
         return result == 0 ? 0 : surveyDAO.insertAnswer(_id, insertAnswerReq.getAnswerList());
     }
 
-    @Transactional(rollbackFor = Exception.class)
     public Long deleteSurvey(String _id, String User_Email) {
-        String owner = surveyDAO.selectOwner(_id);
-        if (!owner.equals(User_Email)) {
-            return 0L;
-        }
         surveyDAO.deleteSurvey_MySQL(_id);
         return surveyDAO.deleteSurvey_Mongo(_id);
     }
 
+    public Boolean checkOwner(String _id, String User_Email){
+        String owner = surveyDAO.selectOwner(_id);
+        if(owner == null)
+            return null;
+        return owner.equals(User_Email)? true: false;
+    }
     @Transactional(rollbackFor = Exception.class)
-    public Boolean updateSurvey(String _id, InsertSurveyReq surveyInsertDTO) throws Exception {
+    public Integer updateSurvey(String _id, InsertSurveyReq surveyInsertDTO) throws Exception {
         // MongoDB insert
         Survey_Mongo survey_Mongo = Survey_Mongo.builder()
                 ._id(_id)
@@ -225,9 +226,9 @@ public class SurveyService {
 //        if(surveyDAO.surveyUpdate_MySQL(survey_MySQL)!=0 && surveyDAO.surveyUpdate_Mongo(survey_Mongo)!= 0L)
 //            return true;
         if (resultMySQL >= 1)
-            return true;
+            return 1;
         else
-            throw new Exception("IMPOSSIBLE TO UPDATE");
+            return 0;
     }
 
     public SurveyResultRes resultSurvey(String _id) {
