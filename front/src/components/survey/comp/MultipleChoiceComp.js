@@ -3,14 +3,16 @@ import React, { useRef, useState } from 'react';
 import MultipleChoice from '../UI/MultipleChoice';
 import {useEffect} from 'react';
 import Checkbox from '@mui/material/Checkbox';
+import { useDispatch } from 'react-redux';
+import { submitAction } from '../../../modules/submitReducer';
 
-const MultipleChoiceComp = ({number, setCheck, setDelIndex, ReadOnlyState, ReadOnlyData, setCheckBoxList }) => {
+const MultipleChoiceComp = ({number, setCheck, setDelIndex, ReadOnlyState, ReadOnlyData, }) => {
 
     const [select, setSelect] = useState([]); // 보기 덩어리가 들어가있음
     const [deleteIndex, setDeleteIndex] = useState(null);
     const [temp, setTemp] = useState([]);
     const [maxNum, setMaxNum] = useState();
-    
+    const dispatch = useDispatch();
     const count = useRef(-1);
     
     useEffect(()=>{
@@ -50,11 +52,8 @@ const MultipleChoiceComp = ({number, setCheck, setDelIndex, ReadOnlyState, ReadO
     }
 
     const ccc = useRef(0);
-    const checkCount = (e, addMaxNum) => {
-        console.log("체크박스 클릭 들어옴 readonlydata 값은?? : ", ReadOnlyData);
-        console.log("addMaxNum", addMaxNum);
-        console.log("ccc.current", ccc.current);
 
+    const checkCount = (e, addMaxNum) => {
         ccc.current += (e.target.checked)? 1 : -1;
         if(ccc.current>addMaxNum){
             alert('놉!');
@@ -66,11 +65,11 @@ const MultipleChoiceComp = ({number, setCheck, setDelIndex, ReadOnlyState, ReadO
     const addText = (number, ReadOnlyData, addMaxNum) => {
         count.current+=1;
         setTemp([...temp, `SurQue_Ans${number}_${count.current}`]); // 질문에 대한 보기 이름 덩어리 합치는 중
+        dispatch(submitAction(`SurQueCheck_${number}_${count.current}`))
         return(
             <Grid key={`SurQue_Ans${number}_${count.current}`} container spacing={2}>
                 <Grid item xs={11} key={`SurQue_Ans${number}_${count.current}`}>
-                {ReadOnlyState&&<Checkbox value={number} name="choice" onClick={(e)=>checkCount(e, addMaxNum)}/>}
-                {/* {ReadOnlyState&&<Checkbox id={`SurQue_Ans${number}_${count.current}`} value={number} name="choice" onClick={(e)=>checkCount(e, addMaxNum)}/>} */}
+                {ReadOnlyState&&<Checkbox value={ReadOnlyState?ReadOnlyData.surSel_Content:null} name={`SurQueCheck_${number}_${count.current}`} id={`SurQueCheck_${number}_${count.current}`} onClick={(e)=>checkCount(e, addMaxNum)}/>}
                 <TextField
                     variant="standard"
                     required

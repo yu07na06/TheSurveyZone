@@ -55,14 +55,14 @@ const MainComp = () => {
     // main 리스트 요청
     useEffect(()=>{
         mainListAPI()
-            .then( res => { console.log("main에서 요청 결과", res.data); setReqMain(res.data); } )
-            .catch( error => console.log("리스트 오류", error) )
+            .then( res => setReqMain(res.data) )
+            .catch( error => console.log("메인 리스트 요청 오류", error) )
     },[dispatch]);
 
     const callPage = (page_Num) => {
         mainListPageAPI(page_Num)
-            .then(res => { console.log("페이지 요청 결과", res.data); setReqMain(res.data)})
-            .catch(err => console.log("페이지 요청 오류", err));
+            .then(res => setReqMain(res.data))
+            .catch(err => console.log("메인 페이지 요청 오류", err));
     }
 
     return (

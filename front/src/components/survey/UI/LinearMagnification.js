@@ -10,7 +10,6 @@ import MenuItem from '@mui/material/MenuItem';
 import Radio from "@mui/material/Radio";
 
 const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxValue, value, setTemp, deleteQue, ReadOnlyState, ReadOnlyData, makeCircles}) => {
-    console.log("저를 이용해주세요~~~ : ", ReadOnlyData);
     return (
         <>
             <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
@@ -68,10 +67,10 @@ const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxVal
 
                     {ReadOnlyState&&
                     <Grid container xs={8} 
-                    justifyContent="center"
-                    alignItems="center">
+                        justifyContent="center"
+                        alignItems="center">
                     {ReadOnlyState&&
-                    makeCircles.map(value=>value)}
+                        makeCircles.map(value=>value)}
                     </Grid>}
 
                     <Grid item xs={2}>

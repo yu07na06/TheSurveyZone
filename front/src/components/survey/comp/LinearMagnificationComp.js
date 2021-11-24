@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import LinearMagnification from '../UI/LinearMagnification';
 import Radio from "@mui/material/Radio";
 import { FormControlLabel, Grid } from '@mui/material';
+import { useDispatch } from 'react-redux';
+import { submitAction } from '../../../modules/submitReducer';
 
 
 const LinearMagnificationComp = ({number, setCheck, setDelIndex, ReadOnlyState, ReadOnlyData, }) => {
@@ -33,9 +35,10 @@ const LinearMagnificationComp = ({number, setCheck, setDelIndex, ReadOnlyState, 
                 value="top"
                 control={<Radio
                     onChange={(e)=>setChangeCircle(e.target.value)}
-                    value={`radio_${id}_${number}`}
+                    value={`radio_${number}_${id}`}
                     name={`radio_${number}`}
-                    checked={ changeCircle === `radio_${id}_${number}` }
+                    id={`radio_${number}`}
+                    checked={ changeCircle === `radio_${number}_${id}` }
                     sx={{
                         "& .MuiSvgIcon-root": {
                             fontSize: size
@@ -60,6 +63,15 @@ const LinearMagnificationComp = ({number, setCheck, setDelIndex, ReadOnlyState, 
             setMakeCircles([...newCircle])
         }
     },[changeCircle])
+
+
+    
+    const dispatch = useDispatch();
+    useEffect(()=>{
+        if(ReadOnlyState)
+            dispatch(submitAction(`radio_${number}`))
+            
+    },[])
     
     return (
         <>
