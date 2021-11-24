@@ -68,14 +68,14 @@
         select count(survey._id)
         from survey.survey left OUTER JOIN survey.surveytag
         on survey._id = surveytag._id
-        where (survey.Sur_State = 1 or survey.Sur_State = 2)
+        where survey.User_Email = #{user_Email}
         <if test="search_Key != null">
             and survey.Sur_Title like CONCAT("%", #{search_Key}, "%")
         </if>
         <if test="search_Tag != null">
             and surveytag.Tag_ID = #{search_Tag}
         </if>
-        and survey.User_Email = #{user_Email} ;
+        ;
     </select>
 
     <insert id="insertSurvey" parameterType="Survey_MySQL">
