@@ -23,10 +23,11 @@ public class ParticipationDAO{
     public Map<String,Long> ACCGender() {
         return sqlSession.selectOne("countGender");
     }
-    public int findByIP(String ip, String _id){
+    public int findByIP(String _id, String ip){
         Map<String, String> map = new HashMap<>();
         map.put("Part_IP",ip);
         map.put("_id",_id);
+        System.out.println(ip+ " " + _id);
         return sqlSession.selectOne("findByIP", map);
     }
     public int insertParticipation(Participation participation){

@@ -4,6 +4,7 @@ import com.mongoosereum.dou_survey_zone.api.v1.dao.ParticipationDAO;
 import com.mongoosereum.dou_survey_zone.api.v1.dao.SurveyDAO;
 import com.mongoosereum.dou_survey_zone.api.v1.dao.TagDAO;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.participation.Participation;
+import com.mongoosereum.dou_survey_zone.api.v1.domain.tag.SurveyTag;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.InsertAnswerReq;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.InsertSurveyReq;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SelectSurveyRes;
@@ -122,11 +123,11 @@ public class SurveyService {
                 .build();
         try {
             surveyDAO.surveyInsert_MySQL(survey_MySQL);
-//            SurveyTag surveyTag = SurveyTag.builder()
-//                                    ._id(surveyID)
-//                                    .Tag_ID(insertSurveyDTO.getSur_Tag())
-//                                    .build();
-//            tagDAO.insertTag(surveyTag);
+            SurveyTag surveyTag = SurveyTag.builder()
+                                    ._id(surveyID)
+                                    .Tag_ID(insertSurveyDTO.getSur_Tag())
+                                    .build();
+            tagDAO.insertTag(surveyTag);
         } catch (Exception e) {
             // Insert에 실패한경우 생성된 MongoDB의 Document를 삭제해줘야함
             surveyDAO.deleteSurvey_Mongo(surveyID);
