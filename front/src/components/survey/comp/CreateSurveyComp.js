@@ -133,7 +133,7 @@ const CreateSurveyComp = () => {
       sur_Publish: !Sur_Publish, // 공개 여부                ---> comp에서 state로 관리중 [ !false: 공개, !true: (잠금)비공개 ]
       sur_Image: "image", // 이미지 추후에 현재는 제외
       user_Email: "dbsk7885@daum.net",  // 작성자 ID
-      tag_Name: data.get(`tag_Name`), 
+      sur_Tag: data.get(`sur_Tag`), 
       questionList,
     }
 
@@ -156,7 +156,7 @@ const CreateSurveyComp = () => {
             await navigator.clipboard.writeText(shareURL+res.data);
             Swal.fire('복사 완료', '', 'success')
           }
-          // history.push('/MySurveyPage'); // test 기간까지 history 사용하지 않겠다.
+          history.push('/MySurveyPage'); // test 기간까지 history 사용하지 않겠다.
         })
       })
       .catch((err)=>console.log(err));

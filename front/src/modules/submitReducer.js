@@ -9,10 +9,9 @@ export const beforeAction = createAction(BEFORESUBMIT);
 const initialState = {
     surAns_Content:[],
     beforeData:{
-        age:"",
-        sex:""
+        age:20,
+        sex:"M"
     }
-        
 };
 
 // 설문 응답시에 제출할때의 data를 만들기 위한 reducer입니다.

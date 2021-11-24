@@ -58,7 +58,7 @@ const MainSurvey = ({theme, surveyReqForm, }) => {
                                 <TextField
                                     disabled
                                     fullWidth
-                                    label="태그아직없음"
+                                    label={surveyReqForm.tagList[0].tag_Name}
                                 />
                             </Grid>
                         </Grid>

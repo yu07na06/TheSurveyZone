@@ -12,11 +12,12 @@ const SubjectiveComp = ({number, setCheck, setDelIndex, ReadOnlyState, ReadOnlyD
     !ReadOnlyState&&setCheck({[number]:[null]});
     useEffect(()=>{
         if(ReadOnlyState)
+            console.log("주관식은 여기서 디스패치 했다.", `SurQueAnswer_${number}`);
             dispatch(submitAction(`SurQueAnswer_${number}`))
             
     },[])
     return (
-        <>s
+        <>
             <Subjective
                 deleteQue={deleteQue}
                 number={number}
