@@ -28,6 +28,9 @@ public class Question {
     @ApiModelProperty(name="SurQue_Order", notes = "질문 순서")
     private Long SurQue_Order;
 
+    @ApiModelProperty(name="SurQue_Essential", notes="필수 문항 여부")
+    private Boolean SurQue_Essential;
+
     @ApiModelProperty(name="selectList", notes = "객관식,선형배율 전용 - 해당 질문의 보기 리스트")
     private List<Select> selectList;
 

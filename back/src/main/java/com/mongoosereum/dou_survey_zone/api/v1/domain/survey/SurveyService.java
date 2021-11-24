@@ -1,5 +1,6 @@
 package com.mongoosereum.dou_survey_zone.api.v1.domain.survey;
 
+import com.mongoosereum.dou_survey_zone.api.v1.common.S3Uploader;
 import com.mongoosereum.dou_survey_zone.api.v1.dao.ParticipationDAO;
 import com.mongoosereum.dou_survey_zone.api.v1.dao.SurveyDAO;
 import com.mongoosereum.dou_survey_zone.api.v1.dao.TagDAO;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.*;
 
 @AllArgsConstructor
@@ -33,6 +35,9 @@ public class SurveyService {
 
     @Autowired
     private final ParticipationDAO participationDAO;
+
+    @Autowired
+    private final S3Uploader s3Uploader;
 
     public SurveyListPageRes selectSurveyList(SurveyListPageReq surveylistDTO) {
 
@@ -101,12 +106,22 @@ public class SurveyService {
         return tagDAO.findById(_id);
     }
 
-    public String insertSurvey(InsertSurveyReq insertSurveyDTO) {
+    public String insertSurvey(InsertSurveyReq insertSurveyDTO) /*throws IOException*/ {
         // MongoDB insert
         Survey_Mongo survey_Mongo = Survey_Mongo.builder()
                 .questionList(insertSurveyDTO.getQuestionList())
                 .build();
         String surveyID = surveyDAO.surveyInsert_Mongo(survey_Mongo);
+
+        // S3 image Upload
+//        String imageURL = "";
+//        if(insertSurveyDTO.getImage()!= null) {
+//            try {
+//                imageURL = s3Uploader.upload(insertSurveyDTO.getImage(), "static");
+//            } catch (Exception e) {
+//                return "IMAGE_UPLOAD_FAIL";
+//            }
+//        }
 
         // MySQL insert by MongoDB.id
         Survey_MySQL survey_MySQL = Survey_MySQL.builder()
@@ -117,28 +132,35 @@ public class SurveyService {
                 .sur_StartDate(insertSurveyDTO.getSur_StartDate())
                 .sur_EndDate(insertSurveyDTO.getSur_EndDate())
                 .sur_Publish(insertSurveyDTO.getSur_Publish())
-                .sur_Image(insertSurveyDTO.getSur_Image())
+                .sur_Image(insertSurveyDTO.getSur_Image() /*imageURL*/ )
                 .user_Email(insertSurveyDTO.getUser_Email())
                 .sur_Type(insertSurveyDTO.getSur_Type().getNum())
                 .build();
-        try {
-            surveyDAO.surveyInsert_MySQL(survey_MySQL);
-            SurveyTag surveyTag = SurveyTag.builder()
-                                    ._id(surveyID)
-                                    .Tag_ID(insertSurveyDTO.getSur_Tag())
-                                    .build();
-            tagDAO.insertTag(surveyTag);
-        } catch (Exception e) {
-            // Insert에 실패한경우 생성된 MongoDB의 Document를 삭제해줘야함
-            surveyDAO.deleteSurvey_Mongo(surveyID);
-            return "FAIL";
+
+            try {
+                surveyDAO.surveyInsert_MySQL(survey_MySQL);
+                if(insertSurveyDTO.getSur_Tag() != null) {
+                    SurveyTag surveyTag = SurveyTag.builder()
+                            ._id(surveyID)
+                            .Tag_ID(insertSurveyDTO.getSur_Tag())
+                            .build();
+                    tagDAO.insertTag(surveyTag);
+                }
+            } catch (Exception e) {
+                // Insert에 실패한경우 생성된 MongoDB의 Document를 삭제해줘야함
+                surveyDAO.deleteSurvey_Mongo(surveyID);
+                return "FAIL";
+
         }
         return surveyID;
     }
 
     public SelectSurveyRes findById(String _id) {
+        System.out.println(_id);
         Survey_MySQL resultMySQL = surveyDAO.findById_MySQL(_id);
+        System.out.println(resultMySQL);
         Survey_Mongo resultMongo = surveyDAO.findById_Mongo(_id);
+        System.out.println(resultMongo);
         List<Tag> tagList = tagDAO.findById(_id);
         SelectSurveyRes surveySelectDTO = new SelectSurveyRes();
         surveySelectDTO.set(resultMongo, resultMySQL, tagList);
