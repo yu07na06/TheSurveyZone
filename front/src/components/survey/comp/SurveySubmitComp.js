@@ -12,6 +12,7 @@ import { beforeAction, submitAction } from '../../../modules/submitReducer';
 
 const SurveySubmitComp = ({surveykey}) => {
     const sss = useSelector(state=>state.submitReducer.beforeData)
+    const surAns_Content = useSelector(state=>state.submitReducer.surAns_Content)
 
     const [activeStep, setActiveStep] = React.useState(0);
     const steps = ['데이터 수집', '설문지', '제출 완료'];
@@ -55,21 +56,109 @@ const SurveySubmitComp = ({surveykey}) => {
       setActiveStep(activeStep + 1);
     };
 
+    // const lastSubmit = (e) => {
+    //     e.preventDefault();
+
+    //     const data = new FormData(e.currentTarget);
+
+    //     let tempArray = [];
+    //     let temp = '';
+    //     let OrderNumber = null;
+    //     let newIndex = 0;
+
+        // surAns_Content.map((value, index) =>{
+        //     let newValue=value.split('_');
+
+        //     temp = data.get(value);
+        //     switch(newValue[0]){
+        //         case 'SurQueAnswer': // 주관식
+        //             tempArray.push(temp);
+        //             newIndex++;
+        //             break;
+                    
+        //         case 'SurQueCheck': // 객관식
+        //             if(newValue[2]==='0') {
+        //                 newIndex++;
+        //                 OrderNumber=newValue[1]; // 같은 컴포넌트만 비교하기 위해
+        //                 tempArray.push('');
+        //             }
+        //             if(temp !== null){
+        //                 if(OrderNumber===newValue[1]){
+        //                     tempArray[newIndex]+=temp+'Θ'
+        //                 }
+        //             }
+        //             break;
+                    
+        //         case 'radio': // 선형배율
+        //             temp=temp.split('_')[2]; // temp: radio_2_5
+        //             tempArray.push(temp);
+        //             newIndex++;
+        //             break;
+        //         default: break;
+        //     }
+        // })
+        // console.log("최종답안", tempArray);
+    // }
     const lastSubmit = (e) => {
         e.preventDefault();
+
         const data = new FormData(e.currentTarget);
-        const aa = data.get('answer')
-        const bb = data.get('연령대')
-        const cc = data.get("gender")
-        console.log("주관식 답변 : ", aa);
-        console.log("나이대를 보여다오!! : ", bb);
-        console.log("너의 성별을 보여다오!! : ", cc);
-        
+
+        let tempArray = [];
+        let temp = '';
+        let OrderNumber = 0;
+        let tempString = "";
+        console.log("surAns_Content", surAns_Content);
+
+
+
+
+        surAns_Content.map((value, index) =>{
+            let newValue=value.split('_');
+            console.log("잘게 잘게 자른애들", newValue);
+
+            temp = data.get(value);
+            switch(newValue[0]){
+                case 'SurQueAnswer': // 주관식
+                if(tempString!=""){
+                    tempArray.push(tempString);
+                    OrderNumber++;
+                    tempString = "";    
+                }
+                    tempArray.push(temp);
+                    break;
+
+                case 'SurQueCheck': // 객관식
+                    if(temp != ""){
+                        if(newValue[1] != OrderNumber){
+                            tempArray.push(tempString);
+                            tempString="";
+                        }
+                        tempString += temp + 'Θ';   
+                    }
+                    break;
+
+                case 'radio': // 선형배율
+                if(tempString!=""){
+                tempArray.push(tempString);    
+                OrderNumber++;
+                tempString = "";
+                }
+                value = temp.split('_');
+                    tempArray.push(value[2]);
+                    break;
+                default: break;
+            }
+        })
+        if(tempString!="")
+            tempArray.push(tempString);
+        console.log("최종답안", tempArray);
     }
+
     const nextPage = () => {
-        console.log("나를 눌렀느냐? 나는 다음이란다!");
         dispatch(beforeAction({age:age,sex:sex}))
     }
+    
     return (
         <>
             <SurveySubmit 

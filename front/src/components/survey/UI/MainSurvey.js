@@ -9,7 +9,6 @@ import MultipleChoiceComp from '../comp/MultipleChoiceComp';
 import LinearMagnificationComp from '../comp/LinearMagnificationComp';
 
 const MainSurvey = ({theme, surveyReqForm, }) => {
-console.log("뭐나오냐??",surveyReqForm);
     return (
         <>
         {surveyReqForm&&
@@ -64,19 +63,19 @@ console.log("뭐나오냐??",surveyReqForm);
                             </Grid>
                         </Grid>
                         <hr/>
-                            {surveyReqForm.questionList.map((value, index)=>{
+                            {surveyReqForm.questionList.map((value)=>{
                                 switch(value.surQue_QType){
-                                    case 0:
+                                    case 0: // 주관식
                                         return <SubjectiveComp ReadOnlyState={true} ReadOnlyData={value} setDelIndex={null} number={value.surQue_Order} setCheck={null}/>
-                                    case 1:
+                                    case 1: // 객관식
                                         return <MultipleChoiceComp ReadOnlyState={true} ReadOnlyData={value} setDelIndex={null} number={value.surQue_Order} setCheck={null} />
-                                    case 2:
+                                    case 2: // 선형배율
                                         return <LinearMagnificationComp ReadOnlyState={true} ReadOnlyData={value} setDelIndex={null} number={value.surQue_Order} setCheck={null} />
                                     default: break;
                                 }
                                 console.log("질문타입 확인", value);
                             })}
-                        </Paper>
+                        </Paper>    
                     </Container>
                 </ThemeProvider>
             }

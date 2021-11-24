@@ -12,7 +12,6 @@ import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
 
 const MultipleChoice = ({number, select, setSelect, addText, maxNum, setMaxNum, deleteQue, ReadOnlyState, ReadOnlyData, }) => {
-    console.log("ReadOnlyData.surQue_MaxAns", ReadOnlyData);
     return (
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
             {!ReadOnlyState&&
