@@ -8,23 +8,22 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
-import {Link} from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import { ThemeProvider } from '@mui/material/styles';
 
-const SurveySubmit = ({steps, getStepContent, theme, activeStep, handleNext, lastSubmit, nextPage}) => {
+const SurveySubmit = ({steps, getStepContent, theme, activeStep, lastSubmit, nextPage, wayBackHome}) => {
     return (
         <>
             <ThemeProvider theme={theme}>
-                <Box component="form" onSubmit={(e)=>lastSubmit(e)}>
+                <Box component="form" onSubmit={(e)=>lastSubmit(e)} >
                     <CssBaseline />
                     <AppBar
                         position="absolute"
                         color="default"
                         elevation={0}
                         sx={{
-                        position: 'relative',
-                        borderBottom: (t) => `1px solid ${t.palette.divider}`,
+                            position: 'relative',
+                            borderBottom: (t) => `1px solid ${t.palette.divider}`,
                         }}
                     >
                     </AppBar>
@@ -41,45 +40,20 @@ const SurveySubmit = ({steps, getStepContent, theme, activeStep, handleNext, las
                             ))}
                         </Stepper>
                         <React.Fragment>
-                            {activeStep === steps.length-1 ? (
-                            <React.Fragment>
-                                <Typography variant="h5" gutterBottom>
-                                    설문 감사합니다 :)
-                                </Typography>
-                            <Button
+                            {getStepContent(activeStep)}
+                            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                <Button
+                                    type="submit"
                                     variant="contained"
-                                    sx={{ mt: 3, ml: 1 ,left: '40%' }}
+                                    onClick={e=> {
+                                        activeStep === 0 && nextPage(e);
+                                        activeStep === 2 && wayBackHome();
+                                    }}
+                                    sx={{ mt: 3, ml: 1 }}
                                 >
-                                <Link to='/' style={{textDecoration:'none', color:'white'}}>홈으로</Link>
+                                {activeStep === 0 ? '다음' : (activeStep === 1 ? '제출' : '완료')}
                                 </Button>
-                            </React.Fragment>
-                            ) : (activeStep === steps.length-2) ? (
-                                <React.Fragment>
-                                {getStepContent(activeStep)}
-                                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                    <Button
-                                        variant="contained"
-                                        type="submit"
-                                        sx={{ mt: 3, ml: 1 }}
-                                    >
-                                    설문 제출하기
-                                    </Button>
-                                </Box>
-                            </React.Fragment>
-                                ) : (
-                            <React.Fragment>
-                                {getStepContent(activeStep)}
-                                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                    <Button
-                                        variant="contained"
-                                        onClick={e=>{handleNext(); nextPage(e);}}
-                                        sx={{ mt: 3, ml: 1 }}
-                                    >
-                                    {activeStep === steps.length - 1 ? '완료' : '다음'}
-                                    </Button>
-                                </Box>
-                            </React.Fragment>
-                            )}
+                            </Box>
                         </React.Fragment>
                         </Paper>
                     </Container>

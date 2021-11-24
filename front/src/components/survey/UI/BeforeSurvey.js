@@ -13,9 +13,9 @@ const BeforeSurvey = ({marks, valuetext, Separator, addStore}) => {
             <Separator />
             <FormControl onChange={(e)=>addStore(e)} component="fieldset" name ="zzz">
                 <Typography style={{fontWeight:'bold'}}>성별</Typography>
-                    <RadioGroup defaultValue="male" sx={{ mx:3 }} row aria-label="gender" name="gender">
-                        <FormControlLabel value="M"  control={<Radio/>} label="남성" />
-                        <FormControlLabel value="W" control={<Radio />} label="여성" />
+                    <RadioGroup defaultValue="M" sx={{ mx:3 }} row aria-label="gender" name="gender">
+                        <FormControlLabel value="M" control={<Radio />} label="남성" />
+                        <FormControlLabel value="W" control={<Radio  />} label="여성" />
                     </RadioGroup>
             </FormControl>
             <Separator />

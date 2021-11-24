@@ -16,6 +16,13 @@ const MultipleChoiceComp = ({number, setCheck, setDelIndex, ReadOnlyState, ReadO
     const count = useRef(-1);
     
     useEffect(()=>{
+        console.log("======================================");
+        console.log(ReadOnlyData);
+        
+        
+    },[])
+
+    useEffect(()=>{
         let newAddText = null;
         if(ReadOnlyState){
             newAddText = ReadOnlyData.selectList.map(value=>{
@@ -60,11 +67,12 @@ const MultipleChoiceComp = ({number, setCheck, setDelIndex, ReadOnlyState, ReadO
             e.target.checked = false;
             ccc.current -= 1;
         }
-    }
+    } 
     
     const addText = (number, ReadOnlyData, addMaxNum) => {
         count.current+=1;
         setTemp([...temp, `SurQue_Ans${number}_${count.current}`]); // 질문에 대한 보기 이름 덩어리 합치는 중
+        console.log("지금 이 순서대로 합치고 있다. 분명히", `SurQueCheck_${number}_${count.current}`);
         dispatch(submitAction(`SurQueCheck_${number}_${count.current}`))
         return(
             <Grid key={`SurQue_Ans${number}_${count.current}`} container spacing={2}>
