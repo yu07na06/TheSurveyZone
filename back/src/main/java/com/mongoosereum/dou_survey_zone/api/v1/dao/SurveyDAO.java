@@ -121,7 +121,13 @@ public class SurveyDAO {
 
 
     //search  today start survey list Mail send list
-    public List<Survey_MySQL> todaystartlist() {
+    public List<Survey_MySQL> todaySurveyList() {
         return sqlSession.selectList("todaystartlist");
     }
+
+    public Integer todaySurveyUpdate(List<? extends Survey_MySQL> list) {
+        System.out.println(list);
+        return sqlSession.update("todaystartUpdate", list);
+    }
+
 }

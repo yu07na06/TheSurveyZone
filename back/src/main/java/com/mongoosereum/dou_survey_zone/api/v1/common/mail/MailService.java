@@ -23,12 +23,23 @@ public class MailService {
 
         String sendto = survey_MySQL.getUser_Email();
 
+        System.out.println(survey_MySQL.getSur_Title());
+        System.out.println(survey_MySQL.getSur_Content());
+        System.out.println(survey_MySQL.getSur_Publish());
+        System.out.println(survey_MySQL.getSur_StartDate());
+
+
         String subject = "[DouSurveyZone]설문시작 안내 메일";
 
         Context context = new Context();
-        context.setVariable("link",mainPageLink);
-        context.setVariable("linktosurvey","http://220.119.14.242:3000/SurveySubmitPage/"+survey_MySQL.get_id());
-        String html = templateEngine.process("mail_start",context);
+        context.setVariable("mainLink", mainPageLink);
+        context.setVariable("Sur_Title", survey_MySQL.getSur_Title());
+        context.setVariable("Sur_Content", survey_MySQL.getSur_Content());
+        context.setVariable("Sur_Publish", survey_MySQL.getSur_Publish() ? "공개" : "비공개" );
+        context.setVariable("Sur_StartDate", survey_MySQL.getSur_StartDate());
+        context.setVariable("Sur_EndDate", survey_MySQL.getSur_EndDate());
+        context.setVariable("linkToSurvey","http://220.119.14.242:3000/SurveySubmitPage/"+survey_MySQL.get_id());
+        String html = templateEngine.process("surveyStartMail",context);
 
         mailSend(sendto,subject,html);
     }
@@ -40,9 +51,14 @@ public class MailService {
         String subject = "[DouSurveyZone]설문종료 안내 메일";
 
         Context context = new Context();
-        context.setVariable("link",mainPageLink);
-        context.setVariable("linktosurvey","http://220.119.14.242:3000/SurveySubmitPage/"+survey_MySQL.get_id());
-        String html = templateEngine.process("mail_start",context);
+        context.setVariable("mainLink",mainPageLink);
+        context.setVariable("Sur_Title", survey_MySQL.getSur_Title());
+        context.setVariable("Sur_Content", survey_MySQL.getSur_Content());
+        context.setVariable("Sur_Publish", survey_MySQL.getSur_Publish() ? "공개" : "비공개" );
+        context.setVariable("Sur_StartDate", survey_MySQL.getSur_StartDate());
+        context.setVariable("Sur_EndDate", survey_MySQL.getSur_EndDate());
+        context.setVariable("linkToSurvey","http://220.119.14.242:3000/ResultPage/"+survey_MySQL.get_id());
+        String html = templateEngine.process("surveyEndMail",context);
 
         mailSend(sendto,subject,html);
     }
@@ -55,11 +71,11 @@ public class MailService {
             String htmlContent = "<p>" + html +"<p>";
             mailHandler.setText(htmlContent, true);
             mailHandler.send();
-            System.out.println("메일 전송 완료");
+//            System.out.println("메일 전송 완료");
         }
         catch (Exception e){
             e.printStackTrace();
-            System.out.println("메일 전송 실패");
+//            System.out.println("메일 전송 실패");
         }
     }
 }
