@@ -6,6 +6,7 @@ import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.type.SurveyProgress
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -45,4 +46,7 @@ public class InsertSurveyReq {
 
     @ApiModelProperty(name = "sur_Tag", notes = "설문 태그, v1 : 1개 태그만 가능")
     private Long sur_Tag; // TODO [정환] 여러개로 변경해야함.
+
+//    @ApiModelProperty(name = "image", notes="이미지 파일")
+//    private MultipartFile image;
 }

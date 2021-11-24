@@ -16,6 +16,9 @@ import java.util.TimeZone;
 @SpringBootApplication
 public class DouSurveyZoneApplication extends SpringBootServletInitializer{
 
+	public static final String APPLICATION_LOCATIONS = "spring.config.location="
+			+ "classpath:application.yml,"
+			+ "classpath:aws.yml";
 	@PostConstruct
 	void started() {
 		TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));

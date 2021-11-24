@@ -1,6 +1,7 @@
 ### application.properties
 /src/main/resources/application.properties
 
+.properties
 ### Gradle template
 .gradle
 build/
