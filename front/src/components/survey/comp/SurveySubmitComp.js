@@ -5,15 +5,14 @@ import BeforeSurveyComp from '../comp/BeforeSurveyComp';
 import MainSurveyComp from '../comp/MainSurveyComp';
 import { createTheme } from '@mui/material/styles';
 import { useEffect } from 'react';
-import { getSurvey as getSurveyAPI } from '../../../lib/api/survey';
+import { getSurvey as getSurveyAPI, postSurvey as postSurveyAPI } from '../../../lib/api/survey';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { beforeAction, submitAction } from '../../../modules/submitReducer';
 
 const SurveySubmitComp = ({surveykey}) => {
-    const sss = useSelector(state=>state.submitReducer.beforeData)
+    const sexAge = useSelector(state=>state.submitReducer.beforeData)
     const surAns_Content = useSelector(state=>state.submitReducer.surAns_Content)
-
     const [activeStep, setActiveStep] = React.useState(0);
     const steps = ['데이터 수집', '설문지', '제출 완료'];
     const [surveyReqForm, setSurveyReqForm] = useState(null);
@@ -56,49 +55,6 @@ const SurveySubmitComp = ({surveykey}) => {
       setActiveStep(activeStep + 1);
     };
 
-    // const lastSubmit = (e) => {
-    //     e.preventDefault();
-
-    //     const data = new FormData(e.currentTarget);
-
-    //     let tempArray = [];
-    //     let temp = '';
-    //     let OrderNumber = null;
-    //     let newIndex = 0;
-
-        // surAns_Content.map((value, index) =>{
-        //     let newValue=value.split('_');
-
-        //     temp = data.get(value);
-        //     switch(newValue[0]){
-        //         case 'SurQueAnswer': // 주관식
-        //             tempArray.push(temp);
-        //             newIndex++;
-        //             break;
-                    
-        //         case 'SurQueCheck': // 객관식
-        //             if(newValue[2]==='0') {
-        //                 newIndex++;
-        //                 OrderNumber=newValue[1]; // 같은 컴포넌트만 비교하기 위해
-        //                 tempArray.push('');
-        //             }
-        //             if(temp !== null){
-        //                 if(OrderNumber===newValue[1]){
-        //                     tempArray[newIndex]+=temp+'Θ'
-        //                 }
-        //             }
-        //             break;
-                    
-        //         case 'radio': // 선형배율
-        //             temp=temp.split('_')[2]; // temp: radio_2_5
-        //             tempArray.push(temp);
-        //             newIndex++;
-        //             break;
-        //         default: break;
-        //     }
-        // })
-        // console.log("최종답안", tempArray);
-    // }
     const lastSubmit = (e) => {
         e.preventDefault();
 
@@ -108,51 +64,63 @@ const SurveySubmitComp = ({surveykey}) => {
         let temp = '';
         let OrderNumber = 0;
         let tempString = "";
-        console.log("surAns_Content", surAns_Content);
 
 
 
 
         surAns_Content.map((value, index) =>{
-            let newValue=value.split('_');
-            console.log("잘게 잘게 자른애들", newValue);
-
+            let splitValue=value.split('_');
             temp = data.get(value);
-            switch(newValue[0]){
+            switch(splitValue[0]){
                 case 'SurQueAnswer': // 주관식
-                if(tempString!=""){
-                    tempArray.push(tempString);
-                    OrderNumber++;
-                    tempString = "";    
-                }
+                    if(tempString!=""){
+                        tempArray.push(tempString);
+                        tempString = "";
+                        OrderNumber++;
+                    }
                     tempArray.push(temp);
+                    OrderNumber++;
                     break;
 
                 case 'SurQueCheck': // 객관식
-                    if(temp != ""){
-                        if(newValue[1] != OrderNumber){
+                    console.log(splitValue, "OrderNumber : ",OrderNumber);
+                    if(temp != null){
+                        if(splitValue[1] != OrderNumber){
                             tempArray.push(tempString);
                             tempString="";
+                            OrderNumber++;
                         }
                         tempString += temp + 'Θ';   
                     }
                     break;
 
                 case 'radio': // 선형배율
-                if(tempString!=""){
-                tempArray.push(tempString);    
-                OrderNumber++;
-                tempString = "";
-                }
-                value = temp.split('_');
+                    if(tempString!=""){
+                        tempArray.push(tempString);    
+                        tempString = "";
+                        OrderNumber++;
+                    }
+                    value = temp.split('_');
                     tempArray.push(value[2]);
+                    OrderNumber++;
                     break;
                 default: break;
             }
         })
         if(tempString!="")
             tempArray.push(tempString);
-        console.log("최종답안", tempArray);
+
+        const answerList = tempArray.map((v)=>{
+            return {'surAns_Content':v}
+        })
+        console.log("보낼놈 ",answerList);
+
+        console.log("나이",sexAge.age);
+        console.log("성별",sexAge.sex);
+        
+        postSurveyAPI(surveykey,{"age":sexAge.age, "gender":sexAge.sex, "answerList":answerList})
+        .then(res=>console.log("제출 성공..?",res))
+        .catch(res=>console.log("제출 실패..?",res))
     }
 
     const nextPage = () => {
