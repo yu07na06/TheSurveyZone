@@ -24,8 +24,6 @@ const handleCopyClipBoard = async (text) => {
 };
 
 const MySurvey = ({mySurList,callPaging}) => {
-    console.log("잘~~ set되었나??",mySurList);
-    
         return (
         <>
             <Container component="main" maxWidth="md" sx={{ mb: 4 }} >
