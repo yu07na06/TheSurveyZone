@@ -38,8 +38,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests() // /와 /auth/** 경로는 인증 안해도 됨
                 .antMatchers("/","/api/v1/user/**", "/api/v1/survey/{}", "/api/v1/participation/**").permitAll()
                 .anyRequest()
-//                .permitAll();
-                .authenticated();
+                .permitAll();
+//                .authenticated();
 
         // fillter 등록
         // 매요청 마다

@@ -30,4 +30,7 @@ public class UserDAO  {
         return sqlSession.selectList("findByEmail", user_MySQL);
     }
 
+    public Integer findByEmail_Name_Tel(User user_MySQL){
+        return sqlSession.selectOne("findByEmail_Name_Tel",user_MySQL);
+    }
 }

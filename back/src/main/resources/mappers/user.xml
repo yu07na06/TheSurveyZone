@@ -18,4 +18,11 @@
     <select id="findByEmail" parameterType="User_MySQL" resultType="String">
         select User_Email from survey.user where User_Name = #{user_Name} and User_Tel = #{user_Tel};
     </select>
+    <select id="findByEmail_Name_Tel" parameterType="User_MySQL" resultType="int">
+        select count(*)
+        from survey.user
+        where User_Email = #{User_Email} and
+              User_Name = #{User_Name} and
+              User_Tel = #{User_Tel};
+    </select>
 </mapper>

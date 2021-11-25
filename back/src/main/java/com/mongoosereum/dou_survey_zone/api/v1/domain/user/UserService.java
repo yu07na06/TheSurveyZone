@@ -59,8 +59,14 @@ public class UserService {
         return (searchEmail != null)? searchEmail : null;
     }
     public Integer searchPW(SearchPWReq searchPWReq){
-//        userDAO.findByEmail();
-
+        Integer result = userDAO.findByEmail_Name_Tel(User.builder()
+                .user_Email(searchPWReq.getUser_Email())
+                .user_Name(searchPWReq.getUser_Name())
+                .user_Tel(searchPWReq.getUser_Tel())
+                .build());
+        if(result == 0 || result == null)
+            return result;
+//        String tempPW =
 //        String encodedPassword = passwordEncoder.encode(newPW);
 //
 //        userDAO.modifyPW(newPW);
