@@ -25,4 +25,9 @@
               User_Name = #{User_Name} and
               User_Tel = #{User_Tel};
     </select>
+    <update id="setPW" parameterType="User_MySQL">
+        update survey.user
+        set User_Password = #{User_Password}
+        where User_Email = #{User_Email};
+    </update>
 </mapper>
