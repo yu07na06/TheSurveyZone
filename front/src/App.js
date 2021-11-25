@@ -5,6 +5,7 @@ import FindPWPage from './pages/FindPWPage';
 import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
 import MySurveyPage from './pages/MySurveyPage';
+import ReadOnlyPage from './pages/ReadOnlyPage';
 import RegisterPage from './pages/RegisterPage';
 import ResultPage from './pages/ResultPage';
 import SurveySubmitPage from './pages/SurveySubmitPage';
@@ -23,6 +24,8 @@ const App = () => {
         
         {/* surveykey : 응답하려는 설문지의 고유번호(PK)를 의미 */}
         <Route path="/SurveySubmitPage/:surveykey" component={SurveySubmitPage} /> 
+        {/* surveykey : 설문지의 고유번호(PK)를 의미 */}
+        <Route path="/ReadOnlyPage/:surveykey" component={ReadOnlyPage} /> 
     </>
   );
 }

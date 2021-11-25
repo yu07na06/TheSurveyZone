@@ -1,16 +1,16 @@
 import React from 'react';
 import Footer from '../components/common/UI/Footer';
 import Header from '../components/common/UI/Header';
-import SurveySubmitComp from '../components/survey/comp/SurveySubmitComp';
+import ReadOnlyComp from '../components/survey/comp/ReadOnlyComp';
 
-const SurveySubmitPage = (props) => {
+const ReadOnlyPage = () => {
     return (
         <>
             <Header />
-                <SurveySubmitComp surveykey={props.match.params.surveykey}/>
+                <ReadOnlyComp />
             <Footer />
         </>
     );
 };
 
-export default SurveySubmitPage;
+export default ReadOnlyPage;

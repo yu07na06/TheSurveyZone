@@ -1,10 +1,15 @@
+import { createTheme } from '@mui/material/styles';
 import React from 'react';
 import MainSurvey from '../UI/MainSurvey';
 
-const MainSurveyComp = () => {
+const MainSurveyComp = ({surveyReqForm}) => {
+    const theme = createTheme();
     return (
         <>
-            <MainSurvey />
+            <MainSurvey 
+                theme={theme}
+                surveyReqForm={surveyReqForm}
+            />
         </>
     );
 };
