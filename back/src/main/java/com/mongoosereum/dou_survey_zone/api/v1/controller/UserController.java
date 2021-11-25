@@ -39,7 +39,7 @@ public class UserController{
                     CheckEmailReq checkEmailReq
     ) {
         System.out.println(checkEmailReq.getUser_Email());
-        return ResponseEntity.ok().body(userService.checkEmail(checkEmailReq.getUser_Email()));
+        return ResponseEntity.status(200).body(userService.checkEmail(checkEmailReq.getUser_Email()));
     }
 
     @PostMapping(path="/signup")
@@ -56,9 +56,9 @@ public class UserController{
             return ResponseEntity.badRequest().body(e.toString());
         }
         if(result == 1) {
-            return ResponseEntity.ok().body(signUpReq);
+            return ResponseEntity.status(201).body("success");
         }
-        return ResponseEntity.badRequest().body("fail");
+        return ResponseEntity.status(401).body("fail");
     }
 
     @PostMapping(path="/signin")
@@ -74,9 +74,9 @@ public class UserController{
                     .user_Name(user.getUser_Name())
                     .user_Token(token)
                     .build();
-            return ResponseEntity.ok().body(signInRes);
+            return ResponseEntity.status(200).body(signInRes);
         } else{
-            return ResponseEntity.badRequest().body("Login fail");
+            return ResponseEntity.status(401).body("Login fail");
         }
     }
 
@@ -84,9 +84,8 @@ public class UserController{
     @ApiOperation(value = "ID찾기")
     public ResponseEntity searchID(@RequestBody SearchIDReq searchIDReq) {
         List<String> user = userService.searchID(searchIDReq.getUser_Name(), searchIDReq.getUser_Tel());
-    return (user != null) ? ResponseEntity.ok().body(user) :  ResponseEntity.badRequest().body("NO User");
+    return (user != null) ? ResponseEntity.ok().body(user) :  ResponseEntity.status(401).body("NO User");
     }
-
 
     /* 테스트용 */
     @GetMapping(path="/test")
@@ -94,3 +93,7 @@ public class UserController{
         return "success";
     }
 }
+
+
+// USER 권한 분리 필요
+// 

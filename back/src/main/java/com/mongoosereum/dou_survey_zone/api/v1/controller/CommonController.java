@@ -25,12 +25,16 @@ public class CommonController {
     @ApiOperation(value = "메인 페이지 정보 출력", notes = "누적 사용자 정보 및 게시물이 존재하는 태그 리스트 출력")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공", response = MainInfoRes.class),
-            @ApiResponse(code = 500, message = "서버 오류")
+            @ApiResponse(code = 500, message = "Server Fail")
     })
     public ResponseEntity mainTest() {
         MainInfoRes mainInfo = partService.resultMainInfo();
         if(mainInfo == null)
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Server Fail");
         return ResponseEntity.ok().body(partService.resultMainInfo());
     }
+
+
+
+
 }
