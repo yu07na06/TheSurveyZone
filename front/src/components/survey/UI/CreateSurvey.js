@@ -95,11 +95,11 @@ const CreateSurvey = ({theme, onClick, day, setDay, onCheckChange, question, ope
                                         <FormControl fullWidth>
                                             <InputLabel id="demo-simple-select-label">태그</InputLabel>
                                                 <Select
-                                                    labelId="tag_Name"
-                                                    id="tag_Name"
-                                                    name="tag_Name"
+                                                    labelId="sur_Tag"
+                                                    id="sur_Tag"
+                                                    name="sur_Tag"
                                                     value={tag}
-                                                    label="tag_Name"
+                                                    label="sur_Tag"
                                                     onChange={e => setTag(e.target.value)}
                                                     >
                                                     {tags&&tags.map(v=><MenuItem value={v.tag_ID}>{v.tag_Name}</MenuItem>)}

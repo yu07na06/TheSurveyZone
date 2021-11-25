@@ -16,6 +16,13 @@ const MultipleChoiceComp = ({number, setCheck, setDelIndex, ReadOnlyState, ReadO
     const count = useRef(-1);
     
     useEffect(()=>{
+        console.log("======================================");
+        console.log(ReadOnlyData);
+        
+        
+    },[])
+
+    useEffect(()=>{
         let newAddText = null;
         if(ReadOnlyState){
             newAddText = ReadOnlyData.selectList.map(value=>{
@@ -48,6 +55,7 @@ const MultipleChoiceComp = ({number, setCheck, setDelIndex, ReadOnlyState, ReadO
     }
 
     const deleteQue = (e) => {
+        console.log('삭제할 컴포넌트 id', e.target.id);
         setDelIndex(e.target.id);
     }
 
@@ -60,23 +68,24 @@ const MultipleChoiceComp = ({number, setCheck, setDelIndex, ReadOnlyState, ReadO
             e.target.checked = false;
             ccc.current -= 1;
         }
-    }
+    } 
     
     const addText = (number, ReadOnlyData, addMaxNum) => {
         count.current+=1;
-        setTemp([...temp, `SurQue_Ans${number}_${count.current}`]); // 질문에 대한 보기 이름 덩어리 합치는 중
+        setTemp([...temp, `SurQue_Ans_${number}_${count.current}`]); // 질문에 대한 보기 이름 덩어리 합치는 중
+        console.log("지금 이 순서대로 합치고 있다. 분명히", `SurQueCheck_${number}_${count.current}`);
         dispatch(submitAction(`SurQueCheck_${number}_${count.current}`))
         return(
-            <Grid key={`SurQue_Ans${number}_${count.current}`} container spacing={2}>
-                <Grid item xs={11} key={`SurQue_Ans${number}_${count.current}`}>
+            <Grid key={`SurQue_Ans_${number}_${count.current}`} container spacing={2}>
+                <Grid item xs={11} key={`SurQue_Ans_${number}_${count.current}`}>
                 {ReadOnlyState&&<Checkbox value={ReadOnlyState?ReadOnlyData.surSel_Content:null} name={`SurQueCheck_${number}_${count.current}`} id={`SurQueCheck_${number}_${count.current}`} onClick={(e)=>checkCount(e, addMaxNum)}/>}
                 <TextField
                     variant="standard"
                     required
                     fullWidth
                     disabled={ReadOnlyState}
-                    name={`SurQue_Ans${number}_${count.current}`}
-                    id={`SurQue_Ans${number}_${count.current}`}
+                    name={`SurQue_Ans_${number}_${count.current}`}
+                    id={`SurQue_Ans_${number}_${count.current}`}
                     label={`선택지${number}_${count.current}`}
                     value={ReadOnlyState?ReadOnlyData.surSel_Content:null}
                     >
@@ -84,7 +93,7 @@ const MultipleChoiceComp = ({number, setCheck, setDelIndex, ReadOnlyState, ReadO
                 </Grid>
                 {!ReadOnlyState&&<Grid item xs={1}>
                 <Button 
-                    id={`SurQue_Ans${number}_${count.current}`}
+                    id={`SurQue_Ans_${number}_${count.current}`}
                     onClick={(e)=>deleteBtn(e)}
                     >삭제</Button><br/>
                 </Grid>}

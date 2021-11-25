@@ -8,19 +8,9 @@ export const createSurvey = (questionList) =>
 export const getSurvey = (sur_ID) => 
     axios.get(`/api/v1/survey/${sur_ID}`);
 
-// // 설문 제출
-// export const postSurvey = (sur_ID,answerList) => 
-//     axios.post(`/api/v1/survey/${sur_ID}`,answerList);
-
-// 설문 제출 test
-export const postSurvey = (sur_ID,answerList) => {
-    console.log("봐주거라.. : ",answerList)
-    return axios.post(`/api/v1/survey/${sur_ID}/test`,answerList);}
-
-// // 설문 제출 test
-// export const postSurvey = (sur_ID,answerList) => {
-//     axios.post(`/api/v1/survey/${sur_ID}/test`,answerList);
-//     console.log("봐주거라.. : ",answerList);}
+// 설문 제출
+export const postSurvey = (sur_ID, answerList) =>
+    axios.post(`/api/v1/survey/${sur_ID}`, answerList);
 
 // 설문 생성시 태그 목록 불러오기
 export const getTags = () => 
@@ -31,3 +21,10 @@ export const getTags = () =>
 export const getMySurveyList = (page_Num) => 
     axios.get(`/api/v1/survey/myPage?page_Num=${page_Num}`);
 
+// 설문 삭제
+export const deleteSurvey = (sur_ID) =>
+    axios.delete(`/api/v1/survey/${sur_ID}`);
+
+// 설문 수정
+export const modifySurvey = (sur_ID) =>
+    axios.put(`/api/v1/survey/${sur_ID}`);
