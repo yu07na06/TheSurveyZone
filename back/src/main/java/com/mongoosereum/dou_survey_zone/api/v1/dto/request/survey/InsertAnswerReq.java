@@ -11,6 +11,8 @@ import java.util.List;
 public class InsertAnswerReq {
     @ApiModelProperty(name = "answerList", notes = "설문 제출 답변 List")
     private List<Answer> answerList;
+    @ApiModelProperty(name = "age", notes = "사용자 연령", example = "10 or 20 or 30 or 40 or 50 or 60")
     private int age;
+    @ApiModelProperty(name = "gender", notes = "사용자 성별", example = "M or W")
     private String gender;
 }

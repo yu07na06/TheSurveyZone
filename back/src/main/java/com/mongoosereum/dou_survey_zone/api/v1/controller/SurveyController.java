@@ -18,6 +18,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.ws.Response;
 
 @Api(value="설문조사 API",tags = {"Survey API"})
 @RestController
@@ -48,11 +49,14 @@ public class SurveyController{
     @GetMapping(path="/survey/myPage")
     @ApiOperation(value = "내 설문지 리스트 출력")
     public ResponseEntity selectMySurveyList(
-            @AuthenticationPrincipal String userEmail,
             @ApiParam(value="페이징 처리 정보 DTO",required = true)
-            SurveyListPageReq surveyListPageReq){
+                    SurveyListPageReq surveyListPageReq,
+            @AuthenticationPrincipal
+                    String userEmail
+    ){
+        if(userEmail==null)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("권한 없음");
 
-        System.out.println(userEmail);
         SurveyListPageRes surveyList = surveyService.selectMySurveyList(userEmail, surveyListPageReq);
 
         return ResponseEntity.ok().body(surveyList);
@@ -68,11 +72,15 @@ public class SurveyController{
     public ResponseEntity insertSurvey(
             @RequestBody
             @ApiParam(value="설문 생성 DTO", required = true)
-                    InsertSurveyReq surveyInsertDTO
+                    InsertSurveyReq insertSurveyReq,
+            @AuthenticationPrincipal
+                    String userEmail
     ){
-        // TODO 정환 로그인 상태 확인 if( )
-        // return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Fail Insert survey");
-        String surveyID = surveyService.insertSurvey(surveyInsertDTO);
+        if(userEmail == null)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("권한 없음");
+
+        insertSurveyReq.setUser_Email(userEmail);
+        String surveyID = surveyService.insertSurvey(insertSurveyReq);
         if (surveyID == null || surveyID.length() != 24)
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Fail Insert survey");
         return ResponseEntity.status(HttpStatus.OK).body(surveyID);
@@ -83,10 +91,12 @@ public class SurveyController{
     public ResponseEntity insertSurveyTest(
             @RequestBody
             @ApiParam(value="설문 생성 DTO", required = true)
-                    InsertSurveyReq insertSurveyReq
+                    InsertSurveyReq insertSurveyReq,
+            @AuthenticationPrincipal String userEmail
     ){
-        // TODO 정환 로그인 상태 확인 if( )
-        // return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Fail Insert survey");
+        if(userEmail == null)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Fail Insert survey");
+        insertSurveyReq.setUser_Email(userEmail);
         String surveyID = surveyService.insertSurvey(insertSurveyReq);
         if (surveyID == null || surveyID.length() != 24)
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Fail Insert survey");
@@ -125,7 +135,7 @@ public class SurveyController{
             @ApiParam(value="작성 답변 DTO ",required = true)
                     InsertAnswerReq insertAnswerReq,
             @ApiParam(hidden = true)
-            HttpServletRequest request
+                    HttpServletRequest request
     ){
         switch(surveyService.insertAnswer(_id,insertAnswerReq,request)){
             case -1: return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 응답이 존재하는 IP입니다.");
@@ -149,13 +159,22 @@ public class SurveyController{
                     String _id,
             @RequestBody
             @ApiParam(value="설문 수정 DTO", required = true)
-                    InsertSurveyReq surveyInsertDTO
+                    InsertSurveyReq surveyInsertDTO,
+            @AuthenticationPrincipal String userEmail
     ){
-        // TODO 정환, 현재 로그인한 유저로 확인하는 로직 추가해야함
+        if(!surveyService.checkOwner(_id,userEmail))
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("권한 없음");
+
+        surveyInsertDTO.setUser_Email(userEmail);
+
         try{
-            return surveyService.updateSurvey(_id, surveyInsertDTO)?
-                    ResponseEntity.status(HttpStatus.CREATED).body("SURVEY UPDATED"):
-                    ResponseEntity.status(HttpStatus.NOT_FOUND).body("NOT FOUND");
+            Integer result = surveyService.updateSurvey(_id, surveyInsertDTO);
+            if (result == null)
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("권한 없음");
+            else if (result == 0)
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("NOT FOUND");
+            else
+                return ResponseEntity.status(HttpStatus.CREATED).body("SURVEY UPDATED");
         }catch(Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("INTERNAL_SERVER_ERROR : "+e);
         }
@@ -173,13 +192,15 @@ public class SurveyController{
             @PathVariable("_id")
             @ApiParam(value="설문조사 PK (영어+숫자 24글자)",required = true, example = "619775a6f9517400e97e30e2")
                     String _id,
-            @RequestBody
-            @ApiParam(value="해당 설문 작성자 Email", required = true, example = "ojh2134@gmail.com")
-                    String User_Email
+            @AuthenticationPrincipal
+                    String userEmail
     ) {
-        // TODO 정환, 현재 로그인한 유저로 확인하는 로직 추가해야함
-        if (surveyService.deleteSurvey(_id, User_Email) == 0)
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("DELETE FAILED");
+        if(!surveyService.checkOwner(_id,userEmail))
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("권한 없음");
+
+        if (surveyService.deleteSurvey(_id, userEmail) == 0L)
+            // TODO delete Survey 단순 삭제하는 로직만
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("권한 없음");
         return ResponseEntity.status(HttpStatus.OK).body("SURVEY DELETED");
     }
 
@@ -193,12 +214,12 @@ public class SurveyController{
     public ResponseEntity surveyResult(
             @PathVariable("_id")
             @ApiParam(value="설문조사 PK (영어+숫자 24글자)",required = true, example = "619b39da46f35902f0cc7757")
-                    String _id
-//            @RequestParam
-//            @ApiParam(value="해당 설문 작성자 Email", required = true, example = "ojh2134@gmail.com")
-//                    String User_Email // TODO security로 확인하게끔 변경해야함
+                    String _id,
+            @AuthenticationPrincipal String userEmail
     ) {
-        // TODO 정환, 현재 로그인한 유저로 확인하는 로직 필요
+        if(!surveyService.checkOwner(_id,userEmail))
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("권한 없음");
+
         SurveyResultRes surveyResultDTO = surveyService.resultSurvey(_id);
         if(surveyResultDTO == null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당하는 설문이 존재하지 않습니다");

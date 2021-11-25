@@ -7,6 +7,7 @@ import lombok.Data;
 @Data
 public class SurveyListPageReq {
 
+
     private int page_Num;
     private String search_Key;
     private Integer search_Tag;
