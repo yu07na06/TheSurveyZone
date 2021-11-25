@@ -4,17 +4,13 @@ import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import FolderIcon from '@mui/icons-material/Folder';
-import DeleteIcon from '@mui/icons-material/Delete';
 import ListItemText from '@mui/material/ListItemText';
 import Paper from '@mui/material/Paper';
 import Container from '@mui/material/Container';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import InsertChartIcon from '@mui/icons-material/InsertChart';
-import CreateIcon from '@mui/icons-material/Create';
-import { Grid, Pagination, Tab } from '@mui/material';
+import { Button, Grid, Pagination, Tab } from '@mui/material';
 import { Link } from 'react-router-dom';
 
-const MySurvey = ({mySurList,callPaging, handleCopyClipBoard}) => {
+const MySurvey = ({mySurList,callPaging, ApiClick,ClipboardCopy}) => {
         return (
             <>
                 <Container component="main" maxWidth="md" sx={{ mb: 4 }} >
@@ -30,10 +26,9 @@ const MySurvey = ({mySurList,callPaging, handleCopyClipBoard}) => {
                                     <ListItemText>
                                         <Link to={`/SurveySubmitPage/${value._id}`} style={{textDecoration:'none', color:'gray'}}><Tab label={value.sur_Title} style={{fontWeight:'bold'}}/></Link> 
                                     </ListItemText>
-                                    <CreateIcon color="action" />
-                                    <InsertChartIcon color="action"/>
-                                    <DeleteIcon color="action" />
-                                    <ContentCopyIcon color="action" onClick={()=>handleCopyClipBoard(`http://localhost:3000/SurveySubmitPage/${value._id}`)}/>
+                                    {value.sur_State===0?<Button id="mod" onClick={(e)=>ApiClick(e,value._id)}>수정</Button>:<Button id="result" onClick={(e)=>ApiClick(e,value._id)}>결과</Button>}
+                                    <Button id="del" onClick={(e)=>ApiClick(e,value._id)}>삭제</Button>
+                                    {ClipboardCopy(`http://115.22.11.110:3000/SurveySubmitPage/${value._id}`)}
                                 </ListItem>
                             )}
                         </List>

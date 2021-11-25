@@ -21,3 +21,10 @@ export const getTags = () =>
 export const getMySurveyList = (page_Num) => 
     axios.get(`/api/v1/survey/myPage?page_Num=${page_Num}`);
 
+// 설문 삭제
+export const deleteSurvey = (sur_ID) =>
+    axios.delete(`/api/v1/survey/${sur_ID}`);
+
+// 설문 수정
+export const modifySurvey = (sur_ID) =>
+    axios.put(`/api/v1/survey/${sur_ID}`);
