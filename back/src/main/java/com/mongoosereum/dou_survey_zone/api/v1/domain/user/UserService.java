@@ -1,5 +1,6 @@
 package com.mongoosereum.dou_survey_zone.api.v1.domain.user;
 
+import com.mongoosereum.dou_survey_zone.api.v1.common.mail.MailService;
 import com.mongoosereum.dou_survey_zone.api.v1.dao.UserDAO;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.user.SearchPWReq;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.user.SignUpReq;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 @Service
 public class UserService {
@@ -38,7 +40,6 @@ public class UserService {
     }
 
     public User login(final String email, final String password){
-
         User searchUser =  userDAO.findByEmailAndPassword_MySQL(email);
         System.out.println(searchUser.getUser_Email());
         System.out.println(searchUser.getUser_Password());
@@ -58,18 +59,13 @@ public class UserService {
 
         return (searchEmail != null)? searchEmail : null;
     }
-    public Integer searchPW(SearchPWReq searchPWReq){
-        Integer result = userDAO.findByEmail_Name_Tel(User.builder()
+    public int findByEmail_Name_Tel(SearchPWReq searchPWReq){
+        int result = userDAO.findByEmail_Name_Tel(
+                User.builder()
                 .user_Email(searchPWReq.getUser_Email())
                 .user_Name(searchPWReq.getUser_Name())
                 .user_Tel(searchPWReq.getUser_Tel())
                 .build());
-        if(result == 0 || result == null)
-            return result;
-//        String tempPW =
-//        String encodedPassword = passwordEncoder.encode(newPW);
-//
-//        userDAO.modifyPW(newPW);
-        return null;
+        return result;
     }
 }

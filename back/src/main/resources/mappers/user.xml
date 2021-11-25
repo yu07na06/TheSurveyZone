@@ -21,8 +21,13 @@
     <select id="findByEmail_Name_Tel" parameterType="User_MySQL" resultType="int">
         select count(*)
         from survey.user
-        where User_Email = #{User_Email} and
-              User_Name = #{User_Name} and
-              User_Tel = #{User_Tel};
+        where User_Email = #{user_Email} and
+              User_Name = #{user_Name} and
+              User_Tel = #{user_Tel};
     </select>
+    <update id="setPW" parameterType="User_MySQL">
+        update survey.user
+        set User_Password = #{user_Password}
+        where User_Email = #{user_Email};
+    </update>
 </mapper>
