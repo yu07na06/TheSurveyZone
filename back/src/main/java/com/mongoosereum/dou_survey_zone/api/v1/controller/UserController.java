@@ -94,7 +94,7 @@ public class UserController{
     public ResponseEntity searchPW(@RequestBody SearchPWReq searchPWReq){
         if(userService.findByEmail_Name_Tel(searchPWReq) == 0)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 정보");
-        mailService.sendTempPW(searchPWReq.getUser_Email());
+        mailService.sendTempPW(searchPWReq.getUser_Email(), searchPWReq.getUser_Name());
         return ResponseEntity.ok().body("비밀번호 찾기 성공");
     }
     /* 테스트용 */

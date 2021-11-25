@@ -40,7 +40,6 @@ public class UserService {
     }
 
     public User login(final String email, final String password){
-
         User searchUser =  userDAO.findByEmailAndPassword_MySQL(email);
         System.out.println(searchUser.getUser_Email());
         System.out.println(searchUser.getUser_Password());
@@ -61,7 +60,8 @@ public class UserService {
         return (searchEmail != null)? searchEmail : null;
     }
     public int findByEmail_Name_Tel(SearchPWReq searchPWReq){
-        int result = userDAO.findByEmail_Name_Tel(User.builder()
+        int result = userDAO.findByEmail_Name_Tel(
+                User.builder()
                 .user_Email(searchPWReq.getUser_Email())
                 .user_Name(searchPWReq.getUser_Name())
                 .user_Tel(searchPWReq.getUser_Tel())

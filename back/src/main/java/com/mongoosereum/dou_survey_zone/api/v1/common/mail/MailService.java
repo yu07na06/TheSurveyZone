@@ -44,7 +44,7 @@ public class MailService {
         System.out.println(tempPW);
         return tempPW;
     }
-    public void sendTempPW(String User_Email){
+    public void sendTempPW(String User_Email, String User_Name){
         String tempPW = makeTempPW();
         String encodedPassword = passwordEncoder.encode(tempPW);
 
@@ -57,8 +57,9 @@ public class MailService {
         String subject = "[DouSurveyZone]비밀번호 재설정 안내 메일";
 
         Context context = new Context();
+        context.setVariable("userName",User_Name);
         context.setVariable("mainLink", mainPageLink);
-        context.setVariable("tempPW",tempPW);
+        context.setVariable("tempPW", tempPW);
         context.setVariable("linkToLogin",mainPageLink + "/Login");
         String html = templateEngine.process("resetPW",context);
 
