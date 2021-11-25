@@ -41,11 +41,6 @@ const CreateSurveyComp = () => {
     .then((res)=>{setTags(res.data);})
     .catch(err=>console.log(err))
   },[])
-
-  useEffect(()=>{
-    const newQuestionList = question.filter((value)=>value.key!==delIndex);
-    setQuestion(newQuestionList);
-  },[delIndex]);
   
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -76,12 +71,20 @@ const CreateSurveyComp = () => {
     setQuestion_Ans({...question_ans, ...check}); // 객관식, 주관식, 선형 배율의 보기들을 합치는 곳
   },[check]);
 
+  // 질문 삭제
   useEffect(()=>{
-    question.map((v)=>{
-      console.log("question값에 변동이 일어났다  : ", v.props.children.type.name);
-    })
-  },[question])
-  
+    // 객,주,선 삭제
+    const newQuestionList = question.filter((value)=>value.key!==delIndex);
+    setQuestion(newQuestionList);
+
+    // 해당 객관식 보기 삭제
+    for (const key in question_ans) {
+      if(key == delIndex){
+        delete question_ans[key];
+      } 
+    }
+  },[delIndex]);
+
   const onClick = (e) => { // 완료 버튼 클릭 시, node에게 보냄
     e.preventDefault(); // 화면 유지
     if(question.length==0){
@@ -93,6 +96,11 @@ const CreateSurveyComp = () => {
     const Sur_Title = data.get('Sur_Title'); // 설문 제목
     const Sur_Content = data.get('Sur_Content'); // 설문 본문
 
+    let newQuestionAnsList = [];
+    for (const key in question_ans) {
+      newQuestionAnsList.push(question_ans[key]);  
+    }
+    
     let questionList = question.map((value, index)=>{ // 질문 들어가는 배열
       let SurType = null;
       switch(value.props.children.type.name){
@@ -107,14 +115,15 @@ const CreateSurveyComp = () => {
           break;
         default: break;
       }
+
       return {
-        surQue_Content: data.get(`SurQue_Content${index}`), // 질문 내용
+        surQue_Content: data.get(`SurQue_Content${value.key}`), // 질문 내용
         surQue_QType: SurType, // 질문 타입 주관식(0), 객관식(1), 선형배율(2)
-        surQue_Essential: data.get(`SurQue_Essential${index}`)==='on'?true:false, // true:필수, false:옵션
-        surQue_MaxAns: data.get(`surQue_MaxAns${index}`), // 최대 선택갯수, 이건 아마 객관식에만 들어갈예정
+        surQue_Essential: data.get(`SurQue_Essential${value.key}`)==='on'?true:false, // true:필수, false:옵션
+        surQue_MaxAns: data.get(`surQue_MaxAns${value.key}`), // 최대 선택갯수, 이건 아마 객관식에만 들어갈예정
         surQue_Order: index, // 질문의 순서
         answerList : [],
-        selectList: question_ans[index].map((v, idx)=>{ // 객관식만 처리한 상태이므로, 주관식과 선형배율 error(수정 부탁)
+        selectList: newQuestionAnsList[index].map((v, idx)=>{ // 객관식만 처리한 상태이므로, 주관식과 선형배율 error(수정 부탁)
           return {
             surSel_Content: v!=null?data.get(v):'', // 보기 내용 --> 주관식의 경우, ''빈값으로 보냄
             surSel_Order: v!=null?idx:'' // 보기 순서 --> 주관식의 경우, ''빈값으로 보냄
@@ -132,7 +141,7 @@ const CreateSurveyComp = () => {
       sur_EndDate: day[1].getFullYear()+"-"+ ('0'+(day[1].getMonth()+1)).slice(-2) +"-"+('0'+(day[1].getDate())).slice(-2),                               // ---> comp에서 state로 관리중
       sur_Publish: !Sur_Publish, // 공개 여부                ---> comp에서 state로 관리중 [ !false: 공개, !true: (잠금)비공개 ]
       sur_Image: "image", // 이미지 추후에 현재는 제외
-      user_Email: "dbsk7885@daum.net",  // 작성자 ID
+      // user_Email: "dbsk7885@daum.net",  // 작성자 ID
       sur_Tag: data.get(`sur_Tag`), 
       questionList,
     }

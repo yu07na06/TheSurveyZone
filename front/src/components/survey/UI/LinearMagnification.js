@@ -9,6 +9,8 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 
 const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxValue, value, setTemp, deleteQue, ReadOnlyState, ReadOnlyData, makeCircles}) => {
+    console.log('혼내러 갑니다!!!!!!!!!!!!!', ReadOnlyData);
+    
     return (
         <>
             <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
