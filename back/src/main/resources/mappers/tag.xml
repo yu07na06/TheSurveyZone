@@ -3,10 +3,20 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="tag">
-    <select id="findtagAll" resultType="UserDTO">
-        select
-        *
-        from
-        user
+    <insert id="insertSurveyTag" parameterType="SurveyTag">
+        insert into survey.surveytag values(#{_id},#{Tag_ID});
+    </insert>
+    <select id="selectTagList" resultType="Tag">
+        select * from survey.Tag;
+    </select>
+    <select id="selectExistTagList" resultType="Tag" parameterType="String">
+    <choose>
+        <when test='_id == ""'>
+            Select * from survey.Tag where Tag_ID in (select Tag_ID from survey.SurveyTag);
+        </when>
+        <otherwise>
+            select * from survey.Tag where Tag_ID in (select Tag_ID from survey.SurveyTag where _id = #{_id});
+        </otherwise>
+    </choose>
     </select>
 </mapper>

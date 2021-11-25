@@ -3,22 +3,19 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="user">
-    <select id="findUserAll" resultType="UserDTO">
-        select
-        *
-        from
-        user
+    <select id="existsByEmail" parameterType="String" resultType="String">
+        select User_Email from survey.user where User_Email = #{param}
     </select>
 
-    <select id="selectEmail" parameterType="String" resultType="String">
-        select User_Email from user where User_Email = #{param}
-    </select>
-
-    <insert id="createUser" parameterType="UserDTO">
-        insert into User values(#{user_Email},#{user_Password},#{user_Name},#{user_Tel})
+    <insert id="createUser" parameterType="User_MySQL">
+        insert into survey.User values(#{user_Email},#{user_Password},#{user_Name},#{user_Tel})
     </insert>
 
-    <select id="login" parameterType="UserDTO" resultType="UserDTO">
-        select * from user where User_Email = #{user_Email};
+    <select id="findByEmailAndPassword" parameterType="String" resultType="User_MySQL">
+        select User_Email, User_Password, User_Name from survey.user where User_Email = #{param};
+    </select>
+
+    <select id="findByEmail" parameterType="User_MySQL" resultType="String">
+        select User_Email from survey.user where User_Name = #{user_Name} and User_Tel = #{user_Tel};
     </select>
 </mapper>
