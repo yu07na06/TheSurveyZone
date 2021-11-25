@@ -62,7 +62,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return null;
     }
 }
-
 // 1. 요청의 헤더에서 Bearer 토큰을 가져온다. 이 작업은 parseBearerToken() 메서드에서 이뤄진다.
 // 2. TokenProvider를 이용해서 토큰을 인증하고 UsernamePasswordAuthenticationToken을 작성한다.
 // 이 오브젝트에 사용자의 인증 정보를 저장하고 SecurityContext에 인증된 사용자를 등록한다.

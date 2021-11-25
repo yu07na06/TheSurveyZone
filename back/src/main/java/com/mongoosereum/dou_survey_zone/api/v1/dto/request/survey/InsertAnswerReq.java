@@ -14,10 +14,6 @@ public class InsertAnswerReq {
 
     @ApiModelProperty(name = "age", notes = "사용자 연령", example = "10 or 20 or 30 or 40 or 50 or 60")
     private int age;
-    @ApiModelProperty(name = "gender", notes = "사용자 성별", example = "M or W")
-
-    @ApiModelProperty(name = "age", notes = "설문 응답자 나이")
-    private int age;
 
     @ApiModelProperty(name = "gender", notes = "설문 응답자 설명")
     private String gender;

@@ -1,14 +1,12 @@
 package com.mongoosereum.dou_survey_zone.api.v1.controller;
 
-import com.mongoosereum.dou_survey_zone.api.v1.dto.request.user.CheckEmailReq;
-import com.mongoosereum.dou_survey_zone.api.v1.dto.request.user.SearchIDReq;
-import com.mongoosereum.dou_survey_zone.api.v1.dto.request.user.SignUpReq;
-import com.mongoosereum.dou_survey_zone.api.v1.dto.request.user.SigninReq;
+import com.mongoosereum.dou_survey_zone.api.v1.dto.request.user.*;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.response.user.SignInRes;
 import com.mongoosereum.dou_survey_zone.security.TokenProvider;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.user.User;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.user.UserService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
@@ -86,7 +84,11 @@ public class UserController{
         List<String> user = userService.searchID(searchIDReq.getUser_Name(), searchIDReq.getUser_Tel());
     return (user != null) ? ResponseEntity.ok().body(user) :  ResponseEntity.status(401).body("NO User");
     }
-
+    @PostMapping(path="/searchPW")
+    @ApiOperation("비밀번호찾기")
+    public ResponseEntity searchPW(@RequestBody SearchPWReq searchPWReq){
+        return ResponseEntity.ok(userService.searchPW(searchPWReq));
+    }
     /* 테스트용 */
     @GetMapping(path="/test")
     public String test() {

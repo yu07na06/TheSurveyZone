@@ -1,6 +1,7 @@
 package com.mongoosereum.dou_survey_zone.api.v1.domain.user;
 
 import com.mongoosereum.dou_survey_zone.api.v1.dao.UserDAO;
+import com.mongoosereum.dou_survey_zone.api.v1.dto.request.user.SearchPWReq;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.user.SignUpReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,7 +14,7 @@ import java.util.Objects;
 public class UserService {
 
     @Autowired
-    private UserDAO Dao;
+    private UserDAO userDAO;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -29,16 +30,16 @@ public class UserService {
                 .user_Tel(signUpReq.getUser_Tel())
                 .build();
 
-        return Dao.createUser_MySQL(user_mySQL);
+        return userDAO.createUser_MySQL(user_mySQL);
     }
 
     public boolean checkEmail(final String User_Email){
-        return Objects.equals(User_Email, Dao.existsByEmail_MySQL(User_Email));
+        return Objects.equals(User_Email, userDAO.existsByEmail_MySQL(User_Email));
     }
 
     public User login(final String email, final String password){
 
-        User searchUser =  Dao.findByEmailAndPassword_MySQL(email);
+        User searchUser =  userDAO.findByEmailAndPassword_MySQL(email);
         System.out.println(searchUser.getUser_Email());
         System.out.println(searchUser.getUser_Password());
         if(searchUser != null && passwordEncoder.matches(password, searchUser.getUser_Password())){
@@ -53,10 +54,16 @@ public class UserService {
                 .user_Tel(tel)
                 .build();
 
-        List<String> searchEmail = Dao.findByEmail(user_mySQL);
+        List<String> searchEmail = userDAO.findByEmail(user_mySQL);
 
         return (searchEmail != null)? searchEmail : null;
-
     }
+    public Integer searchPW(SearchPWReq searchPWReq){
+//        userDAO.findByEmail();
 
+//        String encodedPassword = passwordEncoder.encode(newPW);
+//
+//        userDAO.modifyPW(newPW);
+        return null;
+    }
 }
