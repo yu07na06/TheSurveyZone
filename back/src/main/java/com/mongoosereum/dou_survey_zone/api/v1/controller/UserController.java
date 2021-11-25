@@ -1,7 +1,11 @@
 package com.mongoosereum.dou_survey_zone.api.v1.controller;
 
+import com.mongoosereum.dou_survey_zone.api.v1.dto.request.user.CheckEmailReq;
+import com.mongoosereum.dou_survey_zone.api.v1.dto.request.user.SearchIDReq;
+import com.mongoosereum.dou_survey_zone.api.v1.dto.request.user.SignUpReq;
+import com.mongoosereum.dou_survey_zone.api.v1.dto.request.user.SigninReq;
+import com.mongoosereum.dou_survey_zone.api.v1.dto.response.user.SignInRes;
 import com.mongoosereum.dou_survey_zone.security.TokenProvider;
-import com.mongoosereum.dou_survey_zone.api.v1.dto.UserDTO;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.user.User;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.user.UserService;
 import io.swagger.annotations.Api;
@@ -31,46 +35,46 @@ public class UserController{
     @ApiOperation(value = "이메일 중복검사")
     public ResponseEntity CheckEmail(
             @RequestBody
-            @ApiParam(value="UserDTO",required = true )
-                    UserDTO userDTO
+            @ApiParam(value="CheckEmailReq",required = true )
+                    CheckEmailReq checkEmailReq
     ) {
-        return ResponseEntity.ok().body(userService.checkEmail(userDTO.getUser_Email()));
+        System.out.println(checkEmailReq.getUser_Email());
+        return ResponseEntity.ok().body(userService.checkEmail(checkEmailReq.getUser_Email()));
     }
 
     @PostMapping(path="/signup")
     @ApiOperation(value = "회원 가입")
-    public ResponseEntity<?> registerUser(
+    public ResponseEntity registerUser(
             @RequestBody
-            @ApiParam(value="UserDTO",required = true )
-                    UserDTO userDTO
+            @ApiParam(value="SignUpReq",required = true )
+                    SignUpReq signUpReq
     ) {
         Integer result;
         try{
-            result = userService.createUser(userDTO);
+            result = userService.createUser(signUpReq);
         }catch (Exception e){
             return ResponseEntity.badRequest().body(e.toString());
         }
         if(result == 1) {
-            UserDTO responseUserDTO = userDTO;
-            return ResponseEntity.ok().body(responseUserDTO);
+            return ResponseEntity.ok().body(signUpReq);
         }
         return ResponseEntity.badRequest().body("fail");
     }
 
     @PostMapping(path="/signin")
     @ApiOperation(value = "로그인")
-    public ResponseEntity signin(@RequestBody UserDTO userDTO) {
+    public ResponseEntity signin(@RequestBody SigninReq SigninReq) {
 
-        User user = userService.login(userDTO.getUser_Email(), userDTO.getUser_Password());
+        User user = userService.login(SigninReq.getUser_Email(), SigninReq.getUser_Password());
 
         if(user != null){
             final String token = tokenProvider.create(user);
-            final UserDTO responseUserDTO = UserDTO.builder()
+            final SignInRes signInRes = SignInRes.builder()
                     .user_Email(user.getUser_Email())
                     .user_Name(user.getUser_Name())
                     .user_Token(token)
                     .build();
-            return ResponseEntity.ok().body(responseUserDTO);
+            return ResponseEntity.ok().body(signInRes);
         } else{
             return ResponseEntity.badRequest().body("Login fail");
         }
@@ -78,17 +82,15 @@ public class UserController{
 
     @PostMapping(path="/searchID")
     @ApiOperation(value = "ID찾기")
-    public ResponseEntity<?> searchID(@RequestBody UserDTO userDTO) {
-        List<String> user = userService.searchID(userDTO.getUser_Name(), userDTO.getUser_Tel());
+    public ResponseEntity searchID(@RequestBody SearchIDReq searchIDReq) {
+        List<String> user = userService.searchID(searchIDReq.getUser_Name(), searchIDReq.getUser_Tel());
     return (user != null) ? ResponseEntity.ok().body(user) :  ResponseEntity.badRequest().body("NO User");
     }
 
 
     /* 테스트용 */
     @GetMapping(path="/test")
-    public String test(@RequestBody UserDTO userDTO) {
-        System.out.println(userDTO.getUser_Email());
-        System.out.println(userDTO.getUser_Password());
+    public String test() {
         return "success";
     }
 }
