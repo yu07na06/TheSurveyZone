@@ -3,6 +3,12 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="survey">
+
+    <select id="surveyTotal"  resultType="Long">
+        select count(*)
+        from survey.survey
+    </select>
+
     <select id="findById" parameterType="String" resultType="Survey_MySQL">
         select *
         from survey.survey

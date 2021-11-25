@@ -68,11 +68,11 @@ public class SurveyController{
     public ResponseEntity insertSurvey(
             @RequestBody
             @ApiParam(value="설문 생성 DTO", required = true)
-                    InsertSurveyReq surveyInsertDTO
+                    InsertSurveyReq surveyInsertReq
     ){
         // TODO 정환 로그인 상태 확인 if( )
         // return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Fail Insert survey");
-        String surveyID = surveyService.insertSurvey(surveyInsertDTO);
+        String surveyID = surveyService.insertSurvey(surveyInsertReq);
         if (surveyID == null || surveyID.length() != 24)
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Fail Insert survey");
         return ResponseEntity.status(HttpStatus.OK).body(surveyID);

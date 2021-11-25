@@ -26,6 +26,11 @@ public class SurveyDAO {
     @Autowired
     private SqlSession sqlSession;
 
+    // Select MySQL SurveyTotal
+    public long surveyTotal (){
+        return sqlSession.selectOne("surveyTotal");
+    }
+
     // Select MySQL SurveyList
     public List<Survey_MySQL> selectSurveyList(PaginationInfo paginationInfo) {
         return sqlSession.selectList("selectSurveyList", paginationInfo);
