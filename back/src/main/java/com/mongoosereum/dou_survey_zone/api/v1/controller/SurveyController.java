@@ -86,24 +86,6 @@ public class SurveyController{
         return ResponseEntity.status(HttpStatus.OK).body(surveyID);
     }
 
-    @PostMapping(path="/survey/test")
-    @ApiOperation(value = "설문 생성")
-    public ResponseEntity insertSurveyTest(
-            @RequestBody
-            @ApiParam(value="설문 생성 DTO", required = true)
-                    InsertSurveyReq insertSurveyReq,
-            @AuthenticationPrincipal String userEmail
-    ){
-        if(userEmail == null)
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Fail Insert survey");
-        insertSurveyReq.setUser_Email(userEmail);
-        String surveyID = surveyService.insertSurvey(insertSurveyReq);
-        if (surveyID == null || surveyID.length() != 24)
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Fail Insert survey");
-        return ResponseEntity.status(HttpStatus.OK).body(surveyID);
-    }
-
-
     @GetMapping(path="/survey/{_id}")
     @ApiOperation(value = "설문 조회", notes="설문 조사 참여할때 설문 조사 출력")
     @ApiResponses({
@@ -192,6 +174,7 @@ public class SurveyController{
             @PathVariable("_id")
             @ApiParam(value="설문조사 PK (영어+숫자 24글자)",required = true, example = "619775a6f9517400e97e30e2")
                     String _id,
+
             @AuthenticationPrincipal
                     String userEmail
     ) {
@@ -231,4 +214,5 @@ public class SurveyController{
     public String testabc() {
         return "test OK!";
     }
+
 }

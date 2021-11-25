@@ -13,9 +13,10 @@ import java.util.List;
 @Builder
 @ApiModel("페이징 처리 결과 DTO")
 public class SurveyListPageRes {
-    @ApiModelProperty(name ="paginationInfo", notes = "paging 관련 정보")
+
+    @ApiModelProperty(name = "paginationInfo", notes = "해당 페이지에 대한 정보")
     private PaginationInfo paginationInfo;
 
-    @ApiModelProperty(name ="surveylist", notes = "설문 List")
+    @ApiModelProperty(name = "surveylist", notes = "해당 페이지에 대한 설문조사 리스트")
     List<Survey_MySQL> surveylist;
 }
