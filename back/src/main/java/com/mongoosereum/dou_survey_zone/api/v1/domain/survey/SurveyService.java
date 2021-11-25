@@ -137,19 +137,19 @@ public class SurveyService {
                 .sur_Type(insertSurveyDTO.getSur_Type().getNum())
                 .build();
 
-            try {
-                surveyDAO.surveyInsert_MySQL(survey_MySQL);
-                if(insertSurveyDTO.getSur_Tag() != null) {
-                    SurveyTag surveyTag = SurveyTag.builder()
-                            ._id(surveyID)
-                            .Tag_ID(insertSurveyDTO.getSur_Tag())
-                            .build();
-                    tagDAO.insertTag(surveyTag);
-                }
-            } catch (Exception e) {
-                // Insert에 실패한경우 생성된 MongoDB의 Document를 삭제해줘야함
-                surveyDAO.deleteSurvey_Mongo(surveyID);
-                return "FAIL";
+        try {
+            surveyDAO.surveyInsert_MySQL(survey_MySQL);
+            if(insertSurveyDTO.getSur_Tag() != null) {
+                SurveyTag surveyTag = SurveyTag.builder()
+                        ._id(surveyID)
+                        .Tag_ID(insertSurveyDTO.getSur_Tag())
+                        .build();
+                tagDAO.insertTag(surveyTag);
+            }
+        } catch (Exception e) {
+            // Insert에 실패한경우 생성된 MongoDB의 Document를 삭제해줘야함
+            surveyDAO.deleteSurvey_Mongo(surveyID);
+            return "FAIL";
 
         }
         return surveyID;
@@ -166,7 +166,7 @@ public class SurveyService {
         surveySelectDTO.set(resultMongo, resultMySQL, tagList);
         return surveySelectDTO;
     }
-    
+
     @Transactional(rollbackFor = Exception.class)
     public Integer insertAnswer(String _id, InsertAnswerReq insertAnswerReq, HttpServletRequest request) {
         String ip = getIP(request);
@@ -180,7 +180,7 @@ public class SurveyService {
                         .Part_Gender(insertAnswerReq.getGender().charAt(0))
                         .Part_IP(ip)
                         .build()
-                );
+        );
         return result == 0 ? 0 : surveyDAO.insertAnswer(_id, insertAnswerReq.getAnswerList());
     }
 
