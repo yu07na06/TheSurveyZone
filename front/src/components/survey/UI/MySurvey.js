@@ -9,8 +9,9 @@ import Paper from '@mui/material/Paper';
 import Container from '@mui/material/Container';
 import { Button, Grid, Pagination, Tab } from '@mui/material';
 import { Link } from 'react-router-dom';
+import ClipboardCopy from '../../common/Function';
 
-const MySurvey = ({mySurList,callPaging, ApiClick,ClipboardCopy}) => {
+const MySurvey = ({mySurList,callPaging, ApiClick}) => {
         return (
             <>
                 <Container component="main" maxWidth="md" sx={{ mb: 4 }} >
@@ -28,7 +29,7 @@ const MySurvey = ({mySurList,callPaging, ApiClick,ClipboardCopy}) => {
                                     </ListItemText>
                                     {value.sur_State===0?<Button id="mod" onClick={(e)=>ApiClick(e,value._id)}>수정</Button>:<Button id="result" onClick={(e)=>ApiClick(e,value._id)}>결과</Button>}
                                     <Button id="del" onClick={(e)=>ApiClick(e,value._id)}>삭제</Button>
-                                    {ClipboardCopy(`http://115.22.11.110:3000/SurveySubmitPage/${value._id}`)}
+                                    {ClipboardCopy("icon",`http://115.22.11.110:3000/SurveySubmitPage/${value._id}`)}
                                 </ListItem>
                             )}
                         </List>
