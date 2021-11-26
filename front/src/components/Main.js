@@ -31,7 +31,7 @@ const Main = ({ data, accUserData, accAgeData, accSexData, reqMain, callPage, })
             </Box>
 
             
-            <Container sx={{ py: 5 }} maxWidth="md">
+            <Container sx={{ py: 5 }} maxWidth="lg">
                 <Grid container spacing={4}>
                     {/* 누적 이용자 */}
                     <Grid item xs={4}>

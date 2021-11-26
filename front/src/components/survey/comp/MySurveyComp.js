@@ -6,6 +6,8 @@ import { useHistory } from 'react-router-dom';
 import {modifySurvey as modifySurveyAPI, deleteSurvey as deleteSurveyAPI, getMySurveyList as getMySurveyListAPI } from '../../../lib/api/survey';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
+
+
 const MySurveyComp = () => {
   const [cookies] = useCookies(['user_Token']);
   const [mySurList, setMysurList] = useState();
@@ -33,7 +35,9 @@ const MySurveyComp = () => {
   const ApiClick = (e,id) => {
     switch(e.target.id){
       case "mod" : console.log("수정 on");
-        history.push(`/UpdatePage/${id}`);
+        modifySurveyAPI(id)
+        .then(res=>console.log("수정 성공..?",res))
+        .catch(res=>console.log("수정 실패..?",res))
         break;
       case "del" :  console.log("삭제 on");
           deleteSurveyAPI(id)
@@ -48,30 +52,6 @@ const MySurveyComp = () => {
     }
   }
 
-  const ClipboardCopy = (url) =>{
-    const doCopy = text => {
-        if (!document.queryCommandSupported("copy")) {
-            return alert("복사하기가 지원되지 않는 브라우저입니다.");
-        }
-        const textarea = document.createElement("textarea");
-        textarea.value = text;
-        textarea.style.top = 0;
-        textarea.style.left = 0;
-        textarea.style.position = "fixed";
-        document
-            .body
-            .appendChild(textarea);
-        textarea.focus();
-        textarea.select();
-        document.execCommand("copy");
-        document
-            .body
-            .removeChild(textarea);
-            Swal.fire('URL 복사 성공');
-    };
-    return (<ContentCopyIcon onClick={()=>doCopy(url)}/>);
-
-}
 
   return (
       <>
@@ -79,7 +59,6 @@ const MySurveyComp = () => {
             ApiClick={ApiClick}
             mySurList={mySurList}
             callPaging={callPaging}
-            ClipboardCopy={ClipboardCopy}
           />
       </>
   );
