@@ -9,6 +9,7 @@ import ReadOnlyPage from './pages/ReadOnlyPage';
 import RegisterPage from './pages/RegisterPage';
 import ResultPage from './pages/ResultPage';
 import SurveySubmitPage from './pages/SurveySubmitPage';
+import UpdatePage from './pages/UpdatePage';
 
 const App = () => {
   return (
@@ -26,6 +27,8 @@ const App = () => {
         <Route path="/SurveySubmitPage/:surveykey" component={SurveySubmitPage} /> 
         {/* surveykey : 설문지의 고유번호(PK)를 의미 */}
         <Route path="/ReadOnlyPage/:surveykey" component={ReadOnlyPage} /> 
+        {/* surveykey : 설문지의 고유번호(PK)를 의미 */}
+        <Route path="/UpdatePage/:surveykey" component={UpdatePage} /> 
     </>
   );
 }

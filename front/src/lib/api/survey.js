@@ -4,7 +4,7 @@ import axios from 'axios';
 export const createSurvey = (questionList) =>
     axios.post("/api/v1/survey/", questionList);
 
-// 설문 조회
+// 설문 조회 || 설문 참여자들이 보여지는 설문 
 export const getSurvey = (sur_ID) => 
     axios.get(`/api/v1/survey/${sur_ID}`);
 

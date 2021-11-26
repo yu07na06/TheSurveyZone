@@ -11,7 +11,8 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { ThemeProvider } from '@mui/material/styles';
 
-const SurveySubmit = ({steps, getStepContent, theme, activeStep, lastSubmit, nextPage, wayBackHome}) => {
+
+const SurveySubmit = ({ steps, getStepContent, theme, activeStep, lastSubmit, nextPage, wayBackHome, UpdateKey, }) => {
     return (
         <>
             <ThemeProvider theme={theme}>
@@ -32,15 +33,17 @@ const SurveySubmit = ({steps, getStepContent, theme, activeStep, lastSubmit, nex
                         <Typography component="h1" variant="h4" align="center">
                             Survey
                         </Typography>
+                        {!UpdateKey&&
                         <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
                             {steps.map((label) => (
                                 <Step key={label}>
                                     <StepLabel>{label}</StepLabel>
                                 </Step>
                             ))}
-                        </Stepper>
+                        </Stepper>}
                         <React.Fragment>
                             {getStepContent(activeStep)}
+                            
                             <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                                 <Button
                                     type="submit"
@@ -51,10 +54,15 @@ const SurveySubmit = ({steps, getStepContent, theme, activeStep, lastSubmit, nex
                                     }}
                                     sx={{ mt: 3, ml: 1 }}
                                 >
-                                {activeStep === 0 ? '다음' : (activeStep === 1 ? '제출' : '완료')}
+                                    
+                                {/* 내 설문지에서 수정 버튼 클릭 시, UpdateKey=true 이므로 수정 완료 버튼이 출력 */}
+                                {UpdateKey? '수정완료':
+                                    (activeStep === 0 ? '다음' : (activeStep === 1 ? '제출' : '완료'))
+                                }
                                 </Button>
                             </Box>
                         </React.Fragment>
+                        
                         </Paper>
                     </Container>
                  </Box>

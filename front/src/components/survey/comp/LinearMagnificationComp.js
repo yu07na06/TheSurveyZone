@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { submitAction } from '../../../modules/submitReducer';
 
 
-const LinearMagnificationComp = ({number, setCheck, setDelIndex, ReadOnlyState, ReadOnlyData, }) => {
+const LinearMagnificationComp = ({number, setCheck, setDelIndex, ReadOnlyState, ReadOnlyData, UpdateKey, }) => {
     const [minValue, setMinValue] = useState(0);
     const [maxValue, setMaxValue] = useState(null);
     const [temp, setTemp] = useState('');
@@ -18,6 +18,7 @@ const LinearMagnificationComp = ({number, setCheck, setDelIndex, ReadOnlyState, 
     }
 
     const deleteQue = (e) => {
+        console.log("!!!!!!!선형배율", e.target.id);
         setDelIndex(e.target.id);
     }
 
@@ -71,7 +72,6 @@ const LinearMagnificationComp = ({number, setCheck, setDelIndex, ReadOnlyState, 
     const dispatch = useDispatch();
     useEffect(()=>{
         if(ReadOnlyState)
-            console.log("선형배율은 여기서 했다.",`radio_${number}` );
             dispatch(submitAction(`radio_${number}`))
             
     },[])
@@ -91,6 +91,7 @@ const LinearMagnificationComp = ({number, setCheck, setDelIndex, ReadOnlyState, 
                 ReadOnlyState={ReadOnlyState}
                 ReadOnlyData={ReadOnlyData}
                 makeCircles={makeCircles}
+                UpdateKey={UpdateKey}
 
             />
         </>

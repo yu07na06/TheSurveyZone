@@ -33,9 +33,7 @@ const MySurveyComp = () => {
   const ApiClick = (e,id) => {
     switch(e.target.id){
       case "mod" : console.log("수정 on");
-        modifySurveyAPI(id)
-        .then(res=>console.log("수정 성공..?",res))
-        .catch(res=>console.log("수정 실패..?",res))
+        history.push(`/UpdatePage/${id}`);
         break;
       case "del" :  console.log("삭제 on");
           deleteSurveyAPI(id)
