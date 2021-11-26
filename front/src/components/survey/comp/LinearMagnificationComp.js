@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { submitAction } from '../../../modules/submitReducer';
 
 
-const LinearMagnificationComp = ({number, setCheck, setDelIndex, ReadOnlyState, ReadOnlyData, }) => {
+const LinearMagnificationComp = ({number, setCheck, setDelIndex, ReadOnlyState, ReadOnlyData, UpdateKey, }) => {
     const [minValue, setMinValue] = useState(0);
     const [maxValue, setMaxValue] = useState(null);
     const [temp, setTemp] = useState('');
@@ -58,8 +58,10 @@ const LinearMagnificationComp = ({number, setCheck, setDelIndex, ReadOnlyState, 
     useEffect(()=>{
         if(ReadOnlyState){
             let newCircle = [];
-            let num =  Number(ReadOnlyData.selectList[3].surSel_Content)-Number(ReadOnlyData.selectList[1].surSel_Content);
-            for(let i=0; i<=num; i++){
+            const lowNum = Number(ReadOnlyData.selectList[1].surSel_Content);
+            const maxNum = Number(ReadOnlyData.selectList[3].surSel_Content);
+            // let num =  maxNum-lowNum;
+            for(let i=lowNum; i<=maxNum; i++){
                 newCircle.push(circle(i, number, i+20));
             }
             setMakeCircles([...newCircle])
@@ -71,7 +73,6 @@ const LinearMagnificationComp = ({number, setCheck, setDelIndex, ReadOnlyState, 
     const dispatch = useDispatch();
     useEffect(()=>{
         if(ReadOnlyState)
-            console.log("선형배율은 여기서 했다.",`radio_${number}` );
             dispatch(submitAction(`radio_${number}`))
             
     },[])
@@ -91,6 +92,7 @@ const LinearMagnificationComp = ({number, setCheck, setDelIndex, ReadOnlyState, 
                 ReadOnlyState={ReadOnlyState}
                 ReadOnlyData={ReadOnlyData}
                 makeCircles={makeCircles}
+                UpdateKey={UpdateKey}
 
             />
         </>

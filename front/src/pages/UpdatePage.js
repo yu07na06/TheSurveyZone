@@ -3,14 +3,15 @@ import Footer from '../components/common/UI/Footer';
 import Header from '../components/common/UI/Header';
 import SurveySubmitComp from '../components/survey/comp/SurveySubmitComp';
 
-const SurveySubmitPage = (props) => {
+
+const UpdatePage = (props) => {
     return (
         <>
             <Header />
-                <SurveySubmitComp surveykey={props.match.params.surveykey} UpdataKey={false}/>
+                <SurveySubmitComp surveykey={props.match.params.surveykey} UpdateKey={true} />
             <Footer />
         </>
     );
 };
 
-export default SurveySubmitPage;
+export default UpdatePage;

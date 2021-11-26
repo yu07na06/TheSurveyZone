@@ -1,6 +1,6 @@
 import React from 'react';
 import Paper from '@mui/material/Paper';
-import { Button, Grid, TextField } from '@mui/material';
+import { Button, Grid, TextField, Typography } from '@mui/material';
 import Switch from '@mui/material/Switch';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
@@ -8,14 +8,13 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 
-const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxValue, value, setTemp, deleteQue, ReadOnlyState, ReadOnlyData, makeCircles}) => {
-    console.log('혼내러 갑니다!!!!!!!!!!!!!', ReadOnlyData);
-    
+const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxValue, value, setTemp, deleteQue, ReadOnlyState, ReadOnlyData, makeCircles, UpdateKey, }) => {
     return (
         <>
             <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
                 <Grid container spacing={2}>
-                {!ReadOnlyState&&
+                {ReadOnlyState&&<Typography sx={{ marginLeft: '82%' }} style={{ color:"red" }} >{ReadOnlyData.surQue_Essential&&"필수항목입니다"}</Typography>}
+                {(!ReadOnlyState||UpdateKey)&&
                 <><Switch id={`SurQue_Essential${number}`} name={`SurQue_Essential${number}`} sx={{ left: '92%' }} defaultChecked color="secondary" />
                 <Button id={number} sx={{ left: '74%' }} onClick={(e)=>deleteQue(e)}>삭제</Button></>}
                     <br/>
@@ -24,7 +23,7 @@ const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxVal
                             variant="outlined"
                             required
                             fullWidth
-                            disabled={ReadOnlyState}
+                            disabled={ReadOnlyState&&!UpdateKey}
                             name={`SurQue_Content${number}`}
                             id={`SurQue_Content${number}`}
                             label={`선형배율${number}`}
@@ -39,12 +38,12 @@ const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxVal
                             name={`start_Step${number}`}
                             label="시작"
                             onChange={e=>setTemp(e.target.value)}
-                            disabled={ReadOnlyState}
+                            disabled={ReadOnlyState&&!UpdateKey}
                             value={ReadOnlyState?ReadOnlyData.selectList[0].surSel_Content:null} // 객체 참조 안함
                         />
                     </Grid>
                     
-                    {!ReadOnlyState&&
+                    {(!ReadOnlyState||UpdateKey)&&
                     <Grid item xs={4}>
                         <Box>
                             <FormControl fullWidth>
@@ -56,7 +55,7 @@ const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxVal
                                         name={`start_Name${number}_${minValue}`}
                                         label={`start_Name${number}_${minValue}`}
                                         onChange={e => setMinValue(e.target.value)}
-                                        disabled={ReadOnlyState}
+                                        disabled={ReadOnlyState&&!UpdateKey}
                                         value={minValue} // 객체 참조 안함
                                         >
                                     <MenuItem value="0">0</MenuItem>
@@ -66,7 +65,7 @@ const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxVal
                         </Box>
                     </Grid>}
 
-                    {ReadOnlyState&&
+                    {(ReadOnlyState&&!UpdateKey)&&
                     <Grid container xs={8} 
                         justifyContent="center"
                         alignItems="center">
@@ -81,11 +80,11 @@ const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxVal
                             name={`end_Step${number}`}
                             label="끝"
                             onChange={e=>setTemp(e.target.value)}
-                            disabled={ReadOnlyState}
+                            disabled={ReadOnlyState&&!UpdateKey}
                             value={ReadOnlyState?ReadOnlyData.selectList[2].surSel_Content:null} // 객체 참조 안함
                         />
                     </Grid>
-                    {!ReadOnlyState&&
+                    {(!ReadOnlyState||UpdateKey)&&
                     <Grid item xs={4}>
                         <Box>
                             <FormControl fullWidth>
@@ -97,10 +96,11 @@ const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxVal
                                         name={`end_Name${number}_${maxValue}`}
                                         label={`end_Name${number}_${maxValue}`}
                                         onChange={e => setMaxValue(e.target.value)}
-                                        disabled={ReadOnlyState}
+                                        disabled={ReadOnlyState&&!UpdateKey}
                                         value={maxValue} // 객체 참조 안함
                                         >
-                                    {value.map((v,i)=>
+                                    {/* value = [1,2,3,4,5,6,7,8,9] */}
+                                    {value.map(v =>
                                         (minValue===0)?<MenuItem value={v}>{v}</MenuItem>:<MenuItem value={v+1}>{v+1}</MenuItem>
                                     )}
                                 </Select>
