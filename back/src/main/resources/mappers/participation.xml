@@ -6,6 +6,7 @@
     <select id="findByIP" parameterType="Map" resultType="int">
         select count(*) from survey.participation where _id = #{_id} and Part_IP = #{Part_IP};
     </select>
+
     <insert id="insertParticipation" parameterType="Participation">
         insert into survey.participation values(#{_id},#{Part_IP},#{Part_Gender},#{Part_Age});
     </insert>
