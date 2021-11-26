@@ -3,16 +3,16 @@ import React, { useRef, useState } from 'react';
 import MultipleChoice from '../UI/MultipleChoice';
 import {useEffect} from 'react';
 import Checkbox from '@mui/material/Checkbox';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { submitAction } from '../../../modules/submitReducer';
 
-const MultipleChoiceComp = ({ number, setCheck, setDelIndex, ReadOnlyState, ReadOnlyData, UpdateKey, }) => {
-
+const MultipleChoiceComp = ({ number, setCheck, setDelIndex, ReadOnlyState, ReadOnlyData, UpdateKey, checkboxlistState }) => {
+    const surAns_Content = useSelector(state=>state.submitReducer.surAns_Content)
     const [select, setSelect] = useState([]); // 보기 덩어리가 들어가있음
     const [deleteIndex, setDeleteIndex] = useState(null);
     const [temp, setTemp] = useState([]);
     const [maxNum, setMaxNum] = useState();
-    const [essential, setEssential] = useState(0);
+    const [unRequired, setUnRequired] = useState(null);
     const count = useRef(-1);
     const ccc = useRef(0);
     const dispatch = useDispatch();
@@ -20,7 +20,7 @@ const MultipleChoiceComp = ({ number, setCheck, setDelIndex, ReadOnlyState, Read
     useEffect(()=>{
         if(ReadOnlyState){
             let newAddText = ReadOnlyData.selectList.map((value)=>{
-                    return addText(number, value, ReadOnlyData.surQue_MaxAns, ReadOnlyData.surQue_Essential, )
+                    return addText(number, value, ReadOnlyData.surQue_MaxAns, ReadOnlyData.surQue_Essential)
                 })
             setSelect(newAddText);
 
@@ -65,38 +65,35 @@ const MultipleChoiceComp = ({ number, setCheck, setDelIndex, ReadOnlyState, Read
         }
     }
 
-    useEffect(()=>{
-        if(essential!=0){
-            setSelect([...select]);
-        }
-    },[essential])
-
+    const checkClick = (e)=>{
+        let splitNum = (e.target.name).split('_')[1];
+        setUnRequired(splitNum);
+    }
 
     useEffect(()=>{
-        console.log("essential !!!!!!!!!!!!!", ccc.current);
-        console.log((ReadOnlyData.surQue_Essential&&ccc.current==0));
-        if(essential!=0){
-            console.log("야!");
-            setSelect([...select]);
-        }
-    },[essential])
+        surAns_Content.map(value => {
+            if(value.split('_')[1]==unRequired){
+                let checkbox1 = document.querySelector(`input[name=${value}]`);
+                checkbox1.required=false;
+            }
+        })
+    },[unRequired])
+
     
-    const addText = (number, ReadOnlyData, addMaxNum, checkBoxEssential, ) => {
+    const addText = (number, ReadOnlyData, addMaxNum, checkBoxEssential ) => {
         count.current+=1;
         !UpdateKey && setTemp([...temp, `SurQue_Ans_${number}_${count.current}`]); // 질문에 대한 보기 이름 덩어리 합치는 중
         dispatch(submitAction(`SurQueCheck_${number}_${count.current}`))
         return(
             <Grid key={`SurQue_Ans_${number}_${count.current}`} container spacing={2}>
                 <Grid item xs={11} key={`SurQue_Ans_${number}_${count.current}`}>
-                    {console.log("hi", (checkBoxEssential&&essential==0))}
-
                     {(ReadOnlyState&&!UpdateKey)&&
                         <Checkbox
-                            required={(checkBoxEssential&&essential==0)}
+                            required={checkBoxEssential}
                             value={ReadOnlyState?ReadOnlyData.surSel_Content:null} 
                             name={`SurQueCheck_${number}_${count.current}`} 
                             id={`SurQueCheck_${number}_${count.current}`} 
-                            onClick={(e)=>{ setEssential(1); checkCount(e, addMaxNum);}}
+                            onClick={(e)=>{ checkClick(e); checkCount(e, addMaxNum);}}
                         />
                     }
                     

@@ -99,7 +99,8 @@ const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxVal
                                         disabled={ReadOnlyState&&!UpdateKey}
                                         value={maxValue} // 객체 참조 안함
                                         >
-                                    {value.map((v,i)=>
+                                    {/* value = [1,2,3,4,5,6,7,8,9] */}
+                                    {value.map(v =>
                                         (minValue===0)?<MenuItem value={v}>{v}</MenuItem>:<MenuItem value={v+1}>{v+1}</MenuItem>
                                     )}
                                 </Select>

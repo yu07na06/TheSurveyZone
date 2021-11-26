@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import CreateSurvey from '../UI/CreateSurvey';
-import { createTheme } from '@mui/material/styles';
 import MultipleChoiceComp from '../comp/MultipleChoiceComp';
 import SubjectiveComp from './SubjectiveComp';
 import LinearMagnificationComp from './LinearMagnificationComp';
@@ -8,6 +7,7 @@ import { createSurvey as createSurveyAPI, getTags as getTagsAPI } from '../../..
 import Swal from 'sweetalert2';
 import { useHistory } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
+import  ClipboardCopy from '../../common/Function';
 
 const CreateSurveyComp = () => {
   const [cookies] = useCookies(['user_Token']);
@@ -19,11 +19,9 @@ const CreateSurveyComp = () => {
   const [delIndex, setDelIndex] = useState();
   const [check, setCheck] = useState({});
   const [tag, setTag] = useState('');
-  const theme = createTheme();
-  const todayDate = new Date();
+  const [tags, setTags] = useState();
   const open = Boolean(anchorEl);
   const count = useRef(0);
-  const [tags, setTags] = useState();
   const history = useHistory();
 
   useEffect(()=>{
@@ -42,13 +40,8 @@ const CreateSurveyComp = () => {
     .catch(err=>console.log(err))
   },[])
   
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  
-  const onCheckChange = (e) =>{
-    setSur_Publish( e.target.checked);
-  }
+  const handleClick = (event) => setAnchorEl(event.currentTarget);
+  const onCheckChange = (e) => setSur_Publish( e.target.checked);
 
   const handleClose = (e) => {
     setAnchorEl(null); // 메뉴 닫기
@@ -140,7 +133,7 @@ const CreateSurveyComp = () => {
       sur_Type:1, // 오정환 주입! 일단 하라고 하시넹 오키
       sur_Title: Sur_Title, // 설문 제목
       sur_Content: Sur_Content, // 설문 본문
-      sur_State: todayDate<day[0]?0:1, // 0 : 진행전, 1 : 진행중 , 2 : 마감
+      sur_State: new Date() < day[0]?0:1, // 0 : 진행전, 1 : 진행중 , 2 : 마감
       sur_StartDate: day[0].getFullYear()+"-"+ ('0'+(day[0].getMonth()+1)).slice(-2) +"-"+('0'+(day[0].getDate())).slice(-2), // Date 객체로 던지세요.     ---> comp에서 state로 관리중
       sur_EndDate: day[1].getFullYear()+"-"+ ('0'+(day[1].getMonth()+1)).slice(-2) +"-"+('0'+(day[1].getDate())).slice(-2),                               // ---> comp에서 state로 관리중
       sur_Publish: !Sur_Publish, // 공개 여부                ---> comp에서 state로 관리중 [ !false: 공개, !true: (잠금)비공개 ]
@@ -170,8 +163,8 @@ const CreateSurveyComp = () => {
           confirmButtonText: '확인'
         }).then(async(result)=>{
           if (result.isDenied) {
-            await navigator.clipboard.writeText(shareURL+res.data);
-            Swal.fire('복사 완료', '', 'success')
+            await ClipboardCopy("아님~",`http://115.22.11.110:3000/SurveySubmitPage/${res.data}`)
+            Swal.fire('URL 복사 성공','', 'success');
           }
           history.push('/MySurveyPage'); // test 기간까지 history 사용하지 않겠다.
         })
@@ -182,7 +175,6 @@ const CreateSurveyComp = () => {
   return (
       <>
         <CreateSurvey 
-          theme={theme}
           onClick={onClick}
           day={day}
           setDay={setDay}

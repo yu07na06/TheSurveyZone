@@ -18,6 +18,7 @@ import LinearMagnificationComp from './LinearMagnificationComp';
 const SurveySubmitComp = ({surveykey, UpdateKey}) => {
     const sexAge = useSelector(state=>state.submitReducer.beforeData)
     const surAns_Content = useSelector(state=>state.submitReducer.surAns_Content)
+    const [ checkboxlistState, setCheckboxlistState ] = useState(null);
     const [activeStep, setActiveStep] = React.useState(0);
     const [surveyReqForm, setSurveyReqForm] = useState(null);
     const [day, setDay] = useState([new Date(), new Date()]); // 수정일때 사용
@@ -48,6 +49,11 @@ const SurveySubmitComp = ({surveykey, UpdateKey}) => {
         }
     },[])
 
+    useEffect(()=>{
+        console.log("넣어주었다!!!!!!",surAns_Content);
+        setCheckboxlistState(surAns_Content)
+    },[surAns_Content])
+
     useEffect(() => {
         getSurveyAPI(surveykey)
            .then(res =>{ console.log("요청 결과: ",res.data); setSurveyReqForm(res.data); })
@@ -63,7 +69,7 @@ const SurveySubmitComp = ({surveykey, UpdateKey}) => {
                     case 0: // 주관식
                         return <div key={index}><SubjectiveComp ReadOnlyState={true} ReadOnlyData={value} setDelIndex={setDelIndex} number={value.surQue_Order} setCheck={setCheck} UpdateKey={UpdateKey}/></div>;
                     case 1: // 객관식
-                        return <div key={index}><MultipleChoiceComp ReadOnlyState={true} ReadOnlyData={value} setDelIndex={setDelIndex} number={value.surQue_Order} setCheck={setCheck} UpdateKey={UpdateKey}/></div>;
+                        return <div key={index}><MultipleChoiceComp ReadOnlyState={true} ReadOnlyData={value} setDelIndex={setDelIndex} number={value.surQue_Order} setCheck={setCheck} UpdateKey={UpdateKey} checkboxlistState={checkboxlistState} /></div>;
                     case 2: // 선형배율
                         return <div key={index}><LinearMagnificationComp ReadOnlyState={true} ReadOnlyData={value} setDelIndex={setDelIndex} number={value.surQue_Order} setCheck={setCheck} UpdateKey={UpdateKey}/></div>;
                     default: break;
@@ -126,7 +132,7 @@ const SurveySubmitComp = ({surveykey, UpdateKey}) => {
         setAnchorEl(null); // 메뉴 닫기
         switch(e.target.id){
             case '객관식':
-                setQuestion([...question, <div key={count.current}><MultipleChoiceComp ReadOnlyState={false} ReadOnlyData={null} setDelIndex={setDelIndex} number={count.current} setCheck={setCheck} UpdateKey={false}/></div>  ]);
+                setQuestion([...question, <div key={count.current}><MultipleChoiceComp ReadOnlyState={false} ReadOnlyData={null} setDelIndex={setDelIndex} number={count.current} setCheck={setCheck} UpdateKey={false} checkboxlistState={checkboxlistState}/></div>  ]);
                 break;
             case '주관식':
                 setQuestion([...question, <div key={count.current}><SubjectiveComp ReadOnlyState={false} ReadOnlyData={null} setDelIndex={setDelIndex} number={count.current} setCheck={setCheck} UpdateKey={false}/></div>  ]);
