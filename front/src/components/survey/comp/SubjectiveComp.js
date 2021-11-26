@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { submitAction } from '../../../modules/submitReducer';
 import Subjective from '../UI/Subjective';
 
-const SubjectiveComp = ({number, setCheck, setDelIndex, ReadOnlyState, ReadOnlyData, }) => {
+const SubjectiveComp = ({number, setCheck, setDelIndex, ReadOnlyState, ReadOnlyData, UpdateKey, }) => {
 
     const deleteQue = (e) => {
         setDelIndex(e.target.id);
@@ -12,7 +12,6 @@ const SubjectiveComp = ({number, setCheck, setDelIndex, ReadOnlyState, ReadOnlyD
     !ReadOnlyState&&setCheck({[number]:[null]});
     useEffect(()=>{
         if(ReadOnlyState)
-            console.log("주관식은 여기서 디스패치 했다.", `SurQueAnswer_${number}`);
             dispatch(submitAction(`SurQueAnswer_${number}`))
             
     },[])
@@ -23,6 +22,7 @@ const SubjectiveComp = ({number, setCheck, setDelIndex, ReadOnlyState, ReadOnlyD
                 number={number}
                 ReadOnlyState={ReadOnlyState}
                 ReadOnlyData={ReadOnlyData}
+                UpdateKey={UpdateKey}
             />
         </>
     );

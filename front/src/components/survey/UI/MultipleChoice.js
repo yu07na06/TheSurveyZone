@@ -11,19 +11,21 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
 
-const MultipleChoice = ({number, select, setSelect, addText, maxNum, setMaxNum, deleteQue, ReadOnlyState, ReadOnlyData, }) => {
+const MultipleChoice = ({number, select, setSelect, addText, maxNum, setMaxNum, deleteQue, ReadOnlyState, ReadOnlyData, UpdateKey, }) => {
     return (
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-            {!ReadOnlyState&&
-            <><Switch id={`SurQue_Essential${number}`} name={`SurQue_Essential${number}`} sx={{ left: '94%' }} defaultChecked color="secondary" />
-            <Button id={number} sx={{ left: '74%' }} onClick={(e)=>deleteQue(e)}>삭제</Button></>}
+            {ReadOnlyState&&<Typography sx={{ marginLeft: '82%' }} style={{ color:"red" }} >{ReadOnlyData.surQue_Essential&&"필수항목입니다"}</Typography>}
+            {(!ReadOnlyState||UpdateKey)&&
+                <><Switch id={`SurQue_Essential${number}`} name={`SurQue_Essential${number}`} sx={{ left: '94%' }} defaultChecked color="secondary" />
+                <Button id={number} sx={{ left: '74%' }} onClick={(e)=>deleteQue(e)}>삭제</Button></>
+            }
             <Grid container spacing={2}><br/>
                 <Grid item xs={10}>
                     <TextField
                         variant="outlined"
                         required
                         fullWidth
-                        disabled={ReadOnlyState}
+                        disabled={ReadOnlyState&&!UpdateKey}
                         name={`SurQue_Content${number}`}
                         id={`SurQue_Content${number}`}
                         label={`객관식${number}`}
@@ -33,8 +35,8 @@ const MultipleChoice = ({number, select, setSelect, addText, maxNum, setMaxNum, 
                 <Grid item xs={2}>
                     <Box>
                         <FormControl fullWidth>
-                            {ReadOnlyState&&<Typography>중복답변{ReadOnlyData.surQue_MaxAns}개</Typography>}
-                            {!ReadOnlyState&&
+                            {(ReadOnlyState&&!UpdateKey)&&<Typography>중복답변{ReadOnlyData.surQue_MaxAns}개</Typography>}
+                            {(!ReadOnlyState||UpdateKey)&&
                                 <><InputLabel id="demo-simple-select-label">중복답변개수</InputLabel>
                                 <Select
                                     required
@@ -59,7 +61,7 @@ const MultipleChoice = ({number, select, setSelect, addText, maxNum, setMaxNum, 
                         {select.map((value) => value)}
                     </Paper>
                 </Grid>
-                {!ReadOnlyState&&
+                {(!ReadOnlyState||UpdateKey)&&
                 <Grid item xs={12}>
                     <Button onClick={()=>setSelect([...select, addText(number, ReadOnlyData, null)])}>
                         <AddIcon/>

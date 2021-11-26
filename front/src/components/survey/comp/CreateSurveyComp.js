@@ -54,13 +54,13 @@ const CreateSurveyComp = () => {
     setAnchorEl(null); // 메뉴 닫기
     switch(e.target.id){
       case '객관식':
-        setQuestion([...question, <div key={count.current}><MultipleChoiceComp ReadOnlyState={false} ReadOnlyData={null} setDelIndex={setDelIndex} number={count.current} setCheck={setCheck} /></div>  ]);
+        setQuestion([...question, <div key={count.current}><MultipleChoiceComp ReadOnlyState={false} ReadOnlyData={null} setDelIndex={setDelIndex} number={count.current} setCheck={setCheck} UpdateKey={false}/></div>  ]);
         break;
       case '주관식':
-        setQuestion([...question, <div key={count.current}><SubjectiveComp ReadOnlyState={false} ReadOnlyData={null} setDelIndex={setDelIndex} number={count.current} setCheck={setCheck}/></div>  ]);
+        setQuestion([...question, <div key={count.current}><SubjectiveComp ReadOnlyState={false} ReadOnlyData={null} setDelIndex={setDelIndex} number={count.current} setCheck={setCheck} UpdateKey={false}/></div>  ]);
         break;
       case '선형배율':
-        setQuestion([...question, <div key={count.current}><LinearMagnificationComp ReadOnlyState={false} ReadOnlyData={null} setDelIndex={setDelIndex} number={count.current} setCheck={setCheck}/></div>  ]);
+        setQuestion([...question, <div key={count.current}><LinearMagnificationComp ReadOnlyState={false} ReadOnlyData={null} setDelIndex={setDelIndex} number={count.current} setCheck={setCheck} UpdateKey={false}/></div>  ]);
         break;
       default : break;
     }
@@ -85,6 +85,8 @@ const CreateSurveyComp = () => {
     }
   },[delIndex]);
 
+
+
   const onClick = (e) => { // 완료 버튼 클릭 시, node에게 보냄
     e.preventDefault(); // 화면 유지
     if(question.length==0){
@@ -100,6 +102,8 @@ const CreateSurveyComp = () => {
     for (const key in question_ans) {
       newQuestionAnsList.push(question_ans[key]);  
     }
+    console.log("question_ans", question_ans);
+    console.log("newQuestionAnsList", newQuestionAnsList);
     
     let questionList = question.map((value, index)=>{ // 질문 들어가는 배열
       let SurType = null;
@@ -151,8 +155,12 @@ const CreateSurveyComp = () => {
     let shareURL="http://localhost:3000/SurveySubmitPage/";
     console.log(obj);
     console.log(JSON.stringify(obj));
+
+
+
+    // 설문지 생성 API
     createSurveyAPI(obj)
-      .then((res)=>{ 
+      .then((res)=>{
         Swal.fire({
           icon: 'info',
           title: '설문지 생성 완료',
