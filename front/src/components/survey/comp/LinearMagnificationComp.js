@@ -18,7 +18,6 @@ const LinearMagnificationComp = ({number, setCheck, setDelIndex, ReadOnlyState, 
     }
 
     const deleteQue = (e) => {
-        console.log("!!!!!!!선형배율", e.target.id);
         setDelIndex(e.target.id);
     }
 
@@ -59,8 +58,10 @@ const LinearMagnificationComp = ({number, setCheck, setDelIndex, ReadOnlyState, 
     useEffect(()=>{
         if(ReadOnlyState){
             let newCircle = [];
-            let num =  Number(ReadOnlyData.selectList[3].surSel_Content)-Number(ReadOnlyData.selectList[1].surSel_Content);
-            for(let i=0; i<=num; i++){
+            const lowNum = Number(ReadOnlyData.selectList[1].surSel_Content);
+            const maxNum = Number(ReadOnlyData.selectList[3].surSel_Content);
+            // let num =  maxNum-lowNum;
+            for(let i=lowNum; i<=maxNum; i++){
                 newCircle.push(circle(i, number, i+20));
             }
             setMakeCircles([...newCircle])

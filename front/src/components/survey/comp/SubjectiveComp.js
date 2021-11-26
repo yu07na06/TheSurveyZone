@@ -8,6 +8,7 @@ const SubjectiveComp = ({number, setCheck, setDelIndex, ReadOnlyState, ReadOnlyD
     const deleteQue = (e) => {
         setDelIndex(e.target.id);
     }
+
     const dispatch = useDispatch();
     !ReadOnlyState&&setCheck({[number]:[null]});
     useEffect(()=>{
@@ -15,6 +16,7 @@ const SubjectiveComp = ({number, setCheck, setDelIndex, ReadOnlyState, ReadOnlyD
             dispatch(submitAction(`SurQueAnswer_${number}`))
             
     },[])
+    
     return (
         <>
             <Subjective
