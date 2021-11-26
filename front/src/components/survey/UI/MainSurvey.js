@@ -129,11 +129,11 @@ const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag,
                             surveyReqForm.questionList.map((value)=>{
                                 switch(value.surQue_QType){
                                     case 0: // 주관식
-                                        return <SubjectiveComp ReadOnlyState={true} ReadOnlyData={value} setDelIndex={null} number={value.surQue_Order} setCheck={null} UpdateKey={UpdateKey}/>
+                                        return <SubjectiveComp ReadOnlyState={ReadOnlyState} ReadOnlyData={value} setDelIndex={null} number={value.surQue_Order} setCheck={null} UpdateKey={UpdateKey}/>
                                     case 1: // 객관식
-                                        return <MultipleChoiceComp ReadOnlyState={true} ReadOnlyData={value} setDelIndex={null} number={value.surQue_Order} setCheck={null} UpdateKey={UpdateKey}/>
+                                        return <MultipleChoiceComp ReadOnlyState={ReadOnlyState} ReadOnlyData={value} setDelIndex={null} number={value.surQue_Order} setCheck={null} UpdateKey={UpdateKey}/>
                                     case 2: // 선형배율
-                                        return <LinearMagnificationComp ReadOnlyState={true} ReadOnlyData={value} setDelIndex={null} number={value.surQue_Order} setCheck={null} UpdateKey={UpdateKey}/>
+                                        return <LinearMagnificationComp ReadOnlyState={ReadOnlyState} ReadOnlyData={value} setDelIndex={null} number={value.surQue_Order} setCheck={null} UpdateKey={UpdateKey}/>
                                     default: break;
                                 }
                                 console.log("질문타입 확인", value);

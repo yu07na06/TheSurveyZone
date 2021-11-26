@@ -4,7 +4,7 @@ import { submitAction } from '../../../modules/submitReducer';
 import Subjective from '../UI/Subjective';
 
 const SubjectiveComp = ({number, setCheck, setDelIndex, ReadOnlyState, ReadOnlyData, UpdateKey, }) => {
-
+    
     const deleteQue = (e) => {
         setDelIndex(e.target.id);
     }

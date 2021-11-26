@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 import { ThemeProvider } from '@mui/material/styles';
 
 
-const SurveySubmit = ({ steps, getStepContent, theme, activeStep, lastSubmit, nextPage, wayBackHome, UpdateKey, }) => {
+const SurveySubmit = ({ steps, getStepContent, theme, activeStep, lastSubmit, nextPage, wayBackHome, UpdateKey, updateSubmit}) => {
     return (
         <>
             <ThemeProvider theme={theme}>
@@ -50,7 +50,8 @@ const SurveySubmit = ({ steps, getStepContent, theme, activeStep, lastSubmit, ne
                                     variant="contained"
                                     onClick={e=> {
                                         activeStep === 0 && nextPage(e);
-                                        activeStep === 2 && wayBackHome();
+                                        (activeStep === 1 && UpdateKey) && updateSubmit(e)
+                                        activeStep === 2 && wayBackHome()
                                     }}
                                     sx={{ mt: 3, ml: 1 }}
                                 >
