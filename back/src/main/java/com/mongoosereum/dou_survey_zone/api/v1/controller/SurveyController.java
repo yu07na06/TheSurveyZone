@@ -1,8 +1,10 @@
 package com.mongoosereum.dou_survey_zone.api.v1.controller;
 
+import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.Survey_MySQL;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.InsertAnswerReq;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SelectSurveyRes;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.InsertSurveyReq;
+import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SurveyPartCheckRes;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SurveyResultRes;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.SurveyListPageReq;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SurveyListPageRes;
@@ -42,9 +44,7 @@ public class SurveyController{
         if(surveyList.getSurveylist() != null){
             return ResponseEntity.status(HttpStatus.OK).body(surveyList);
         }
-
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(surveylistDTO);
-
     }
     @GetMapping(path="/survey/myPage")
     @ApiOperation(value = "내 설문지 리스트 출력")
@@ -85,6 +85,16 @@ public class SurveyController{
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Fail Insert survey");
         return ResponseEntity.status(HttpStatus.OK).body(surveyID);
     }
+
+    @GetMapping(path = "/survey/{_id}/Check")
+    @ApiOperation(value = "설문 참여 체크", notes="설문 조사 참여할때 중복 참여 체크")
+    public ResponseEntity partCheck(@PathVariable("_id") String _id , HttpServletRequest request){
+
+        SurveyPartCheckRes response= surveyService.checkPart(_id, request);
+
+        return ResponseEntity.ok().body(response);
+    }
+
 
     @GetMapping(path="/survey/{_id}")
     @ApiOperation(value = "설문 조회", notes="설문 조사 참여할때 설문 조사 출력")

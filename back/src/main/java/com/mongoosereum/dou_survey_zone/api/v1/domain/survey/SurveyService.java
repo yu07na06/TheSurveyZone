@@ -9,6 +9,7 @@ import com.mongoosereum.dou_survey_zone.api.v1.domain.tag.SurveyTag;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.InsertAnswerReq;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.InsertSurveyReq;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SelectSurveyRes;
+import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SurveyPartCheckRes;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SurveyResultRes;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.SurveyListPageReq;
 import com.mongoosereum.dou_survey_zone.api.v1.common.paging.PageCriteria;
@@ -156,7 +157,16 @@ public class SurveyService {
         return survey_mongo.get_id();
     }
 
+
     @Transactional(rollbackFor = NotFoundEntityException.class)
+    public SurveyPartCheckRes checkPart(String _id, HttpServletRequest request){
+        String ip = getIP(request);
+        return SurveyPartCheckRes.builder()
+                .check_State(surveyDAO.findById_MySQL(_id).getSur_State())
+                .check_IP(participationDAO.findByIP(_id, ip) < 1)
+                .build();
+    }
+
     public SelectSurveyRes findById(String _id) {
         Survey_MySQL resultMySQL = surveyDAO.findById_MySQL(_id)
                 .orElseThrow(NotFoundEntityException::new);
