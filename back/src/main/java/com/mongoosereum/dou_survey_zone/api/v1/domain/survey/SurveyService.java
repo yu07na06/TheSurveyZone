@@ -16,6 +16,7 @@ import com.mongoosereum.dou_survey_zone.api.v1.common.paging.PageCriteria;
 import com.mongoosereum.dou_survey_zone.api.v1.common.paging.PaginationInfo;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SurveyListPageRes;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.tag.Tag;
+import com.mongoosereum.dou_survey_zone.api.v1.exception.NotFoundEntityException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,7 @@ public class SurveyService {
 
     @Autowired
     private final SurveyDAO surveyDAO;
+
     @Autowired
     private final TagDAO tagDAO;
 
@@ -106,14 +108,15 @@ public class SurveyService {
         return tagDAO.findById(_id);
     }
 
+    @Transactional(rollbackFor = NullPointerException.class)
     public String insertSurvey(InsertSurveyReq insertSurveyDTO) /*throws IOException*/ {
         // MongoDB insert
-        Survey_Mongo survey_Mongo = Survey_Mongo.builder()
-                .questionList(insertSurveyDTO.getQuestionList())
-                .build();
-        String surveyID = surveyDAO.surveyInsert_Mongo(survey_Mongo);
 
-        // S3 image Upload
+        Survey_Mongo survey_mongo = surveyDAO.surveyInsert_Mongo(Survey_Mongo.builder()
+                .questionList(insertSurveyDTO.getQuestionList())
+                .build());
+
+//        S3 image Upload
 //        String imageURL = "";
 //        if(insertSurveyDTO.getImage()!= null) {
 //            try {
@@ -125,7 +128,7 @@ public class SurveyService {
 
         // MySQL insert by MongoDB.id
         Survey_MySQL survey_MySQL = Survey_MySQL.builder()
-                ._id(surveyID)
+                ._id(survey_mongo.get_id())
                 .sur_Title(insertSurveyDTO.getSur_Title())
                 .sur_Content(insertSurveyDTO.getSur_Content())
                 .sur_State(insertSurveyDTO.getSur_State().getNum())
@@ -141,21 +144,22 @@ public class SurveyService {
             surveyDAO.surveyInsert_MySQL(survey_MySQL);
             if(insertSurveyDTO.getSur_Tag() != null) {
                 SurveyTag surveyTag = SurveyTag.builder()
-                        ._id(surveyID)
+                        ._id(survey_mongo.get_id())
                         .Tag_ID(insertSurveyDTO.getSur_Tag())
                         .build();
                 tagDAO.insertTag(surveyTag);
             }
         } catch (Exception e) {
             // Insert에 실패한경우 생성된 MongoDB의 Document를 삭제해줘야함
-            surveyDAO.deleteSurvey_Mongo(surveyID);
+            surveyDAO.deleteSurvey_Mongo(survey_mongo.get_id());
             return "FAIL";
-
         }
-        return surveyID;
+        return survey_mongo.get_id();
     }
 
-    public SurveyPartCheckRes  checkPart(String _id, HttpServletRequest request){
+
+    @Transactional(rollbackFor = NotFoundEntityException.class)
+    public SurveyPartCheckRes checkPart(String _id, HttpServletRequest request){
         String ip = getIP(request);
         return SurveyPartCheckRes.builder()
                 .check_State(surveyDAO.findById_MySQL(_id).getSur_State())
@@ -163,13 +167,13 @@ public class SurveyService {
                 .build();
     }
 
-
     public SelectSurveyRes findById(String _id) {
-        System.out.println(_id);
-        Survey_MySQL resultMySQL = surveyDAO.findById_MySQL(_id);
-        System.out.println(resultMySQL);
-        Survey_Mongo resultMongo = surveyDAO.findById_Mongo(_id);
-        System.out.println(resultMongo);
+        Survey_MySQL resultMySQL = surveyDAO.findById_MySQL(_id)
+                .orElseThrow(NotFoundEntityException::new);
+
+        Survey_Mongo resultMongo = surveyDAO.findById_Mongo(_id)
+                .orElseThrow(NotFoundEntityException::new);
+
         List<Tag> tagList = tagDAO.findById(_id);
         SelectSurveyRes surveySelectDTO = new SelectSurveyRes();
         surveySelectDTO.set(resultMongo, resultMySQL, tagList);
@@ -241,7 +245,7 @@ public class SurveyService {
     }
 
     public SurveyResultRes resultSurvey(String _id) {
-        Survey_Mongo survey_mongo = surveyDAO.findById_Mongo(_id);
+        Survey_Mongo survey_mongo = surveyDAO.findById_Mongo(_id).orElseThrow(NotFoundEntityException::new);
         if(survey_mongo == null)
             return null;
         List<Question> questionList = survey_mongo.getQuestionList();
