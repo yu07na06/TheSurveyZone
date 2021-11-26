@@ -34,4 +34,8 @@ public class ParticipationDAO{
     public int insertParticipation(Participation participation){
         return sqlSession.insert("insertParticipation", participation);
     }
+
+    public Participation selectParticipation(Participation participation){
+        return sqlSession.selectOne("selectParticipation", participation);
+    }
 }

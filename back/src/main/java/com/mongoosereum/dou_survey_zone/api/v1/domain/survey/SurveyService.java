@@ -9,6 +9,7 @@ import com.mongoosereum.dou_survey_zone.api.v1.domain.tag.SurveyTag;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.InsertAnswerReq;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.InsertSurveyReq;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SelectSurveyRes;
+import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SurveyPartCheckRes;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SurveyResultRes;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.SurveyListPageReq;
 import com.mongoosereum.dou_survey_zone.api.v1.common.paging.PageCriteria;
@@ -21,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.*;
 
 @AllArgsConstructor
@@ -154,6 +154,15 @@ public class SurveyService {
         }
         return surveyID;
     }
+
+    public SurveyPartCheckRes  checkPart(String _id, HttpServletRequest request){
+        String ip = getIP(request);
+        return SurveyPartCheckRes.builder()
+                .check_State(surveyDAO.findById_MySQL(_id).getSur_State())
+                .check_IP(participationDAO.findByIP(_id, ip) < 1)
+                .build();
+    }
+
 
     public SelectSurveyRes findById(String _id) {
         System.out.println(_id);
