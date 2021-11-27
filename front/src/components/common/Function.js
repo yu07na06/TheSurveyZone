@@ -27,4 +27,22 @@ const ClipboardCopy = (flag, copyText) =>{
     // flag값이 icon이라면? icon을 반환!! 그외에는 입력된값을 클립보드에 저장!!
     return (flag==="icon"?<ContentCopyIcon onClick={()=>doCopy(copyText)}/>:doCopy(copyText));
 }
+
+export const Gongback = ({num}) => {
+
+    // const 찍어내기 = (num) =>{
+    //     for(var i=0;i<num;i++){
+    //         <br/>
+    //         console.log(num);
+    //     }
+    // }
+    return(
+        <>
+            {/* {찍어내기(num)} */}
+            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+        </>
+    )
+}
+
+
 export default ClipboardCopy
