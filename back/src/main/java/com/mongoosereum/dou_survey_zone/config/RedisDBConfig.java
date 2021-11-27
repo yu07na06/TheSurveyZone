@@ -20,6 +20,7 @@ public class RedisDBConfig {
         private final RedisProperties redisProperties;
 
         // lettuce
+        // HOST PORT로 템플릿 만드는거
         @Bean
         public RedisConnectionFactory redisConnectionFactory() {
             return new LettuceConnectionFactory(redisProperties.getHost(), redisProperties.getPort());

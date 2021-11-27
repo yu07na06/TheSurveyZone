@@ -19,6 +19,9 @@ public class SignInRes {
     @ApiModelProperty(name = "user_Name", notes = "유저 이름" , example = "홍길동")
     private String user_Name;
 
+    @ApiModelProperty(name = "login_Type", notes = "로그인 타입" , example = "UserPW / TempPW")
+    private String login_Type;
+
     @ApiModelProperty(name = "user_Token", notes = "유저 JWT 인증 토큰")
     private String user_Token;
 }

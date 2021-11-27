@@ -6,6 +6,7 @@ import com.mongoosereum.dou_survey_zone.api.v1.domain.user.User;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
@@ -44,15 +45,20 @@ public class MailService {
         System.out.println(tempPW);
         return tempPW;
     }
-    public void sendTempPW(String User_Email, String User_Name){
-        String tempPW = makeTempPW();
-        String encodedPassword = passwordEncoder.encode(tempPW);
 
-        if(userDAO.setPW(User.builder()
-                .user_Email(User_Email)
-                .user_Password(encodedPassword)
-                .build()) == 0)
-            return;
+    @Async
+    public void sendTempPW(String User_Email, String User_Name, String tempPW){
+
+        // 1. tempPW가 임시 비밀 번호 :  userservice
+        // 2. encodedPassword :  userservice
+        // 3. redis 저장할 건데 몇 분? 10분? ㅇㅋㅇㅋ
+        // 4.. pw가 원래 께 맞지않으면 redis판별하고 return w주는데 임시로 한건 따로 표시를 해서 return
+
+//       if(userDAO.setPW(User.builder()
+//                .user_Email(User_Email)
+//                .user_Password(encodedPassword)
+//                .build()) == 0)
+//            return;
 
         String subject = "[DouSurveyZone]비밀번호 재설정 안내 메일";
 
