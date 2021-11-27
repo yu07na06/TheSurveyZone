@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
@@ -13,7 +13,6 @@ import Box from '@mui/material/Box';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 import NativeSelect from '@mui/material/NativeSelect';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
@@ -22,6 +21,15 @@ import Switch from '@mui/material/Switch';
 import Fab from '@mui/material/Fab';
 
 const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag, tags, handleClick, anchorEl, open, handleClose, question, ReadOnlyState, }) => {
+    const [수정할때의데이터제목 , set수정할때의데이터제목] = useState();
+    const [수정할때의데이터본문 , set수정할때의데이터본문] = useState();
+    useEffect(()=>{
+        if(surveyReqForm!=null){
+            set수정할때의데이터제목(surveyReqForm.sur_Title)
+            set수정할때의데이터본문(surveyReqForm.sur_Content)
+        }
+    },[surveyReqForm])
+
     return (
         <>
         {surveyReqForm&&
@@ -59,21 +67,24 @@ const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag,
                                         <TextField
                                             disabled
                                             fullWidth
-                                            label={surveyReqForm.sur_StartDate}
+                                            label="시작 날짜"
+                                            value={surveyReqForm.sur_StartDate}
                                         />
                                     </Grid>
                                     <Grid item xs={4}>
                                         <TextField
                                             disabled
                                             fullWidth
-                                            label={surveyReqForm.sur_EndDate}
+                                            label="마감 날짜"
+                                            value={surveyReqForm.sur_EndDate}
                                         />
                                     </Grid>
                                     <Grid item xs={4}>
                                         <TextField
                                             disabled
                                             fullWidth
-                                            label={surveyReqForm.sur_State===0?"진행전":(surveyReqForm.sur_State===1?"진행중":"마감")}
+                                            value={surveyReqForm.sur_State===0?"진행전":(surveyReqForm.sur_State===1?"진행중":"마감")}
+                                            label="진행상태"
                                         />
                                     </Grid>
                                 </>
@@ -83,16 +94,22 @@ const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag,
                                 <TextField
                                     disabled={!UpdateKey}
                                     fullWidth
-                                    label={surveyReqForm.sur_Title}
+                                    id="Sur_Title"
+                                    name="Sur_Title"
+                                    label="제목"
+                                    value={수정할때의데이터제목}
+                                    onChange={e=>set수정할때의데이터제목(e.target.value)}
                                 />
                             </Grid>
                             <Grid item xs={10}>
                                 <TextField
                                     disabled={!UpdateKey}
                                     fullWidth
-                                    label={UpdateKey?"본문":surveyReqForm.sur_Content}
-                                    value={UpdateKey&&surveyReqForm.sur_Content}
-                                    // onChange={e=>}
+                                    id="Sur_Content"
+                                    name="Sur_Content"
+                                    label="본문"
+                                    value={수정할때의데이터본문}
+                                    onChange={e=>set수정할때의데이터본문(e.target.value)}
                                 />
                             </Grid>
 

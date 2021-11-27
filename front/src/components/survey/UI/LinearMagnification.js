@@ -7,23 +7,25 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import NativeSelect from '@mui/material/NativeSelect';
 
 const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxValue, value, setTemp, deleteQue, ReadOnlyState, ReadOnlyData, makeCircles, UpdateKey, }) => {
     const [수정할때의데이터 , set수정할때의데이터] = useState(ReadOnlyState?ReadOnlyData.surQue_Content:null);
     const [수정할때의데이터시작 , set수정할때의데이터시작] = useState(ReadOnlyState?ReadOnlyData.selectList[0].surSel_Content:null);
+    const [수정할때의데이터시작값 , set수정할때의데이터시작값] = useState(ReadOnlyState?Number(ReadOnlyData.selectList[1].surSel_Content):null);
     const [수정할때의데이터끝 , set수정할때의데이터끝] = useState(ReadOnlyState?ReadOnlyData.selectList[2].surSel_Content:null);
-    
+    const [수정할때의데이터끝값 , set수정할때의데이터끝값] = useState(ReadOnlyState?Number(ReadOnlyData.selectList[3].surSel_Content):null);
     return (
-        <>
             <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
                 <Grid container spacing={2}>
-                {ReadOnlyState&&<Typography sx={{ marginLeft: '82%' }} style={{ color:"red" }} >{ReadOnlyData.surQue_Essential&&"필수항목입니다"}</Typography>}
-                {(!ReadOnlyState||UpdateKey)&&
-                <><Switch id={`SurQue_Essential${number}`} name={`SurQue_Essential${number}`} sx={{ left: '92%' }} defaultChecked color="secondary" />
-                <Button id={number} sx={{ left: '74%' }} onClick={(e)=>deleteQue(e)}>삭제</Button></>}
-                    <br/>
+                    {ReadOnlyState&&<Typography sx={{ marginLeft: '82%' }} style={{ color:"red" }} >{ReadOnlyData.surQue_Essential&&"필수항목입니다"}</Typography>}
+                    {(!ReadOnlyState||UpdateKey)&&
+                        <><Switch id={`SurQue_Essential${number}`} name={`SurQue_Essential${number}`} sx={{ left: '92%' }} defaultChecked color="secondary" />
+                        <Button id={number} sx={{ left: '74%' }} onClick={(e)=>deleteQue(e)}>삭제</Button></>
+                    }<br/>
+
                     <Grid item xs={12}>
-                        <TextField
+                         <TextField
                             onChange={(e)=>set수정할때의데이터(e.target.value)}
                             variant="outlined"
                             required
@@ -37,7 +39,7 @@ const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxVal
                     </Grid>
 
                     <Grid item xs={2}>
-                        <TextField
+                         <TextField
                             onChange={(e)=>{set수정할때의데이터시작(e.target.value); setTemp(e.target.value);}}
                             required
                             variant="filled"
@@ -47,39 +49,62 @@ const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxVal
                             value={수정할때의데이터시작} // 객체 참조 안함
                         />
                     </Grid>
-                    
+
                     {(!ReadOnlyState||UpdateKey)&&
-                    <Grid item xs={4}>
-                        <Box>
-                            <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label">시작 값</InputLabel>
-                                    <Select
-                                        required
-                                        labelId={`start_Name${number}_${minValue}`}
-                                        id={`start_Name${number}_${minValue}`}
-                                        name={`start_Name${number}_${minValue}`}
-                                        label={`start_Name${number}_${minValue}`}
-                                        onChange={e => setMinValue(e.target.value)}
-                                        disabled={ReadOnlyState&&!UpdateKey}
-                                        value={minValue} // 객체 참조 안함
-                                        >
-                                    <MenuItem value="0">0</MenuItem>
-                                    <MenuItem value="1">1</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Box>
-                    </Grid>}
+                        <Grid item xs={4}>
+                            {UpdateKey?
+                                <Box>
+                                    <FormControl fullWidth>
+                                        <InputLabel  id="demo-simple-select-label">시작 값</InputLabel>
+                                            {value&&<NativeSelect
+                                                labelId={`start_Name${number}_${minValue}`}
+                                                id={`start_Name${number}_${minValue}`}
+                                                name={`start_Name${number}_${minValue}`}
+                                                label={`start_Name${number}_${minValue}`}
+                                                onChange={e => set수정할때의데이터시작값(e.target.value)}
+                                                disabled={ReadOnlyState&&!UpdateKey}
+                                                value={minValue} // 객체 참조 안함
+                                                defaultValue={수정할때의데이터시작값}
+                                                >
+                                            <option value={0}>0</option>
+                                            <option value={1}>1</option>
+                                            </NativeSelect>}
+                                    </FormControl>
+                                </Box>
+                            :
+                                <Box>
+                                <FormControl fullWidth>
+                                    <InputLabel id="demo-simple-select-label">시작 값</InputLabel>
+                                        <Select
+                                            required
+                                            labelId={`start_Name${number}_${minValue}`}
+                                            id={`start_Name${number}_${minValue}`}
+                                            name={`start_Name${number}_${minValue}`}
+                                            label={`start_Name${number}_${minValue}`}
+                                            onChange={e => setMinValue(e.target.value)}
+                                            disabled={ReadOnlyState&&!UpdateKey}
+                                            value={minValue} // 객체 참조 안함
+                                            >
+                                        <MenuItem value="0">0</MenuItem>
+                                        <MenuItem value="1">1</MenuItem>
+                                    </Select>
+                                </FormControl>
+                                </Box>
+                            }
+                        </Grid>
+                    }
 
                     {(ReadOnlyState&&!UpdateKey)&&
-                    <Grid container xs={8} 
-                        justifyContent="center"
-                        alignItems="center">
-                    {ReadOnlyState&&
-                        makeCircles.map(value=>value)}
-                    </Grid>}
+                        <Grid container xs={8} 
+                            justifyContent="center"
+                            alignItems="center">
+                        {ReadOnlyState&&
+                            makeCircles.map(value=>value)}
+                        </Grid>
+                    }
 
                     <Grid item xs={2}>
-                        <TextField
+                         <TextField
                             onChange={(e)=>{set수정할때의데이터끝(e.target.value); setTemp(e.target.value);}}
                             required
                             variant="filled"
@@ -89,32 +114,55 @@ const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxVal
                             value={수정할때의데이터끝} // 객체 참조 안함
                         />
                     </Grid>
+
+
                     {(!ReadOnlyState||UpdateKey)&&
-                    <Grid item xs={4}>
-                        <Box>
-                            <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label">끝 값</InputLabel>
-                                    <Select
-                                        required
-                                        labelId={`end_Name${number}_${maxValue}`}
-                                        id={`end_Name${number}_${maxValue}`}
-                                        name={`end_Name${number}_${maxValue}`}
-                                        label={`end_Name${number}_${maxValue}`}
-                                        onChange={e => setMaxValue(e.target.value)}
-                                        disabled={ReadOnlyState&&!UpdateKey}
-                                        value={maxValue} // 객체 참조 안함
-                                        >
-                                    {/* value = [1,2,3,4,5,6,7,8,9] */}
-                                    {value.map(v =>
-                                        (minValue===0)?<MenuItem value={v}>{v}</MenuItem>:<MenuItem value={v+1}>{v+1}</MenuItem>
-                                    )}
-                                </Select>
-                            </FormControl>
-                        </Box>
-                    </Grid>}
+                        <Grid item xs={4}>
+                            {UpdateKey?
+                                <Box>
+                                    <FormControl fullWidth>
+                                        <InputLabel  id="demo-simple-select-label">끝 값</InputLabel>
+                                            {value&&<NativeSelect
+                                                labelId={`end_Name${number}_${maxValue}`}
+                                                id={`end_Name${number}_${maxValue}`}
+                                                name={`end_Name${number}_${maxValue}`}
+                                                label={`end_Name${number}_${maxValue}`}
+                                                onChange={e =>set수정할때의데이터끝값(e.target.value)}
+                                                value={maxValue} // 객체 참조 안함                                                
+                                                defaultValue={수정할때의데이터끝값}
+                                                >
+                                                {value.map(v =>
+                                                    (minValue===0)?<option value={v}>{v}</option>:<option value={v+1}>{v+1}</option>
+                                                )}
+                                            </NativeSelect>}
+                                    </FormControl>
+                                </Box>
+                            :
+                                <Box>
+                                    <FormControl fullWidth>
+                                        <InputLabel id="demo-simple-select-label">끝 값</InputLabel>
+                                            <Select
+                                                required
+                                                labelId={`end_Name${number}_${maxValue}`}
+                                                id={`end_Name${number}_${maxValue}`}
+                                                name={`end_Name${number}_${maxValue}`}
+                                                label={`end_Name${number}_${maxValue}`}
+                                                onChange={e => setMaxValue(e.target.value)}
+                                                disabled={ReadOnlyState&&!UpdateKey}
+                                                value={maxValue} // 객체 참조 안함
+                                                >
+                                            {/* value = [1,2,3,4,5,6,7,8,9] */}
+                                            {value.map(v =>
+                                                (minValue===0)?<MenuItem value={v}>{v}</MenuItem>:<MenuItem value={v+1}>{v+1}</MenuItem>
+                                            )}
+                                        </Select>
+                                    </FormControl>
+                                </Box>
+                            }
+                        </Grid>
+                    }
                 </Grid>
             </Paper>
-        </>
     );
 };
 

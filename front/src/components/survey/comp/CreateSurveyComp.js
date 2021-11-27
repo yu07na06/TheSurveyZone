@@ -95,8 +95,6 @@ const CreateSurveyComp = () => {
     for (const key in question_ans) {
       newQuestionAnsList.push(question_ans[key]);  
     }
-    console.log("question_ans", question_ans);
-    console.log("newQuestionAnsList", newQuestionAnsList);
     
     let questionList = question.map((value, index)=>{ // 질문 들어가는 배열
       let SurType = null;
@@ -129,6 +127,7 @@ const CreateSurveyComp = () => {
       };
     });
 
+    console.log("좋아해?", day);
     let obj = {
       sur_Type:1, // 오정환 주입! 일단 하라고 하시넹 오키
       sur_Title: Sur_Title, // 설문 제목
@@ -163,7 +162,7 @@ const CreateSurveyComp = () => {
           confirmButtonText: '확인'
         }).then(async(result)=>{
           if (result.isDenied) {
-            await ClipboardCopy("아님~",`http://115.22.11.110:3000/SurveySubmitPage/${res.data}`)
+            await ClipboardCopy("아님~",`http://localhost:3000/SurveySubmitPage/${res.data}`)
             Swal.fire('URL 복사 성공','', 'success');
           }
           history.push('/MySurveyPage'); // test 기간까지 history 사용하지 않겠다.
