@@ -26,5 +26,5 @@ export const deleteSurvey = (sur_ID) =>
     axios.delete(`/api/v1/survey/${sur_ID}`);
 
 // 설문 수정
-export const modifySurvey = (sur_ID) =>
-    axios.put(`/api/v1/survey/${sur_ID}`);
+export const modifySurvey = (sur_ID, surveyInsertDTO) =>
+    axios.put(`/api/v1/survey/${sur_ID}`, surveyInsertDTO);

@@ -22,7 +22,6 @@ import { ThemeProvider } from '@mui/material/styles';
 import { createTheme } from '@mui/material/styles';
 
 const CreateSurvey = ({ onClick, day, setDay, onCheckChange, question, open, anchorEl, handleClick, handleClose, tag, setTag, tags }) => {
-
     return (
         <>
             <ThemeProvider theme={createTheme()}>

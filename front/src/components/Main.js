@@ -110,7 +110,7 @@ const Main = ({ data, accUserData, accAgeData, accSexData, reqMain, callPage, })
                         </Grid>
                     ))}
 
-                    <Grid item xs={12} marginLeft="40%" >
+                    <Grid item xs={12} >
                         {reqMain&&<Pagination onChange={(e)=>callPage((e.target.ariaLabel).split(' ')[3])} count={reqMain.paginationInfo.lastPage} color="primary" />}
                     </Grid>
                 </Grid>

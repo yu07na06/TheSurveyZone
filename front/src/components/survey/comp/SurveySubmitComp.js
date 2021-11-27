@@ -5,7 +5,7 @@ import BeforeSurveyComp from '../comp/BeforeSurveyComp';
 import MainSurveyComp from '../comp/MainSurveyComp';
 import { createTheme } from '@mui/material/styles';
 import { useEffect } from 'react';
-import { getSurvey as getSurveyAPI, getTags as getTagsAPI, postSurvey as postSurveyAPI } from '../../../lib/api/survey';
+import { getSurvey as getSurveyAPI, getTags as getTagsAPI, modifySurvey as modifySurveyAPI, postSurvey as postSurveyAPI } from '../../../lib/api/survey';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { beforeAction } from '../../../modules/submitReducer';
@@ -41,27 +41,34 @@ const SurveySubmitComp = ({surveykey, UpdateKey}) => {
 
     useEffect(()=>{ // 수정 시, mainSurvey 출력 및 태그 목록 불러오기
         if(UpdateKey){ 
+            submitCheck.current = true
             setActiveStep(1); // mainSurveyComp 바로 이동
-            
             getTagsAPI() // 태그 목록 불러오기
                 .then((res)=>setTags(res.data))
                 .catch(err=>console.log(err));
         }
     },[])
 
-    useEffect(()=>{
-        console.log("넣어주었다!!!!!!",surAns_Content);
+
+
+
+    useEffect(()=>{ // 이거 삭제해도 되는데, 확인 바람
         setCheckboxlistState(surAns_Content)
     },[surAns_Content])
 
-    useEffect(() => {
+
+
+
+    useEffect(() => { // 설문 조회/수정 시 데이터 들고오는거 알지?
         getSurveyAPI(surveykey)
            .then(res =>{ console.log("요청 결과: ",res.data); setSurveyReqForm(res.data); })
            .catch(err => console.log(err)); // 설문 참여한 사람이라면, 서버쪽에서 알려주어서 튕구는 걸로 함 403
    },[surveykey])
 
-   useEffect(()=>{
-       if(!UpdateKey&&surveyReqForm){
+
+
+   useEffect(()=>{ // 수정/응답시 뿌려주는 용도
+       if(surveyReqForm){ // 수정할때도 쓰고~ 응답할때도 쓰는~ 그저 뿌려주는 용도의 useEffect입니다.
            setDay([surveyReqForm.sur_StartDate, surveyReqForm.sur_EndDate]);
            count.current = surveyReqForm.questionList.length;
            let newOrderQuestion = surveyReqForm.questionList.map((value, index)=>{
@@ -79,7 +86,11 @@ const SurveySubmitComp = ({surveykey, UpdateKey}) => {
        }
    },[surveyReqForm])
 
+
+
+
     const handleClick = (event) => setAnchorEl(event.currentTarget);
+    
     const getStepContent = (step) => {
         switch (step) {
             case 0:
@@ -114,7 +125,7 @@ const SurveySubmitComp = ({surveykey, UpdateKey}) => {
     useEffect(()=>{
         setQuestion_Ans({...question_ans, ...check}); // 객관식, 주관식, 선형 배율의 보기들을 합치는 곳
     },[check]);
-    
+
     useEffect(()=>{
         // 객,주,선 삭제
         const newQuestionList = question.filter((value)=> value.key!==delIndex );
@@ -208,9 +219,74 @@ const SurveySubmitComp = ({surveykey, UpdateKey}) => {
             const answerList = tempArray.map((v)=>{
                 return {'surAns_Content':v}
             })
-            postSurveyAPI(surveykey,{"age":sexAge.age, "gender":sexAge.sex, "answerList":answerList})
-                .then(res=>console.log("제출 성공..?",res))
-                .catch(res=>console.log("제출 실패..?",res))
+
+            if(UpdateKey){ // 수정 버튼 클릭 ----------------------------------------------------------------------------
+                const data = new FormData(e.currentTarget);
+                const Sur_Title = data.get('Sur_Title'); // 설문 제목
+                const Sur_Content = data.get('Sur_Content'); // 설문 본문
+
+                let newQuestionAnsList = [];
+                for (const key in question_ans) {
+                newQuestionAnsList.push(question_ans[key]);  
+                }
+                console.log("question_ans", question_ans);
+                console.log("newQuestionAnsList", newQuestionAnsList);
+                
+                let questionList = question.map((value, index)=>{ // 질문 들어가는 배열
+                let SurType = null;
+                switch(value.props.children.type.name){
+                    case 'SubjectiveComp':
+                        SurType=0; // 주관식
+                        break;
+                    case 'MultipleChoiceComp':
+                        SurType=1; // 객관식
+                        break;
+                    case 'LinearMagnificationComp':
+                        SurType=2; // 선형배율
+                        break;
+                    default: break;
+                }
+
+                return {
+                    surQue_Content: data.get(`SurQue_Content${value.key}`), // 질문 내용
+                    surQue_QType: SurType, // 질문 타입 주관식(0), 객관식(1), 선형배율(2)
+                    surQue_Essential: data.get(`SurQue_Essential${value.key}`)==='on'?true:false, // true:필수, false:옵션
+                    surQue_MaxAns: data.get(`surQue_MaxAns${value.key}`), // 최대 선택갯수, 이건 아마 객관식에만 들어갈예정
+                    surQue_Order: index, // 질문의 순서
+                    answerList : [],
+                    selectList: newQuestionAnsList[index].map((v, idx)=>{ // 객관식만 처리한 상태이므로, 주관식과 선형배율 error(수정 부탁)
+                    return {
+                        surSel_Content: v!='null'?data.get(v):'', // 보기 내용 --> 주관식의 경우, ''빈값으로 보냄
+                        surSel_Order: v!='null'?idx:'' // 보기 순서 --> 주관식의 경우, ''빈값으로 보냄
+                    };
+                    })
+                };
+                });
+
+                let obj = {
+                sur_Type:1, // 오정환 주입! 일단 하라고 하시넹 오키
+                sur_Title: Sur_Title, // 설문 제목
+                sur_Content: Sur_Content, // 설문 본문
+                sur_State: new Date() < day[0]?0:1, // 0 : 진행전, 1 : 진행중 , 2 : 마감
+                sur_StartDate: typeof day[0] == 'string' ? day[0] : day[0].getFullYear()+"-"+ ('0'+(day[0].getMonth()+1)).slice(-2) +"-"+('0'+(day[0].getDate())).slice(-2), // Date 객체로 던지세요.     ---> comp에서 state로 관리중
+                sur_EndDate: typeof day[1] === 'string' ? day[1] : day[1].getFullYear()+"-"+ ('0'+(day[1].getMonth()+1)).slice(-2) +"-"+('0'+(day[1].getDate())).slice(-2),                               // ---> comp에서 state로 관리중
+                sur_Publish: true, // 공개 여부                ---> comp에서 state로 관리중 [ !false: 공개, !true: (잠금)비공개 ]
+                sur_Image: "image", // 이미지 추후에 현재는 제외
+                // user_Email: "dbsk7885@daum.net",  // 작성자 ID
+                sur_Tag: data.get(`sur_Tag`), 
+                questionList,
+                }
+
+                console.log("수정 데이터", obj);
+
+                modifySurveyAPI(surveykey, obj)
+                    .then(res=>console.log("수정 성공..?", res))
+                    .catch(err=>console.log("수정 실패..?", err));
+            }else{ // 질문 응답 버튼 클릭 시 ---------------------------------------------------------------------------------------------------------------------------
+                postSurveyAPI(surveykey,{"age":sexAge.age, "gender":sexAge.sex, "answerList":answerList})
+                    .then(res => console.log("제출 성공..?",res))
+                    .catch(err => console.log("제출 실패..000?",err));
+            }
             
             submitCheck.current = false;
         }
@@ -222,6 +298,11 @@ const SurveySubmitComp = ({surveykey, UpdateKey}) => {
     const wayBackHome = () =>{
         Swal.fire('Way Back Home ~');
         history.push('/');
+    }
+
+    const wayBackMySurvey = () => {
+        Swal.fire('내 설문지로 이동');
+        history.push('/MySurveyPage');
     }
     
     return (
@@ -236,6 +317,7 @@ const SurveySubmitComp = ({surveykey, UpdateKey}) => {
                 nextPage={nextPage}
                 wayBackHome={wayBackHome}
                 UpdateKey={UpdateKey}
+                wayBackMySurvey={wayBackMySurvey}
             />   
         </>
     );
