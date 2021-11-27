@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Paper from '@mui/material/Paper';
 import { Button, Grid, TextField, Typography } from '@mui/material';
 import Switch from '@mui/material/Switch';
@@ -9,6 +9,10 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 
 const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxValue, value, setTemp, deleteQue, ReadOnlyState, ReadOnlyData, makeCircles, UpdateKey, }) => {
+    const [수정할때의데이터 , set수정할때의데이터] = useState(ReadOnlyState?ReadOnlyData.surQue_Content:null);
+    const [수정할때의데이터시작 , set수정할때의데이터시작] = useState(ReadOnlyState?ReadOnlyData.selectList[0].surSel_Content:null);
+    const [수정할때의데이터끝 , set수정할때의데이터끝] = useState(ReadOnlyState?ReadOnlyData.selectList[2].surSel_Content:null);
+    
     return (
         <>
             <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
@@ -20,6 +24,7 @@ const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxVal
                     <br/>
                     <Grid item xs={12}>
                         <TextField
+                            onChange={(e)=>set수정할때의데이터(e.target.value)}
                             variant="outlined"
                             required
                             fullWidth
@@ -27,19 +32,19 @@ const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxVal
                             name={`SurQue_Content${number}`}
                             id={`SurQue_Content${number}`}
                             label={`선형배율${number}`}
-                            value={ReadOnlyState?ReadOnlyData.surQue_Content:null} // 객체 참조 안함
+                            value={수정할때의데이터} // 객체 참조 안함
                         />
                     </Grid>
 
                     <Grid item xs={2}>
                         <TextField
+                            onChange={(e)=>{set수정할때의데이터시작(e.target.value); setTemp(e.target.value);}}
                             required
                             variant="filled"
                             name={`start_Step${number}`}
                             label="시작"
-                            onChange={e=>setTemp(e.target.value)}
                             disabled={ReadOnlyState&&!UpdateKey}
-                            value={ReadOnlyState?ReadOnlyData.selectList[0].surSel_Content:null} // 객체 참조 안함
+                            value={수정할때의데이터시작} // 객체 참조 안함
                         />
                     </Grid>
                     
@@ -75,13 +80,13 @@ const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxVal
 
                     <Grid item xs={2}>
                         <TextField
+                            onChange={(e)=>{set수정할때의데이터끝(e.target.value); setTemp(e.target.value);}}
                             required
                             variant="filled"
                             name={`end_Step${number}`}
                             label="끝"
-                            onChange={e=>setTemp(e.target.value)}
                             disabled={ReadOnlyState&&!UpdateKey}
-                            value={ReadOnlyState?ReadOnlyData.selectList[2].surSel_Content:null} // 객체 참조 안함
+                            value={수정할때의데이터끝} // 객체 참조 안함
                         />
                     </Grid>
                     {(!ReadOnlyState||UpdateKey)&&

@@ -16,7 +16,6 @@ import SubjectiveComp from './SubjectiveComp';
 import LinearMagnificationComp from './LinearMagnificationComp';
 
 const SurveySubmitComp = ({surveykey, UpdateKey}) => {
-    console.log("1................", surveykey, UpdateKey); // UpdateKey=true, 수정 상태임 지금
     const sexAge = useSelector(state=>state.submitReducer.beforeData)
     const surAns_Content = useSelector(state=>state.submitReducer.surAns_Content)
     const [ checkboxlistState, setCheckboxlistState ] = useState(null);

@@ -11,6 +11,7 @@ const SubjectiveComp = ({number, setCheck, setDelIndex, ReadOnlyState, ReadOnlyD
 
     const dispatch = useDispatch();
     !ReadOnlyState&&setCheck({[number]:[null]});
+    
     useEffect(()=>{
         if(ReadOnlyState)
             dispatch(submitAction(`SurQueAnswer_${number}`))

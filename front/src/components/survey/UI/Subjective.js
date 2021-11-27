@@ -42,7 +42,7 @@ const Subjective = ({number, deleteQue, ReadOnlyState, ReadOnlyData, UpdateKey, 
                             name={`SurQueAnswer_${number}`}
                             id={`SurQueAnswer_${number}`}
                             variant="outlined"
-                            required
+                            required={ReadOnlyData.surQue_Essential}
                             fullWidth
                             disabled={UpdateKey}
                         />

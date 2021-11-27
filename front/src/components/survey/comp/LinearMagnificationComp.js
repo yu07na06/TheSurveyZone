@@ -35,7 +35,7 @@ const LinearMagnificationComp = ({number, setCheck, setDelIndex, ReadOnlyState, 
                 style={{marginLeft:"0", marginRight:"0"}}
                 value="top"
                 control={<Radio
-                    required
+                    required={ReadOnlyData.surQue_Essential}
                     onChange={(e)=>setChangeCircle(e.target.value)}
                     value={`radio_${number}_${id}`}
                     name={`radio_${number}`}
