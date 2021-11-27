@@ -6,23 +6,20 @@ import { useDispatch } from 'react-redux';
 import { submitAction } from '../../../modules/submitReducer';
 
 
-const LinearMagnificationComp = ({number, setCheck, setDelIndex, ReadOnlyState, ReadOnlyData, UpdateKey, }) => {
-    const [minValue, setMinValue] = useState(0);
+const LinearMagnificationComp = ({ ReadOnlyState, ReadOnlyData, setDelIndex,  number, setCheck, UpdateKey, }) => {
+    const [minValue, setMinValue] = useState(null);
     const [maxValue, setMaxValue] = useState(null);
     const [temp, setTemp] = useState('');
     const [makeCircles, setMakeCircles] = useState([]);
-
+    
     let value = [1,2,3,4,5,6,7,8,9];
-    const valuetext = (value) => {
-        return `${value}`;
-    }
 
     const deleteQue = (e) => {
         setDelIndex(e.target.id);
     }
 
     useEffect(()=>{
-        !ReadOnlyState&&setCheck({[number]:[ `start_Step${number}`, `start_Name${number}_${minValue}`, `end_Step${number}`, `end_Name${number}_${maxValue}`]});
+        (!ReadOnlyState||UpdateKey)&&setCheck({[number]:[ `start_Step${number}`, `start_Name${number}_${minValue}`, `end_Step${number}`, `end_Name${number}_${maxValue}`]});
     },[minValue, maxValue, temp])
 
     const [ changeCircle, setChangeCircle ] = useState(null);
@@ -35,7 +32,7 @@ const LinearMagnificationComp = ({number, setCheck, setDelIndex, ReadOnlyState, 
                 style={{marginLeft:"0", marginRight:"0"}}
                 value="top"
                 control={<Radio
-                    required
+                    required={ReadOnlyData.surQue_Essential}
                     onChange={(e)=>setChangeCircle(e.target.value)}
                     value={`radio_${number}_${id}`}
                     name={`radio_${number}`}
@@ -78,24 +75,20 @@ const LinearMagnificationComp = ({number, setCheck, setDelIndex, ReadOnlyState, 
     },[])
     
     return (
-        <>
-            <LinearMagnification 
-                number={number}
-                minValue={minValue}
-                setMinValue={setMinValue}
-                maxValue={maxValue}
-                setMaxValue={setMaxValue}
-                value={value}
-                valuetext={valuetext}
-                setTemp={setTemp}
-                deleteQue={deleteQue}
-                ReadOnlyState={ReadOnlyState}
-                ReadOnlyData={ReadOnlyData}
-                makeCircles={makeCircles}
-                UpdateKey={UpdateKey}
-
-            />
-        </>
+        <LinearMagnification 
+            number={number}
+            minValue={minValue}
+            setMinValue={setMinValue}
+            maxValue={maxValue}
+            setMaxValue={setMaxValue}
+            value={value}
+            setTemp={setTemp}
+            deleteQue={deleteQue}
+            ReadOnlyState={ReadOnlyState}
+            ReadOnlyData={ReadOnlyData}
+            makeCircles={makeCircles}
+            UpdateKey={UpdateKey}
+        />
     );
 };
 
