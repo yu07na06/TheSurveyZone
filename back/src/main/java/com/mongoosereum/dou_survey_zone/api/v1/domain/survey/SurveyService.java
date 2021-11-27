@@ -162,7 +162,7 @@ public class SurveyService {
     public SurveyPartCheckRes checkPart(String _id, HttpServletRequest request){
         String ip = getIP(request);
         return SurveyPartCheckRes.builder()
-                .check_State(surveyDAO.findById_MySQL(_id).getSur_State())
+                .check_State(surveyDAO.findById_MySQL(_id).get().getSur_State())
                 .check_IP(participationDAO.findByIP(_id, ip) < 1)
                 .build();
     }
