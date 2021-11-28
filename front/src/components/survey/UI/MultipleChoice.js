@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Paper from '@mui/material/Paper';
 import { Grid, TextField } from '@mui/material';
 import NativeSelect from '@mui/material/NativeSelect';
-import Switch from '@mui/material/Switch';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import MenuItem from '@mui/material/MenuItem';
@@ -11,15 +10,23 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
+import ReqSwitch from '../../common/UI/ReqSwitch';
 
-const MultipleChoice = ({number, select, setSelect, AddText, maxNum, setMaxNum, deleteQue, ReadOnlyState, ReadOnlyData, UpdateKey, count, temp, Add, }) => {
+
+
+
+
+const MultipleChoice = ({number, select, setSelect, AddText, maxNum, setMaxNum, deleteQue, ReadOnlyState, ReadOnlyData, UpdateKey, count, temp, Add }) => {
     const [수정할때의데이터 , set수정할때의데이터] = useState(ReadOnlyState?ReadOnlyData.surQue_Content:null);
+
     return (
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
             {ReadOnlyState&&<Typography sx={{ marginLeft: '82%' }} style={{ color:"red" }} >{ReadOnlyData.surQue_Essential&&"필수항목입니다"}</Typography>}
             {(!ReadOnlyState||UpdateKey)&&
-                <><Switch id={`SurQue_Essential${number}`} name={`SurQue_Essential${number}`} sx={{ left: '94%' }} defaultChecked color="secondary" />
-                <Button id={number} sx={{ left: '74%' }} onClick={(e)=>deleteQue(e)}>삭제</Button></>
+                <>
+                    <ReqSwitch number={number} flag={"qeustion"}/>
+                    <Button id={number} sx={{ left: '75%' }} onClick={(e)=>deleteQue(e)}>삭제</Button>
+                </>
             }
             <Grid container spacing={2}><br/>
                 <Grid item xs={10}>
