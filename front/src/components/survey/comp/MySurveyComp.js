@@ -8,6 +8,7 @@ import {deleteSurvey as deleteSurveyAPI, getMySurveyList as getMySurveyListAPI }
 const MySurveyComp = () => {
   const [cookies] = useCookies(['user_Token']);
   const [mySurList, setMysurList] = useState();
+  const [currentPage, setCurrentPage] = useState(1);
   const history = useHistory();
   
   useEffect(()=>{
@@ -18,10 +19,14 @@ const MySurveyComp = () => {
       })
       history.push('/LoginPage');
     }
-    getMySurveyListAPI(1)
+    getMySurveyListAPI(currentPage)
       .then(res => setMysurList(res.data))
       .catch(err => console.log(err))
   },[])
+
+  useEffect(()=>{
+    mySurList&&setCurrentPage(mySurList.paginationInfo.criteria.page_Num);
+  },[mySurList]);
 
   const callPaging = (pageNum) => {
     getMySurveyListAPI(pageNum)
@@ -30,6 +35,7 @@ const MySurveyComp = () => {
   }
 
   const ApiClick = (e, id) => {
+    console.log(e.target);
     switch(e.target.id){
       case "mod" : console.log("수정 on");
         history.push(`/UpdatePage/${id}`);
@@ -37,6 +43,13 @@ const MySurveyComp = () => {
       case "del" :  console.log("삭제 on");
           deleteSurveyAPI(id)
             .then(res=>console.log("삭제 성공..?",res))
+            .then(()=>{
+                        setMysurList(null);
+                        getMySurveyListAPI(currentPage)
+                          .then(res => { console.log("리스트 재요청"); setMysurList(res.data); })
+                          .catch(err => console.log(err))
+                      }
+                  )
             .catch(res=>console.log("삭제 실패..?",res))
         break;
       case "result" :  console.log("결과 on");
@@ -51,6 +64,7 @@ const MySurveyComp = () => {
             ApiClick={ApiClick}
             mySurList={mySurList}
             callPaging={callPaging}
+            currentPage={currentPage}
           />
       </>
   );
