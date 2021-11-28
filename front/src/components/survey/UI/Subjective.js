@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Paper from '@mui/material/Paper';
 import { Button, Grid, TextField, Typography } from '@mui/material';
 import Switch from '@mui/material/Switch';
+import ReqSwitch from '../../common/UI/ReqSwitch';
 
 const Subjective = ({number, deleteQue, ReadOnlyState, ReadOnlyData, UpdateKey, }) => {
     const [수정할때의데이터 , set수정할때의데이터] = useState(ReadOnlyState?ReadOnlyData.surQue_Content:null);
@@ -11,7 +12,7 @@ const Subjective = ({number, deleteQue, ReadOnlyState, ReadOnlyData, UpdateKey, 
                 {ReadOnlyState&&<Typography sx={{ marginLeft: '82%' }} style={{ color:"red" }} >{ReadOnlyData.surQue_Essential&&"필수항목입니다"}</Typography>}
                 {(!ReadOnlyState||UpdateKey)&& // 읽기 상태일때는 switch를 보여주지 않지만, 업데이트 상태일떄는 보여준다.
                     <>
-                        <Switch id={`SurQue_Essential${number}`} name={`SurQue_Essential${number}`} sx={{ left: '92%' }} defaultChecked color="secondary" />
+                        <ReqSwitch number={number} flag={"qeustion"}/>
                         <Button id={number} sx={{ left: '74%' }} onClick={(e)=>deleteQue(e)}>삭제</Button>
                     </>
                 }
