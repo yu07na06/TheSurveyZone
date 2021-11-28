@@ -8,6 +8,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import NativeSelect from '@mui/material/NativeSelect';
+import ReqSwitch from '../../common/UI/ReqSwitch';
 
 const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxValue, value, setTemp, deleteQue, ReadOnlyState, ReadOnlyData, makeCircles, UpdateKey, }) => {
     const [수정할때의데이터 , set수정할때의데이터] = useState(ReadOnlyState?ReadOnlyData.surQue_Content:null);
@@ -20,10 +21,11 @@ const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxVal
                 <Grid container spacing={2}>
                     {ReadOnlyState&&<Typography sx={{ marginLeft: '82%' }} style={{ color:"red" }} >{ReadOnlyData.surQue_Essential&&"필수항목입니다"}</Typography>}
                     {(!ReadOnlyState||UpdateKey)&&
-                        <><Switch id={`SurQue_Essential${number}`} name={`SurQue_Essential${number}`} sx={{ left: '92%' }} defaultChecked color="secondary" />
-                        <Button id={number} sx={{ left: '74%' }} onClick={(e)=>deleteQue(e)}>삭제</Button></>
-                    }<br/>
-
+                        <>
+                            <ReqSwitch number={number} flag={"qeustion"}/>
+                            <Button id={number} sx={{ left: '75%' }} onClick={(e)=>deleteQue(e)}>삭제</Button>
+                        </>
+                    }
                     <Grid item xs={12}>
                          <TextField
                             onChange={(e)=>set수정할때의데이터(e.target.value)}
