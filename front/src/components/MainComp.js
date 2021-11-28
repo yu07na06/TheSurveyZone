@@ -9,6 +9,7 @@ const MainComp = () => {
     const data = useSelector(state=>state.chartReducer.responseAcc);
     const err = useSelector(state=>state.chartReducer.err);
     const [ reqMain, setReqMain ] = useState(null);
+    const TAGENUM = {};
     const dispatch = useDispatch();
 
     const accUserData = [ 
@@ -30,6 +31,10 @@ const MainComp = () => {
         ['50대', data.part_Age.age_50],
         ['60대', data.part_Age.age_60],
     ];
+
+    for (const value of data.sur_Tag) { // 태그 enum으로 사용하기
+        TAGENUM[value.tag_ID] = value.tag_Name;
+    }
 
     const accSexData = [
         ['성별', '성별수'],
@@ -59,6 +64,7 @@ const MainComp = () => {
             .catch( error => console.log("메인 리스트 요청 오류", error) )
     },[dispatch]);
 
+    // 페이징 요청
     const callPage = (page_Num) => {
         mainListPageAPI(page_Num)
             .then(res => setReqMain(res.data))
@@ -74,6 +80,7 @@ const MainComp = () => {
                 accSexData={accSexData}
                 reqMain={reqMain}
                 callPage={callPage}
+                TAGENUM={TAGENUM}
              />      
         </>
     );
