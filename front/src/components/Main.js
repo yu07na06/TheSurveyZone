@@ -13,7 +13,7 @@ import Chart from 'react-google-charts';
 import Pagination from '@mui/material/Pagination';
 import { Link } from 'react-router-dom';
 
-const Main = ({ data, accUserData, accAgeData, accSexData, reqMain, callPage, }) => {
+const Main = ({ data, accUserData, accAgeData, accSexData, reqMain, callPage, TAGENUM, }) => {
     return (
         <>
             {/* 태그 출력 */}
@@ -104,6 +104,9 @@ const Main = ({ data, accUserData, accAgeData, accSexData, reqMain, callPage, })
                                     <Link to={`/SurveySubmitPage/${value._id}`} style={{textDecoration:'none', color:'blue', fontWeight:'bold' }}><Button>참여</Button></Link>
                                         <Typography style={{ color:'red' }}>
                                             {value.sur_State === 1? "진행중" : "마감"}
+                                        </Typography>
+                                        <Typography>
+                                            #{TAGENUM[value.tag_ID]}
                                         </Typography>
                                 </CardActions>
                             </Card>
