@@ -101,7 +101,7 @@ const Main = ({ data, accUserData, accAgeData, accSexData, reqMain, callPage, TA
 
                                 <CardActions>
                                     {/* 설문 참여 링크 이동 */}
-                                    <Link to={`/SurveySubmitPage/${value._id}`} style={{textDecoration:'none', color:'blue', fontWeight:'bold' }}><Button>참여</Button></Link>
+                                    {value.sur_State === 1?<Link to={`/SurveySubmitPage/${value._id}`} style={{textDecoration:'none', color:'blue', fontWeight:'bold' }}><Button>참여</Button></Link>:null}
                                         <Typography style={{ color:'red' }}>
                                             {value.sur_State === 1? "진행중" : "마감"}
                                         </Typography>
