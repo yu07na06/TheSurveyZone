@@ -11,3 +11,12 @@ export const register = ({user_Email, user_Password, user_Name, user_Tel}) =>
 // 로그인
 export const login = ({user_Email, user_Password}) =>
     axios.post('/api/v1/user/signin', {user_Email, user_Password});
+
+// ID찾기
+export const searchID = (searchIDReq) =>
+    axios.post('/api/v1/user/searchID',searchIDReq);
+
+// PW찾기
+export const searchPW = (searchPWReq ) =>
+    axios.post('/api/v1/user/searchPW',searchPWReq );
+    

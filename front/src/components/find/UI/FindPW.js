@@ -31,24 +31,24 @@ const FindPW = ({theme, handleSubmit}) => {
                     <Typography component="h1" variant="h5">
                         비밀번호 찾기
                     </Typography>
-                        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                        <Box component="form" onSubmit={e=>handleSubmit(e)} noValidate sx={{ mt: 1 }}>
                             <TextField
                             margin="normal"
                             required
                             fullWidth
-                            name="User_Email"
+                            name="user_Email"
                             label="이메일"
                             type="email"
-                            id="User_Email"
+                            id="user_Email"
                             autoComplete="off"
                             />
                             <TextField
                             margin="normal"
                             required
                             fullWidth
-                            id="User_Name"
+                            id="user_Name"
                             label="성함"
-                            name="User_Name"
+                            name="user_Name"
                             autoComplete="off"
                             autoFocus
                             />
@@ -56,10 +56,10 @@ const FindPW = ({theme, handleSubmit}) => {
                             margin="normal"
                             required
                             fullWidth
-                            name="User_Tel"
+                            name="user_Tel"
                             label="전화번호"
                             type="tel"
-                            id="User_Tel"
+                            id="user_Tel"
                             autoComplete="off"
                             />
                             <Button
