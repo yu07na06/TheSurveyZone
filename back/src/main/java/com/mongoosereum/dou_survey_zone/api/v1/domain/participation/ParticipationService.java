@@ -1,12 +1,16 @@
 package com.mongoosereum.dou_survey_zone.api.v1.domain.participation;
 
 import com.mongoosereum.dou_survey_zone.api.v1.dao.ParticipationDAO;
+import com.mongoosereum.dou_survey_zone.api.v1.dao.SurveyDAO;
 import com.mongoosereum.dou_survey_zone.api.v1.dao.TagDAO;
+import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.Survey_MySQL;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.tag.Tag;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.response.common.MainInfoRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import java.net.http.HttpRequest;
 import java.util.List;
 
 @Service
@@ -16,11 +20,15 @@ public class ParticipationService {
     private ParticipationDAO participationDAO;
 
     @Autowired
+    private SurveyDAO surveyDAO;
+
+    @Autowired
     private TagDAO tagDAO;
 
     public MainInfoRes resultMainInfo(){
         return MainInfoRes.builder()
                 .part_Total(participationDAO.ACCTotal())
+                .survey_Total(surveyDAO.surveyTotal())
                 .part_Age(participationDAO.ACCAge())
                 .part_Gender(participationDAO.ACCGender())
                 .sur_Tag(tagDAO.findById(""))
@@ -38,4 +46,5 @@ public class ParticipationService {
     public List<Tag> partTag(){
         return tagDAO.findById("");
     }
+
 }

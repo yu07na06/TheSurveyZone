@@ -1,10 +1,12 @@
 package com.mongoosereum.dou_survey_zone.api.v1.common.paging;
 
+import io.swagger.annotations.ApiModel;
 import lombok.*;
 
 @Data
 @Builder
 @AllArgsConstructor
+@ApiModel("Page 검색 관련 정보")
 public class PageCriteria {
         /** 생성자 **/
         public PageCriteria() {

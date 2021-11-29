@@ -30,4 +30,10 @@ public class UserDAO  {
         return sqlSession.selectList("findByEmail", user_MySQL);
     }
 
+    public int findByEmail_Name_Tel(User user){
+        return sqlSession.selectOne("findByEmail_Name_Tel",user);
+    }
+    public int setPW(User user){
+        return sqlSession.update("setPW",user);
+    }
 }

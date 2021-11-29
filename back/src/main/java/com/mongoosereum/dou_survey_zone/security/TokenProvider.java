@@ -1,12 +1,16 @@
-package com.mongoosereum.dou_survey_zone.v1.api.Security;
+package com.mongoosereum.dou_survey_zone.security;
 
 import com.mongoosereum.dou_survey_zone.api.v1.domain.user.User;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.WebUtils;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
@@ -19,7 +23,7 @@ public class TokenProvider {
     public String create(User user_mySQL){
         // 기한은 지금부터 1일
         Date expiryDate = Date.from(
-                Instant.now().plus(1, ChronoUnit.DAYS));
+                Instant.now().plus(1, ChronoUnit.HOURS));
 
         /*
         { //header
@@ -58,5 +62,25 @@ public class TokenProvider {
 
         return claims.getSubject();
     }
+
+    // Request의 Header에서 token 값을 가져옵니다. "X-AUTH-TOKEN" : "TOKEN값'
+    public String resolveToken(HttpServletRequest request) {
+        Cookie name = WebUtils.getCookie(request, "Authorization");
+        if(name != null) {
+            return name.getValue();
+        }else {
+            return null;
+        }
+//        return request.getHeader("X-AUTH-TOKEN");
+    }
+
+    // 토큰의 유효성 + 만료일자 확인
+    public Jws<Claims> confirmToken(String jwtToken) {
+
+        Jws<Claims> claims = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(jwtToken);
+        return claims;
+
+    }
+
 }
 

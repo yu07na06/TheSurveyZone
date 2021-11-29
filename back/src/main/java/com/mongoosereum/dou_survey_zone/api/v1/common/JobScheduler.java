@@ -26,7 +26,7 @@ public class JobScheduler {
     @Autowired
     private EmailBatchConfig emailBatchConfig;
 
-    @Scheduled(initialDelay = 3000, fixedDelay = 50000000)
+    @Scheduled(cron = "0 0 0 * * ?") // 초 분 시 일 월 요일 년(생략가능)
     public void runMailJob(){
         System.out.println("스케쥴 실행");
         Map<String, JobParameter> confMap = new HashMap<>();

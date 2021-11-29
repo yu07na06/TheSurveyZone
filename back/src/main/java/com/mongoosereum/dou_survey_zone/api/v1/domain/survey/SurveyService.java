@@ -1,20 +1,28 @@
 package com.mongoosereum.dou_survey_zone.api.v1.domain.survey;
 
+import com.mongoosereum.dou_survey_zone.api.v1.common.S3Uploader;
+import com.mongoosereum.dou_survey_zone.api.v1.dao.ParticipationDAO;
 import com.mongoosereum.dou_survey_zone.api.v1.dao.SurveyDAO;
 import com.mongoosereum.dou_survey_zone.api.v1.dao.TagDAO;
-import com.mongoosereum.dou_survey_zone.api.v1.dto.request.InsertSurveyReq;
+import com.mongoosereum.dou_survey_zone.api.v1.domain.participation.Participation;
+import com.mongoosereum.dou_survey_zone.api.v1.domain.tag.SurveyTag;
+import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.InsertAnswerReq;
+import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.InsertSurveyReq;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SelectSurveyRes;
+import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SurveyPartCheckRes;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SurveyResultRes;
-import com.mongoosereum.dou_survey_zone.api.v1.dto.request.SurveyListPageReq;
+import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.SurveyListPageReq;
 import com.mongoosereum.dou_survey_zone.api.v1.common.paging.PageCriteria;
 import com.mongoosereum.dou_survey_zone.api.v1.common.paging.PaginationInfo;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SurveyListPageRes;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.tag.Tag;
+import com.mongoosereum.dou_survey_zone.api.v1.exception.NotFoundEntityException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @AllArgsConstructor
@@ -23,8 +31,15 @@ public class SurveyService {
 
     @Autowired
     private final SurveyDAO surveyDAO;
+
     @Autowired
     private final TagDAO tagDAO;
+
+    @Autowired
+    private final ParticipationDAO participationDAO;
+
+    @Autowired
+    private final S3Uploader s3Uploader;
 
     public SurveyListPageRes selectSurveyList(SurveyListPageReq surveylistDTO) {
 
@@ -93,44 +108,72 @@ public class SurveyService {
         return tagDAO.findById(_id);
     }
 
-    public String insertSurvey(InsertSurveyReq insertSurveyDTO) {
+    @Transactional(rollbackFor = NullPointerException.class)
+    public String insertSurvey(InsertSurveyReq insertSurveyDTO) /*throws IOException*/ {
         // MongoDB insert
-        Survey_Mongo survey_Mongo = Survey_Mongo.builder()
+
+        Survey_Mongo survey_mongo = surveyDAO.surveyInsert_Mongo(Survey_Mongo.builder()
                 .questionList(insertSurveyDTO.getQuestionList())
-                .build();
-        String surveyID = surveyDAO.surveyInsert_Mongo(survey_Mongo);
+                .build());
+
+//        S3 image Upload
+//        String imageURL = "";
+//        if(insertSurveyDTO.getImage()!= null) {
+//            try {
+//                imageURL = s3Uploader.upload(insertSurveyDTO.getImage(), "static");
+//            } catch (Exception e) {
+//                return "IMAGE_UPLOAD_FAIL";
+//            }
+//        }
 
         // MySQL insert by MongoDB.id
         Survey_MySQL survey_MySQL = Survey_MySQL.builder()
-                ._id(surveyID)
+                ._id(survey_mongo.get_id())
                 .sur_Title(insertSurveyDTO.getSur_Title())
                 .sur_Content(insertSurveyDTO.getSur_Content())
                 .sur_State(insertSurveyDTO.getSur_State().getNum())
                 .sur_StartDate(insertSurveyDTO.getSur_StartDate())
                 .sur_EndDate(insertSurveyDTO.getSur_EndDate())
                 .sur_Publish(insertSurveyDTO.getSur_Publish())
-                .sur_Image(insertSurveyDTO.getSur_Image())
+                .sur_Image(insertSurveyDTO.getSur_Image() /*imageURL*/ )
                 .user_Email(insertSurveyDTO.getUser_Email())
                 .sur_Type(insertSurveyDTO.getSur_Type().getNum())
                 .build();
+
         try {
             surveyDAO.surveyInsert_MySQL(survey_MySQL);
-//            SurveyTag surveyTag = SurveyTag.builder()
-//                                    ._id(surveyID)
-//                                    .Tag_ID(insertSurveyDTO.getSur_Tag())
-//                                    .build();
-//            tagDAO.insertTag(surveyTag);
+            if(insertSurveyDTO.getSur_Tag() != null) {
+                SurveyTag surveyTag = SurveyTag.builder()
+                        ._id(survey_mongo.get_id())
+                        .Tag_ID(insertSurveyDTO.getSur_Tag())
+                        .build();
+                tagDAO.insertTag(surveyTag);
+            }
         } catch (Exception e) {
             // Insert에 실패한경우 생성된 MongoDB의 Document를 삭제해줘야함
-            surveyDAO.deleteSurvey_Mongo(surveyID);
+            surveyDAO.deleteSurvey_Mongo(survey_mongo.get_id());
             return "FAIL";
         }
-        return surveyID;
+        return survey_mongo.get_id();
+    }
+
+
+    @Transactional(rollbackFor = NotFoundEntityException.class)
+    public SurveyPartCheckRes checkPart(String _id, HttpServletRequest request){
+        String ip = getIP(request);
+        return SurveyPartCheckRes.builder()
+                .check_State(surveyDAO.findById_MySQL(_id).get().getSur_State())
+                .check_IP(participationDAO.findByIP(_id, ip) < 1)
+                .build();
     }
 
     public SelectSurveyRes findById(String _id) {
-        Survey_MySQL resultMySQL = surveyDAO.findById_MySQL(_id);
-        Survey_Mongo resultMongo = surveyDAO.findById_Mongo(_id);
+        Survey_MySQL resultMySQL = surveyDAO.findById_MySQL(_id)
+                .orElseThrow(NotFoundEntityException::new);
+
+        Survey_Mongo resultMongo = surveyDAO.findById_Mongo(_id)
+                .orElseThrow(NotFoundEntityException::new);
+
         List<Tag> tagList = tagDAO.findById(_id);
         SelectSurveyRes surveySelectDTO = new SelectSurveyRes();
         surveySelectDTO.set(resultMongo, resultMySQL, tagList);
@@ -138,22 +181,35 @@ public class SurveyService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public Integer insertAnswer(String _id, List<Answer> answerList) {
-        return surveyDAO.insertAnswer(_id, answerList);
+    public Integer insertAnswer(String _id, InsertAnswerReq insertAnswerReq, HttpServletRequest request) {
+        String ip = getIP(request);
+        int findByIP = participationDAO.findByIP(_id,ip);
+        if(findByIP == 1) // 이미 응답한 IP.
+            return -1;
+        int result = participationDAO.insertParticipation(
+                Participation.builder()
+                        ._id(_id)
+                        .Part_Age(insertAnswerReq.getAge())
+                        .Part_Gender(insertAnswerReq.getGender().charAt(0))
+                        .Part_IP(ip)
+                        .build()
+        );
+        return result == 0 ? 0 : surveyDAO.insertAnswer(_id, insertAnswerReq.getAnswerList());
     }
 
-    @Transactional(rollbackFor = Exception.class)
     public Long deleteSurvey(String _id, String User_Email) {
-        String owner = surveyDAO.selectOwner(_id);
-        if (!owner.equals(User_Email)) {
-            return 0L;
-        }
         surveyDAO.deleteSurvey_MySQL(_id);
         return surveyDAO.deleteSurvey_Mongo(_id);
     }
 
+    public Boolean checkOwner(String _id, String User_Email){
+        String owner = surveyDAO.selectOwner(_id);
+        if(owner == null)
+            return null;
+        return owner.equals(User_Email)? true: false;
+    }
     @Transactional(rollbackFor = Exception.class)
-    public Boolean updateSurvey(String _id, InsertSurveyReq surveyInsertDTO) throws Exception {
+    public Integer updateSurvey(String _id, InsertSurveyReq surveyInsertDTO) throws Exception {
         // MongoDB insert
         Survey_Mongo survey_Mongo = Survey_Mongo.builder()
                 ._id(_id)
@@ -183,13 +239,13 @@ public class SurveyService {
 //        if(surveyDAO.surveyUpdate_MySQL(survey_MySQL)!=0 && surveyDAO.surveyUpdate_Mongo(survey_Mongo)!= 0L)
 //            return true;
         if (resultMySQL >= 1)
-            return true;
+            return 1;
         else
-            throw new Exception("IMPOSSIBLE TO UPDATE");
+            return 0;
     }
 
     public SurveyResultRes resultSurvey(String _id) {
-        Survey_Mongo survey_mongo = surveyDAO.findById_Mongo(_id);
+        Survey_Mongo survey_mongo = surveyDAO.findById_Mongo(_id).orElseThrow(NotFoundEntityException::new);
         if(survey_mongo == null)
             return null;
         List<Question> questionList = survey_mongo.getQuestionList();
@@ -259,5 +315,21 @@ public class SurveyService {
             surveyResultDTO.getAnswerList().add(ansList); // 이번 질문에 대한 모든 ansList를 추가
         }
         return surveyResultDTO;
+    }
+    public String getIP(HttpServletRequest request){
+        String ip = null;
+        String[] header = new String []{
+                "X-Forwarded-For",
+                "Proxy-Client-IP",
+                "WL-Proxy-Client-IP",
+                "HTTP_CLIENT_IP",
+                "HTTP_X_FORWARDED_FOR"
+        };
+        for(int i=0;i<header.length;i++){
+            ip = request.getHeader(header[i]);
+            if(ip != null)
+                return ip;
+        }
+        return request.getRemoteAddr();
     }
 }
