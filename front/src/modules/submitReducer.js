@@ -7,7 +7,7 @@ export const submitAction = createAction(SUBMIT);
 export const beforeAction = createAction(BEFORESUBMIT);
 
 const initialState = {
-    surAns_Content:[],
+    surAns_Content:{},
     beforeData:{
         age:20,
         sex:"M"
@@ -20,7 +20,7 @@ const submitReducer = handleActions({
     [SUBMIT]:(state, { payload: data}) =>{
         return ({
         ...state,
-        surAns_Content: state.surAns_Content.concat(data)
+        surAns_Content: {...state.surAns_Content, ...data}
     })},
 
     // main설문 응답 전 연령대 및 성별데이터를 받는 용도

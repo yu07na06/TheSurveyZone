@@ -7,8 +7,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { submitAction } from '../../../modules/submitReducer';
 
 const MultipleChoiceComp = ({ number, setCheck, setDelIndex, ReadOnlyState, ReadOnlyData, UpdateKey, checkboxlistState, realReadState }) => {
-    console.log("ReadOnlyState",ReadOnlyState );
-    console.log("UpdateKey : ",UpdateKey );
     const surAns_Content = useSelector(state=>state.submitReducer.surAns_Content)
     const [select, setSelect] = useState([]); // 보기 덩어리가 들어가있음
     const [deleteIndex, setDeleteIndex] = useState(null);
@@ -18,7 +16,6 @@ const MultipleChoiceComp = ({ number, setCheck, setDelIndex, ReadOnlyState, Read
     const count = useRef(-1);
     const ccc = useRef(0);
     const dispatch = useDispatch();
-
 
     useEffect(()=>{
         if(ReadOnlyState){
@@ -83,20 +80,33 @@ const MultipleChoiceComp = ({ number, setCheck, setDelIndex, ReadOnlyState, Read
     }
 
     useEffect(()=>{
-        surAns_Content&&surAns_Content.map(value => {
-            let splitValue = value.split('_');
-            if(splitValue[1]==unRequired && splitValue[0]=="SurQueCheck"){
-                let checkbox1 = document.querySelector(`input[name=${value}]`);
-                console.log("checkbox 출력", checkbox1);
-                checkbox1.required=false;
+        if(surAns_Content){
+            for (const key in surAns_Content) {
+                    let splitValue = surAns_Content[key].split('_');
+                    // unRequired 는 required를 해제할 객관식 보기의 number이다.
+                    if(splitValue[1]==unRequired && splitValue[0]=="SurQueCheck"){
+                        for(let i=0; i<=Number(splitValue[2]); i++){
+                            let checkbox1 = document.querySelector(`input[name=SurQueCheck_${unRequired}_${i}]`);
+                            console.log("checkbox 출력", checkbox1);
+                            checkbox1.required=false;
+                        }
+                    }
             }
-        })
+            // surAns_Content.map(value => {
+            //     let splitValue = value.split('_');
+            //     if(splitValue[1]==unRequired && splitValue[0]=="SurQueCheck"){
+            //         let checkbox1 = document.querySelector(`input[name=${value}]`);
+            //         console.log("checkbox 출력", checkbox1);
+            //         checkbox1.required=false;
+            //     }
+            // })
+        }
     },[unRequired])
 
     const AddText = ({number, ReadOnlyData, addMaxNum, checkBoxEssential, count}) => {
         const [수정할때의데이터 , set수정할때의데이터] = useState(ReadOnlyState?ReadOnlyData.surSel_Content:null);
         !UpdateKey && setTemp([...temp, `SurQue_Ans_${number}_${count}`]); // 질문에 대한 보기 이름 덩어리 합치는 중
-        dispatch(submitAction(`SurQueCheck_${number}_${count}`))
+        dispatch(submitAction({[number]:`SurQueCheck_${number}_${count}`}))
         return(
             <Grid key={`SurQue_Ans_${number}_${count}`} container spacing={2}>
                 <Grid item xs={11} key={`SurQue_Ans_${number}_${count}`}>

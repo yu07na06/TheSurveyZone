@@ -20,7 +20,7 @@ const SubjectiveComp = ({ReadOnlyState, ReadOnlyData, setDelIndex, number, setCh
     
     useEffect(()=>{
         if(ReadOnlyState)
-            dispatch(submitAction(`SurQueAnswer_${number}`))
+            dispatch(submitAction({[number]:`SurQueAnswer_${number}`}))
     },[])
     
     return (

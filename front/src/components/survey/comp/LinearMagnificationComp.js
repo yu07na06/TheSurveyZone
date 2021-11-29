@@ -71,8 +71,7 @@ const LinearMagnificationComp = ({ ReadOnlyState, ReadOnlyData, setDelIndex,  nu
     const dispatch = useDispatch();
     useEffect(()=>{
         if(ReadOnlyState)
-            dispatch(submitAction(`radio_${number}`))
-            
+            dispatch(submitAction({[number]:`radio_${number}`}))
     },[])
     
     return (
