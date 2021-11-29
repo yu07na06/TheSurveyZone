@@ -1,6 +1,5 @@
 package com.mongoosereum.dou_survey_zone.api.v1.controller;
 
-import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.Survey_MySQL;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.InsertAnswerReq;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SelectSurveyRes;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.InsertSurveyReq;
@@ -9,6 +8,7 @@ import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SurveyResultR
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.SurveyListPageReq;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SurveyListPageRes;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.SurveyService;
+import com.mongoosereum.dou_survey_zone.api.v1.exception._404_NotFound.NotFoundEntityException;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,11 +16,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.ws.Response;
+import javax.validation.Valid;
 
 @Api(value="설문조사 API",tags = {"Survey API"})
 @RestController
@@ -72,6 +70,7 @@ public class SurveyController{
     public ResponseEntity insertSurvey(
             @RequestBody
             @ApiParam(value="설문 생성 DTO", required = true)
+            @Valid
                     InsertSurveyReq insertSurveyReq,
             @AuthenticationPrincipal
                     String userEmail
@@ -100,8 +99,7 @@ public class SurveyController{
     @ApiOperation(value = "설문 조회", notes="설문 조사 참여할때 설문 조사 출력")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공", response = SelectSurveyRes.class),
-            @ApiResponse(code = 404, message = "해당 설문 없음", response = HttpClientErrorException.NotFound.class),
-            @ApiResponse(code = 500, message = "서버 오류", response = HttpServerErrorException.InternalServerError.class)
+            @ApiResponse(code = 404, message = "해당 설문 없음", response = NotFoundEntityException.class),
     })
     public ResponseEntity findById(
             @PathVariable("_id")
@@ -117,7 +115,6 @@ public class SurveyController{
     @ApiResponses({
             @ApiResponse(code = 201, message = "제출 완료"),
             @ApiResponse(code = 404, message = "해당 설문 없음"),
-            @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity insertAnswer(
             @PathVariable("_id")
