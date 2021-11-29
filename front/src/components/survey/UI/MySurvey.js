@@ -49,7 +49,7 @@ const MySurvey = ({ mySurList, callPaging, ApiClick, currentPage, }) => {
 
                                         <Button id="del" onClick={(e)=>ApiClick(e,value._id)}>삭제</Button>
                                         
-                                        {ClipboardCopy("icon",`http://localhost:3000/SurveySubmitPage/${value._id}`)}
+                                        {ClipboardCopy("icon",`http://115.22.11.110:3000/SurveySubmitPage/${value._id}`)}
                                     </ListItem>
                                 )}
                             </List>
