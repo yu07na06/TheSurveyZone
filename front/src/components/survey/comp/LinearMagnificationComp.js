@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { submitAction } from '../../../modules/submitReducer';
 
 
-const LinearMagnificationComp = ({ ReadOnlyState, ReadOnlyData, setDelIndex,  number, setCheck, UpdateKey, }) => {
+const LinearMagnificationComp = ({ ReadOnlyState, ReadOnlyData, setDelIndex,  number, setCheck, UpdateKey, realReadState,  }) => {
     const [minValue, setMinValue] = useState(null);
     const [maxValue, setMaxValue] = useState(null);
     const [temp, setTemp] = useState('');
@@ -32,6 +32,7 @@ const LinearMagnificationComp = ({ ReadOnlyState, ReadOnlyData, setDelIndex,  nu
                 style={{marginLeft:"0", marginRight:"0"}}
                 value="top"
                 control={<Radio
+                    disabled={realReadState}
                     required={ReadOnlyData.surQue_Essential}
                     onChange={(e)=>setChangeCircle(e.target.value)}
                     value={`radio_${number}_${id}`}
@@ -76,6 +77,7 @@ const LinearMagnificationComp = ({ ReadOnlyState, ReadOnlyData, setDelIndex,  nu
     
     return (
         <LinearMagnification 
+            realReadState={realReadState}
             number={number}
             minValue={minValue}
             setMinValue={setMinValue}

@@ -6,7 +6,9 @@ import Checkbox from '@mui/material/Checkbox';
 import { useDispatch, useSelector } from 'react-redux';
 import { submitAction } from '../../../modules/submitReducer';
 
-const MultipleChoiceComp = ({ number, setCheck, setDelIndex, ReadOnlyState, ReadOnlyData, UpdateKey, checkboxlistState }) => {
+const MultipleChoiceComp = ({ number, setCheck, setDelIndex, ReadOnlyState, ReadOnlyData, UpdateKey, checkboxlistState, realReadState }) => {
+    console.log("ReadOnlyState",ReadOnlyState );
+    console.log("UpdateKey : ",UpdateKey );
     const surAns_Content = useSelector(state=>state.submitReducer.surAns_Content)
     const [select, setSelect] = useState([]); // 보기 덩어리가 들어가있음
     const [deleteIndex, setDeleteIndex] = useState(null);
@@ -100,6 +102,7 @@ const MultipleChoiceComp = ({ number, setCheck, setDelIndex, ReadOnlyState, Read
                 <Grid item xs={11} key={`SurQue_Ans_${number}_${count}`}>
                     {(ReadOnlyState&&!UpdateKey)&&
                         <Checkbox
+                            disabled={realReadState}
                             required={checkBoxEssential}
                             value={ReadOnlyState?ReadOnlyData.surSel_Content:null}
                             name={`SurQueCheck_${number}_${count}`}

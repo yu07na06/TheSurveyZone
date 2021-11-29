@@ -7,7 +7,7 @@ const SurveySubmitPage = (props) => {
     return (
         <>
             <Header />
-                <SurveySubmitComp surveykey={props.match.params.surveykey} UpdataKey={false}/>
+                <SurveySubmitComp surveykey={props.match.params.surveykey} UpdateKey={false} realReadState={false}/>
             <Footer />
         </>
     );
