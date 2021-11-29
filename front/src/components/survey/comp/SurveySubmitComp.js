@@ -49,15 +49,9 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
         }
     },[])
 
-
-
-
     useEffect(()=>{ // 이거 삭제해도 되는데, 확인 바람
         setCheckboxlistState(surAns_Content)
     },[surAns_Content])
-
-
-
 
     useEffect(() => { // 설문 조회/수정 시 데이터 들고오는거 알지?
         if(!UpdateKey&&ReadOnlyState){
@@ -78,7 +72,7 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
            let newOrderQuestion = surveyReqForm.questionList.map((value, index)=>{
                 switch(value.surQue_QType){
                     case 0: // 주관식
-                        return <div key={index}><SubjectiveComp ReadOnlyState={true} ReadOnlyData={value} setDelIndex={setDelIndex} number={value.surQue_Order} setCheck={setCheck} UpdateKey={UpdateKey} realReadState={realReadState}/></div>;
+                        return <div key={index}><SubjectiveComp ReadOnlyState={true} ReadOnlyData={value} setDelIndex={setDelIndex} number={value.surQue_Order} setCheck={setCheck} UpdateKey={UpdateKey} realReadState={realReadState}/></div>;    
                     case 1: // 객관식
                         return <div key={index}><MultipleChoiceComp ReadOnlyState={true} ReadOnlyData={value} setDelIndex={setDelIndex} number={value.surQue_Order} setCheck={setCheck} UpdateKey={UpdateKey} checkboxlistState={checkboxlistState} realReadState={realReadState} /></div>;
                     case 2: // 선형배율
@@ -162,8 +156,6 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
 
     const lastSubmit = (e) => {
         e.preventDefault();
-        console.log('submit 눌렀다');
-        
         if (submitCheck.current === false){
             submitCheck.current = true
         }else{
@@ -174,12 +166,11 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
             let OrderNumber = 0;
             let tempString = "";
             
-
-            console.log("잘~ 가고있는가??", surAns_Content);
-            surAns_Content.map((value, index) =>{
-                let splitValue=value.split('_');
-                temp = data.get(value);
-
+            for (const key in surAns_Content) {
+                let splitValue=surAns_Content[key].split('_');
+                temp = data.get(surAns_Content[key]);
+                console.log('temp!!!', temp);
+                
                 switch(splitValue[0]){
                     case 'SurQueAnswer': // 주관식
                         if(tempString!="" || splitValue[1] != OrderNumber){
@@ -192,16 +183,18 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
                         break;
 
                     case 'SurQueCheck': // 객관식
-                        if(temp != null){
-                            if(splitValue[1] != OrderNumber){
-                                tempArray.push(tempString);
-                                tempString="";
-                                OrderNumber++;
+                        for(let i=0; i<=Number(splitValue[2]); i++){
+                            temp = data.get(`SurQueCheck_${splitValue[1]}_${i}`);
+                            if(temp != null){
+                                if(splitValue[1] != OrderNumber){
+                                    tempArray.push(tempString);
+                                    tempString="";
+                                    OrderNumber++;
+                                }
+                                tempString += temp + 'Θ';   
                             }
-                            tempString += temp + 'Θ';   
                         }
                         break;
-
                     case 'radio': // 선형배율
                         if(tempString!="" || splitValue[1] != OrderNumber){
                             tempArray.push(tempString);    
@@ -219,8 +212,55 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
                         break;
                     default: break;
                 }
-            })
-            if(tempString!="")
+
+            }
+            // surAns_Content.map((value, index) =>{
+            //     let splitValue=value.split('_');
+            //     temp = data.get(value);
+            //     console.log('temp!!!', temp);
+                
+
+            //     switch(splitValue[0]){
+            //         case 'SurQueAnswer': // 주관식
+            //             if(tempString!="" || splitValue[1] != OrderNumber){
+            //                 tempArray.push(tempString);
+            //                 tempString = "";
+            //                 OrderNumber++;
+            //             }
+            //             tempArray.push(temp);
+            //             OrderNumber++;
+            //             break;
+
+            //         case 'SurQueCheck': // 객관식
+            //             if(temp != null){
+            //                 if(splitValue[1] != OrderNumber){
+            //                     tempArray.push(tempString);
+            //                     tempString="";
+            //                     OrderNumber++;
+            //                 }
+            //                 tempString += temp + 'Θ';   
+            //             }
+            //             break;
+
+            //         case 'radio': // 선형배율
+            //             if(tempString!="" || splitValue[1] != OrderNumber){
+            //                 tempArray.push(tempString);    
+            //                 tempString = "";
+            //                 OrderNumber++;
+            //             }
+            //             if(temp == null){
+            //                 tempArray.push('');
+            //             }
+            //             else{
+            //                 let value2 = temp.split('_');
+            //                 tempArray.push(value2[2]);
+            //                 OrderNumber++;
+            //             }
+            //             break;
+            //         default: break;
+            //     }
+            // })
+            if(tempString!='')
                 tempArray.push(tempString);
 
             const answerList = tempArray.map((v)=>{
@@ -293,7 +333,7 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
                 wayBackMySurvey();
             }else{ // 질문 응답 버튼 클릭 시 ---------------------------------------------------------------------------------------------------------------------------
                 console.log('제출 했니?');
-                postSurveyAPI(surveykey,{"age":sexAge.age, "gender":sexAge.sex, "answerList":answerList})
+                postSurveyAPI(surveykey,{"age":sexAge.age, "gender":sexAge.sex, "answerList":[...answerList]})
                     .then(res => console.log("제출 성공..?",res))
                     .catch(err => console.log("제출 실패..000?",err));
             }
