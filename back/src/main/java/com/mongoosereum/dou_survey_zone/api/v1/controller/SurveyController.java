@@ -9,16 +9,19 @@ import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.SurveyListPage
 import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SurveyListPageRes;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.SurveyService;
 import com.mongoosereum.dou_survey_zone.api.v1.exception._404_NotFound.NotFoundEntityException;
+import com.mongoosereum.dou_survey_zone.api.v1.exceptionHandler.dto.ExceptionModel;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 
 @Api(value="설문조사 API",tags = {"Survey API"})
 @RestController
@@ -32,37 +35,22 @@ public class SurveyController{
     @GetMapping(path="/main/list")
     @ApiOperation(value = "설문지 리스트 출력",notes="메인 페이지용, 페이징 작업중")
     public ResponseEntity selectSurveyList(
-            @RequestBody
-            @ApiParam(value="페이징 처리 정보 DTO", required = true)
+            @ApiParam(value="페이징 처리 정보 DTO")
             SurveyListPageReq surveylistDTO
     ){
-
-        // test print keyword and tag
-        System.out.println(surveylistDTO.getSearch_Key());
-        System.out.println(surveylistDTO.getSearch_Tag());
-
-        SurveyListPageRes surveyList = surveyService.selectSurveyList(surveylistDTO);
-
-        if(surveyList.getSurveylist() != null){
-            return ResponseEntity.status(HttpStatus.OK).body(surveyList);
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(surveylistDTO);
+            return ResponseEntity.status(HttpStatus.OK).body(surveyService.selectSurveyList(surveylistDTO));
     }
     @GetMapping(path="/survey/myPage")
     @ApiOperation(value = "내 설문지 리스트 출력")
     public ResponseEntity selectMySurveyList(
-            @RequestBody
-            @ApiParam(value="페이징 처리 정보 DTO",required = true)
+            @ApiParam(value="페이징 처리 정보 DTO")
                     SurveyListPageReq surveyListPageReq,
             @AuthenticationPrincipal
+            @Valid
+            @NotBlank
                     String userEmail
     ){
-        if(userEmail==null)
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("권한 없음");
-
-        SurveyListPageRes surveyList = surveyService.selectMySurveyList(userEmail, surveyListPageReq);
-
-        return ResponseEntity.ok().body(surveyList);
+        return ResponseEntity.ok().body(surveyService.selectMySurveyList(userEmail, surveyListPageReq));
     }
     @GetMapping(path="/survey/tags")
     @ApiOperation(value="현재 존재하는 태그 리스트 출력", notes = "설문 생성시 존재하는 태그 리스트 출력")
@@ -209,11 +197,12 @@ public class SurveyController{
     public ResponseEntity surveyResult(
             @PathVariable("_id")
             @ApiParam(value="설문조사 PK (영어+숫자 24글자)",required = true, example = "619b39da46f35902f0cc7757")
-                    String _id,
-            @AuthenticationPrincipal String userEmail
+                    String _id
+//            @AuthenticationPrincipal
+//                    String userEmail
     ) {
-        if(!surveyService.checkOwner(_id,userEmail))
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("권한 없음");
+//        if(!surveyService.checkOwner(_id,userEmail))
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("권한 없음");
 
         SurveyResultRes surveyResultDTO = surveyService.resultSurvey(_id);
         if(surveyResultDTO == null)
