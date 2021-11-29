@@ -15,7 +15,7 @@ import MultipleChoiceComp from './MultipleChoiceComp';
 import SubjectiveComp from './SubjectiveComp';
 import LinearMagnificationComp from './LinearMagnificationComp';
 
-const SurveySubmitComp = ({surveykey, UpdateKey}) => {
+const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) => {
     const sexAge = useSelector(state=>state.submitReducer.beforeData)
     const surAns_Content = useSelector(state=>state.submitReducer.surAns_Content)
     const [ checkboxlistState, setCheckboxlistState ] = useState(null);
@@ -60,9 +60,13 @@ const SurveySubmitComp = ({surveykey, UpdateKey}) => {
 
 
     useEffect(() => { // 설문 조회/수정 시 데이터 들고오는거 알지?
+        if(!UpdateKey&&ReadOnlyState){
+            setActiveStep(1); // mainSurveyComp 바로 이동
+        }
         getSurveyAPI(surveykey)
            .then(res =>{ console.log("요청 결과: ",res.data); setSurveyReqForm(res.data); })
            .catch(err => console.log(err)); // 설문 참여한 사람이라면, 서버쪽에서 알려주어서 튕구는 걸로 함 403
+           
    },[surveykey])
 
 
@@ -74,11 +78,11 @@ const SurveySubmitComp = ({surveykey, UpdateKey}) => {
            let newOrderQuestion = surveyReqForm.questionList.map((value, index)=>{
                 switch(value.surQue_QType){
                     case 0: // 주관식
-                        return <div key={index}><SubjectiveComp ReadOnlyState={true} ReadOnlyData={value} setDelIndex={setDelIndex} number={value.surQue_Order} setCheck={setCheck} UpdateKey={UpdateKey}/></div>;
+                        return <div key={index}><SubjectiveComp ReadOnlyState={true} ReadOnlyData={value} setDelIndex={setDelIndex} number={value.surQue_Order} setCheck={setCheck} UpdateKey={UpdateKey} realReadState={realReadState}/></div>;
                     case 1: // 객관식
-                        return <div key={index}><MultipleChoiceComp ReadOnlyState={true} ReadOnlyData={value} setDelIndex={setDelIndex} number={value.surQue_Order} setCheck={setCheck} UpdateKey={UpdateKey} checkboxlistState={checkboxlistState} /></div>;
+                        return <div key={index}><MultipleChoiceComp ReadOnlyState={true} ReadOnlyData={value} setDelIndex={setDelIndex} number={value.surQue_Order} setCheck={setCheck} UpdateKey={UpdateKey} checkboxlistState={checkboxlistState} realReadState={realReadState} /></div>;
                     case 2: // 선형배율
-                        return <div key={index}><LinearMagnificationComp ReadOnlyState={true} ReadOnlyData={value} setDelIndex={setDelIndex} number={value.surQue_Order} setCheck={setCheck} UpdateKey={UpdateKey}/></div>;
+                        return <div key={index}><LinearMagnificationComp ReadOnlyState={true} ReadOnlyData={value} setDelIndex={setDelIndex} number={value.surQue_Order} setCheck={setCheck} UpdateKey={UpdateKey} realReadState={realReadState} /></div>;
                     default: break;
                 }
             });
@@ -308,7 +312,6 @@ const SurveySubmitComp = ({surveykey, UpdateKey}) => {
         Swal.fire('내 설문지로 이동');
         history.push('/MySurveyPage');
     }
-    
     return (
         <>
             <SurveySubmit 
@@ -321,6 +324,7 @@ const SurveySubmitComp = ({surveykey, UpdateKey}) => {
                 nextPage={nextPage}
                 wayBackHome={wayBackHome}
                 UpdateKey={UpdateKey}
+                ReadOnlyState={ReadOnlyState}
             />   
         </>
     );

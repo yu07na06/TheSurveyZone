@@ -4,7 +4,7 @@ import { Button, Grid, TextField, Typography } from '@mui/material';
 import Switch from '@mui/material/Switch';
 import ReqSwitch from '../../common/UI/ReqSwitch';
 
-const Subjective = ({number, deleteQue, ReadOnlyState, ReadOnlyData, UpdateKey, }) => {
+const Subjective = ({number, deleteQue, ReadOnlyState, ReadOnlyData, UpdateKey, realReadState}) => {
     const [수정할때의데이터 , set수정할때의데이터] = useState(ReadOnlyState?ReadOnlyData.surQue_Content:null);
     return (
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
@@ -44,12 +44,13 @@ const Subjective = ({number, deleteQue, ReadOnlyState, ReadOnlyData, UpdateKey, 
                 {(ReadOnlyState&&!UpdateKey)&& // 응답상태에서만 보여주려고!
                     <Grid item xs={12}>
                         <TextField
+
                             name={`SurQueAnswer_${number}`}
                             id={`SurQueAnswer_${number}`}
                             variant="outlined"
                             required={ReadOnlyData.surQue_Essential}
                             fullWidth
-                            disabled={UpdateKey}
+                            disabled={realReadState}
                         />
                     </Grid>
                 }

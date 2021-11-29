@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 import { ThemeProvider } from '@mui/material/styles';
 
 
-const SurveySubmit = ({ steps, getStepContent, theme, activeStep, lastSubmit, nextPage, wayBackHome, UpdateKey, }) => {
+const SurveySubmit = ({ steps, getStepContent, theme, activeStep, lastSubmit, nextPage, wayBackHome, UpdateKey, ReadOnlyState}) => {
     return (
         <>
             <ThemeProvider theme={theme}>
@@ -30,17 +30,23 @@ const SurveySubmit = ({ steps, getStepContent, theme, activeStep, lastSubmit, ne
                     </AppBar>
                     <Container component="main" maxWidth="md" sx={{ mb: 4 }}>
                         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-                        <Typography component="h1" variant="h4" align="center">
-                            Survey
-                        </Typography>
-                        {!UpdateKey&&
-                        <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
-                            {steps.map((label) => (
-                                <Step key={label}>
-                                    <StepLabel>{label}</StepLabel>
-                                </Step>
-                            ))}
-                        </Stepper>}
+                        {/*(찐보기 상태를 요구할때) ReadOnlyPage에서 내려왔을때, ReadOnlyState=true, UpdateKey=false 일떄? steps를 보여주지않는다! */}
+                        {(!ReadOnlyState&&!UpdateKey)&&
+                            <>
+                                <Typography component="h1" variant="h4" align="center">
+                                    Survey
+                                </Typography>
+                                <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
+                                {steps.map((label) => (
+                                    <Step key={label}>
+                                        <StepLabel>{label}</StepLabel>
+                                    </Step>
+                                ))}
+                                </Stepper>
+                            </>
+                        }
+                        
+                        
                         <React.Fragment>
                             {getStepContent(activeStep)}
                             
