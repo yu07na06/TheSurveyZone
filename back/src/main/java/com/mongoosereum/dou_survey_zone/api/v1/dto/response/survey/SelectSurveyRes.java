@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.ToString;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -47,7 +48,7 @@ public class SelectSurveyRes {
     private Integer sur_Type;
 
     @ApiModelProperty(name = "questionList", notes = "질문 리스트")
-    private List<Question> questionList;
+    private List<QuestionDTO> questionList;
 
     @ApiModelProperty(name = "tagList", notes = "설문 태그 리스트, v1 : 1개 태그만 전달됨")
     private List<Tag> tagList;
@@ -63,7 +64,18 @@ public class SelectSurveyRes {
         this.user_Email = survey_mySQL.getUser_Email();
         this.sur_Publish = survey_mySQL.getSur_Publish();
         this.sur_Type = survey_mySQL.getSur_Type();
-        this.questionList = survey_mongo.getQuestionList();
+        this.questionList = new ArrayList<QuestionDTO>();
+        for(int i=0;i<survey_mongo.getQuestionList().size();i++) {
+            Question question = survey_mongo.getQuestionList().get(i);
+            this.questionList.add(
+                    QuestionDTO.builder()
+                    .SurQue_QType(question.getSurQue_QType())
+                    .SurQue_Content(question.getSurQue_Content())
+                    .SurQue_Essential(question.getSurQue_Essential())
+                    .SurQue_MaxAns(question.getSurQue_MaxAns())
+                    .SurQue_Order(question.getSurQue_Order())
+                    .build());
+        }
         this.tagList = tagList;
     }
 }
