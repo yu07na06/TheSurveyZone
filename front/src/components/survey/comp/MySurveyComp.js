@@ -52,7 +52,8 @@ const MySurveyComp = () => {
                   )
             .catch(res=>console.log("삭제 실패..?",res))
         break;
-      case "result" :  console.log("결과 on");
+      case "result" :  console.log("결과 on")
+                      history.push(`/ResultPage/${id}`)
         break;
       default: break;
     }

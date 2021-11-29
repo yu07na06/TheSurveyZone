@@ -174,6 +174,8 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
             let OrderNumber = 0;
             let tempString = "";
             
+
+            console.log("잘~ 가고있는가??", surAns_Content);
             surAns_Content.map((value, index) =>{
                 let splitValue=value.split('_');
                 temp = data.get(value);
@@ -211,7 +213,6 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
                         }
                         else{
                             let value2 = temp.split('_');
-                            console.log(value2);
                             tempArray.push(value2[2]);
                             OrderNumber++;
                         }
@@ -225,6 +226,7 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
             const answerList = tempArray.map((v)=>{
                 return {'surAns_Content':v}
             })
+            console.log("정답을 보여줘 : ",answerList );
 
             if(UpdateKey){ // 수정 버튼 클릭 ----------------------------------------------------------------------------
                 const data = new FormData(e.currentTarget);

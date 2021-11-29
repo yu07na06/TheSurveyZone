@@ -28,3 +28,7 @@ export const deleteSurvey = (sur_ID) =>
 // 설문 수정
 export const modifySurvey = (sur_ID, surveyInsertDTO) =>
     axios.put(`/api/v1/survey/${sur_ID}`, surveyInsertDTO);
+
+// 결과 조회
+export const resultSurvey = (sur_ID) =>
+    axios.get(`/api/v1/survey/${sur_ID}/result`);

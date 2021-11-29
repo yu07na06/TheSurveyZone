@@ -1,13 +1,13 @@
 import React from 'react';
 import Footer from '../components/common/UI/Footer';
 import Header from '../components/common/UI/Header';
-import RegisterComp from '../components/register/comp/RegisterComp';
+import ResultComp from '../components/result/comp/ResultComp';
 
-const ResultPage = () => {
+const ResultPage = (props) => {
     return (
         <>
             <Header />
-                <RegisterComp />
+                <ResultComp surveykey={props.match.params.surveykey} />
             <Footer />
         </>
     );
