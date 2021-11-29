@@ -69,12 +69,13 @@ public class SelectSurveyRes {
             Question question = survey_mongo.getQuestionList().get(i);
             this.questionList.add(
                     QuestionDTO.builder()
-                    .SurQue_QType(question.getSurQue_QType())
-                    .SurQue_Content(question.getSurQue_Content())
-                    .SurQue_Essential(question.getSurQue_Essential())
-                    .SurQue_MaxAns(question.getSurQue_MaxAns())
-                    .SurQue_Order(question.getSurQue_Order())
-                    .build());
+                            .SurQue_QType(question.getSurQue_QType())
+                            .SurQue_Content(question.getSurQue_Content())
+                            .SurQue_Essential(question.getSurQue_Essential())
+                            .SurQue_MaxAns(question.getSurQue_MaxAns())
+                            .SurQue_Order(question.getSurQue_Order())
+                            .selectList(question.getSelectList())
+                            .build());
         }
         this.tagList = tagList;
     }

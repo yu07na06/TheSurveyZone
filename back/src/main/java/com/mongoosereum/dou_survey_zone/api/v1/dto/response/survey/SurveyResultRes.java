@@ -70,6 +70,7 @@ public class SurveyResultRes{
                         .SurQue_MaxAns(question.getSurQue_MaxAns())
                         .SurQue_Order(question.getSurQue_Order())
                         .SurQue_QType(question.getSurQue_QType())
+                        .selectList(question.getSelectList())
                         .build());
     }
     public void setSurvey(Survey_MySQL survey_mySQL){
