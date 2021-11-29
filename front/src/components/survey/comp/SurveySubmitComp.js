@@ -158,6 +158,8 @@ const SurveySubmitComp = ({surveykey, UpdateKey}) => {
 
     const lastSubmit = (e) => {
         e.preventDefault();
+        console.log('submit 눌렀다');
+        
         if (submitCheck.current === false){
             submitCheck.current = true
         }else{
@@ -273,7 +275,7 @@ const SurveySubmitComp = ({surveykey, UpdateKey}) => {
                 sur_Publish: true, // 공개 여부                ---> comp에서 state로 관리중 [ !false: 공개, !true: (잠금)비공개 ]
                 sur_Image: "image", // 이미지 추후에 현재는 제외
                 // user_Email: "dbsk7885@daum.net",  // 작성자 ID
-                sur_Tag: data.get(`sur_Tag`), 
+                sur_Tag: data.get(`sur_Tag`),
                 questionList,
                 }
 
@@ -282,7 +284,9 @@ const SurveySubmitComp = ({surveykey, UpdateKey}) => {
                 modifySurveyAPI(surveykey, obj)
                     .then(res=>console.log("수정 성공..?", res))
                     .catch(err=>console.log("수정 실패..?", err));
+                wayBackMySurvey();
             }else{ // 질문 응답 버튼 클릭 시 ---------------------------------------------------------------------------------------------------------------------------
+                console.log('제출 했니?');
                 postSurveyAPI(surveykey,{"age":sexAge.age, "gender":sexAge.sex, "answerList":answerList})
                     .then(res => console.log("제출 성공..?",res))
                     .catch(err => console.log("제출 실패..000?",err));
@@ -317,7 +321,6 @@ const SurveySubmitComp = ({surveykey, UpdateKey}) => {
                 nextPage={nextPage}
                 wayBackHome={wayBackHome}
                 UpdateKey={UpdateKey}
-                wayBackMySurvey={wayBackMySurvey}
             />   
         </>
     );
