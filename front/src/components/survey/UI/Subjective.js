@@ -12,8 +12,12 @@ const Subjective = ({number, deleteQue, ReadOnlyState, ReadOnlyData, UpdateKey, 
                 {ReadOnlyState&&<Typography sx={{ marginLeft: '82%' }} style={{ color:"red" }} >{ReadOnlyData.surQue_Essential&&"필수항목입니다"}</Typography>}
                 {(!ReadOnlyState||UpdateKey)&& // 읽기 상태일때는 switch를 보여주지 않지만, 업데이트 상태일떄는 보여준다.
                     <>
-                        <ReqSwitch number={number} flag={"qeustion"}/>
-                        <Button id={number} sx={{ left: '74%' }} onClick={(e)=>deleteQue(e)}>삭제</Button>
+                        <Grid item xs={6}>
+                            <ReqSwitch number={number} flag={"qeustion"}/>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Button id={number} sx={{ left: '75%' }} onClick={(e)=>deleteQue(e)}>삭제</Button>
+                        </Grid>
                     </>
                 }
 
