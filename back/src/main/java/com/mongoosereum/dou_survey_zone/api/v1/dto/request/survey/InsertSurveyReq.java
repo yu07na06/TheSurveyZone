@@ -15,6 +15,7 @@ import java.util.List;
 
 @Data
 @ApiModel("설문 생성 or 수정 Request DTO")
+
 public class InsertSurveyReq {
     @NotNull
     @ApiModelProperty(name = "sur_Title", notes = "설문 제목")
