@@ -15,7 +15,7 @@ import MultipleChoiceComp from './MultipleChoiceComp';
 import SubjectiveComp from './SubjectiveComp';
 import LinearMagnificationComp from './LinearMagnificationComp';
 
-const SurveySubmitComp = ({surveykey, UpdateKey}) => {
+const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) => {
     const sexAge = useSelector(state=>state.submitReducer.beforeData)
     const surAns_Content = useSelector(state=>state.submitReducer.surAns_Content)
     const [ checkboxlistState, setCheckboxlistState ] = useState(null);
@@ -60,9 +60,13 @@ const SurveySubmitComp = ({surveykey, UpdateKey}) => {
 
 
     useEffect(() => { // 설문 조회/수정 시 데이터 들고오는거 알지?
+        if(!UpdateKey&&ReadOnlyState){
+            setActiveStep(1); // mainSurveyComp 바로 이동
+        }
         getSurveyAPI(surveykey)
            .then(res =>{ console.log("요청 결과: ",res.data); setSurveyReqForm(res.data); })
            .catch(err => console.log(err)); // 설문 참여한 사람이라면, 서버쪽에서 알려주어서 튕구는 걸로 함 403
+           
    },[surveykey])
 
 
@@ -74,11 +78,11 @@ const SurveySubmitComp = ({surveykey, UpdateKey}) => {
            let newOrderQuestion = surveyReqForm.questionList.map((value, index)=>{
                 switch(value.surQue_QType){
                     case 0: // 주관식
-                        return <div key={index}><SubjectiveComp ReadOnlyState={true} ReadOnlyData={value} setDelIndex={setDelIndex} number={value.surQue_Order} setCheck={setCheck} UpdateKey={UpdateKey}/></div>;
+                        return <div key={index}><SubjectiveComp ReadOnlyState={true} ReadOnlyData={value} setDelIndex={setDelIndex} number={value.surQue_Order} setCheck={setCheck} UpdateKey={UpdateKey} realReadState={realReadState}/></div>;
                     case 1: // 객관식
-                        return <div key={index}><MultipleChoiceComp ReadOnlyState={true} ReadOnlyData={value} setDelIndex={setDelIndex} number={value.surQue_Order} setCheck={setCheck} UpdateKey={UpdateKey} checkboxlistState={checkboxlistState} /></div>;
+                        return <div key={index}><MultipleChoiceComp ReadOnlyState={true} ReadOnlyData={value} setDelIndex={setDelIndex} number={value.surQue_Order} setCheck={setCheck} UpdateKey={UpdateKey} checkboxlistState={checkboxlistState} realReadState={realReadState} /></div>;
                     case 2: // 선형배율
-                        return <div key={index}><LinearMagnificationComp ReadOnlyState={true} ReadOnlyData={value} setDelIndex={setDelIndex} number={value.surQue_Order} setCheck={setCheck} UpdateKey={UpdateKey}/></div>;
+                        return <div key={index}><LinearMagnificationComp ReadOnlyState={true} ReadOnlyData={value} setDelIndex={setDelIndex} number={value.surQue_Order} setCheck={setCheck} UpdateKey={UpdateKey} realReadState={realReadState} /></div>;
                     default: break;
                 }
             });
@@ -158,6 +162,8 @@ const SurveySubmitComp = ({surveykey, UpdateKey}) => {
 
     const lastSubmit = (e) => {
         e.preventDefault();
+        console.log('submit 눌렀다');
+        
         if (submitCheck.current === false){
             submitCheck.current = true
         }else{
@@ -273,7 +279,7 @@ const SurveySubmitComp = ({surveykey, UpdateKey}) => {
                 sur_Publish: true, // 공개 여부                ---> comp에서 state로 관리중 [ !false: 공개, !true: (잠금)비공개 ]
                 sur_Image: "image", // 이미지 추후에 현재는 제외
                 // user_Email: "dbsk7885@daum.net",  // 작성자 ID
-                sur_Tag: data.get(`sur_Tag`), 
+                sur_Tag: data.get(`sur_Tag`),
                 questionList,
                 }
 
@@ -282,7 +288,9 @@ const SurveySubmitComp = ({surveykey, UpdateKey}) => {
                 modifySurveyAPI(surveykey, obj)
                     .then(res=>console.log("수정 성공..?", res))
                     .catch(err=>console.log("수정 실패..?", err));
+                wayBackMySurvey();
             }else{ // 질문 응답 버튼 클릭 시 ---------------------------------------------------------------------------------------------------------------------------
+                console.log('제출 했니?');
                 postSurveyAPI(surveykey,{"age":sexAge.age, "gender":sexAge.sex, "answerList":answerList})
                     .then(res => console.log("제출 성공..?",res))
                     .catch(err => console.log("제출 실패..000?",err));
@@ -304,7 +312,6 @@ const SurveySubmitComp = ({surveykey, UpdateKey}) => {
         Swal.fire('내 설문지로 이동');
         history.push('/MySurveyPage');
     }
-    
     return (
         <>
             <SurveySubmit 
@@ -317,7 +324,7 @@ const SurveySubmitComp = ({surveykey, UpdateKey}) => {
                 nextPage={nextPage}
                 wayBackHome={wayBackHome}
                 UpdateKey={UpdateKey}
-                wayBackMySurvey={wayBackMySurvey}
+                ReadOnlyState={ReadOnlyState}
             />   
         </>
     );

@@ -37,9 +37,8 @@ const MySurvey = ({ mySurList, callPaging, ApiClick, currentPage, }) => {
                                         </ListItemAvatar>
 
                                         <Typography>{value.sur_State===0?"진행전":(value.sur_State===1?"진행중":"마감")}</Typography>
-
                                         <ListItemText>
-                                            <Link to={`/SurveySubmitPage/${value._id}`} style={{textDecoration:'none', color:'gray'}}>
+                                            <Link to={`/ReadOnlyPage/${value._id}`} style={{textDecoration:'none', color:'gray'}}>
                                                 <Tab label={mySurList.paginationInfo.firstRecordIndex+index+1+". "+value.sur_Title} style={{fontWeight:'bold'}}/>
                                             </Link> 
                                         </ListItemText>

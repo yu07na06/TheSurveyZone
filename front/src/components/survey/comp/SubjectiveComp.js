@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { submitAction } from '../../../modules/submitReducer';
 import Subjective from '../UI/Subjective';
 
-const SubjectiveComp = ({ReadOnlyState, ReadOnlyData, setDelIndex, number, setCheck, UpdateKey, }) => {
+const SubjectiveComp = ({ReadOnlyState, ReadOnlyData, setDelIndex, number, setCheck, UpdateKey, realReadState}) => {
     
     const deleteQue = (e) => {
         setDelIndex(e.target.id);
@@ -31,6 +31,7 @@ const SubjectiveComp = ({ReadOnlyState, ReadOnlyData, setDelIndex, number, setCh
                 ReadOnlyState={ReadOnlyState}
                 ReadOnlyData={ReadOnlyData}
                 UpdateKey={UpdateKey}
+                realReadState={realReadState}
             />
         </>
     );
