@@ -116,7 +116,7 @@ public class UserController{
         }
     }
 
-    @PostMapping("/signOut") // 받아와야하기에
+    @PostMapping("/signout") // 받아와야하기에
     public ResponseEntity logout(HttpServletRequest request) {
 
         //푸는 이유는 블랙리스트를 추가를 하기 위해서이다.

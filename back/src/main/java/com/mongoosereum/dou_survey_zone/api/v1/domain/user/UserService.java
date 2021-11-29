@@ -92,11 +92,14 @@ public class UserService {
         // BlackListToken Redis 저장 (expirationTime 설정을 통해 자동 삭제 처리)
 
         System.out.println(claims.getBody().getExpiration().getTime()-System.currentTimeMillis());
+
+        long expiretime =  claims.getBody().getExpiration().getTime()-System.currentTimeMillis();
+
         //.set(이름 (bt: 토큰) , value(), 익스파이어 시간, 시간 타입)
         try{redisTemplate.opsForValue()
-                .set("BT:" + token, "l",
+                .set("BT:" + token, expiretime,
                         // Date 타입(LONG) - 현재시간 () = 유효기간 남은시간() 만큼난 REDIS에서 쳐 들고잇는다.
-                        (claims.getBody().getExpiration().getTime()-System.currentTimeMillis()),
+                        expiretime,
                         TimeUnit.MILLISECONDS);
             return true;
         }catch (Exception e) {

@@ -156,7 +156,7 @@ public class SurveyController{
     ){
         if(!surveyService.checkOwner(_id,userEmail))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("권한 없음");
-
+        System.out.println(surveyInsertDTO.toString());
         surveyInsertDTO.setUser_Email(userEmail);
 
         try{

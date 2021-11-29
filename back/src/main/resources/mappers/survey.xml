@@ -100,7 +100,7 @@
         update survey.survey
         set Sur_Title = #{sur_Title}, Sur_Content = #{sur_Content}, Sur_State = #{sur_State},
             Sur_StartDate = #{sur_StartDate}, Sur_EndDate = #{sur_EndDate},
-            Sur_Publish = #{sur_Publish}, Sur_Image = #{sur_Image},
+            Sur_Publish = #{sur_Publish}, Sur_Img = #{sur_Image},
             User_Email = #{user_Email}, Sur_Type = #{sur_Type}
         where _id = #{_id}
     </update>
