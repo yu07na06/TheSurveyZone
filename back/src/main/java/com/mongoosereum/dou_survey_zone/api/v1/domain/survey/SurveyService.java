@@ -16,7 +16,10 @@ import com.mongoosereum.dou_survey_zone.api.v1.common.paging.PageCriteria;
 import com.mongoosereum.dou_survey_zone.api.v1.common.paging.PaginationInfo;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SurveyListPageRes;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.tag.Tag;
-import com.mongoosereum.dou_survey_zone.api.v1.exception.NotFoundEntityException;
+import com.mongoosereum.dou_survey_zone.api.v1.exception.BusinessException;
+import com.mongoosereum.dou_survey_zone.api.v1.exception.ErrorCode;
+import com.mongoosereum.dou_survey_zone.api.v1.exception._403_Forbidden.AlreadyParticipatedException;
+import com.mongoosereum.dou_survey_zone.api.v1.exception._404_NotFound.NotFoundEntityException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -108,7 +111,7 @@ public class SurveyService {
         return tagDAO.findById(_id);
     }
 
-    @Transactional(rollbackFor = NullPointerException.class)
+    @Transactional(rollbackFor = BusinessException.class)
     public String insertSurvey(InsertSurveyReq insertSurveyDTO) /*throws IOException*/ {
         // MongoDB insert
 
@@ -169,10 +172,10 @@ public class SurveyService {
 
     public SelectSurveyRes findById(String _id) {
         Survey_MySQL resultMySQL = surveyDAO.findById_MySQL(_id)
-                .orElseThrow(NotFoundEntityException::new);
+                .orElseThrow(()-> new NotFoundEntityException(ErrorCode.NOT_FOUND_SURVEY));
 
         Survey_Mongo resultMongo = surveyDAO.findById_Mongo(_id)
-                .orElseThrow(NotFoundEntityException::new);
+                .orElseThrow(()-> new NotFoundEntityException(ErrorCode.NOT_FOUND_SURVEY));
 
         List<Tag> tagList = tagDAO.findById(_id);
         SelectSurveyRes surveySelectDTO = new SelectSurveyRes();
@@ -180,12 +183,11 @@ public class SurveyService {
         return surveySelectDTO;
     }
 
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = BusinessException.class)
     public Integer insertAnswer(String _id, InsertAnswerReq insertAnswerReq, HttpServletRequest request) {
         String ip = getIP(request);
-        int findByIP = participationDAO.findByIP(_id,ip);
-        if(findByIP == 1) // 이미 응답한 IP.
-            return -1;
+        if(participationDAO.findByIP(_id,ip) == 1) // 이미 응답한 IP.
+            throw new AlreadyParticipatedException(ErrorCode.ALREADY_PARTICIPATION);
         int result = participationDAO.insertParticipation(
                 Participation.builder()
                         ._id(_id)
@@ -245,7 +247,8 @@ public class SurveyService {
     }
 
     public SurveyResultRes resultSurvey(String _id) {
-        Survey_Mongo survey_mongo = surveyDAO.findById_Mongo(_id).orElseThrow(NotFoundEntityException::new);
+        Survey_Mongo survey_mongo = surveyDAO.findById_Mongo(_id)
+                .orElseThrow(()->new NotFoundEntityException(ErrorCode.NOT_FOUND_SURVEY));
         if(survey_mongo == null)
             return null;
         List<Question> questionList = survey_mongo.getQuestionList();

@@ -1,8 +1,8 @@
 package com.mongoosereum.dou_survey_zone.api.v1.exception;
 
-public class AuthenticationException extends RuntimeException{
+public class AuthorizationException extends RuntimeException{
     private ErrorCode errorCode;
-    public AuthenticationException(String cause){
+    public AuthorizationException(String cause){
         super(cause);
     }
 }

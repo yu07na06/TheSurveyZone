@@ -125,7 +125,6 @@ public class SurveyDAOImpl implements SurveyDAO {
         return sqlSession.update("updateSurvey", survey);
     }
 
-
     //search  today start survey list Mail send list
     public List<Survey_MySQL> todaySurveyList() {
         return sqlSession.selectList("todaystartlist");
