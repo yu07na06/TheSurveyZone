@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Future;
@@ -77,8 +79,12 @@ public class UserController{
 
     @PostMapping(path="/signin")
     @ApiOperation(value = "로그인")
-    public ResponseEntity signin(@RequestBody SigninReq SigninReq , HttpServletResponse response) {
-
+    public ResponseEntity signin(
+            @Valid
+            @RequestBody SigninReq SigninReq ,
+            @Valid
+            @NotNull HttpServletResponse response
+    ) {
         List result = userService.login(SigninReq.getUser_Email(), SigninReq.getUser_Password());
 
         if(result != null){

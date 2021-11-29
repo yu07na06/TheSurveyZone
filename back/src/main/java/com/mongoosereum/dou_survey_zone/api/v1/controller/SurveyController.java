@@ -31,7 +31,11 @@ public class SurveyController{
     // selectSurveyList 설문지 리스트 출력
     @GetMapping(path="/main/list")
     @ApiOperation(value = "설문지 리스트 출력",notes="메인 페이지용, 페이징 작업중")
-    public ResponseEntity selectSurveyList(SurveyListPageReq surveylistDTO){
+    public ResponseEntity selectSurveyList(
+            @RequestBody
+            @ApiParam(value="페이징 처리 정보 DTO", required = true)
+            SurveyListPageReq surveylistDTO
+    ){
 
         // test print keyword and tag
         System.out.println(surveylistDTO.getSearch_Key());
@@ -47,6 +51,7 @@ public class SurveyController{
     @GetMapping(path="/survey/myPage")
     @ApiOperation(value = "내 설문지 리스트 출력")
     public ResponseEntity selectMySurveyList(
+            @RequestBody
             @ApiParam(value="페이징 처리 정보 DTO",required = true)
                     SurveyListPageReq surveyListPageReq,
             @AuthenticationPrincipal
