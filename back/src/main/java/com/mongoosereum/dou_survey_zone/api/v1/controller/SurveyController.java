@@ -70,9 +70,6 @@ public class SurveyController{
             @AuthenticationPrincipal
                     String userEmail
     ){
-        if(userEmail == null)
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("권한 없음");
-
         insertSurveyReq.setUser_Email(userEmail);
         String surveyID = surveyService.insertSurvey(insertSurveyReq);
         if (surveyID == null || surveyID.length() != 24)
@@ -82,7 +79,10 @@ public class SurveyController{
 
     @GetMapping(path = "/survey/{_id}/Check")
     @ApiOperation(value = "설문 참여 체크", notes="설문 조사 참여할때 중복 참여 체크")
-    public ResponseEntity partCheck(@PathVariable("_id") String _id , HttpServletRequest request){
+    public ResponseEntity partCheck(
+            @PathVariable("_id")
+                    String _id,
+            HttpServletRequest request){
 
         SurveyPartCheckRes response= surveyService.checkPart(_id, request);
 
@@ -101,8 +101,7 @@ public class SurveyController{
             @ApiParam(value="설문조사 PK (영어+숫자 24글자)",required = true, example = "619775a6f9517400e97e30e2")
                     String _id
     ){
-        SelectSurveyRes result = surveyService.findById(_id);
-        return ResponseEntity.status(HttpStatus.OK).body(result);
+        return ResponseEntity.status(HttpStatus.OK).body(surveyService.findById(_id));
     }
 
     @PostMapping("/survey/{_id}")
@@ -194,7 +193,6 @@ public class SurveyController{
     @ApiResponses({
             @ApiResponse(code = 200, message = "설문 결과", response = SurveyResultRes.class),
             @ApiResponse(code = 404, message = "해당 설문 없음"),
-            @ApiResponse(code = 500, message = "서버 오류")
     })
     public ResponseEntity surveyResult(
             @PathVariable("_id")

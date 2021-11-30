@@ -3,9 +3,11 @@ package com.mongoosereum.dou_survey_zone.api.v1.domain.survey;
 import com.mongoosereum.dou_survey_zone.api.v1.common.S3Uploader;
 import com.mongoosereum.dou_survey_zone.api.v1.dao.ParticipationDAOImpl;
 import com.mongoosereum.dou_survey_zone.api.v1.dao.SurveyDAO;
-import com.mongoosereum.dou_survey_zone.api.v1.dao.TagDAOImpl;
+import com.mongoosereum.dou_survey_zone.api.v1.dao.TagDAO;
+import com.mongoosereum.dou_survey_zone.api.v1.dao.UserDAO;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.participation.Participation;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.tag.SurveyTag;
+import com.mongoosereum.dou_survey_zone.api.v1.domain.user.User;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.InsertAnswerReq;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.InsertSurveyReq;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.*;
@@ -13,7 +15,8 @@ import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.SurveyListPage
 import com.mongoosereum.dou_survey_zone.api.v1.common.paging.PageCriteria;
 import com.mongoosereum.dou_survey_zone.api.v1.common.paging.PaginationInfo;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.tag.Tag;
-import com.mongoosereum.dou_survey_zone.api.v1.exception.BusinessException;
+import com.mongoosereum.dou_survey_zone.api.v1.exception.AuthorizationException;
+import com.mongoosereum.dou_survey_zone.api.v1.exception.NotFoundException;
 import com.mongoosereum.dou_survey_zone.api.v1.exception.ErrorCode;
 import com.mongoosereum.dou_survey_zone.api.v1.exception._403_Forbidden.AlreadyParticipatedException;
 import com.mongoosereum.dou_survey_zone.api.v1.exception._404_NotFound.NotFoundEntityException;
@@ -33,7 +36,10 @@ public class SurveyService {
     private final SurveyDAO surveyDAO;
 
     @Autowired
-    private final TagDAOImpl tagDAO;
+    private final UserDAO userDAO;
+    @Autowired
+    private final TagDAO tagDAO;
+
 
     @Autowired
     private final ParticipationDAOImpl participationDAO;
@@ -83,22 +89,19 @@ public class SurveyService {
                 .surveylist(surveyList)
                 .build();
     }
-
-    public List<Tag> selectTagList() {
-        return tagDAO.selectTagList();
-    }
-
-    public List<Tag> selectTagExistList(String _id) {
-        return tagDAO.findById(_id);
-    }
-
-    @Transactional(rollbackFor = BusinessException.class)
+    @Transactional
     public String insertSurvey(InsertSurveyReq insertSurveyDTO) /*throws IOException*/ {
         // MongoDB insert
+        if(insertSurveyDTO.getUser_Email()==null || insertSurveyDTO.getUser_Email().equals("anonymousUser"))
+            throw new HasNotPermissionException(ErrorCode.UNAUTHORIZED_ACCESS);
 
-        Survey_Mongo survey_mongo = surveyDAO.surveyInsert_Mongo(Survey_Mongo.builder()
-                .questionList(insertSurveyDTO.getQuestionList())
-                .build());
+        User user = userDAO.existsByEmail_MySQL(insertSurveyDTO.getUser_Email())
+                .orElseThrow(()-> new NotFoundEntityException(ErrorCode.NOT_FOUND_USER));
+
+        Survey_Mongo survey_mongo = surveyDAO.surveyInsert_Mongo(
+                Survey_Mongo.builder()
+                        .questionList(insertSurveyDTO.getQuestionList())
+                        .build());
 
 //        S3 image Upload
 //        String imageURL = "";
@@ -120,7 +123,7 @@ public class SurveyService {
                 .sur_EndDate(insertSurveyDTO.getSur_EndDate())
                 .sur_Publish(insertSurveyDTO.getSur_Publish())
                 .sur_Image(insertSurveyDTO.getSur_Image() /*imageURL*/ )
-                .user_Email(insertSurveyDTO.getUser_Email())
+                .user_Email(user.getUser_Email())
                 .sur_Type(insertSurveyDTO.getSur_Type().getNum())
                 .build();
 
@@ -134,13 +137,20 @@ public class SurveyService {
                 tagDAO.insertTag(surveyTag);
             }
         } catch (Exception e) {
+            System.out.println("Exception!!");
             // Insert에 실패한경우 생성된 MongoDB의 Document를 삭제해줘야함
-            surveyDAO.deleteSurvey_Mongo(survey_mongo.get_id());
-            return "FAIL";
+            // surveyDAO.deleteSurvey_Mongo(survey_mongo.get_id());
         }
         return survey_mongo.get_id();
     }
 
+    public List<Tag> selectTagList() {
+        return tagDAO.selectTagList();
+    }
+
+    public List<Tag> selectTagExistList(String _id) {
+        return tagDAO.findById(_id);
+    }
 
     @Transactional(rollbackFor = NotFoundEntityException.class)
     public SurveyPartCheckRes checkPart(String _id, HttpServletRequest request){
@@ -164,7 +174,7 @@ public class SurveyService {
         return surveySelectDTO;
     }
 
-    @Transactional(rollbackFor = BusinessException.class)
+    @Transactional(rollbackFor = NotFoundException.class)
     public Integer insertAnswer(String _id, InsertAnswerReq insertAnswerReq, HttpServletRequest request) {
         String ip = getIP(request);
         if(participationDAO.findByIP(_id,ip) == 1) // 이미 응답한 IP.
@@ -177,10 +187,15 @@ public class SurveyService {
                         .Part_IP(ip)
                         .build()
         );
-        return result == 0 ? 0 : surveyDAO.insertAnswer(_id, insertAnswerReq.getAnswerList());
+        return surveyDAO.insertAnswer(_id, insertAnswerReq.getAnswerList());
     }
 
     public Long deleteSurvey(String _id, String User_Email) {
+        String owner = surveyDAO.selectOwner(_id);
+
+        if(!owner.equals(User_Email))
+            throw new AuthorizationException(ErrorCode.NOT_OWNER_SURVEY);
+
         surveyDAO.deleteSurvey_MySQL(_id);
         return surveyDAO.deleteSurvey_Mongo(_id);
     }

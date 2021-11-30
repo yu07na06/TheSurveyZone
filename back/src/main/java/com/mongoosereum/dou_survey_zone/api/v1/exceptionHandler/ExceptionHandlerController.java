@@ -1,9 +1,8 @@
 package com.mongoosereum.dou_survey_zone.api.v1.exceptionHandler;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.mongoosereum.dou_survey_zone.api.v1.exception.AuthenticationException;
 import com.mongoosereum.dou_survey_zone.api.v1.exception.AuthorizationException;
-import com.mongoosereum.dou_survey_zone.api.v1.exception.BusinessException;
+import com.mongoosereum.dou_survey_zone.api.v1.exception.NotFoundException;
 import com.mongoosereum.dou_survey_zone.api.v1.exceptionHandler.dto.ExceptionModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -11,16 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
@@ -60,8 +52,8 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ExceptionModel.of(e));
     }
 
-    @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<ExceptionModel> businessExceptionHandler(BusinessException e) {
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ExceptionModel> businessExceptionHandler(NotFoundException e) {
         logger.error("BusinessException :",e);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ExceptionModel.of(e));
     }
