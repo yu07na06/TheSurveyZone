@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
-import { mainList as mainListAPI, mainListPage as mainListPageAPI } from '../lib/api/home';
+import { mainList as mainListAPI } from '../lib/api/home';
 import { chartData } from '../modules/chartReducer';
 import Main from './Main';
 
-const MainComp = () => {
+const MainComp = ({match}) => {
     const data = useSelector(state=>state.chartReducer.responseAcc);
     const err = useSelector(state=>state.chartReducer.err);
     const [ reqMain, setReqMain ] = useState(null);
+    const [ pageNum, setPageNum ] = useState(1);
+    const [ tagSearch, setTagSearch ] = useState('');
+    const [ searchKey, setSearchKey ] = useState('');
     const TAGENUM = {};
     const dispatch = useDispatch();
 
@@ -52,24 +55,57 @@ const MainComp = () => {
         }
     },[err]);
 
+    
     // main 차트 요청
     useEffect(()=>{
         dispatch(chartData());
-    },[dispatch]);
-
-    // main 리스트 요청
+        setPageNum(1);
+        setTagSearch('');
+        setSearchKey('');
+        console.log('여기 되나');
+    },[dispatch, match.params]);
+    
+    // main 리스트, 태그, 검색 요청
     useEffect(()=>{
-        mainListAPI()
-            .then( res => setReqMain(res.data) )
-            .catch( error => console.log("메인 리스트 요청 오류", error) )
-    },[dispatch]);
+        console.log("pageNum, tagSearch, searchKey", pageNum, tagSearch, searchKey);
+        mainListAPI(pageNum, tagSearch, searchKey)
+            .then(res => setReqMain(res.data))
+            .catch(error => console.log("메인 오류", error))
+    },[pageNum, tagSearch, searchKey])
+
+    // 태그 검색 리스트 요청
+    // useEffect(()=>{
+    //     if(tagSearch){
+    //         console.log("pageNum, tagSearch", pageNum, tagSearch);
+    //         mainListSearchTagAPI(pageNum, tagSearch)
+    //             .then(res => setReqMain(res.data))
+    //             .catch(error => console.log('태그 검색 요청 오류', error))
+    //     }
+    // },[tagSearch])
+    
+    // // main 리스트 요청
+    // useEffect(()=>{
+    //     setTagSearch(null);
+    //     mainListAPI()
+    //         .then( res => setReqMain(res.data) )
+    //         .catch( error => console.log("메인 리스트 요청 오류", error) )
+    // },[dispatch]);
 
     // 페이징 요청
-    const callPage = (page_Num) => {
-        mainListPageAPI(page_Num)
-            .then(res => setReqMain(res.data))
-            .catch(err => console.log("메인 페이지 요청 오류", err));
-    }
+    // useEffect(()=>{
+    //     mainListPageAPI(pageNum)
+    //         .then(res => setReqMain(res.data))
+    //         .catch(err => console.log("메인 페이지 요청 오류", err));
+    // },[pageNum])
+
+
+
+
+    // const callPage = (page_Num) => {
+    //     mainListPageAPI(page_Num)
+    //         .then(res => setReqMain(res.data))
+    //         .catch(err => console.log("메인 페이지 요청 오류", err));
+    // }
 
     return (
         <>
@@ -79,8 +115,10 @@ const MainComp = () => {
                 accAgeData={accAgeData}
                 accSexData={accSexData}
                 reqMain={reqMain}
-                callPage={callPage}
                 TAGENUM={TAGENUM}
+                setPageNum={setPageNum}
+                setTagSearch={setTagSearch}
+                pageNum={pageNum}
              />      
         </>
     );

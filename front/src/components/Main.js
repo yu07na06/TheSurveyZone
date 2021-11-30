@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
@@ -13,7 +13,10 @@ import Chart from 'react-google-charts';
 import Pagination from '@mui/material/Pagination';
 import { Link } from 'react-router-dom';
 
-const Main = ({ data, accUserData, accAgeData, accSexData, reqMain, callPage, TAGENUM, }) => {
+const Main = ({ data, accUserData, accAgeData, accSexData, reqMain, TAGENUM, setPageNum, setTagSearch, pageNum, }) => {
+    const [ newPage, setNewPage ] = useState(1);
+    // console.log("reqMain", reqMain);
+    console.log("pageNum", pageNum);
     return (
         <>
             {/* 태그 출력 */}
@@ -24,7 +27,7 @@ const Main = ({ data, accUserData, accAgeData, accSexData, reqMain, callPage, TA
                         justifyContent="center"
                     >
                     { data.sur_Tag && data.sur_Tag.map((value) => 
-                        <Button id={`${value.tag_ID}`}>#{value.tag_Name}</Button>
+                        <Button id={`${value.tag_ID}`} onClick={e=>{ setPageNum(1); setNewPage(1); setTagSearch(e.target.id); }} >#{value.tag_Name}</Button>
                     )}
                     </Stack>
                 </Container>
@@ -115,7 +118,8 @@ const Main = ({ data, accUserData, accAgeData, accSexData, reqMain, callPage, TA
 
                     <br/>
                     <Grid container justifyContent="center">
-                        {reqMain&&<Pagination onChange={(e)=>callPage((e.target.ariaLabel).split(' ')[3])} count={reqMain.paginationInfo.lastPage} color="primary" />}
+                        {reqMain&&<Pagination page={newPage} onChange={(_, page)=>{ console.log("체인지", page); setPageNum(page); setNewPage(page)}} count={reqMain.paginationInfo.lastPage} color="primary" />}
+                        {/* {reqMain&&<Pagination onChange={(_, page)=>{ console.log("체인지", page); setPageNum(page)}} count={reqMain.paginationInfo.lastPage} color="primary" />} */}
                     </Grid>
                 </Grid>
             </Container>
