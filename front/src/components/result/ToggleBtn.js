@@ -20,6 +20,7 @@ const ToggleBtn = ({chartState, setChartState}) => {
     >
       <ToggleButton value="BarChart">BarChart</ToggleButton>
       <ToggleButton value="DoughnutChart">DoughnutChart</ToggleButton>
+      <ToggleButton value="LineChart">LineChart</ToggleButton>
 
     </ToggleButtonGroup>
   );
