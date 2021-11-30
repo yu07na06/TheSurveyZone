@@ -5,11 +5,10 @@ import Result from '../UI/Result';
 const ResultComp = ({surveykey}) => {
 
     const [result, setResult]=useState("")
-
+    
     useEffect(()=>{
-        console.log("surveykey: ",surveykey);
         resultSurveyAPI(surveykey)
-        .then(res=>{console.log("성공"); setResult(res.data)})
+        .then(res=>{setResult(res.data)})
         .catch(err=>console.log("실패", err));
     },[])
 

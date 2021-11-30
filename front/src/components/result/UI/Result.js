@@ -3,9 +3,8 @@ import Paper from '@mui/material/Paper';
 import Container from '@mui/material/Container';
 import ResultLinearComp from '../comp/ResultLinearComp';
 import ResultSubjective from './ResultSubjective';
-import ResultMulti from './ResultMulti';
 import { TextField } from '@mui/material';
-
+import ResultMultiComp from '../comp/ResultMultiComp';
 
 const Result = ({result}) => {
     return (
@@ -19,12 +18,13 @@ const Result = ({result}) => {
                     <TextField label="마감날짜" value={result.sur_EndDate} focused/>
                     <TextField label="진행상태" value={result.sur_State===1?"진행중":"마감"}/>
                     <TextField label="공개여부" value={result.sur_Publish?"공개":"비공개"} focused/>
-                    {result && result.questionList.map((value, index) =>{
+                    {result && result.questionList.map((value, index) => {
                         switch (value.surQue_QType) {
                             case 0: // 주관식
                                 return <ResultSubjective result={result} index={index}/>
                             case 1: // 객관식
-                                return <ResultMulti value={value} index={index} result={result}/>
+                                return <ResultMultiComp index={index} result={result}/>
+                                // return <ResultMulti index={index} result={result}/>
                             case 2: // 선형배율
                                 return <ResultLinearComp value={value} index={index} result={result}/>
                             default:

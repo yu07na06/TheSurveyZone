@@ -6,6 +6,7 @@ import { FormControlLabel, Grid } from '@mui/material';
 const ResultLinearComp = ({ value, index, result, }) => {
     const [ makeCircle, setMakeCircle ] = useState([]);
     const [changeCircle, setChangeCircle] = useState();
+    const [chartState, setChartState] = useState();
 
     const linearcircle = (size, idx) => {
         return(
@@ -22,7 +23,6 @@ const ResultLinearComp = ({ value, index, result, }) => {
                         />}
                 label={result.resultMap[index][idx]}
                 labelPlacement={"top"}
-                // labelPlacement="top"
             />
         );
     }
@@ -41,11 +41,16 @@ const ResultLinearComp = ({ value, index, result, }) => {
         }
     },[value])
 
+    useEffect(()=>{
+        setChartState("BarChart")
+    },[])
+
     return (
         <>
-            <ResultLinear value={value} index={index} result={result} makeCircle={makeCircle}/>
+            <ResultLinear value={value} index={index} result={result} makeCircle={makeCircle} chartState={chartState} setChartState={setChartState}/>
         </>
     );
 };
 
 export default ResultLinearComp;
+
