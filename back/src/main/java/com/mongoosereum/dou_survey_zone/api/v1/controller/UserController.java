@@ -3,7 +3,6 @@ package com.mongoosereum.dou_survey_zone.api.v1.controller;
 import com.mongoosereum.dou_survey_zone.api.v1.common.mail.MailService;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.user.*;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.response.user.SignInRes;
-import com.mongoosereum.dou_survey_zone.api.v1.exception._400_BadRequest.AlreadyRegisteredEmailException;
 import com.mongoosereum.dou_survey_zone.security.TokenProvider;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.user.User;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.user.UserService;
@@ -85,8 +84,8 @@ public class UserController{
         Cookie cookie = new Cookie("Authorization", token); // create a cookie
         cookie.setMaxAge(60 * 60); // expires 1h 유효기간
         // optional properties
-//            cookie.setSecure(true); // 암호화
-//            cookie.setHttpOnly(true); // js가 못건들게 하는것
+//            cookie.setSecure(true); // SSL 통신채널 연결 시에만 쿠키를 전송하도록 설정
+//            cookie.setHttpOnly(true); // 자바 스크립트에서 쿠키값을 읽어가지 못하도록 설정
         cookie.setPath("/"); // 모든 경로에서 쓸수있게  (Front에서 쓰는경로에서)
         response.addCookie(cookie);  // add cookie to response
 
@@ -100,7 +99,7 @@ public class UserController{
         return ResponseEntity.status(200).body(signInRes);
     }
 
-    @PostMapping("/signOut")
+    @PostMapping("/signout")
     public ResponseEntity logout(
             @Valid
             @NotNull HttpServletRequest request
