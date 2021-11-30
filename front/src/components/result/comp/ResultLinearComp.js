@@ -20,8 +20,9 @@ const ResultLinearComp = ({ value, index, result, }) => {
                             checked={ changeCircle === `radio_1_1` }
                             sx={{ "& .MuiSvgIcon-root": { fontSize: size } }}
                         />}
-                label={idx}
-                labelPlacement="top"
+                label={result.resultMap[index][idx]}
+                labelPlacement={"top"}
+                // labelPlacement="top"
             />
         );
     }

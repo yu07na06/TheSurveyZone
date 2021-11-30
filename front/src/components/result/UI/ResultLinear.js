@@ -2,8 +2,10 @@ import React from 'react';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import { Grid } from '@mui/material';
+import BarChart from '../charts/BarChart';
 
 const ResultLinear = ({ value, index, result, makeCircle }) => {
+    console.log("확인", result.resultMap[index]);
     
     return ( 
         <>
@@ -35,7 +37,7 @@ const ResultLinear = ({ value, index, result, makeCircle }) => {
                     </Grid>
                     <Grid item xs={12}>
                         <Paper elevation={3} sx={{ bgcolor: '#80CEBE', p: { xs: 2 } }}>
-                            여기는 그래프가 들어가는 곳입니다
+                            <BarChart data={result.resultMap[index]}/>
                         </Paper>
                     </Grid>
                 </Grid>
