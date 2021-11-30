@@ -3,19 +3,18 @@ package com.mongoosereum.dou_survey_zone.api.v1.controller;
 import com.mongoosereum.dou_survey_zone.api.v1.common.mail.MailService;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.user.*;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.response.user.SignInRes;
-import com.mongoosereum.dou_survey_zone.config.RedisDBConfig;
+import com.mongoosereum.dou_survey_zone.api.v1.exception._400_BadRequest.AlreadyRegisteredEmailException;
 import com.mongoosereum.dou_survey_zone.security.TokenProvider;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.user.User;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.user.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.el.stream.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,9 +26,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 @Api(value="사용자 API", tags = {"User API"})
 @RestController
@@ -51,26 +47,21 @@ public class UserController{
     public ResponseEntity CheckEmail(
             @RequestBody
             @ApiParam(value="CheckEmailReq",required = true )
-                    CheckEmailReq checkEmailReq
+            @Valid CheckEmailReq checkEmailReq
     ) {
         System.out.println(checkEmailReq.getUser_Email());
         return ResponseEntity.status(200).body(userService.checkEmail(checkEmailReq.getUser_Email()));
     }
 
-    //TODO
     @PostMapping(path="/signup")
     @ApiOperation(value = "회원 가입")
     public ResponseEntity registerUser(
             @RequestBody
             @ApiParam(value="SignUpReq",required = true )
-                    SignUpReq signUpReq
+            @Valid SignUpReq signUpReq
     ) {
         Integer result;
-        try{
-            result = userService.createUser(signUpReq);
-        }catch (Exception e){
-            return ResponseEntity.badRequest().body(e.toString());
-        }
+         result = userService.createUser(signUpReq);
         if(result == 1) {
             return ResponseEntity.status(201).body("success");
         }
@@ -87,69 +78,54 @@ public class UserController{
     ) {
         List result = userService.login(SigninReq.getUser_Email(), SigninReq.getUser_Password());
 
-        if(result != null){
-            String loginType = (String) result.get(0);
-            User user = (User) result.get(1);
-            final String token = tokenProvider.create(user);
+        String loginType = (String) result.get(0);
+        String token = (String) result.get(1);
+        User user = (User) result.get(2);
 
-            // create a cookie
-            Cookie cookie = new Cookie("Authorization", token);
-            // expires 3h 유효기간
-            cookie.setMaxAge(60 * 60);
-            // optional properties
-            cookie.setSecure(true); // 암호화
-            cookie.setHttpOnly(true); // js가 못건들게 하는것
-            cookie.setPath("/"); // 모든 경로에서 쓸수있게  (Front에서 쓰는경로에서)
-            // add cookie to response
-            response.addCookie(cookie);
+        Cookie cookie = new Cookie("Authorization", token); // create a cookie
+        cookie.setMaxAge(60 * 60); // expires 1h 유효기간
+        // optional properties
+//            cookie.setSecure(true); // 암호화
+//            cookie.setHttpOnly(true); // js가 못건들게 하는것
+        cookie.setPath("/"); // 모든 경로에서 쓸수있게  (Front에서 쓰는경로에서)
+        response.addCookie(cookie);  // add cookie to response
 
+        final SignInRes signInRes = SignInRes.builder()
+                .user_Email(user.getUser_Email())
+                .user_Name(user.getUser_Name())
+                .user_Token(token)
+                .login_Type(loginType)
+                .build();
 
-            // 헤더에 담았엇던 것 ( 헤더 << 쿠키 맞는건가? )
-//            HttpHeaders headers= new HttpHeaders();
-//            headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-//            member.setResponseToken(jwtTokenProvider.createToken(member.getUsername(), member.getRoles()));
-
-            final SignInRes signInRes = SignInRes.builder()
-                    .user_Email(user.getUser_Email())
-                    .user_Name(user.getUser_Name())
-                    .user_Token(token)
-                    .login_Type(loginType)
-                    .build();
-
-            return ResponseEntity.status(200).body(signInRes);
-        } else{
-            return ResponseEntity.status(401).body("Login fail");
-        }
+        return ResponseEntity.status(200).body(signInRes);
     }
 
-    @PostMapping("/signOut") // 받아와야하기에
-    public ResponseEntity logout(HttpServletRequest request) {
+    @PostMapping("/signOut")
+    public ResponseEntity logout(
+            @Valid
+            @NotNull HttpServletRequest request
+    ) {
 
-        //푸는 이유는 블랙리스트를 추가를 하기 위해서이다.
-        // 헤더에서 JWT 를 받아옵니다.
-        String token = tokenProvider.resolveToken((HttpServletRequest) request);
-
-        // 전체를 뽑아내서 뽑아내는 토큰
-        Jws<Claims> claims = tokenProvider.confirmToken(token);
-
-        Boolean result = userService.BlackListToken(token, claims);
-
-        return result ? ResponseEntity.status(200).body("logout success") : ResponseEntity.status(401).body("logout fail");
+        userService.BlackListToken(request);
+        return ResponseEntity.status(200).body("logout success");
     }
 
     @PostMapping(path="/searchID")
     @ApiOperation(value = "ID찾기")
-    public ResponseEntity searchID(@RequestBody SearchIDReq searchIDReq) {
+    public ResponseEntity searchID(
+            @RequestBody
+            @Valid SearchIDReq searchIDReq) {
         List<String> user = userService.searchID(searchIDReq.getUser_Name(), searchIDReq.getUser_Tel());
-    return (user != null) ? ResponseEntity.ok().body(user) :  ResponseEntity.status(401).body("NO User");
+    return ResponseEntity.ok().body(user);
     }
 
     @PostMapping(path="/searchPW")
     @ApiOperation("임시비밀번호 발금")
-    public ResponseEntity searchPW(@RequestBody SearchPWReq searchPWReq){
+    public ResponseEntity searchPW(
+            @RequestBody
+            @Valid SearchPWReq searchPWReq){
 
-        if(userService.findByEmail_Name_Tel(searchPWReq) == 0)
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 정보");
+        userService.findByEmail_Name_Tel(searchPWReq);
 
         String tempPW = userService.makeTempPW(searchPWReq.getUser_Email());
         System.out.println(tempPW);

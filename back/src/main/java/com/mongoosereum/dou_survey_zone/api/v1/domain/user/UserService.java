@@ -1,11 +1,15 @@
 package com.mongoosereum.dou_survey_zone.api.v1.domain.user;
 
-import com.mongoosereum.dou_survey_zone.api.v1.common.mail.MailService;
-import com.mongoosereum.dou_survey_zone.api.v1.dao.UserDAO;
+import com.mongoosereum.dou_survey_zone.api.v1.dao.UserDAOImpl;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.user.SearchPWReq;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.user.SignUpReq;
+import com.mongoosereum.dou_survey_zone.api.v1.exception.ErrorCode;
+import com.mongoosereum.dou_survey_zone.api.v1.exception._401_Unauthorized.HasNotPermissionException;
+import com.mongoosereum.dou_survey_zone.api.v1.exception._404_NotFound.NotFoundEntityException;
+import com.mongoosereum.dou_survey_zone.security.TokenProvider;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,17 +19,21 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @Service
 public class UserService {
 
     @Autowired
-    private UserDAO userDAO;
+    private UserDAOImpl userDAO;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
     private RedisTemplate redisTemplate;
+
+    @Autowired
+    private TokenProvider tokenProvider;
 
     public Integer createUser(final SignUpReq signUpReq){
 
@@ -42,28 +50,27 @@ public class UserService {
     }
 
     public boolean checkEmail(final String User_Email){
-        return Objects.equals(User_Email, userDAO.existsByEmail_MySQL(User_Email));
+        return !Objects.equals(User_Email, userDAO.existsByEmail_MySQL(User_Email));
     }
 
     public List<?> login(final String email, final String password){
-        User searchUser =  userDAO.findByEmailAndPassword_MySQL(email);
+        User searchUser = userDAO.findByEmailAndPassword_MySQL(email)
+                .orElseThrow(() -> new NotFoundEntityException(ErrorCode.NOT_FOUND_USER));
         String tempPW = (String) redisTemplate.opsForValue().get(email+" TempPW");
-
         ArrayList result = new ArrayList();
-
-        if(searchUser != null){
-            if(passwordEncoder.matches(password, searchUser.getUser_Password())){
-                result.add("UserPW");
-                result.add(searchUser);
-                return result;
-            }
-            else if(passwordEncoder.matches(password, tempPW)) {
-                result.add("TempPW");
-                result.add(searchUser);
-                return result;
-            }
+        if(passwordEncoder.matches(password, searchUser.getUser_Password())){
+            result.add("UserPW");
+            result.add(tokenProvider.create(searchUser));
+            result.add(searchUser);
+            return result;
         }
-        return null;
+        else if(passwordEncoder.matches(password, tempPW)) {
+            result.add("TempPW");
+            result.add(tokenProvider.create(searchUser));
+            result.add(searchUser);
+            return result;
+        }
+        throw new HasNotPermissionException(ErrorCode.NOT_FOUND_USER);
     }
 
     public List<String> searchID(final String name, final String tel){
@@ -74,40 +81,48 @@ public class UserService {
 
         List<String> searchEmail = userDAO.findByEmail(user_mySQL);
 
-        return (searchEmail != null)? searchEmail : null;
+        if(searchEmail.isEmpty()){
+            throw new NotFoundEntityException(ErrorCode.NOT_FOUND_USER);
+        }
+
+        return searchEmail;
     }
-    public int findByEmail_Name_Tel(SearchPWReq searchPWReq){
-        int result = userDAO.findByEmail_Name_Tel(
-                User.builder()
+    public User findByEmail_Name_Tel(SearchPWReq searchPWReq){
+
+        User user_mySQL =  User.builder()
                 .user_Email(searchPWReq.getUser_Email())
                 .user_Name(searchPWReq.getUser_Name())
                 .user_Tel(searchPWReq.getUser_Tel())
-                .build());
+                .build();
+
+        User result = userDAO.findByEmail_Name_Tel(user_mySQL).orElseThrow(() -> new NotFoundEntityException(ErrorCode.NOT_FOUND_USER));
+
         return result;
     }
 
-    public boolean BlackListToken(String token, Jws<Claims> claims){
-//	        log.info("logout:"+(claims.getBody().getExpiration().getTime()-System.currentTimeMillis()));
+    public void BlackListToken(HttpServletRequest request){
+        //푸는 이유는 블랙리스트를 추가를 하기 위해서이다.
+        // 헤더에서 JWT 를 받아옵니다.
+        String token = tokenProvider.resolveToken((HttpServletRequest) request);
 
-        // BlackListToken Redis 저장 (expirationTime 설정을 통해 자동 삭제 처리)
-
-        System.out.println(claims.getBody().getExpiration().getTime()-System.currentTimeMillis());
-        //.set(이름 (bt: 토큰) , value(), 익스파이어 시간, 시간 타입)
-        try{redisTemplate.opsForValue()
-                .set("BT:" + token, "l",
-                        // Date 타입(LONG) - 현재시간 () = 유효기간 남은시간() 만큼난 REDIS에서 쳐 들고잇는다.
-                        (claims.getBody().getExpiration().getTime()-System.currentTimeMillis()),
-                        TimeUnit.MILLISECONDS);
-            return true;
-        }catch (Exception e) {
-            return false;
+        if(token != null){
+            // 전체를 뽑아내서 뽑아내는 토큰
+            Jws<Claims> claims = tokenProvider.confirmToken(token);
+            log.info("logout:"+(claims.getBody().getExpiration().getTime()-System.currentTimeMillis()));
+            // BlackListToken Redis 저장 (expirationTime 설정을 통해 자동 삭제 처리)
+            //.set(이름 (bt: 토큰) , value(), 익스파이어 시간, 시간 타입)
+            redisTemplate.opsForValue()
+                    .set("BT:" + token, "blacklist",
+                            // Date 타입(LONG) - 현재시간 () = 유효기간 남은시간() 만큼난 REDIS에서 쳐 들고잇는다.
+                            (claims.getBody().getExpiration().getTime()-System.currentTimeMillis()),
+                            TimeUnit.MILLISECONDS);
         }
 
-        //is empty에서 redis black list를 판별한번 조지고 뒤에 인가할건지 filter실행
     }
 
     //임시 비밀번호 발금
     public String makeTempPW(String User_Email) {
+
         int leftLimit = 48;
         int rightLimit = 122;
         int tempPW_length = 10;
