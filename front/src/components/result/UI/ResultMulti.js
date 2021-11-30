@@ -3,6 +3,7 @@ import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import { Grid, Typography } from '@mui/material';
 import BarChart from '../charts/BarChart';
+import DoughnutChart from '../charts/DoughnutChart';
 
 const Text = ({result, index, flag, resultKeys}) => {
     return(
@@ -45,6 +46,7 @@ const ResultMulti = ({ value, index, result, }) => {
                     <Grid item xs={12}>
                         <Paper elevation={3} sx={{ bgcolor: '#80CEBE', p: { xs: 2 } }}>
                             <BarChart data={result.resultMap[index]}/>
+                            <DoughnutChart data={result.resultMap[index]} />
                         </Paper>
                     </Grid>
                 </Grid>

@@ -3,6 +3,7 @@ import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import { Grid } from '@mui/material';
 import BarChart from '../charts/BarChart';
+import DoughnutChart from '../charts/DoughnutChart';
 
 const ResultLinear = ({ value, index, result, makeCircle }) => {
     console.log("확인", result.resultMap[index]);
@@ -38,6 +39,7 @@ const ResultLinear = ({ value, index, result, makeCircle }) => {
                     <Grid item xs={12}>
                         <Paper elevation={3} sx={{ bgcolor: '#80CEBE', p: { xs: 2 } }}>
                             <BarChart data={result.resultMap[index]}/>
+                            <DoughnutChart data={result.resultMap[index]} />
                         </Paper>
                     </Grid>
                 </Grid>
