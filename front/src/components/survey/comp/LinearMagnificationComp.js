@@ -74,6 +74,8 @@ const LinearMagnificationComp = ({ ReadOnlyState, ReadOnlyData, setDelIndex,  nu
             dispatch(submitAction({[number]:`radio_${number}`}))
     },[])
     
+    console.log('makeCircles', makeCircles);
+    
     return (
         <LinearMagnification 
             realReadState={realReadState}
