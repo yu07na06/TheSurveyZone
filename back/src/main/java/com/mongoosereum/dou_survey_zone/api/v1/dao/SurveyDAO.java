@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface SurveyDAO {
     long surveyTotal();
-    List<Survey_MySQL> selectSurveyList(PaginationInfo paginationInfo);
+    List<Survey_MySQL>selectSurveyList(PaginationInfo paginationInfo);
     int selectSurveyTotalCount(PageCriteria Criteria);
     List<Survey_MySQL> selectMySurveyList(PaginationInfo paginationInfo);
     int selectMySurveyTotalCount(PageCriteria Criteria);

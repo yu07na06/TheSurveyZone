@@ -8,16 +8,14 @@ import com.mongoosereum.dou_survey_zone.api.v1.domain.participation.Participatio
 import com.mongoosereum.dou_survey_zone.api.v1.domain.tag.SurveyTag;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.InsertAnswerReq;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.InsertSurveyReq;
-import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SelectSurveyRes;
-import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SurveyPartCheckRes;
-import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SurveyResultRes;
+import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.*;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.SurveyListPageReq;
 import com.mongoosereum.dou_survey_zone.api.v1.common.paging.PageCriteria;
 import com.mongoosereum.dou_survey_zone.api.v1.common.paging.PaginationInfo;
-import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SurveyListPageRes;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.tag.Tag;
 import com.mongoosereum.dou_survey_zone.api.v1.exception.BusinessException;
 import com.mongoosereum.dou_survey_zone.api.v1.exception.ErrorCode;
+import com.mongoosereum.dou_survey_zone.api.v1.exception._401_Unauthorized.HasNotPermissionException;
 import com.mongoosereum.dou_survey_zone.api.v1.exception._403_Forbidden.AlreadyParticipatedException;
 import com.mongoosereum.dou_survey_zone.api.v1.exception._404_NotFound.NotFoundEntityException;
 import lombok.AllArgsConstructor;
@@ -45,7 +43,6 @@ public class SurveyService {
     private final S3Uploader s3Uploader;
 
     public SurveyListPageRes selectSurveyList(SurveyListPageReq surveylistDTO) {
-
         //criteria insert
         PageCriteria criteria = new PageCriteria();
         criteria.setPage_Num(surveylistDTO.getPage_Num());
@@ -58,25 +55,16 @@ public class SurveyService {
         // total count
         int surveyTotalCount = surveyDAO.selectSurveyTotalCount(criteria);
 
-        // surveylist
-        List<Survey_MySQL> surveyList = Collections.emptyList();
-        if (0 < surveyTotalCount) {
-            paginationInfo.setTotalRecordCount(surveyTotalCount);
-            surveyList = surveyDAO.selectSurveyList(paginationInfo);
-        }
-
-        // insert total info
-        SurveyListPageRes response = SurveyListPageRes.builder()
+        paginationInfo.setTotalRecordCount(surveyTotalCount);
+        List<Survey_MySQL> surveyList = surveyDAO.selectSurveyList(paginationInfo);
+        return SurveyListPageRes.builder()
                 .paginationInfo(paginationInfo)
                 .surveylist(surveyList)
                 .build();
-
-        return response;
     }
 
     public SurveyListPageRes selectMySurveyList(String User_Email, SurveyListPageReq surveylistDTO) {
         //criteria insert
-        System.out.println(User_Email);
         PageCriteria criteria = new PageCriteria();
         criteria.setPage_Num(surveylistDTO.getPage_Num());
         criteria.setUser_Email(User_Email);
@@ -88,19 +76,13 @@ public class SurveyService {
         int surveyTotalCount = surveyDAO.selectMySurveyTotalCount(criteria);
 
         // surveylist
-        List<Survey_MySQL> surveyList = Collections.emptyList();
-        if (0 < surveyTotalCount) {
-            paginationInfo.setTotalRecordCount(surveyTotalCount);
-            surveyList = surveyDAO.selectMySurveyList(paginationInfo);
-        }
+        paginationInfo.setTotalRecordCount(surveyTotalCount);
+        List<Survey_MySQL> surveyList = surveyDAO.selectMySurveyList(paginationInfo);
 
-        // insert total info
-        SurveyListPageRes response = SurveyListPageRes.builder()
+        return SurveyListPageRes.builder()
                 .paginationInfo(paginationInfo)
                 .surveylist(surveyList)
                 .build();
-
-        return response;
     }
 
     public List<Tag> selectTagList() {
@@ -249,13 +231,19 @@ public class SurveyService {
     public SurveyResultRes resultSurvey(String _id) {
         Survey_Mongo survey_mongo = surveyDAO.findById_Mongo(_id)
                 .orElseThrow(()->new NotFoundEntityException(ErrorCode.NOT_FOUND_SURVEY));
-        if(survey_mongo == null)
-            return null;
+
+        Survey_MySQL survey_mySQL = surveyDAO.findById_MySQL(_id)
+                .orElseThrow(()->new NotFoundEntityException(ErrorCode.NOT_FOUND_SURVEY));
+
         List<Question> questionList = survey_mongo.getQuestionList();
         SurveyResultRes surveyResultDTO = new SurveyResultRes();
+
+        surveyResultDTO.setSurvey(survey_mySQL);
+
         for (int i = 0; i < questionList.size(); i++) {
             Question nowQuestion = questionList.get(i);
-            surveyResultDTO.getQuestionList().add(questionList.get(i).getSurQue_Content()); // 질문추가
+            surveyResultDTO.setQuestion(nowQuestion);
+            
             // TODO 정환. 유저 정보를 담게 변경되는 경우 아래 코드 추가해야함
             // surveyResultDTO.getUserList().add(questionList.get(i).getUserInfo());
 
