@@ -4,8 +4,8 @@ import com.mongoosereum.dou_survey_zone.api.v1.dao.UserDAOImpl;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.user.SearchPWReq;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.user.SignUpReq;
 import com.mongoosereum.dou_survey_zone.api.v1.exception.ErrorCode;
-import com.mongoosereum.dou_survey_zone.api.v1.exception._401_Unauthorized.HasNotPermissionException;
-import com.mongoosereum.dou_survey_zone.api.v1.exception._404_NotFound.NotFoundEntityException;
+import com.mongoosereum.dou_survey_zone.api.v1.exception.NotFoundException;
+import com.mongoosereum.dou_survey_zone.api.v1.exception.UnauthorizedException;
 import com.mongoosereum.dou_survey_zone.security.TokenProvider;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -55,7 +55,7 @@ public class UserService {
 
     public List<?> login(final String email, final String password){
         User searchUser = userDAO.findByEmailAndPassword_MySQL(email)
-                .orElseThrow(() -> new NotFoundEntityException(ErrorCode.NOT_FOUND_USER));
+                .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_USER));
         String tempPW = (String) redisTemplate.opsForValue().get(email+" TempPW");
         ArrayList result = new ArrayList();
         if(passwordEncoder.matches(password, searchUser.getUser_Password())){
@@ -70,7 +70,7 @@ public class UserService {
             result.add(searchUser);
             return result;
         }
-        throw new HasNotPermissionException(ErrorCode.NOT_FOUND_USER);
+        throw new UnauthorizedException(ErrorCode.NOT_FOUND_USER);
     }
 
     public List<String> searchID(final String name, final String tel){
@@ -82,7 +82,7 @@ public class UserService {
         List<String> searchEmail = userDAO.findByEmail(user_mySQL);
 
         if(searchEmail.isEmpty()){
-            throw new NotFoundEntityException(ErrorCode.NOT_FOUND_USER);
+            throw new NotFoundException(ErrorCode.NOT_FOUND_USER);
         }
 
         return searchEmail;
@@ -95,7 +95,7 @@ public class UserService {
                 .user_Tel(searchPWReq.getUser_Tel())
                 .build();
 
-        User result = userDAO.findByEmail_Name_Tel(user_mySQL).orElseThrow(() -> new NotFoundEntityException(ErrorCode.NOT_FOUND_USER));
+        User result = userDAO.findByEmail_Name_Tel(user_mySQL).orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_USER));
 
         return result;
     }
@@ -108,13 +108,14 @@ public class UserService {
         if(token != null){
             // 전체를 뽑아내서 뽑아내는 토큰
             Jws<Claims> claims = tokenProvider.confirmToken(token);
-            log.info("logout:"+(claims.getBody().getExpiration().getTime()-System.currentTimeMillis()));
+            long expiretime =  claims.getBody().getExpiration().getTime()-System.currentTimeMillis();
+            log.info("logout expireTime: "+ expiretime);
             // BlackListToken Redis 저장 (expirationTime 설정을 통해 자동 삭제 처리)
             //.set(이름 (bt: 토큰) , value(), 익스파이어 시간, 시간 타입)
             redisTemplate.opsForValue()
                     .set("BT:" + token, "blacklist",
                             // Date 타입(LONG) - 현재시간 () = 유효기간 남은시간() 만큼난 REDIS에서 쳐 들고잇는다.
-                            (claims.getBody().getExpiration().getTime()-System.currentTimeMillis()),
+                            expiretime,
                             TimeUnit.MILLISECONDS);
         }
 

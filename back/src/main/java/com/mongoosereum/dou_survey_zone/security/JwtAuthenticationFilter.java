@@ -73,7 +73,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // 토큰 검사하기.  JWT이므로 인가 서버에 요청하지 않고도 검증이 가능
             if (token != null && !token.equalsIgnoreCase("null")) {
 
+
                 String isLogout = (String) redisTemplate.opsForValue().get("BT:" + token);
+                log.info(ObjectUtils.isEmpty(isLogout)? "this token is not black list" : "this token is black list");
 
                 if(ObjectUtils.isEmpty(isLogout)) {
                     //userEmail 가져오기. 위조된 경우 예외 처리된다.
