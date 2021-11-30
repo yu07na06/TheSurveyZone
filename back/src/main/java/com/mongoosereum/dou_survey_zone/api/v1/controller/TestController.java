@@ -2,18 +2,14 @@ package com.mongoosereum.dou_survey_zone.api.v1.controller;
 
 import com.mongoosereum.dou_survey_zone.api.v1.common.S3Uploader;
 import com.mongoosereum.dou_survey_zone.api.v1.common.mail.MailService;
-import com.mongoosereum.dou_survey_zone.api.v1.dao.SurveyDAO;
-import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.SurveyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @RequiredArgsConstructor
@@ -22,12 +18,6 @@ import java.io.IOException;
 public class TestController{
 
     private final S3Uploader s3Uploader;
-
-    @Autowired
-    private final SurveyService surveyService;
-
-    @Autowired
-    private final SurveyDAO surveyDAO;
 
     @Autowired
     private final MailService mailService;
@@ -59,15 +49,5 @@ public class TestController{
         System.out.println(ip);
         System.out.println("=========================");
         return ip;
-    }
-    @PostMapping(path="/checkOwner")
-    public String testOwner(
-            @RequestParam String _id, @RequestParam String User_Email
-            ){
-        Boolean result = surveyService.checkOwner(_id,User_Email);
-        if(result == null)
-            return "null";
-        else
-            return result.toString();
     }
 }

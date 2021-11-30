@@ -2,19 +2,14 @@ package com.mongoosereum.dou_survey_zone.api.v1.controller;
 
 import com.mongoosereum.dou_survey_zone.api.v1.common.mail.MailService;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.user.*;
+import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SelectSurveyRes;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.response.user.SignInRes;
-import com.mongoosereum.dou_survey_zone.security.TokenProvider;
+import com.mongoosereum.dou_survey_zone.api.v1.exception.ExceptionModel;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.user.User;
-import com.mongoosereum.dou_survey_zone.api.v1.domain.user.UserService;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import com.mongoosereum.dou_survey_zone.api.v1.service.UserService;
+import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.el.stream.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,14 +30,15 @@ public class UserController{
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private TokenProvider tokenProvider;
 
     @Autowired
     private MailService mailService;
 
     @PostMapping(path="/checkEmail")
     @ApiOperation(value = "이메일 중복검사")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공(return ture/false)", response = String.class),
+    })
     public ResponseEntity CheckEmail(
             @RequestBody
             @ApiParam(value="CheckEmailReq",required = true )
@@ -54,33 +50,37 @@ public class UserController{
 
     @PostMapping(path="/signup")
     @ApiOperation(value = "회원 가입")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "성공", response = SelectSurveyRes.class),
+    })
     public ResponseEntity registerUser(
             @RequestBody
             @ApiParam(value="SignUpReq",required = true )
             @Valid SignUpReq signUpReq
     ) {
-        Integer result;
-         result = userService.createUser(signUpReq);
-        if(result == 1) {
-            return ResponseEntity.status(201).body("success");
-        }
-        return ResponseEntity.status(401).body("fail");
+         userService.createUser(signUpReq);
+         return ResponseEntity.status(201).body("success");
     }
 
     @PostMapping(path="/signin")
     @ApiOperation(value = "로그인")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "로그인 성공", response = SignInRes.class),
+            @ApiResponse(code = 401, message = "로그인 실패" , response = ExceptionModel.class)
+    })
     public ResponseEntity signin(
             @Valid
             @RequestBody SigninReq SigninReq ,
             @Valid
             @NotNull HttpServletResponse response
     ) {
-        List result = userService.login(SigninReq.getUser_Email(), SigninReq.getUser_Password());
+        List result = userService.signin(SigninReq.getUser_Email(), SigninReq.getUser_Password());
 
         String loginType = (String) result.get(0);
         String token = (String) result.get(1);
         User user = (User) result.get(2);
 
+        /* Cookie */
         Cookie cookie = new Cookie("Authorization", token); // create a cookie
         cookie.setMaxAge(60 * 60); // expires 1h 유효기간
         // optional properties
@@ -100,17 +100,23 @@ public class UserController{
     }
 
     @PostMapping("/signout")
-    public ResponseEntity logout(
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "로그아웃 성공", response = String.class),
+    })
+    public ResponseEntity signout(
             @Valid
             @NotNull HttpServletRequest request
     ) {
-
-        userService.BlackListToken(request);
+        userService.signout(request);
         return ResponseEntity.status(200).body("logout success");
     }
 
     @PostMapping(path="/searchID")
     @ApiOperation(value = "ID찾기")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "검색 결과 성공", response = SearchIDReq.class),
+            @ApiResponse(code = 404, message = "검색 결과 없음" , response = ExceptionModel.class)
+    })
     public ResponseEntity searchID(
             @RequestBody
             @Valid SearchIDReq searchIDReq) {
@@ -120,26 +126,16 @@ public class UserController{
 
     @PostMapping(path="/searchPW")
     @ApiOperation("임시비밀번호 발금")
-    public ResponseEntity searchPW(
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "임시 비밀번호 발급 성공", response = String.class),
+            @ApiResponse(code = 404, message = "검색 결과 없음" , response = ExceptionModel.class)
+    })
+    public ResponseEntity tempPW(
             @RequestBody
             @Valid SearchPWReq searchPWReq){
-
-        userService.findByEmail_Name_Tel(searchPWReq);
-
-        String tempPW = userService.makeTempPW(searchPWReq.getUser_Email());
-        System.out.println(tempPW);
-
+        String tempPW = userService.makeTempPW(searchPWReq);
         mailService.sendTempPW(searchPWReq.getUser_Email(), searchPWReq.getUser_Name(), tempPW);
         return ResponseEntity.ok().body("임시 비밀 번호 전송");
     }
-    /* 테스트용 */
-    @GetMapping(path="/test")
-    public String test() {
-        return "success";
-    }
 
 }
-
-
-// USER 권한 분리 필요
-// 

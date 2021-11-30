@@ -1,8 +1,5 @@
-package com.mongoosereum.dou_survey_zone.api.v1.exceptionHandler.dto;
+package com.mongoosereum.dou_survey_zone.api.v1.exception;
 
-import com.mongoosereum.dou_survey_zone.api.v1.exception.UnauthorizedException;
-import com.mongoosereum.dou_survey_zone.api.v1.exception.ForbiddenException;
-import com.mongoosereum.dou_survey_zone.api.v1.exception.NotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -17,6 +14,9 @@ public class ExceptionModel {
     private final int status;
     private final String message;
 
+    public static ExceptionModel of(BadRequestException e) {
+        return new ExceptionModel(e.errorCode.getStatus(), e.toString());
+    }
     public static ExceptionModel of(NotFoundException e) {
         return new ExceptionModel(e.errorCode.getStatus(), e.toString());
     }

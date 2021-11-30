@@ -1,6 +1,7 @@
 package com.mongoosereum.dou_survey_zone.api.v1.domain.survey;
 
 
+import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.InsertSurveyReq;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -35,9 +36,19 @@ public class Survey_MySQL {
         this.sur_Type = surveyType;
     }
 
+    public void set(InsertSurveyReq insertSurveyReq){
+        this.sur_Title = insertSurveyReq.getSur_Title();
+        this.sur_Content = insertSurveyReq.getSur_Content();
+        this.sur_State = insertSurveyReq.getSur_State().getNum();
+        this.sur_StartDate = insertSurveyReq.getSur_StartDate();
+        this.sur_EndDate = insertSurveyReq.getSur_EndDate();
+        this.sur_Publish = insertSurveyReq.getSur_Publish();
+        this.sur_Image = insertSurveyReq.getSur_Image();
+        this.user_Email = insertSurveyReq.getUser_Email();
+        this.sur_Type = insertSurveyReq.getSur_Type().getNum();
+    }
     public Survey_MySQL setSur_State(int sur_State) {
         this.sur_State = sur_State;
         return this;
     }
-
 }

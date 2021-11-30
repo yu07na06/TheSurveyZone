@@ -1,9 +1,5 @@
-package com.mongoosereum.dou_survey_zone.api.v1.exceptionHandler;
+package com.mongoosereum.dou_survey_zone.api.v1.exception;
 
-import com.mongoosereum.dou_survey_zone.api.v1.exception.UnauthorizedException;
-import com.mongoosereum.dou_survey_zone.api.v1.exception.ForbiddenException;
-import com.mongoosereum.dou_survey_zone.api.v1.exception.NotFoundException;
-import com.mongoosereum.dou_survey_zone.api.v1.exceptionHandler.dto.ExceptionModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +9,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import javax.servlet.ServletException;
 
 @RestControllerAdvice
 public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
@@ -40,10 +38,10 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ExceptionModel.of(e));
     }
 
-    @ExceptionHandler(ForbiddenException.class)
-    public ResponseEntity<ExceptionModel> authorizationExceptionHandler(ForbiddenException e){
-        logger.error("AuthorizationException :", e);
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ExceptionModel.of(e));
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ExceptionModel> badRequestExceptionHandler(BadRequestException e){
+        logger.error("AuthenticationException :", e);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ExceptionModel.of(e));
     }
 
     @ExceptionHandler(UnauthorizedException.class)
@@ -51,6 +49,13 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
         logger.error("AuthenticationException :", e);
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ExceptionModel.of(e));
     }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<ExceptionModel> authorizationExceptionHandler(ForbiddenException e){
+        logger.error("ForbiddenException :", e);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ExceptionModel.of(e));
+    }
+
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ExceptionModel> businessExceptionHandler(NotFoundException e) {
@@ -62,6 +67,12 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     public ResponseEntity UnhandleExceptionHandler(Exception e){
         logger.error("UnhandleException :", e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
+    }
+
+    @ExceptionHandler(ServletException.class)
+    public ResponseEntity ServletExceptionHandler(Exception e){
+        logger.error("ForbiddenException :", e);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e);
     }
 
 //    protected String getResultMessage(final Iterator<ConstraintViolation<?> > violationIterator){

@@ -1,7 +1,6 @@
 package com.mongoosereum.dou_survey_zone.api.v1.controller;
 
-
-import com.mongoosereum.dou_survey_zone.api.v1.domain.participation.ParticipationService;
+import com.mongoosereum.dou_survey_zone.api.v1.service.ParticipationService;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.response.common.MainInfoRes;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -25,7 +24,6 @@ public class CommonController {
     @ApiOperation(value = "메인 페이지 정보 출력", notes = "누적 사용자 정보 및 게시물이 존재하는 태그 리스트 출력")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공", response = MainInfoRes.class),
-            @ApiResponse(code = 500, message = "Server Fail")
     })
     public ResponseEntity mainTest() {
         MainInfoRes mainInfo = partService.resultMainInfo();
@@ -33,8 +31,4 @@ public class CommonController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Server Fail");
         return ResponseEntity.ok().body(partService.resultMainInfo());
     }
-
-
-
-
 }

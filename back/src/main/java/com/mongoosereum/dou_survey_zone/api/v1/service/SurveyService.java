@@ -1,4 +1,4 @@
-package com.mongoosereum.dou_survey_zone.api.v1.domain.survey;
+package com.mongoosereum.dou_survey_zone.api.v1.service;
 
 import com.mongoosereum.dou_survey_zone.api.v1.common.S3Uploader;
 import com.mongoosereum.dou_survey_zone.api.v1.dao.ParticipationDAOImpl;
@@ -6,6 +6,9 @@ import com.mongoosereum.dou_survey_zone.api.v1.dao.SurveyDAO;
 import com.mongoosereum.dou_survey_zone.api.v1.dao.TagDAO;
 import com.mongoosereum.dou_survey_zone.api.v1.dao.UserDAO;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.participation.Participation;
+import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.Question;
+import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.Survey_Mongo;
+import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.Survey_MySQL;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.tag.SurveyTag;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.user.User;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.InsertAnswerReq;
@@ -173,7 +176,7 @@ public class SurveyService {
     }
 
     @Transactional(rollbackFor = NotFoundException.class)
-    public Integer insertAnswer(String _id, InsertAnswerReq insertAnswerReq, HttpServletRequest request) {
+    public void insertAnswer(String _id, InsertAnswerReq insertAnswerReq, HttpServletRequest request) {
         String ip = getIP(request);
         if(participationDAO.findByIP(_id,ip) == 1) // 이미 응답한 IP.
             throw new ForbiddenException(ErrorCode.ALREADY_PARTICIPATION);
@@ -185,62 +188,52 @@ public class SurveyService {
                         .Part_IP(ip)
                         .build()
         );
-        return surveyDAO.insertAnswer(_id, insertAnswerReq.getAnswerList());
+        surveyDAO.insertAnswer(_id, insertAnswerReq.getAnswerList());
     }
 
-    public Long deleteSurvey(String _id, String User_Email) {
-        String owner = surveyDAO.selectOwner(_id);
+    @Transactional
+    public void deleteSurvey(String _id, String User_Email) {
+        String owner = surveyDAO.selectOwner(_id)
+                .orElseThrow(()->new NotFoundException(ErrorCode.NOT_FOUND_SURVEY));
 
         if(!owner.equals(User_Email))
             throw new ForbiddenException(ErrorCode.NOT_OWNER_SURVEY);
 
         surveyDAO.deleteSurvey_MySQL(_id);
-        return surveyDAO.deleteSurvey_Mongo(_id);
+        surveyDAO.deleteSurvey_Mongo(_id);
     }
 
     public Boolean checkOwner(String _id, String User_Email){
-        String owner = surveyDAO.selectOwner(_id);
-        if(owner == null)
-            return null;
+        String owner = surveyDAO.selectOwner(_id)
+                .orElseThrow(()->new NotFoundException(ErrorCode.NOT_FOUND_SURVEY));
+        if(!owner.equals(User_Email))
+            throw new ForbiddenException(ErrorCode.NOT_OWNER_SURVEY);
+
         return owner.equals(User_Email)? true: false;
     }
     @Transactional(rollbackFor = Exception.class)
-    public Integer updateSurvey(String _id, InsertSurveyReq surveyInsertDTO) throws Exception {
+    public void updateSurvey(String _id, InsertSurveyReq surveyInsertDTO) {
         // MongoDB insert
-        Survey_Mongo survey_Mongo = Survey_Mongo.builder()
-                ._id(_id)
-                .questionList(surveyInsertDTO.getQuestionList())
-                .build();
+        Survey_MySQL survey_MySQL = surveyDAO.findById_MySQL(_id)
+                .orElseThrow(()-> new NotFoundException(ErrorCode.NOT_FOUND_SURVEY));
 
-        Survey_MySQL survey_MySQL = Survey_MySQL.builder()
-                ._id(_id)
-                .sur_Title(surveyInsertDTO.getSur_Title())
-                .sur_Content(surveyInsertDTO.getSur_Content())
-                .sur_State(surveyInsertDTO.getSur_State().getNum())
-                .sur_StartDate(surveyInsertDTO.getSur_StartDate())
-                .sur_EndDate(surveyInsertDTO.getSur_EndDate())
-                .sur_Publish(surveyInsertDTO.getSur_Publish())
-                .sur_Image(surveyInsertDTO.getSur_Image())
-                .user_Email(surveyInsertDTO.getUser_Email())
-                .sur_Type(surveyInsertDTO.getSur_Type().getNum())
-                .build();
+        Survey_Mongo survey_Mongo = surveyDAO.findById_Mongo(_id)
+                .orElseThrow(()-> new NotFoundException(ErrorCode.NOT_FOUND_SURVEY));
 
-        Long resultMongo = surveyDAO.updateSurvey_Mongo(survey_Mongo);
-        if (resultMongo == 0L)
-            throw new Exception("IMPOSSIBLE TO UPDATE");
-        // MySQL insert by MongoDB.id
-        Integer resultMySQL = surveyDAO.updateSurvey_MySQL(survey_MySQL);
-//        if (resultMySQL.equals("500")|| resultMySQL.equals("500"))
-//            throw new Exception("Failed to ");
-//        if(surveyDAO.surveyUpdate_MySQL(survey_MySQL)!=0 && surveyDAO.surveyUpdate_Mongo(survey_Mongo)!= 0L)
-//            return true;
-        if (resultMySQL >= 1)
-            return 1;
-        else
-            return 0;
+        survey_Mongo.setQuestionList(surveyInsertDTO.getQuestionList());
+        survey_MySQL.set(surveyInsertDTO);
+
+        surveyDAO.updateSurvey_Mongo(survey_Mongo);
+        surveyDAO.updateSurvey_MySQL(survey_MySQL);
     }
 
-    public SurveyResultRes resultSurvey(String _id) {
+    public SurveyResultRes resultSurvey(String User_Email, String _id) {
+        if(!User_Email.equals(surveyDAO.selectOwner(_id)
+                .orElseThrow(() ->
+                                new NotFoundException(ErrorCode.NOT_FOUND_SURVEY))
+        ) )
+            throw new ForbiddenException(ErrorCode.NOT_OWNER_SURVEY);
+
         Survey_Mongo survey_mongo = surveyDAO.findById_Mongo(_id)
                 .orElseThrow(()->new NotFoundException(ErrorCode.NOT_FOUND_SURVEY));
 

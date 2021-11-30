@@ -1,4 +1,4 @@
-package com.mongoosereum.dou_survey_zone.api.v1.domain.participation;
+package com.mongoosereum.dou_survey_zone.api.v1.service;
 
 import com.mongoosereum.dou_survey_zone.api.v1.dao.ParticipationDAOImpl;
 import com.mongoosereum.dou_survey_zone.api.v1.dao.SurveyDAO;
@@ -31,14 +31,6 @@ public class ParticipationService {
                 .sur_Tag(tagDAO.findById(""))
                 .build();
     }
-//    public Part_Acc_MySQL partACC(){
-//        Part_Acc_MySQL responseAcc = Part_Acc_MySQL.builder()
-//                .part_Total(participationDAO.ACCTotal())
-//                .part_Gender(participationDAO.ACCGender())
-//                .part_Age(participationDAO.ACCAge())
-//                .build();
-//        return responseAcc;
-//    }
 
     public List<Tag> partTag(){
         return tagDAO.findById("");
