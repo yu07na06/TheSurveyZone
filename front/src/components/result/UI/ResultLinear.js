@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import { Grid } from '@mui/material';
 import BarChart from '../charts/BarChart';
 import DoughnutChart from '../charts/DoughnutChart';
+import LineChart from '../charts/LineChart';
+import ToggleBtn from '../ToggleBtn';
 
-const ResultLinear = ({ value, index, result, makeCircle }) => {
-    console.log("확인", result.resultMap[index]);
-    
+const ResultLinear = ({ value, index, result, makeCircle , chartState, setChartState}) => {
+    useEffect(()=>{
+        chartState&&console.log("chartState",chartState);
+    },[chartState])
     return ( 
         <>
             <Paper elevation={3} sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
@@ -36,10 +39,29 @@ const ResultLinear = ({ value, index, result, makeCircle }) => {
                             </Grid>
                         </Paper>
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid item xs = {12}  style={{paddingBottom:"0px"}} >
+                        <Grid container justifyContent="flex-end">
+                            <ToggleBtn chartState={chartState} setChartState={setChartState}/>
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={12} style={{paddingTop:"0px"}}>
                         <Paper elevation={3} sx={{ bgcolor: '#80CEBE', p: { xs: 2 } }}>
-                            <BarChart data={result.resultMap[index]}/>
-                            <DoughnutChart data={result.resultMap[index]} />
+                        {
+                                (()=>{
+                                        switch(chartState){
+                                            case "BarChart" : 
+                                                return <BarChart data = {result.resultMap[index]} />
+                                            case "DoughnutChart" :
+                                                return <DoughnutChart data = {result.resultMap[index]} />
+                                            case "LineChart" :
+                                                return <LineChart data = {result.resultMap[index]} />
+                                            default : 
+                                                break;
+                                    }
+                                })()
+                            }
+                            {/* <BarChart data={result.resultMap[index]}/>
+                            <DoughnutChart data={result.resultMap[index]} /> */}
                         </Paper>
                     </Grid>
                 </Grid>

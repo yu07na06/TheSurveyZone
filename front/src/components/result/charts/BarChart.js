@@ -25,7 +25,7 @@ const BarChart = ({data}) => {
           valueField="point"
           argumentField="select_key"
         />
-        <Title text="World population" />
+        <Title text="BarChart" />
         <Animation />
       </Chart>
     </Paper>

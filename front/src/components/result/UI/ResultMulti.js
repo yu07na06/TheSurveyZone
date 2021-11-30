@@ -4,22 +4,13 @@ import TextField from '@mui/material/TextField';
 import { Grid, Typography } from '@mui/material';
 import BarChart from '../charts/BarChart';
 import DoughnutChart from '../charts/DoughnutChart';
+import LineChart from '../charts/LineChart';
+import ToggleBtn from '../ToggleBtn';
+import { Text } from '../comp/ResultMultiComp';
 
-const Text = ({result, index, flag, resultKeys}) => {
-    return(
-        <>
-            {resultKeys.map((_,idx)=>  
-                <Typography variant="h6" color="initial">
-                     {`${flag}${idx+1} : ${flag=="보기"?resultKeys[idx]:result[index][resultKeys[idx]]}`} 
-                </Typography>
-            )}
-        </>
-    )
-}
 
-const ResultMulti = ({ value, index, result, }) => {
-    console.log("전체 result : ", result);
-    const resultKeys = Object.keys(result.resultMap[index])
+
+const ResultMulti = ({ index, result, chartState, resultKeys, setChartState}) => {
     return (
         <>
             <Paper elevation={3} sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
@@ -43,10 +34,29 @@ const ResultMulti = ({ value, index, result, }) => {
                             <Text result={result.resultMap} index={index} flag={"결과"} resultKeys={resultKeys}/>
                         </Paper>
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid item xs = {12}  style={{paddingBottom:"0px"}} >
+                        <Grid container justifyContent="flex-end">
+                            <ToggleBtn chartState={chartState} setChartState={setChartState}/>
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={12} style={{paddingTop:"0px"}}>
                         <Paper elevation={3} sx={{ bgcolor: '#80CEBE', p: { xs: 2 } }}>
-                            <BarChart data={result.resultMap[index]}/>
-                            <DoughnutChart data={result.resultMap[index]} />
+                            {
+                                (()=>{
+                                        switch(chartState){
+                                            case "BarChart" : 
+                                                return <BarChart data = {result.resultMap[index]} />
+                                            case "DoughnutChart" :
+                                                return <DoughnutChart data = {result.resultMap[index]} />
+                                            case "LineChart" :
+                                                return <LineChart data = {result.resultMap[index]} />
+                                            default : 
+                                                break;
+                                    }
+                                })()
+                            }
+                            {/* <BarChart data={result.resultMap[index]}/>
+                            <DoughnutChart data={result.resultMap[index]} /> */}
                         </Paper>
                     </Grid>
                 </Grid>
