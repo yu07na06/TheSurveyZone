@@ -7,8 +7,6 @@ import ResultMulti from './ResultMulti';
 
 
 const Result = ({result}) => {
-    console.log('result', result);
-    
     return (
         <>
             <Container component="main" maxWidth="lg" sx={{ mb: 4 }} >
