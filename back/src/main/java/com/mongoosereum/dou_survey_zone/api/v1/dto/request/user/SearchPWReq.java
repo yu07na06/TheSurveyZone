@@ -14,10 +14,12 @@ public class SearchPWReq {
 
     @NotBlank
     @Email
+    @Size(max = 45)
     @ApiModelProperty(value = "user_Email", notes = "사용자 이메일", example = "ojh2134@gmail.com")
     private String user_Email;
 
     @NotBlank
+    @Size(max = 20)
     @ApiModelProperty(value = "user_Name", notes = "사용자 이름", example = "오정환")
     private String user_Name;
 
