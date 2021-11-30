@@ -44,7 +44,7 @@ public class InsertSurveyReq {
     @ApiModelProperty(name = "sur_Image", notes = "설문 이미지, 미구현 ")
     private String sur_Image;
 
-    @NotNull
+
     @ApiModelProperty(name = "user_Email", notes = "설문 작성자 UserEmail")
     private String user_Email;
 

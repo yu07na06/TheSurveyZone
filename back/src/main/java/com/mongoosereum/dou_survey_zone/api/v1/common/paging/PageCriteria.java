@@ -10,6 +10,7 @@ import lombok.*;
 public class PageCriteria {
         /** 생성자 **/
         public PageCriteria() {
+
         this.page_Size=5;
         this.records_Perpage =12;
         }

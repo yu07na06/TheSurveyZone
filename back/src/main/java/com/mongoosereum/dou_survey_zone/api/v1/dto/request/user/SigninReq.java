@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -17,6 +18,7 @@ import javax.validation.constraints.NotNull;
 public class SigninReq {
 
     @NotBlank
+    @Email
     @ApiModelProperty(name = "user_Email", notes = "유저 Email", example = "test@gmail.com")
     private String user_Email;
 
