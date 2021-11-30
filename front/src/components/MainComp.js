@@ -73,6 +73,11 @@ const MainComp = ({match}) => {
             .catch(error => console.log("메인 오류", error))
     },[pageNum, tagSearch, searchKey])
 
+    useEffect(()=>{
+        console.log('reqMain', reqMain);
+        
+    },[reqMain])
+
     // 태그 검색 리스트 요청
     // useEffect(()=>{
     //     if(tagSearch){

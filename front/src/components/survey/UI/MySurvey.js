@@ -55,7 +55,7 @@ const MySurvey = ({ mySurList, callPaging, ApiClick, currentPage, }) => {
                             </List>
                         
                             <Grid container justifyContent="center">
-                                {mySurList&&<Pagination page={currentPage} onChange={(e)=>callPaging((e.target.ariaLabel).split(' ')[3])} count={mySurList.paginationInfo.lastPage} color="primary" />}
+                                {mySurList&&<Pagination showFirstButton showLastButton page={currentPage} onChange={(_, page)=>{ callPaging(page); }} count={mySurList.paginationInfo.totalPageCount} color="primary" />}
                             </Grid></>
                     }  
                 </Paper>
