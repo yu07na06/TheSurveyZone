@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -18,8 +19,8 @@ public class UserDAO  {
         return sqlSession.insert("createUser", user_MySQL);
     }
 
-    public String existsByEmail_MySQL(String email) {
-        return sqlSession.selectOne("existsByEmail", email);
+    public Optional<User> existsByEmail_MySQL(String email) {
+        return Optional.ofNullable(sqlSession.selectOne("existsByEmail", email));
     }
 
     public User findByEmailAndPassword_MySQL(String email) {
