@@ -118,7 +118,7 @@ const Main = ({ data, accUserData, accAgeData, accSexData, reqMain, TAGENUM, set
 
                     <br/>
                     <Grid container justifyContent="center">
-                        {reqMain&&<Pagination page={newPage} onChange={(_, page)=>{ console.log("체인지", page); setPageNum(page); setNewPage(page)}} count={reqMain.paginationInfo.lastPage} color="primary" />}
+                        {reqMain&&<Pagination showFirstButton showLastButton page={newPage} onChange={(_, page)=>{ setPageNum(page); setNewPage(page)}} count={reqMain.paginationInfo.totalPageCount} color="primary" />}
                         {/* {reqMain&&<Pagination onChange={(_, page)=>{ console.log("체인지", page); setPageNum(page)}} count={reqMain.paginationInfo.lastPage} color="primary" />} */}
                     </Grid>
                 </Grid>
