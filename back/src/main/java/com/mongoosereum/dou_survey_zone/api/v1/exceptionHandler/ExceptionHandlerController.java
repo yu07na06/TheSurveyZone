@@ -42,7 +42,7 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(AuthorizationException.class)
     public ResponseEntity<ExceptionModel> authorizationExceptionHandler(AuthorizationException e){
-        logger.error("ErrorResponse :", e);
+        logger.error("AuthorizationException :", e);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ExceptionModel.of(e));
     }
 
@@ -60,7 +60,7 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity UnhandleExceptionHandler(Exception e){
-        logger.error("UnhandleException : ", e);
+        logger.error("UnhandleException :", e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
     }
 

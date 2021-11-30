@@ -1,8 +1,7 @@
 package com.mongoosereum.dou_survey_zone.api.v1.common.mail;
 
-import com.mongoosereum.dou_survey_zone.api.v1.dao.UserDAO;
+import com.mongoosereum.dou_survey_zone.api.v1.dao.UserDAOImpl;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.Survey_MySQL;
-import com.mongoosereum.dou_survey_zone.api.v1.domain.user.User;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -26,7 +25,7 @@ public class MailService {
     PasswordEncoder passwordEncoder;
 
     @Autowired
-    UserDAO userDAO;
+    UserDAOImpl userDAO;
 
     @Autowired
     private SpringTemplateEngine templateEngine;
