@@ -1,9 +1,9 @@
 package com.mongoosereum.dou_survey_zone.api.v1.domain.survey;
 
 import com.mongoosereum.dou_survey_zone.api.v1.common.S3Uploader;
-import com.mongoosereum.dou_survey_zone.api.v1.dao.ParticipationDAO;
+import com.mongoosereum.dou_survey_zone.api.v1.dao.ParticipationDAOImpl;
 import com.mongoosereum.dou_survey_zone.api.v1.dao.SurveyDAO;
-import com.mongoosereum.dou_survey_zone.api.v1.dao.TagDAO;
+import com.mongoosereum.dou_survey_zone.api.v1.dao.TagDAOImpl;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.participation.Participation;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.tag.SurveyTag;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.InsertAnswerReq;
@@ -15,7 +15,6 @@ import com.mongoosereum.dou_survey_zone.api.v1.common.paging.PaginationInfo;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.tag.Tag;
 import com.mongoosereum.dou_survey_zone.api.v1.exception.BusinessException;
 import com.mongoosereum.dou_survey_zone.api.v1.exception.ErrorCode;
-import com.mongoosereum.dou_survey_zone.api.v1.exception._401_Unauthorized.HasNotPermissionException;
 import com.mongoosereum.dou_survey_zone.api.v1.exception._403_Forbidden.AlreadyParticipatedException;
 import com.mongoosereum.dou_survey_zone.api.v1.exception._404_NotFound.NotFoundEntityException;
 import lombok.AllArgsConstructor;
@@ -34,10 +33,10 @@ public class SurveyService {
     private final SurveyDAO surveyDAO;
 
     @Autowired
-    private final TagDAO tagDAO;
+    private final TagDAOImpl tagDAO;
 
     @Autowired
-    private final ParticipationDAO participationDAO;
+    private final ParticipationDAOImpl participationDAO;
 
     @Autowired
     private final S3Uploader s3Uploader;

@@ -136,7 +136,6 @@ public class UserService {
 
         redisTemplate.opsForValue()
                 .set(User_Email+" TempPW", encodedPassword,
-                        // Date 타입(LONG) - 현재시간 () = 유효기간 남은시간() 만큼난 REDIS에서 쳐 들고잇는다.
                         10,
                         TimeUnit.MINUTES);
 
