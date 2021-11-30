@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
@@ -12,23 +12,29 @@ import Chart from 'react-google-charts';
 // import BarChart from 'rechart';
 import Pagination from '@mui/material/Pagination';
 import { Link } from 'react-router-dom';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
-const Main = ({ data, accUserData, accAgeData, accSexData, reqMain, TAGENUM, setPageNum, setTagSearch, pageNum, }) => {
-    const [ newPage, setNewPage ] = useState(1);
-    // console.log("reqMain", reqMain);
-    console.log("pageNum", pageNum);
+const Main = ({ data, accUserData, accAgeData, accSexData, reqMain, TAGENUM, setTagSearch, tagSearch, alignment, setAlignment, pageNum, pageChange, }) => {
     return (
         <>
             {/* 태그 출력 */}
             <Box sx={{ bgcolor: 'background.paper', pt: 2 }}>
-                <Container maxWidth="sm">
+                <Container maxWidth="lg">
                     <Stack
                         direction="row"
                         justifyContent="center"
                     >
-                    { data.sur_Tag && data.sur_Tag.map((value) => 
-                        <Button id={`${value.tag_ID}`} onClick={e=>{ setPageNum(1); setNewPage(1); setTagSearch(e.target.id); }} >#{value.tag_Name}</Button>
-                    )}
+                    <ToggleButtonGroup
+                        color="success"
+                        value={alignment}
+                        exclusive
+                        onChange={(e,a)=>{ console.log("뭐 출력하니?", a); setAlignment(a);}}
+                    >
+                        { data.sur_Tag && data.sur_Tag.map((value) => 
+                            <ToggleButton id={`${value.tag_ID}`} onClick={e=>{ pageChange(1); setTagSearch(e.target.id===tagSearch? '':e.target.id); }} value={value.tag_Name}>{'#'+value.tag_Name}</ToggleButton>
+                        )}
+                    </ToggleButtonGroup>
                     </Stack>
                 </Container>
             </Box>
@@ -118,8 +124,7 @@ const Main = ({ data, accUserData, accAgeData, accSexData, reqMain, TAGENUM, set
 
                     <br/>
                     <Grid container justifyContent="center">
-                        {reqMain&&<Pagination showFirstButton showLastButton page={newPage} onChange={(_, page)=>{ setPageNum(page); setNewPage(page)}} count={reqMain.paginationInfo.totalPageCount} color="primary" />}
-                        {/* {reqMain&&<Pagination onChange={(_, page)=>{ console.log("체인지", page); setPageNum(page)}} count={reqMain.paginationInfo.lastPage} color="primary" />} */}
+                        {reqMain&&<Pagination showFirstButton showLastButton page={pageNum} onChange={(_, page)=>{ pageChange(page) }} count={reqMain.paginationInfo.totalPageCount} color="primary" />}
                     </Grid>
                 </Grid>
             </Container>

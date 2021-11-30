@@ -9,6 +9,7 @@ const MainComp = ({match}) => {
     const data = useSelector(state=>state.chartReducer.responseAcc);
     const err = useSelector(state=>state.chartReducer.err);
     const [ reqMain, setReqMain ] = useState(null);
+    const [ alignment, setAlignment ] = useState(null);
     const [ pageNum, setPageNum ] = useState(1);
     const [ tagSearch, setTagSearch ] = useState('');
     const [ searchKey, setSearchKey ] = useState('');
@@ -67,50 +68,14 @@ const MainComp = ({match}) => {
     
     // main 리스트, 태그, 검색 요청
     useEffect(()=>{
-        console.log("pageNum, tagSearch, searchKey", pageNum, tagSearch, searchKey);
         mainListAPI(pageNum, tagSearch, searchKey)
             .then(res => setReqMain(res.data))
             .catch(error => console.log("메인 오류", error))
     },[pageNum, tagSearch, searchKey])
 
-    useEffect(()=>{
-        console.log('reqMain', reqMain);
-        
-    },[reqMain])
-
-    // 태그 검색 리스트 요청
-    // useEffect(()=>{
-    //     if(tagSearch){
-    //         console.log("pageNum, tagSearch", pageNum, tagSearch);
-    //         mainListSearchTagAPI(pageNum, tagSearch)
-    //             .then(res => setReqMain(res.data))
-    //             .catch(error => console.log('태그 검색 요청 오류', error))
-    //     }
-    // },[tagSearch])
-    
-    // // main 리스트 요청
-    // useEffect(()=>{
-    //     setTagSearch(null);
-    //     mainListAPI()
-    //         .then( res => setReqMain(res.data) )
-    //         .catch( error => console.log("메인 리스트 요청 오류", error) )
-    // },[dispatch]);
-
-    // 페이징 요청
-    // useEffect(()=>{
-    //     mainListPageAPI(pageNum)
-    //         .then(res => setReqMain(res.data))
-    //         .catch(err => console.log("메인 페이지 요청 오류", err));
-    // },[pageNum])
-
-
-
-
-    // const callPage = (page_Num) => {
-    //     mainListPageAPI(page_Num)
-    //         .then(res => setReqMain(res.data))
-    //         .catch(err => console.log("메인 페이지 요청 오류", err));
-    // }
+    const pageChange = (page) =>{
+        setPageNum(page);
+    }
 
     return (
         <>
@@ -121,9 +86,12 @@ const MainComp = ({match}) => {
                 accSexData={accSexData}
                 reqMain={reqMain}
                 TAGENUM={TAGENUM}
-                setPageNum={setPageNum}
                 setTagSearch={setTagSearch}
+                tagSearch={tagSearch}
+                alignment={alignment}
+                setAlignment={setAlignment}
                 pageNum={pageNum}
+                pageChange={pageChange}
              />      
         </>
     );
