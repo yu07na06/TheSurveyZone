@@ -20,14 +20,17 @@ public class SignUpReq {
 
     @NotBlank
     @Email
+    @Size(max = 45)
     @ApiModelProperty(name = "user_Email", notes = "유저 Email", example = "test@gmail.com")
     private String user_Email;
 
     @NotBlank
+    @Size(max = 15, min = 8)
     @ApiModelProperty(name = "user_Password", notes = "유저 Password", example = "password123!" )
     private String user_Password;
 
     @NotBlank
+    @Size(max = 20)
     @ApiModelProperty(name = "user_Name", notes = "유저 이름", example = "홍길동" )
     private String user_Name;
 

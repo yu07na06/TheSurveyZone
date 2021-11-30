@@ -16,11 +16,14 @@ import java.util.List;
 @Data
 @ApiModel("설문 생성 or 수정 Request DTO")
 public class InsertSurveyReq {
+
     @NotBlank
+    @Size(max = 45)
     @ApiModelProperty(name = "sur_Title", notes = "설문 제목")
     private String sur_Title;
 
     @NotBlank
+    @Size(max = 300)
     @ApiModelProperty(name = "sur_Content", notes = "설문 내용")
     private String sur_Content;
 

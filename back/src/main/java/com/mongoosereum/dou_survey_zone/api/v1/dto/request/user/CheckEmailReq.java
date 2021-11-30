@@ -8,6 +8,7 @@ import lombok.Data;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 
 @Data
@@ -18,6 +19,7 @@ public class CheckEmailReq {
 
     @NotBlank
     @Email
+    @Size(max = 45)
     @ApiModelProperty(name = "user_Email", notes = "유저 Email", example = "test@gmail.com")
     private String user_Email;
 
