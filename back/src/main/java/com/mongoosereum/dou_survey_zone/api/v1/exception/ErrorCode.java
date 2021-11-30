@@ -11,9 +11,14 @@ public enum ErrorCode {
     ALREADY_PARTICIPATION(403,"403_1","ALREADY PARTICIPATION"), // 403 권한 없음
     NOT_OWNER_SURVEY(403,"403_2","NOT OWNER"),
     NOT_FOUND_USER(404,"404_1","NOT FOUND USER"), // 404 유저
-    NOT_FOUND_SURVEY(404,"404_1","NOT FOUND SURVEY"); // 404 설문
+    NOT_FOUND_SURVEY(404,"404_2","NOT FOUND SURVEY"); // 404 설문
 
     private int status;
     private String errorCode;
     private String message;
+
+    @Override
+    public String toString() {
+        return "["+errorCode+ "]: " + message;
+    }
 }

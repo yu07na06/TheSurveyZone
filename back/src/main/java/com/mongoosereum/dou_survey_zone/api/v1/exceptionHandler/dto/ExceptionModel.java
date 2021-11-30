@@ -1,5 +1,7 @@
 package com.mongoosereum.dou_survey_zone.api.v1.exceptionHandler.dto;
 
+import com.mongoosereum.dou_survey_zone.api.v1.exception.UnauthorizedException;
+import com.mongoosereum.dou_survey_zone.api.v1.exception.ForbiddenException;
 import com.mongoosereum.dou_survey_zone.api.v1.exception.NotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,9 +18,14 @@ public class ExceptionModel {
     private final String message;
 
     public static ExceptionModel of(NotFoundException e) {
-        return new ExceptionModel(e.errorCode.getStatus(), e.errorCode.getMessage());
+        return new ExceptionModel(e.errorCode.getStatus(), e.toString());
     }
-
+    public static ExceptionModel of(ForbiddenException e){
+        return new ExceptionModel(e.errorCode.getStatus(), e.toString());
+    }
+    public static ExceptionModel of(UnauthorizedException e) {
+        return new ExceptionModel(e.errorCode.getStatus(), e.toString());
+    }
     public static ExceptionModel of(MethodArgumentNotValidException e){
         List<String> validationList = e.getBindingResult()
                 .getFieldErrors()
