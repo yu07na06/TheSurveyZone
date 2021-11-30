@@ -123,7 +123,7 @@ const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag,
                                                     id="sur_Tag"
                                                     name="sur_Tag"
                                                     value={tag}
-                                                    defaultValue={surveyReqForm.tagList[0].tag_ID}
+                                                    defaultValue={surveyReqForm.tagList.length!==0 && surveyReqForm.tagList[0].tag_ID}
                                                     label="sur_Tag"
                                                     onChange={e => setTag(e.target.value)}
                                                     >
@@ -135,7 +135,7 @@ const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag,
                                     <TextField
                                         disabled
                                         fullWidth
-                                        label={surveyReqForm.tagList[0].tag_Name}
+                                        label={surveyReqForm.tagList.length!==0 && surveyReqForm.tagList[0].tag_Name}
                                     />
                                 }
 

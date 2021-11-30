@@ -3,11 +3,11 @@ import Footer from '../components/common/UI/Footer';
 import Header from '../components/common/UI/Header';
 import MainComp from '../components/MainComp';
 
-const MainPage = () => {
+const MainPage = (match) => {
     return (
         <>
             <Header />
-                <MainComp />
+                <MainComp match={match.match} />
             <Footer />
         </>
     );
