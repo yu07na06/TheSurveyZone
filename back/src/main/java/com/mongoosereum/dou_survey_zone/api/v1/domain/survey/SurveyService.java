@@ -15,11 +15,9 @@ import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.SurveyListPage
 import com.mongoosereum.dou_survey_zone.api.v1.common.paging.PageCriteria;
 import com.mongoosereum.dou_survey_zone.api.v1.common.paging.PaginationInfo;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.tag.Tag;
-import com.mongoosereum.dou_survey_zone.api.v1.exception.AuthorizationException;
+import com.mongoosereum.dou_survey_zone.api.v1.exception.ForbiddenException;
 import com.mongoosereum.dou_survey_zone.api.v1.exception.NotFoundException;
 import com.mongoosereum.dou_survey_zone.api.v1.exception.ErrorCode;
-import com.mongoosereum.dou_survey_zone.api.v1.exception._403_Forbidden.AlreadyParticipatedException;
-import com.mongoosereum.dou_survey_zone.api.v1.exception._404_NotFound.NotFoundEntityException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -93,10 +91,10 @@ public class SurveyService {
     public String insertSurvey(InsertSurveyReq insertSurveyDTO) /*throws IOException*/ {
         // MongoDB insert
         if(insertSurveyDTO.getUser_Email()==null || insertSurveyDTO.getUser_Email().equals("anonymousUser"))
-            throw new HasNotPermissionException(ErrorCode.UNAUTHORIZED_ACCESS);
+            throw new ForbiddenException(ErrorCode.UNAUTHORIZED_ACCESS);
 
         User user = userDAO.existsByEmail_MySQL(insertSurveyDTO.getUser_Email())
-                .orElseThrow(()-> new NotFoundEntityException(ErrorCode.NOT_FOUND_USER));
+                .orElseThrow(()-> new NotFoundException(ErrorCode.NOT_FOUND_USER));
 
         Survey_Mongo survey_mongo = surveyDAO.surveyInsert_Mongo(
                 Survey_Mongo.builder()
@@ -137,9 +135,7 @@ public class SurveyService {
                 tagDAO.insertTag(surveyTag);
             }
         } catch (Exception e) {
-            System.out.println("Exception!!");
-            // Insert에 실패한경우 생성된 MongoDB의 Document를 삭제해줘야함
-            // surveyDAO.deleteSurvey_Mongo(survey_mongo.get_id());
+            surveyDAO.deleteSurvey_Mongo(survey_mongo.get_id());
         }
         return survey_mongo.get_id();
     }
@@ -152,21 +148,23 @@ public class SurveyService {
         return tagDAO.findById(_id);
     }
 
-    @Transactional(rollbackFor = NotFoundEntityException.class)
+    @Transactional(rollbackFor = NotFoundException.class)
     public SurveyPartCheckRes checkPart(String _id, HttpServletRequest request){
         String ip = getIP(request);
+        Survey_MySQL survey_mySQL = surveyDAO.findById_MySQL(_id)
+                .orElseThrow(()->new NotFoundException(ErrorCode.NOT_FOUND_SURVEY));
         return SurveyPartCheckRes.builder()
-                .check_State(surveyDAO.findById_MySQL(_id).get().getSur_State())
+                .check_State(survey_mySQL.getSur_State())
                 .check_IP(participationDAO.findByIP(_id, ip) < 1)
                 .build();
     }
 
     public SelectSurveyRes findById(String _id) {
         Survey_MySQL resultMySQL = surveyDAO.findById_MySQL(_id)
-                .orElseThrow(()-> new NotFoundEntityException(ErrorCode.NOT_FOUND_SURVEY));
+                .orElseThrow(()-> new NotFoundException(ErrorCode.NOT_FOUND_SURVEY));
 
         Survey_Mongo resultMongo = surveyDAO.findById_Mongo(_id)
-                .orElseThrow(()-> new NotFoundEntityException(ErrorCode.NOT_FOUND_SURVEY));
+                .orElseThrow(()-> new NotFoundException(ErrorCode.NOT_FOUND_SURVEY));
 
         List<Tag> tagList = tagDAO.findById(_id);
         SelectSurveyRes surveySelectDTO = new SelectSurveyRes();
@@ -178,8 +176,8 @@ public class SurveyService {
     public Integer insertAnswer(String _id, InsertAnswerReq insertAnswerReq, HttpServletRequest request) {
         String ip = getIP(request);
         if(participationDAO.findByIP(_id,ip) == 1) // 이미 응답한 IP.
-            throw new AlreadyParticipatedException(ErrorCode.ALREADY_PARTICIPATION);
-        int result = participationDAO.insertParticipation(
+            throw new ForbiddenException(ErrorCode.ALREADY_PARTICIPATION);
+        participationDAO.insertParticipation(
                 Participation.builder()
                         ._id(_id)
                         .Part_Age(insertAnswerReq.getAge())
@@ -194,7 +192,7 @@ public class SurveyService {
         String owner = surveyDAO.selectOwner(_id);
 
         if(!owner.equals(User_Email))
-            throw new AuthorizationException(ErrorCode.NOT_OWNER_SURVEY);
+            throw new ForbiddenException(ErrorCode.NOT_OWNER_SURVEY);
 
         surveyDAO.deleteSurvey_MySQL(_id);
         return surveyDAO.deleteSurvey_Mongo(_id);
@@ -244,10 +242,10 @@ public class SurveyService {
 
     public SurveyResultRes resultSurvey(String _id) {
         Survey_Mongo survey_mongo = surveyDAO.findById_Mongo(_id)
-                .orElseThrow(()->new NotFoundEntityException(ErrorCode.NOT_FOUND_SURVEY));
+                .orElseThrow(()->new NotFoundException(ErrorCode.NOT_FOUND_SURVEY));
 
         Survey_MySQL survey_mySQL = surveyDAO.findById_MySQL(_id)
-                .orElseThrow(()->new NotFoundEntityException(ErrorCode.NOT_FOUND_SURVEY));
+                .orElseThrow(()->new NotFoundException(ErrorCode.NOT_FOUND_SURVEY));
 
         List<Question> questionList = survey_mongo.getQuestionList();
         SurveyResultRes surveyResultDTO = new SurveyResultRes();

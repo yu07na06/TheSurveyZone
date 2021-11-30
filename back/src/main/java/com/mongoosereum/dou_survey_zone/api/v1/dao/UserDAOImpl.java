@@ -18,7 +18,7 @@ public class UserDAOImpl implements UserDAO {
         return sqlSession.insert("createUser", user_MySQL);
     }
 
-    public String existsByEmail_MySQL(String email) {
+    public Optional<User> existsByEmail_MySQL(String email) {
         return sqlSession.selectOne("existsByEmail", email);
     }
 

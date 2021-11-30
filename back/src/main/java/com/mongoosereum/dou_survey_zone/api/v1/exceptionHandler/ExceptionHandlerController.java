@@ -1,7 +1,7 @@
 package com.mongoosereum.dou_survey_zone.api.v1.exceptionHandler;
 
-import com.mongoosereum.dou_survey_zone.api.v1.exception.AuthenticationException;
-import com.mongoosereum.dou_survey_zone.api.v1.exception.AuthorizationException;
+import com.mongoosereum.dou_survey_zone.api.v1.exception.UnauthorizedException;
+import com.mongoosereum.dou_survey_zone.api.v1.exception.ForbiddenException;
 import com.mongoosereum.dou_survey_zone.api.v1.exception.NotFoundException;
 import com.mongoosereum.dou_survey_zone.api.v1.exceptionHandler.dto.ExceptionModel;
 import org.springframework.http.HttpHeaders;
@@ -40,14 +40,14 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ExceptionModel.of(e));
     }
 
-    @ExceptionHandler(AuthorizationException.class)
-    public ResponseEntity<ExceptionModel> authorizationExceptionHandler(AuthorizationException e){
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<ExceptionModel> authorizationExceptionHandler(ForbiddenException e){
         logger.error("AuthorizationException :", e);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ExceptionModel.of(e));
     }
 
-    @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<ExceptionModel> authenticationExceptionHandler(AuthenticationException e){
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ExceptionModel> authenticationExceptionHandler(UnauthorizedException e){
         logger.error("AuthenticationException :", e);
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ExceptionModel.of(e));
     }
