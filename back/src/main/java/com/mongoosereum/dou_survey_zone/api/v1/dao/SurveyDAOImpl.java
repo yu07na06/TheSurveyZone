@@ -11,6 +11,7 @@ import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.Survey_MySQL;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
@@ -58,8 +59,8 @@ public class SurveyDAOImpl implements SurveyDAO {
     }
 
     // Insert MySQL Survey Entity
-    public int surveyInsert_MySQL(final Survey_MySQL survey) {
-        return sqlSession.insert("insertSurvey", survey);
+    public void surveyInsert_MySQL(final Survey_MySQL survey) {
+        sqlSession.insert("insertSurvey", survey);
     }
 
     // Select MongoDB Survey Document by _id
@@ -70,59 +71,46 @@ public class SurveyDAOImpl implements SurveyDAO {
 
     @Override
     public Optional<Survey_Mongo> findById_Mongo(String _id) {
-        return Optional.ofNullable(mongoTemplate.findOne(new Query(org.springframework.data.mongodb.core.query.Criteria.where("_id").is(_id)), Survey_Mongo.class));
+        return Optional.ofNullable(mongoTemplate.findOne(new Query(Criteria.where("_id").is(_id)), Survey_Mongo.class));
     }
 
     // Insert MongoDB Survey:AnswerList
-    public Integer insertAnswer(final String _id, final List<Answer> answerList) {
+    public void insertAnswer(final String _id, final List<Answer> answerList) {
         UpdateResult updateResult = null;
-        Query query = new Query(org.springframework.data.mongodb.core.query.Criteria.where("_id").is(_id));
+        Query query = new Query(Criteria.where("_id").is(_id));
         for (int i = 0; i < answerList.size(); i++) {
             Update update = new Update().push("questionList.$[element].answerList")
                     .each(answerList.get(i))
-                    .filterArray(org.springframework.data.mongodb.core.query.Criteria.where("element.SurQue_Order").is(i));
-            try {
+                    .filterArray(Criteria.where("element.SurQue_Order").is(i));
                 updateResult = mongoTemplate.updateMulti(query, update, Survey_Mongo.class);
                 System.out.println(updateResult);
                 System.out.println("Update Success");
-            } catch (Exception e) {
-                System.out.println("Update is failed" + e);
-                return null;
-            }
         }
-        return 1;
     }
 
-    public String selectOwner(String _id) {
-        return sqlSession.selectOne("selectOwner", _id);
+    public Optional<String> selectOwner(String _id) {
+        return Optional.ofNullable(sqlSession.selectOne("selectOwner", _id));
     }
 
-    public int deleteSurvey_MySQL(String _id) {
-        return sqlSession.delete("deleteSurvey", _id);
+    public void deleteSurvey_MySQL(String _id) {
+        sqlSession.delete("deleteSurvey", _id);
     }
 
-    public Long deleteSurvey_Mongo(String _id) {
-        DeleteResult deleteResult = mongoTemplate.remove(
-                new Query(org.springframework.data.mongodb.core.query.Criteria.where("_id").is(_id)),
+    public void deleteSurvey_Mongo(String _id) {
+        mongoTemplate.remove(
+                new Query(Criteria.where("_id").is(_id)),
                 Survey_Mongo.class);
-        return deleteResult.getDeletedCount();
     }
 
-    public Long updateSurvey_Mongo(Survey_Mongo survey) {
+    public void updateSurvey_Mongo(Survey_Mongo survey) {
         List<Question> questionList = survey.getQuestionList();
-        Query query = new Query(org.springframework.data.mongodb.core.query.Criteria.where("_id").is(survey.get_id()));
+        Query query = new Query(Criteria.where("_id").is(survey.get_id()));
         Update update = new Update().set("questionList", questionList);
-        UpdateResult updateResult = null;
-        try {
-            updateResult = mongoTemplate.updateFirst(query, update, Survey_Mongo.class);
-        } catch (Exception e) {
-            return null;
-        }
-        return updateResult.getModifiedCount();
+        mongoTemplate.updateFirst(query, update, Survey_Mongo.class);
     }
 
-    public Integer updateSurvey_MySQL(Survey_MySQL survey) {
-        return sqlSession.update("updateSurvey", survey);
+    public void updateSurvey_MySQL(Survey_MySQL survey) {
+        sqlSession.update("updateSurvey", survey);
     }
 
     //search  today start survey list Mail send list

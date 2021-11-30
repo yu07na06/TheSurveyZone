@@ -8,6 +8,5 @@ public interface ParticipationDAO {
         Map<String, Long> ACCAge();
         Map<String,Long> ACCGender();
         int findByIP(String _id, String ip);
-        int insertParticipation(Participation participation);
-        Participation selectParticipation(Participation participation);
+        void insertParticipation(Participation participation);
 }

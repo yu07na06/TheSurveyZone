@@ -1,8 +1,10 @@
-package com.mongoosereum.dou_survey_zone.api.v1.domain.user;
+package com.mongoosereum.dou_survey_zone.api.v1.service;
 
 import com.mongoosereum.dou_survey_zone.api.v1.dao.UserDAOImpl;
+import com.mongoosereum.dou_survey_zone.api.v1.domain.user.User;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.user.SearchPWReq;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.user.SignUpReq;
+import com.mongoosereum.dou_survey_zone.api.v1.exception.BadRequestException;
 import com.mongoosereum.dou_survey_zone.api.v1.exception.ErrorCode;
 import com.mongoosereum.dou_survey_zone.api.v1.exception.NotFoundException;
 import com.mongoosereum.dou_survey_zone.api.v1.exception.UnauthorizedException;
@@ -35,8 +37,9 @@ public class UserService {
     @Autowired
     private TokenProvider tokenProvider;
 
-    public Integer createUser(final SignUpReq signUpReq){
-
+    public void createUser(final SignUpReq signUpReq){
+        if(userDAO.existsByEmail_MySQL(signUpReq.getUser_Email()).isPresent())
+            throw new BadRequestException(ErrorCode.EMAIL_DUPLICATION);
         String encodedPassword = passwordEncoder.encode(signUpReq.getUser_Password());
 
         User user_mySQL = User.builder()
@@ -46,16 +49,16 @@ public class UserService {
                 .user_Tel(signUpReq.getUser_Tel())
                 .build();
 
-        return userDAO.createUser_MySQL(user_mySQL);
+        userDAO.createUser_MySQL(user_mySQL);
     }
 
     public boolean checkEmail(final String User_Email){
         return !Objects.equals(User_Email, userDAO.existsByEmail_MySQL(User_Email));
     }
 
-    public List<?> login(final String email, final String password){
+    public List<?> signin(final String email, final String password){
         User searchUser = userDAO.findByEmailAndPassword_MySQL(email)
-                .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_USER));
+                .orElseThrow(() -> new UnauthorizedException(ErrorCode.UNAUTHORIZED_ACCESS));
         String tempPW = (String) redisTemplate.opsForValue().get(email+" TempPW");
         ArrayList result = new ArrayList();
         if(passwordEncoder.matches(password, searchUser.getUser_Password())){
@@ -70,37 +73,10 @@ public class UserService {
             result.add(searchUser);
             return result;
         }
-        throw new UnauthorizedException(ErrorCode.NOT_FOUND_USER);
+        throw new UnauthorizedException(ErrorCode.UNAUTHORIZED_ACCESS);
     }
 
-    public List<String> searchID(final String name, final String tel){
-        User user_mySQL = User.builder()
-                .user_Name(name)
-                .user_Tel(tel)
-                .build();
-
-        List<String> searchEmail = userDAO.findByEmail(user_mySQL);
-
-        if(searchEmail.isEmpty()){
-            throw new NotFoundException(ErrorCode.NOT_FOUND_USER);
-        }
-
-        return searchEmail;
-    }
-    public User findByEmail_Name_Tel(SearchPWReq searchPWReq){
-
-        User user_mySQL =  User.builder()
-                .user_Email(searchPWReq.getUser_Email())
-                .user_Name(searchPWReq.getUser_Name())
-                .user_Tel(searchPWReq.getUser_Tel())
-                .build();
-
-        User result = userDAO.findByEmail_Name_Tel(user_mySQL).orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_USER));
-
-        return result;
-    }
-
-    public void BlackListToken(HttpServletRequest request){
+    public void signout(HttpServletRequest request){
         //푸는 이유는 블랙리스트를 추가를 하기 위해서이다.
         // 헤더에서 JWT 를 받아옵니다.
         String token = tokenProvider.resolveToken((HttpServletRequest) request);
@@ -121,8 +97,35 @@ public class UserService {
 
     }
 
+    public List<String> searchID(final String name, final String tel){
+        User user_mySQL = User.builder()
+                .user_Name(name)
+                .user_Tel(tel)
+                .build();
+
+        List<String> searchEmail = userDAO.findByEmail(user_mySQL);
+
+        if(searchEmail.isEmpty()){
+            throw new NotFoundException(ErrorCode.NOT_FOUND_USER);
+        }
+
+        return searchEmail;
+    }
+
+
     //임시 비밀번호 발금
-    public String makeTempPW(String User_Email) {
+    public String makeTempPW(SearchPWReq searchPWReq) {
+
+        User user_mySQL =  User.builder()
+                .user_Email(searchPWReq.getUser_Email())
+                .user_Name(searchPWReq.getUser_Name())
+                .user_Tel(searchPWReq.getUser_Tel())
+                .build();
+
+        User result = userDAO.findByEmail_Name_Tel(user_mySQL)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_USER));
+
+        String User_Email = result.getUser_Email();
 
         int leftLimit = 48;
         int rightLimit = 122;

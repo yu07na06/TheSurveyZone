@@ -31,11 +31,7 @@ public class ParticipationDAOImpl implements ParticipationDAO {
         System.out.println(ip+ " " + _id);
         return sqlSession.selectOne("findByIP", map);
     }
-    public int insertParticipation(Participation participation){
-        return sqlSession.insert("insertParticipation", participation);
-    }
-
-    public Participation selectParticipation(Participation participation){
-        return sqlSession.selectOne("selectParticipation", participation);
+    public void insertParticipation(Participation participation){
+        sqlSession.insert("insertParticipation", participation);
     }
 }

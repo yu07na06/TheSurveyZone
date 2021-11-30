@@ -14,12 +14,12 @@ public class UserDAOImpl implements UserDAO {
     @Autowired
     SqlSession sqlSession;
 
-    public int createUser_MySQL(User user_MySQL) {
-        return sqlSession.insert("createUser", user_MySQL);
+    public void createUser_MySQL(User user_MySQL) {
+        sqlSession.insert("createUser", user_MySQL);
     }
 
     public Optional<User> existsByEmail_MySQL(String email) {
-        return sqlSession.selectOne("existsByEmail", email);
+        return Optional.ofNullable(sqlSession.selectOne("existsByEmail", email));
     }
 
     public Optional<User> findByEmailAndPassword_MySQL(String email) {
