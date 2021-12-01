@@ -92,14 +92,6 @@ const MultipleChoiceComp = ({ number, setCheck, setDelIndex, ReadOnlyState, Read
                         }
                     }
             }
-            // surAns_Content.map(value => {
-            //     let splitValue = value.split('_');
-            //     if(splitValue[1]==unRequired && splitValue[0]=="SurQueCheck"){
-            //         let checkbox1 = document.querySelector(`input[name=${value}]`);
-            //         console.log("checkbox 출력", checkbox1);
-            //         checkbox1.required=false;
-            //     }
-            // })
         }
     },[unRequired])
 
@@ -127,7 +119,8 @@ const MultipleChoiceComp = ({ number, setCheck, setDelIndex, ReadOnlyState, Read
                         variant="standard"
                         required
                         fullWidth
-                        disabled={ReadOnlyState&&!UpdateKey}
+                        InputProps={{ readOnly: (ReadOnlyState&&!UpdateKey)}}
+                        // disabled={ReadOnlyState&&!UpdateKey}
                         name={`SurQue_Ans_${number}_${count}`}
                         id={`SurQue_Ans_${number}_${count}`}
                         label={`선택지${number}_${count}`}

@@ -41,6 +41,7 @@ const useStyles = makeStyles((theme) => ({
   
   
   const Register = ({onSubmit, PWNOTMATCH, onChange, phoneNumber, errorText, emailText, }) => {
+    console.log("emailText : ",emailText);
     const classes = useStyles();
     return (
       <Container component="main" maxWidth="xs">
