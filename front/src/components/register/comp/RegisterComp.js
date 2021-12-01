@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Register from '../UI/Register';
 import { email as emailAPI, register as registerAPI } from '../../../lib/api/auth'; 
 import { useHistory } from 'react-router';
-import Swal from 'sweetalert2';
+import ErrorSweet from '../../common/UI/ErrorSweet';
 
 const RegisterComp = () => {
 
@@ -11,7 +11,7 @@ const RegisterComp = () => {
     const [passWordConfirm, setPassWordConfirm] = useState();
     const [phoneNumber, setPhoneNumber] = useState();
     const [errorText, setErrorText] = useState();
-    const [emailText, setEmailText] = useState();
+    const [emailText, setEmailText] = useState(true);
     const history = useHistory();
 
     const onSubmit = (event) => {
@@ -35,7 +35,7 @@ const RegisterComp = () => {
             history.push('/LoginPage')
         })
         .catch((err)=>{
-            console.log(err);
+            ErrorSweet(err.response.status, err.response.statusText, err.response.data.message);
         })
 
         setErrorText()
@@ -71,7 +71,7 @@ const RegisterComp = () => {
                 emailResult.current = regexEmail.test(e.target.value)
                 emailAPI({user_Email: e.target.value})
                     .then(res=>{ console.log("중복검사 결과값 : ",!res.data);setEmailText(!res.data)})
-                    .catch(err=>console.log(err));
+                    .catch(err=> ErrorSweet(err.response.status, err.response.statusText, err.response.data.message));
                 break;
             case 'User_Password' : 
                 setUser_Password(e.target.value)
