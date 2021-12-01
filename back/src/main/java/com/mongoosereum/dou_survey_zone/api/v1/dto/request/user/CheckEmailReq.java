@@ -17,8 +17,6 @@ import javax.validation.constraints.Size;
 @ApiModel("이메일 체크 DTO")
 public class CheckEmailReq {
 
-    @NotBlank
-    @Email
     @Size(max = 45)
     @ApiModelProperty(name = "user_Email", notes = "유저 Email", example = "test@gmail.com")
     private String user_Email;
