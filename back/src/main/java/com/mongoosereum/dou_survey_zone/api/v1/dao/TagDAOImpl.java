@@ -32,9 +32,12 @@ public class TagDAOImpl implements TagDAO {
     }
 
     public Optional<SurveyTag> selectSurveyTag(String _id){
-        return sqlSession.selectOne("selectSurveyTag",_id);
+        return Optional.ofNullable(sqlSession.selectOne("selectSurveyTag",_id));
     }
     public void updateSurveyTag(SurveyTag surveyTag){
         sqlSession.update("updateSurveyTag",surveyTag);
+    }
+    public void deleteSurveyTag(SurveyTag surveyTag){
+        sqlSession.delete("deleteSurveyTag",surveyTag);
     }
 }

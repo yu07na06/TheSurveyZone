@@ -210,16 +210,14 @@ public class SurveyService {
         surveyDAO.deleteSurvey_Mongo(_id);
     }
 
-    public Boolean checkOwner(String _id, String User_Email){
-        String owner = surveyDAO.selectOwner(_id)
-                .orElseThrow(()->new NotFoundException(ErrorCode.NOT_FOUND_SURVEY));
-        if(!owner.equals(User_Email))
-            throw new ForbiddenException(ErrorCode.NOT_OWNER_SURVEY);
-
-        return owner.equals(User_Email)? true: false;
-    }
     @Transactional(rollbackFor = Exception.class)
     public void updateSurvey(String _id, InsertSurveyReq surveyInsertDTO) {
+        if(!surveyInsertDTO.getUser_Email().equals(surveyDAO.selectOwner(_id)
+                .orElseThrow(() ->
+                        new NotFoundException(ErrorCode.NOT_FOUND_SURVEY))
+        ) )
+            throw new ForbiddenException(ErrorCode.NOT_OWNER_SURVEY);
+
         // MongoDB insert
         Survey_MySQL survey_MySQL = surveyDAO.findById_MySQL(_id)
                 .orElseThrow(()-> new NotFoundException(ErrorCode.NOT_FOUND_SURVEY));
@@ -241,10 +239,16 @@ public class SurveyService {
                 ._id(_id)
                 .build();
 
-        if(tagDAO.selectSurveyTag(_id).isPresent())
-            tagDAO.insertTag(surveyTag);
-        else
-            tagDAO.updateSurveyTag(surveyTag);
+        if(tagDAO.selectSurveyTag(_id).isPresent()) { // tag가 기존에 존재함
+            if(surveyTag.getTag_ID() == null || surveyTag.getTag_ID().equals(""))
+                tagDAO.deleteSurveyTag(surveyTag);
+            else
+                tagDAO.updateSurveyTag(surveyTag);
+        }
+        else {
+            if(surveyTag.getTag_ID() != null && !surveyTag.getTag_ID().equals(""))
+                tagDAO.insertTag(surveyTag);
+        }
     }
 
     public SurveyResultRes resultSurvey(String User_Email, String _id) {

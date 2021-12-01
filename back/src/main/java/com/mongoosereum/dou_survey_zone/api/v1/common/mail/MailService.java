@@ -65,7 +65,7 @@ public class MailService {
         context.setVariable("userName",User_Name);
         context.setVariable("mainLink", mainPageLink);
         context.setVariable("tempPW", tempPW);
-        context.setVariable("linkToLogin",mainPageLink + "/Login");
+        context.setVariable("linkToLogin",mainPageLink + "LoginPage");
         String html = templateEngine.process("resetPW",context);
 
         mailSend(User_Email,subject,html);

@@ -82,7 +82,8 @@ public class UserController{
 
         /* Cookie */
         Cookie cookie = new Cookie("Authorization", token); // create a cookie
-        cookie.setMaxAge(60 * 60); // expires 1h 유효기간
+        //TODO 유효기간 현재 작업 편하게 10시간 해둠 1시간으로 변경 필요!
+        cookie.setMaxAge(600 * 60); // expires 1h 유효기간
         // optional properties
 //            cookie.setSecure(true); // SSL 통신채널 연결 시에만 쿠키를 전송하도록 설정
 //            cookie.setHttpOnly(true); // 자바 스크립트에서 쿠키값을 읽어가지 못하도록 설정
@@ -92,7 +93,7 @@ public class UserController{
         final SignInRes signInRes = SignInRes.builder()
                 .user_Email(user.getUser_Email())
                 .user_Name(user.getUser_Name())
-                .user_Token(token)
+//                .user_Token(token)
                 .login_Type(loginType)
                 .build();
 

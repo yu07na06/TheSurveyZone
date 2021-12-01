@@ -12,30 +12,31 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ExceptionModel {
     private final int status;
+    private final String errorCode;
     private final String message;
 
     public static ExceptionModel of(BadRequestException e) {
-        return new ExceptionModel(e.errorCode.getStatus(), e.toString());
+        return new ExceptionModel(e.errorCode.getStatus(),e.errorCode.getErrorCode(), e.errorCode.getMessage());
     }
     public static ExceptionModel of(NotFoundException e) {
-        return new ExceptionModel(e.errorCode.getStatus(), e.toString());
+        return new ExceptionModel(e.errorCode.getStatus(),e.errorCode.getErrorCode(), e.errorCode.getMessage());
     }
     public static ExceptionModel of(ForbiddenException e){
-        return new ExceptionModel(e.errorCode.getStatus(), e.toString());
+        return new ExceptionModel(e.errorCode.getStatus(),e.errorCode.getErrorCode(), e.errorCode.getMessage());
     }
     public static ExceptionModel of(UnauthorizedException e) {
-        return new ExceptionModel(e.errorCode.getStatus(), e.toString());
+        return new ExceptionModel(e.errorCode.getStatus(),e.errorCode.getErrorCode(), e.errorCode.getMessage());
     }
-    public static ExceptionModel of(MethodArgumentNotValidException e){
-        List<String> validationList = e.getBindingResult()
-                .getFieldErrors()
-                .stream()
-                .map(fieldError-> fieldError.getField()+" : "+fieldError.getDefaultMessage())
-                .collect(Collectors.toList());
-
-        return new ExceptionModel(400,validationList.toString());
-    }
-    public static ExceptionModel of(HttpMessageNotReadableException e) {
-        return new ExceptionModel(400, "Request body has empty value");
-    }
+//    public static ExceptionModel of(MethodArgumentNotValidException e){
+//        List<String> validationList = e.getBindingResult()
+//                .getFieldErrors()
+//                .stream()
+//                .map(fieldError-> fieldError.getField()+" : "+fieldError.getDefaultMessage())
+//                .collect(Collectors.toList());
+//
+//        return new ExceptionModel(400,validationList.toString());
+//    }
+//    public static ExceptionModel of(HttpMessageNotReadableException e) {
+//        return new ExceptionModel(400, "Request body has empty value");
+//    }
 }

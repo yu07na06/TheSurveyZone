@@ -38,8 +38,9 @@ public class UserService {
     private TokenProvider tokenProvider;
 
     public void createUser(final SignUpReq signUpReq){
-        if(userDAO.existsByEmail_MySQL(signUpReq.getUser_Email()).isPresent())
+        if(checkEmail(signUpReq.getUser_Email()))
             throw new BadRequestException(ErrorCode.EMAIL_DUPLICATION);
+        userDAO.existsByEmail_MySQL(signUpReq.getUser_Email()).isPresent();
         String encodedPassword = passwordEncoder.encode(signUpReq.getUser_Password());
 
         User user_mySQL = User.builder()
@@ -53,7 +54,8 @@ public class UserService {
     }
 
     public boolean checkEmail(final String User_Email){
-        return Objects.equals(User_Email, userDAO.existsByEmail_MySQL(User_Email));
+        System.out.println("checkEmail: "+ Objects.equals(User_Email, userDAO.emailCheck(User_Email)));
+        return Objects.equals(User_Email, userDAO.emailCheck(User_Email));
     }
 
     public List<?> signin(final String email, final String password){
