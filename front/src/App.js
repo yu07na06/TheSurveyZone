@@ -1,4 +1,5 @@
 import { Route } from 'react-router-dom';
+import ChangePWPage from './pages/ChangePWPage';
 import CreateSurveyPage from './pages/CreateSurveyPage';
 import FindIDPage from './pages/FindIDPage';
 import FindPWPage from './pages/FindPWPage';
@@ -19,6 +20,7 @@ const App = () => {
         <Route path="/RegisterPage" component={RegisterPage} />
         <Route path="/FindIDPage" component={FindIDPage} />
         <Route path="/FindPWPage" component={FindPWPage} />
+        <Route path="/ChangePWPage" component={ChangePWPage} />
         <Route path="/CreateSurveyPage" component={CreateSurveyPage} />
         <Route path="/MySurveyPage" component={MySurveyPage} />
         
