@@ -60,7 +60,7 @@ public class SelectSurveyRes {
         this.sur_State = survey_mySQL.getSur_State();
         this.sur_StartDate = survey_mySQL.getSur_StartDate();
         this.sur_EndDate = survey_mySQL.getSur_EndDate();
-        this.sur_Image = survey_mySQL.getSur_Image();
+        this.sur_Image = survey_mySQL.getSur_Img();
         this.user_Email = survey_mySQL.getUser_Email();
         this.sur_Publish = survey_mySQL.getSur_Publish();
         this.sur_Type = survey_mySQL.getSur_Type();
