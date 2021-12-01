@@ -19,6 +19,6 @@ public enum ErrorCode {
 
     @Override
     public String toString() {
-        return "["+errorCode+ "]: " + message;
+        return ("["+ errorCode+ "]: " + message);
     }
 }
