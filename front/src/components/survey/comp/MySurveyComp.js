@@ -6,13 +6,13 @@ import { useHistory } from 'react-router-dom';
 import {deleteSurvey as deleteSurveyAPI, getMySurveyList as getMySurveyListAPI } from '../../../lib/api/survey';
 
 const MySurveyComp = () => {
-  const [cookies] = useCookies(['user_Token']);
+  const [cookies] = useCookies(['Authorization']);
   const [mySurList, setMysurList] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const history = useHistory();
   
   useEffect(()=>{
-    if(cookies.user_Token==null){
+    if(cookies.Authorization==null){
       Swal.fire({
         icon:'info', 
         title:'로그인이 필요한 페이지입니다.'
