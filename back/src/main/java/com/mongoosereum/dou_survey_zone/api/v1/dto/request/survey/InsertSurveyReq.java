@@ -62,7 +62,7 @@ public class InsertSurveyReq {
     private SurveyType sur_Type;
 
     @ApiModelProperty(name = "sur_Tag", notes = "설문 태그, v1 : 1개 태그만 가능")
-    private Long sur_Tag; // TODO [정환] 여러개로 변경해야함.
+    private Integer sur_Tag; // TODO [정환] 여러개로 변경해야함.
 
 //    @ApiModelProperty(name = "image", notes="이미지 파일")
 //    private MultipartFile image;

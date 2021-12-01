@@ -16,7 +16,7 @@
     </select>
 
     <select id="selectSurveyList" parameterType="PaginationInfo" resultType="Survey_MySQL">
-        select survey._id, survey.Sur_Title, survey.Sur_Content, survey.Sur_State, survey.Sur_StartDate, survey.Sur_EndDate, survey.Sur_Publish, survey.Sur_Image, survey.User_Email, survey.Sur_Type, surveytag.Tag_ID
+        select survey._id, survey.Sur_Title, survey.Sur_Content, survey.Sur_State, survey.Sur_StartDate, survey.Sur_EndDate, survey.Sur_Publish, survey.Sur_Img, survey.User_Email, survey.Sur_Type, surveytag.Tag_ID
         from survey.survey left OUTER JOIN survey.surveytag
         on survey.survey._id = survey.surveytag._id
         where Sur_Publish = true
@@ -85,7 +85,7 @@
     </select>
 
     <insert id="insertSurvey" parameterType="Survey_MySQL">
-        insert into survey.survey values (#{_id},#{sur_Title},#{sur_Content},#{sur_State},#{sur_StartDate},#{sur_EndDate},#{sur_Publish},#{sur_Image},#{user_Email},#{sur_Type} );
+        insert into survey.survey values (#{_id},#{sur_Title},#{sur_Content},#{sur_State},#{sur_StartDate},#{sur_EndDate},#{sur_Publish},#{sur_Img},#{user_Email},#{sur_Type} );
     </insert>
 
     <select id="selectOwner" parameterType="String" resultType="String">
@@ -100,7 +100,7 @@
         update survey.survey
         set Sur_Title = #{sur_Title}, Sur_Content = #{sur_Content}, Sur_State = #{sur_State},
             Sur_StartDate = #{sur_StartDate}, Sur_EndDate = #{sur_EndDate},
-            Sur_Publish = #{sur_Publish}, Sur_Img = #{sur_Image},
+            Sur_Publish = #{sur_Publish}, Sur_Img = #{sur_Img},
             User_Email = #{user_Email}, Sur_Type = #{sur_Type}
         where _id = #{_id}
     </update>

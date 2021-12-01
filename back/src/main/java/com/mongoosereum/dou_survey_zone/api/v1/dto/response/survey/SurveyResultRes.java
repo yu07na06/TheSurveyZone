@@ -35,7 +35,7 @@ public class SurveyResultRes{
     private Boolean sur_Publish;
 
     @ApiModelProperty(name = "sur_Image", notes = "설문 이미지, 미구현 ")
-    private String sur_Image;
+    private String sur_Img;
 
     @ApiModelProperty(name = "sur_Type", notes = "설문 타입, 미구현")
     private Integer sur_Type;
@@ -80,7 +80,7 @@ public class SurveyResultRes{
         this.sur_StartDate = survey_mySQL.getSur_StartDate();
         this.sur_EndDate = survey_mySQL.getSur_EndDate();
         this.sur_Publish = survey_mySQL.getSur_Publish();
-        this.sur_Image = survey_mySQL.getSur_Image();
+        this.sur_Img = survey_mySQL.getSur_Img();
         this.sur_Type = survey_mySQL.getSur_Type();
     }
 }
