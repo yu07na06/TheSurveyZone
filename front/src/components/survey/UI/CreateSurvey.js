@@ -104,6 +104,7 @@ const CreateSurvey = ({ onClick, day, setDay, onCheckChange, question, open, anc
                                                     label="sur_Tag"
                                                     onChange={e => setTag(e.target.value)}
                                                     >
+                                                    <MenuItem value="">선택안함</MenuItem>
                                                     {tags&&tags.map(v=><MenuItem value={v.tag_ID}>{v.tag_Name}</MenuItem>)}
                                                 </Select>
                                             </FormControl>
