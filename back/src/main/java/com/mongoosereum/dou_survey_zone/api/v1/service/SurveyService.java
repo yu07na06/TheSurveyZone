@@ -225,6 +225,16 @@ public class SurveyService {
 
         surveyDAO.updateSurvey_Mongo(survey_Mongo);
         surveyDAO.updateSurvey_MySQL(survey_MySQL);
+
+        SurveyTag surveyTag = SurveyTag.builder()
+                .Tag_ID(surveyInsertDTO.getSur_Tag())
+                ._id(_id)
+                .build();
+
+        if(tagDAO.selectSurveyTag(_id).isPresent())
+            tagDAO.insertTag(surveyTag);
+        else
+            tagDAO.updateSurveyTag(surveyTag);
     }
 
     public SurveyResultRes resultSurvey(String User_Email, String _id) {
