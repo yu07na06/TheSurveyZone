@@ -10,7 +10,7 @@ import { useCookies } from 'react-cookie';
 import  ClipboardCopy from '../../common/Function';
 
 const CreateSurveyComp = () => {
-  const [cookies] = useCookies(['user_Token']);
+  const [cookies] = useCookies(['Authorization']);
   const [day, setDay] = useState([new Date(), new Date()]);
   const [Sur_Publish, setSur_Publish] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -25,7 +25,7 @@ const CreateSurveyComp = () => {
   const history = useHistory();
 
   useEffect(()=>{
-    if(cookies.user_Token==null){
+    if(cookies.Authorization==null){
       Swal.fire({
         icon:'info',
         title:'로그인이 필요한 페이지입니다.'
@@ -127,7 +127,6 @@ const CreateSurveyComp = () => {
       };
     });
 
-    console.log("좋아해?", day);
     let obj = {
       sur_Type:1, // 오정환 주입! 일단 하라고 하시넹 오키
       sur_Title: Sur_Title, // 설문 제목

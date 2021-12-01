@@ -7,6 +7,7 @@ import { Tab, Tabs } from '@mui/material';
 import { alpha, makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
+import { logout as logoutAPI } from '../../../lib/api/auth';
 
 const useStyles = makeStyles((theme) => ({
     search: {
@@ -48,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
   }));
   
   const Header = () => {
-  const [cookies, _, removeCookie] = useCookies(['user_Token']);
+  const [cookies, _, removeCookie] = useCookies(['Authorization']);
   const classes = useStyles();
 
   return (
@@ -71,12 +72,12 @@ const useStyles = makeStyles((theme) => ({
                   <Link to='/MySurveyPage'style={{textDecoration:'none', color:'white'}}><Tab label="내 설문지" style={{fontWeight:'bold'}}/></Link>
                  
                   {/**/}
-                  {!cookies.user_Token?
+                  {!cookies.Authorization?
                     <>
                       <Link to='/LoginPage'style={{textDecoration:'none', color:'white'}}><Tab label="로그인" style={{fontWeight:'bold'}}/></Link>
                       <Link to='/RegisterPage'style={{textDecoration:'none', color:'white'}}><Tab label="회원가입" style={{fontWeight:'bold'}}/></Link>
                     </>
-                   :<Link to='/'style={{textDecoration:'none', color:'white'}}><Tab label="로그아웃" onClick={()=>removeCookie('user_Token')} style={{fontWeight:'bold'}}/></Link>}
+                   :<Link to='/'style={{textDecoration:'none', color:'white'}}><Tab label="로그아웃" onClick={()=>{removeCookie('Authorization'); logoutAPI().then(res=>console.log("로그아웃 성공", res)).catch(err=>console.log("로그아웃 실패", err))}} style={{fontWeight:'bold'}}/></Link>}
 
               </Tabs>
               </Toolbar>
