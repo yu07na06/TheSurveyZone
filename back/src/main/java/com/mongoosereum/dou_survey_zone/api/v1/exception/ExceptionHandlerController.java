@@ -11,6 +11,8 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.servlet.ServletException;
+import javax.validation.ConstraintViolation;
+import java.util.Iterator;
 
 @RestControllerAdvice
 public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
@@ -74,25 +76,4 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
         logger.error("ForbiddenException :", e);
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e);
     }
-
-//    protected String getResultMessage(final Iterator<ConstraintViolation<?> > violationIterator){
-//        final StringBuilder resultMessageBuilder = new StringBuilder();
-//        while(violationIterator.hasNext()){
-//            final ConstraintViolation<?> constraintViolation = violationIterator.next();
-//            resultMessageBuilder
-//                    .append("['")
-//                    .append(getPropertyName(constraintViolation.getPropertyPath().toString()))
-//                    .append("' is '")
-//                    .append(constraintViolation.getInvalidValue())
-//                    .append("'. ")
-//                    .append(constraintViolation.getMessage())
-//                    .append("]");
-//            if(violationIterator.hasNext())
-//                resultMessageBuilder.append(", ");
-//        }
-//        return resultMessageBuilder.toString();
-//    }
-//    protected String getPropertyName(String propertyPath) {
-//        return propertyPath.substring(propertyPath.lastIndexOf('.') + 1); // 전체 속성 경로에서 속성 이름만 가져온다.
-//    }
 }
