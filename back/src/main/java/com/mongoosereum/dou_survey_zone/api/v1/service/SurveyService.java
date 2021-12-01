@@ -90,8 +90,10 @@ public class SurveyService {
                 .surveylist(surveyList)
                 .build();
     }
+
     @Transactional
     public String insertSurvey(InsertSurveyReq insertSurveyDTO) /*throws IOException*/ {
+        System.out.println("inssertsurvey 서비스 시작");
         // MongoDB insert
         if(insertSurveyDTO.getUser_Email()==null || insertSurveyDTO.getUser_Email().equals("anonymousUser"))
             throw new ForbiddenException(ErrorCode.UNAUTHORIZED_ACCESS);
@@ -103,6 +105,8 @@ public class SurveyService {
                 Survey_Mongo.builder()
                         .questionList(insertSurveyDTO.getQuestionList())
                         .build());
+
+
 
 //        S3 image Upload
 //        String imageURL = "";
@@ -123,9 +127,10 @@ public class SurveyService {
                 .sur_StartDate(insertSurveyDTO.getSur_StartDate())
                 .sur_EndDate(insertSurveyDTO.getSur_EndDate())
                 .sur_Publish(insertSurveyDTO.getSur_Publish())
-                .sur_Image(insertSurveyDTO.getSur_Image() /*imageURL*/ )
+                .sur_Img(insertSurveyDTO.getSur_Image() /*imageURL*/ )
                 .user_Email(user.getUser_Email())
                 .sur_Type(insertSurveyDTO.getSur_Type().getNum())
+                .tag_ID(insertSurveyDTO.getSur_Tag())
                 .build();
 
         try {
@@ -138,6 +143,8 @@ public class SurveyService {
                 tagDAO.insertTag(surveyTag);
             }
         } catch (Exception e) {
+            System.out.println("에러발생");
+            e.printStackTrace();
             surveyDAO.deleteSurvey_Mongo(survey_mongo.get_id());
         }
         return survey_mongo.get_id();
@@ -222,6 +229,9 @@ public class SurveyService {
 
         survey_Mongo.setQuestionList(surveyInsertDTO.getQuestionList());
         survey_MySQL.set(surveyInsertDTO);
+
+        System.out.println(survey_MySQL.getSur_State());
+        System.out.println(surveyInsertDTO.getSur_State());
 
         surveyDAO.updateSurvey_Mongo(survey_Mongo);
         surveyDAO.updateSurvey_MySQL(survey_MySQL);

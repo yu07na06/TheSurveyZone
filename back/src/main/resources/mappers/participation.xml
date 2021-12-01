@@ -8,7 +8,7 @@
     </select>
 
     <insert id="insertParticipation" parameterType="Participation">
-        insert into survey.participation values(#{_id},#{Part_IP},#{Part_Gender},#{Part_Age});
+        insert into survey.participation (`_id`, `Part_IP`, `Part_Gender`, `Part_Age`) values(#{_id},#{Part_IP},#{Part_Gender},#{Part_Age});
     </insert>
     <select id="countTotal" resultType="Long">
         select count(*) from survey.participation;
