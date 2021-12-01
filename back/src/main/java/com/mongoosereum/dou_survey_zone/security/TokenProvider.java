@@ -22,9 +22,9 @@ public class TokenProvider {
     public static final String SECRET_KEY = "DOUSURVEYZONE";
 
     public String create(User user_mySQL){
-        // 기한은 지금부터 1일
+        //TODO 유효기간 현재 작업 편하게 10시간 해둠 1시간으로 변경 필요!
         Date expiryDate = Date.from(
-                Instant.now().plus(1, ChronoUnit.HOURS));
+                Instant.now().plus(10, ChronoUnit.HOURS));
 
         /*
         { //header

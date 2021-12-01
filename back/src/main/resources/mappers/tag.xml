@@ -3,9 +3,6 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="tag">
-    <insert id="insertSurveyTag" parameterType="SurveyTag">
-        insert into survey.surveytag values(#{_id},#{Tag_ID});
-    </insert>
     <select id="selectTagList" resultType="Tag">
         select * from survey.tag;
     </select>
@@ -23,13 +20,19 @@
         </otherwise>
     </choose>
     </select>
-
     <select id="selectSurveyTag" parameterType="String" resultType="SurveyTag">
         select *
         from survey.surveytag
-        where ._id = #{_id}
+        where _id = #{_id}
     </select>
+    <insert id="insertSurveyTag" parameterType="SurveyTag">
+        insert into survey.surveytag values(#{_id},#{Tag_ID});
+    </insert>
     <update id="updateSurveyTag" parameterType="SurveyTag">
         update survey.surveytag set survey.surveytag.Tag_ID = #{Tag_ID} where _id = #{_id};
     </update>
+
+    <delete id="deleteSurveyTag" parameterType="SurveyTag">
+        delete from survey.surveytag where _id = #{_id};
+    </delete>
 </mapper>

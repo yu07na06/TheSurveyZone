@@ -18,6 +18,10 @@ public class UserDAOImpl implements UserDAO {
         sqlSession.insert("createUser", user_MySQL);
     }
 
+    public String emailCheck (String email){
+        return sqlSession.selectOne("emailCheck", email);
+    }
+
     public Optional<User> existsByEmail_MySQL(String email) {
         return Optional.ofNullable(sqlSession.selectOne("existsByEmail", email));
     }

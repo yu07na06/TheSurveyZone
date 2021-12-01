@@ -12,4 +12,5 @@ public interface TagDAO {
     void insertTag(SurveyTag surveyTag);
     Optional<SurveyTag> selectSurveyTag(String _id);
     void updateSurveyTag(SurveyTag surveyTag);
+    void deleteSurveyTag(SurveyTag surveyTag);
 }

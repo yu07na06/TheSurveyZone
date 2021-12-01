@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserDAO {
+    String emailCheck (String email);
     void createUser_MySQL(User user_MySQL);
     Optional<User> existsByEmail_MySQL(String email);
     Optional<User> findByEmailAndPassword_MySQL(String email);
