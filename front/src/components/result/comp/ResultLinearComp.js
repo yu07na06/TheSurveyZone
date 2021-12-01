@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ResultLinear from '../UI/ResultLinear';
 import Radio from "@mui/material/Radio";
-import { FormControlLabel, Grid } from '@mui/material';
+import { FormControlLabel } from '@mui/material';
 
 const ResultLinearComp = ({ value, index, result, }) => {
     const [ makeCircle, setMakeCircle ] = useState([]);

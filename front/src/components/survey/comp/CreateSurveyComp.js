@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import { useHistory } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import  ClipboardCopy from '../../common/Function';
+import ErrorSweet from '../../common/UI/ErrorSweet';
 
 const CreateSurveyComp = () => {
   const [cookies] = useCookies(['Authorization']);
@@ -36,8 +37,8 @@ const CreateSurveyComp = () => {
 
   useEffect(()=>{
     getTagsAPI()
-    .then((res)=>{setTags(res.data);})
-    .catch(err=>console.log(err))
+    .then((res)=>{ setTags(res.data);})
+    .catch(err=> ErrorSweet(err.response.status, err.response.statusText, err.response.data.message))
   },[])
   
   const handleClick = (event) => setAnchorEl(event.currentTarget);
@@ -167,7 +168,7 @@ const CreateSurveyComp = () => {
           history.push('/MySurveyPage'); // test 기간까지 history 사용하지 않겠다.
         })
       })
-      .catch((err)=>console.log(err));
+      .catch((err)=> ErrorSweet(err.response.status, err.response.statusText, err.response.data.message));
   };
 
   return (
