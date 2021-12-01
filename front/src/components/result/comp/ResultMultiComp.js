@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ResultMulti from '../UI/ResultMulti';
-import { Grid, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 
 const ResultMultiComp = ({result, index,}) => {
 

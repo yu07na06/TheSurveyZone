@@ -4,6 +4,7 @@ import { useCookies } from 'react-cookie';
 import Swal from 'sweetalert2';
 import { useHistory } from 'react-router-dom';
 import {deleteSurvey as deleteSurveyAPI, getMySurveyList as getMySurveyListAPI } from '../../../lib/api/survey';
+import ErrorSweet from '../../common/UI/ErrorSweet';
 
 const MySurveyComp = () => {
   const [cookies] = useCookies(['Authorization']);
@@ -21,7 +22,7 @@ const MySurveyComp = () => {
     }
     getMySurveyListAPI(currentPage)
       .then(res => setMysurList(res.data))
-      .catch(err => console.log(err))
+      .catch(err => ErrorSweet(err.response.status, err.response.statusText, err.response.data.message))
   },[])
 
   useEffect(()=>{
@@ -31,7 +32,7 @@ const MySurveyComp = () => {
   const callPaging = (pageNum) => {
     getMySurveyListAPI(pageNum)
       .then(res => setMysurList(res.data))
-      .catch(err => console.log(err))
+      .catch(err => ErrorSweet(err.response.status, err.response.statusText, err.response.data.message))
   }
 
   const ApiClick = (e, id) => {
@@ -47,10 +48,10 @@ const MySurveyComp = () => {
                         setMysurList(null);
                         getMySurveyListAPI(currentPage)
                           .then(res => { console.log("리스트 재요청"); setMysurList(res.data); })
-                          .catch(err => console.log(err))
+                          .catch(err => ErrorSweet(err.response.status, err.response.statusText, err.response.data.message))
                       }
                   )
-            .catch(res=>console.log("삭제 실패..?",res))
+            .catch(err=> ErrorSweet(err.response.status, err.response.statusText, err.response.data.message))
         break;
       case "result" :  console.log("결과 on")
                       history.push(`/ResultPage/${id}`)

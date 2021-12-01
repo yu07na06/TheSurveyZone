@@ -67,23 +67,26 @@ const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag,
                                 <>
                                     <Grid item xs={4}>
                                         <TextField
-                                            disabled
+                                            // disabled
+                                            InputProps={{ readOnly: true}}
                                             fullWidth
-                                            label="시작 날짜"
+                                            label="시작일"
                                             value={surveyReqForm.sur_StartDate}
                                         />
                                     </Grid>
                                     <Grid item xs={4}>
                                         <TextField
-                                            disabled
+                                            // disabled
+                                            InputProps={{ readOnly: true}}
                                             fullWidth
-                                            label="마감 날짜"
+                                            label="마감일"
                                             value={surveyReqForm.sur_EndDate}
                                         />
                                     </Grid>
                                     <Grid item xs={4}>
                                         <TextField
-                                            disabled
+                                            // disabled
+                                            InputProps={{ readOnly: true}}
                                             fullWidth
                                             value={surveyReqForm.sur_State===0?"진행전":(surveyReqForm.sur_State===1?"진행중":"마감")}
                                             label="진행상태"
@@ -94,7 +97,8 @@ const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag,
 
                             <Grid item xs={12}>
                                 <TextField
-                                    disabled={!UpdateKey}
+                                    // disabled={!UpdateKey}
+                                    InputProps={{ readOnly: (!UpdateKey)}}
                                     fullWidth
                                     id="Sur_Title"
                                     name="Sur_Title"
@@ -105,7 +109,8 @@ const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag,
                             </Grid>
                             <Grid item xs={10}>
                                 <TextField
-                                    disabled={!UpdateKey}
+                                    // disabled={!UpdateKey}
+                                    InputProps={{ readOnly: (!UpdateKey)}}
                                     fullWidth
                                     id="Sur_Content"
                                     name="Sur_Content"
@@ -136,6 +141,7 @@ const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag,
                                     </Box>
                                 :
                                     <TextField
+                                        // InputProps={{ readOnly: true}}
                                         disabled
                                         fullWidth
                                         label={surveyReqForm.tagList.length!==0 && surveyReqForm.tagList[0].tag_Name}

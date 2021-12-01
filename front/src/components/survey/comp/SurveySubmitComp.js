@@ -5,7 +5,7 @@ import BeforeSurveyComp from '../comp/BeforeSurveyComp';
 import MainSurveyComp from '../comp/MainSurveyComp';
 import { createTheme } from '@mui/material/styles';
 import { useEffect } from 'react';
-import { getSurvey as getSurveyAPI, getTags as getTagsAPI, modifySurvey as modifySurveyAPI, postSurvey as postSurveyAPI } from '../../../lib/api/survey';
+import { getSurvey as getSurveyAPI, getTags as getTagsAPI, modifySurvey as modifySurveyAPI, postSurvey as postSurveyAPI, surveyCheck as surveyCheckAPI } from '../../../lib/api/survey';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { beforeAction } from '../../../modules/submitReducer';
@@ -14,6 +14,7 @@ import Swal from 'sweetalert2';
 import MultipleChoiceComp from './MultipleChoiceComp';
 import SubjectiveComp from './SubjectiveComp';
 import LinearMagnificationComp from './LinearMagnificationComp';
+import ErrorSweet from '../../common/UI/ErrorSweet';
 
 const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) => {
     const sexAge = useSelector(state=>state.submitReducer.beforeData)
@@ -39,13 +40,30 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
     const dispatch = useDispatch()
     const steps = ['데이터 수집', '설문지', '제출 완료'];
 
+    const surveyCheckFunc = (overlapIP, surState) => {
+        // 참여한 IP=false / 참여안한 IP=true
+        console.log("realReadState", realReadState);
+        if(!overlapIP && !realReadState){
+            Swal.fire('이미 참여한 설문입니다. 설문 보기 페이지로 이동합니다'); 
+            history.push(`/ReadOnlyPage/${surveykey}`)
+        }else if(surState===0 && !realReadState){
+            Swal.fire('진행 전 설문입니다. 설문 보기 페이지로 이동합니다'); 
+            history.push(`/ReadOnlyPage/${surveykey}`)
+        }
+    }
+    useEffect(()=>{
+        surveyCheckAPI(surveykey)
+            .then(res => { console.log("참여여부 확인", res.data); surveyCheckFunc(res.data.check_IP, res.data.check_State); })
+            .catch(err => { console.log("팅구기", err);})
+    },[])
+
     useEffect(()=>{ // 수정 시, mainSurvey 출력 및 태그 목록 불러오기
         if(UpdateKey){ 
             submitCheck.current = true
             setActiveStep(1); // mainSurveyComp 바로 이동
             getTagsAPI() // 태그 목록 불러오기
-                .then((res)=>setTags(res.data))
-                .catch(err=>console.log(err));
+                .then(res=> setTags(res.data))
+                .catch(err=> ErrorSweet(err.response.status, err.response.statusText, err.response.data.message));
         }
     },[])
 
@@ -59,7 +77,7 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
         }
         getSurveyAPI(surveykey)
            .then(res =>{ console.log("요청 결과: ",res.data); setSurveyReqForm(res.data); })
-           .catch(err => console.log(err)); // 설문 참여한 사람이라면, 서버쪽에서 알려주어서 튕구는 걸로 함 403
+           .catch(err => ErrorSweet(err.response.status, err.response.statusText, err.response.data.message)); // 설문 참여한 사람이라면, 서버쪽에서 알려주어서 튕구는 걸로 함 403
            
    },[surveykey])
 
@@ -214,52 +232,6 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
                 }
 
             }
-            // surAns_Content.map((value, index) =>{
-            //     let splitValue=value.split('_');
-            //     temp = data.get(value);
-            //     console.log('temp!!!', temp);
-                
-
-            //     switch(splitValue[0]){
-            //         case 'SurQueAnswer': // 주관식
-            //             if(tempString!="" || splitValue[1] != OrderNumber){
-            //                 tempArray.push(tempString);
-            //                 tempString = "";
-            //                 OrderNumber++;
-            //             }
-            //             tempArray.push(temp);
-            //             OrderNumber++;
-            //             break;
-
-            //         case 'SurQueCheck': // 객관식
-            //             if(temp != null){
-            //                 if(splitValue[1] != OrderNumber){
-            //                     tempArray.push(tempString);
-            //                     tempString="";
-            //                     OrderNumber++;
-            //                 }
-            //                 tempString += temp + 'Θ';   
-            //             }
-            //             break;
-
-            //         case 'radio': // 선형배율
-            //             if(tempString!="" || splitValue[1] != OrderNumber){
-            //                 tempArray.push(tempString);    
-            //                 tempString = "";
-            //                 OrderNumber++;
-            //             }
-            //             if(temp == null){
-            //                 tempArray.push('');
-            //             }
-            //             else{
-            //                 let value2 = temp.split('_');
-            //                 tempArray.push(value2[2]);
-            //                 OrderNumber++;
-            //             }
-            //             break;
-            //         default: break;
-            //     }
-            // })
             if(tempString!='')
                 tempArray.push(tempString);
 
@@ -329,13 +301,13 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
 
                 modifySurveyAPI(surveykey, obj)
                     .then(res=>console.log("수정 성공..?", res))
-                    .catch(err=>console.log("수정 실패..?", err));
+                    .catch(err=> ErrorSweet(err.response.status, err.response.statusText, err.response.data.message));
                 wayBackMySurvey();
             }else{ // 질문 응답 버튼 클릭 시 ---------------------------------------------------------------------------------------------------------------------------
                 console.log('제출 했니?');
                 postSurveyAPI(surveykey,{"age":sexAge.age, "gender":sexAge.sex, "answerList":[...answerList]})
                     .then(res => console.log("제출 성공..?",res))
-                    .catch(err => console.log("제출 실패..000?",err));
+                    .catch(err => ErrorSweet(err.response.status, err.response.statusText, err.response.data.message));
             }
             
             submitCheck.current = false;

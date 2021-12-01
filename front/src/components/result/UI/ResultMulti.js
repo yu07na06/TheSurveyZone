@@ -1,7 +1,7 @@
 import React from 'react';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
-import { Grid, Typography } from '@mui/material';
+import { Grid } from '@mui/material';
 import BarChart from '../charts/BarChart';
 import DoughnutChart from '../charts/DoughnutChart';
 import LineChart from '../charts/LineChart';

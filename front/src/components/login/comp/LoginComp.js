@@ -4,16 +4,27 @@ import { createTheme  } from '@mui/material/styles';
 import { useDispatch } from 'react-redux';
 import { LoginStateAction, UserEmailAction } from '../../../modules/loginReducer';
 import { login as loginAPI } from '../../../lib/api/auth'; 
-import Swal from 'sweetalert2';
 import { useHistory } from 'react-router-dom';
-import { useCookies } from 'react-cookie';
-import { useEffect } from 'react/cjs/react.development';
+import ErrorSweet from '../../common/UI/ErrorSweet';
+import Swal from 'sweetalert2';
 
 const LoginComp = () => {
-    // const [cookies, setCookie] = useCookies(['user_Token']);
     const dispatch = useDispatch();
     const history = useHistory();
     const theme = createTheme();
+
+    const newPassword = (infoPW) => {
+        if(infoPW === "TempPW"){
+            Swal.fire({
+                title:'비밀번호 변경 페이지로 이동'
+            }).then(()=>{
+                history.push('/ChangePWPage');
+            })
+            
+            return false;
+        }
+        return true;
+    }
 
     // 로그인 버튼 클릭 시,,
     const handleSubmit = (e) => {
@@ -29,25 +40,17 @@ const LoginComp = () => {
         console.log({"user_Email": email, "user_Password": password});
         // 로그인 요청
         loginAPI({user_Email: email, user_Password: password})
-            .then((res) => {
-                console.log(res); 
-                // setCookie('user_Token', res.data.user_Token,{expires:timer , path:'/'}); // userCookie 저장           
+            .then(res => {
+                console.log(res);
+                newPassword(res.data.login_Type);})
+            .then(res => {
+
                 dispatch(LoginStateAction(true)); // login 상태 유지
                 dispatch(UserEmailAction(email)); // user pk 저장
                 history.push('/'); // 메인 화면으로 이동
-            }).catch((res)=>{ // DB에 존재하지 않는 데이터로 판정
-                console.log(res);                
-                Swal.fire({
-                    icon: 'error',
-                    title: '로그인 실패',
-                    text: '해당 정보가 일치하지 않습니다.'
-                })
-            })
+            }).catch((err)=> // DB에 존재하지 않는 데이터로 판정
+                ErrorSweet(err.response.status, err.response.statusText, err.response.data.message))
     };
-
-    // useEffect(()=>{
-    //     console.log("토큰 받아왔는가", cookies.user_Token);
-    // },[cookies.user_Token])
 
     return (
         <>
