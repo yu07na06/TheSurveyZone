@@ -1,4 +1,5 @@
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { useEffect } from 'react';
 import Swal from 'sweetalert2';
 
 
@@ -29,17 +30,16 @@ const ClipboardCopy = (flag, copyText) =>{
 }
 
 export const Gongback = ({num}) => {
+    let nbsp = [];
 
-    // const 찍어내기 = (num) =>{
-    //     for(var i=0;i<num;i++){
-    //         <br/>
-    //         console.log(num);
-    //     }
-    // }
+        for(var i=0;i<num;i++){
+            nbsp.push(i)
+        }
+
+    
     return(
         <>
-            {/* {찍어내기(num)} */}
-            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+            {nbsp.map(v=><br/>)}
         </>
     )
 }
