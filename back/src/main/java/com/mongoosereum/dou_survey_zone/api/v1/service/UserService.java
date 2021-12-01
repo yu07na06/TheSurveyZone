@@ -53,7 +53,7 @@ public class UserService {
     }
 
     public boolean checkEmail(final String User_Email){
-        return !Objects.equals(User_Email, userDAO.existsByEmail_MySQL(User_Email));
+        return Objects.equals(User_Email, userDAO.existsByEmail_MySQL(User_Email));
     }
 
     public List<?> signin(final String email, final String password){

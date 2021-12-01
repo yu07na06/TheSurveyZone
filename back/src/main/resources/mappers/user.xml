@@ -8,7 +8,7 @@
     </select>
 
     <insert id="createUser" parameterType="User_MySQL">
-        insert into survey.User values(#{user_Email},#{user_Password},#{user_Name},#{user_Tel})
+        insert into survey.user values(#{user_Email},#{user_Password},#{user_Name},#{user_Tel})
     </insert>
 
     <select id="findByEmailAndPassword" parameterType="String" resultType="User_MySQL">
