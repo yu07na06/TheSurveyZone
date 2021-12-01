@@ -66,4 +66,5 @@ public class InsertSurveyReq {
 
 //    @ApiModelProperty(name = "image", notes="이미지 파일")
 //    private MultipartFile image;
+
 }

@@ -47,6 +47,7 @@ public class Survey_MySQL {
         this.sur_Img = insertSurveyReq.getSur_Image();
         this.user_Email = insertSurveyReq.getUser_Email();
         this.sur_Type = insertSurveyReq.getSur_Type().getNum();
+        this.tag_ID = insertSurveyReq.getSur_Tag();
     }
     public Survey_MySQL setSur_State(int sur_State) {
         this.sur_State = sur_State;

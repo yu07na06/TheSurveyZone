@@ -23,4 +23,13 @@
         </otherwise>
     </choose>
     </select>
+
+    <select id="selectSurveyTag" parameterType="String" resultType="SurveyTag">
+        select *
+        from survey.surveytag
+        where ._id = #{_id}
+    </select>
+    <update id="updateSurveyTag" parameterType="SurveyTag">
+        update survey.surveytag set survey.surveytag.Tag_ID = #{Tag_ID} where _id = #{_id};
+    </update>
 </mapper>

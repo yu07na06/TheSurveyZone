@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Repository
@@ -26,8 +27,14 @@ public class TagDAOImpl implements TagDAO {
     }
 
     /*태그 생성*/
-    public int insertTag(SurveyTag surveyTag){
-        return sqlSession.insert("insertSurveyTag",surveyTag);
+    public void insertTag(SurveyTag surveyTag){
+        sqlSession.insert("insertSurveyTag",surveyTag);
     }
 
+    public Optional<SurveyTag> selectSurveyTag(String _id){
+        return sqlSession.selectOne("selectSurveyTag",_id);
+    }
+    public void updateSurveyTag(SurveyTag surveyTag){
+        sqlSession.update("updateSurveyTag",surveyTag);
+    }
 }
