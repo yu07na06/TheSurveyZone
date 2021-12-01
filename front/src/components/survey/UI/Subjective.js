@@ -31,7 +31,8 @@ const Subjective = ({number, deleteQue, ReadOnlyState, ReadOnlyData, UpdateKey, 
                     label={`주관식${number}`}
                     autoComplete="userId"
                     onChange={(e)=>set수정할때의데이터(e.target.value)}
-                    disabled={ReadOnlyState&&!UpdateKey} // 읽기 상태일때 disabled=true로, 업데이트 상태일때 disabled=fasle로
+                    InputProps={{ readOnly: (ReadOnlyState&&!UpdateKey)}}
+                    // disabled={ReadOnlyState&&!UpdateKey} // 읽기 상태일때 disabled=true로, 업데이트 상태일때 disabled=fasle로
                     value={수정할때의데이터} 
                     />
                 </Grid>
@@ -50,7 +51,8 @@ const Subjective = ({number, deleteQue, ReadOnlyState, ReadOnlyData, UpdateKey, 
                             variant="outlined"
                             required={ReadOnlyData.surQue_Essential}
                             fullWidth
-                            disabled={realReadState}
+                            InputProps={{ readOnly: (realReadState)}}
+                            // disabled={realReadState}
                         />
                     </Grid>
                 }

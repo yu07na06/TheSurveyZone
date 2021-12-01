@@ -36,7 +36,8 @@ const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxVal
                             variant="outlined"
                             required
                             fullWidth
-                            disabled={ReadOnlyState&&!UpdateKey}
+                            InputProps={{ readOnly: (ReadOnlyState&&!UpdateKey)}}
+                            // disabled={ReadOnlyState&&!UpdateKey}
                             name={`SurQue_Content${number}`}
                             id={`SurQue_Content${number}`}
                             label={`선형배율${number}`}
@@ -51,7 +52,8 @@ const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxVal
                             variant="filled"
                             name={`start_Step${number}`}
                             label="시작"
-                            disabled={ReadOnlyState&&!UpdateKey}
+                            InputProps={{ readOnly: (ReadOnlyState&&!UpdateKey)}}
+                            // disabled={ReadOnlyState&&!UpdateKey}
                             value={수정할때의데이터시작} // 객체 참조 안함
                         />
                     </Grid>
@@ -68,7 +70,8 @@ const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxVal
                                                 name={`start_Name${number}_${minValue}`}
                                                 label={`start_Name${number}_${minValue}`}
                                                 onChange={e => set수정할때의데이터시작값(e.target.value)}
-                                                disabled={ReadOnlyState&&!UpdateKey}
+                                                InputProps={{ readOnly: (ReadOnlyState&&!UpdateKey)}}
+                                                // disabled={ReadOnlyState&&!UpdateKey}
                                                 value={minValue} // 객체 참조 안함
                                                 defaultValue={수정할때의데이터시작값}
                                                 >
@@ -88,7 +91,8 @@ const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxVal
                                             name={`start_Name${number}_${minValue}`}
                                             label={`start_Name${number}_${minValue}`}
                                             onChange={e => setMinValue(e.target.value)}
-                                            disabled={ReadOnlyState&&!UpdateKey}
+                                            InputProps={{ readOnly: (ReadOnlyState&&!UpdateKey)}}
+                                            // disabled={ReadOnlyState&&!UpdateKey}
                                             value={minValue} // 객체 참조 안함
                                             >
                                         <MenuItem value="0">0</MenuItem>
@@ -116,7 +120,8 @@ const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxVal
                             variant="filled"
                             name={`end_Step${number}`}
                             label="끝"
-                            disabled={ReadOnlyState&&!UpdateKey}
+                            InputProps={{ readOnly: (ReadOnlyState&&!UpdateKey)}}
+                            // disabled={ReadOnlyState&&!UpdateKey}
                             value={수정할때의데이터끝} // 객체 참조 안함
                         />
                     </Grid>

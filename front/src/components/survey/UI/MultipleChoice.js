@@ -39,7 +39,8 @@ const MultipleChoice = ({number, select, setSelect, AddText, maxNum, setMaxNum, 
                         variant="outlined"
                         required
                         fullWidth
-                        disabled={ReadOnlyState&&!UpdateKey}
+                        InputProps={{ readOnly: (ReadOnlyState&&!UpdateKey)}}
+                        // disabled={ReadOnlyState&&!UpdateKey}
                         name={`SurQue_Content${number}`}
                         id={`SurQue_Content${number}`}
                         label={`객관식${number}`}
@@ -55,7 +56,8 @@ const MultipleChoice = ({number, select, setSelect, AddText, maxNum, setMaxNum, 
                                         labelId={`surQue_MaxAns${number}`}
                                         id={`surQue_MaxAns${number}`}
                                         value={maxNum} // 아직 객체 참조 안함
-                                        disabled={ReadOnlyState&&!UpdateKey}
+                                        InputProps={{ readOnly: (ReadOnlyState&&!UpdateKey)}}
+                                        // disabled={ReadOnlyState&&!UpdateKey}
                                         defaultValue={ ReadOnlyData.surQue_MaxAns }
                                         name={`surQue_MaxAns${number}`}
                                         label={`surQue_MaxAns${number}`}
@@ -80,7 +82,8 @@ const MultipleChoice = ({number, select, setSelect, AddText, maxNum, setMaxNum, 
                                         labelId={`surQue_MaxAns${number}`}
                                         id={`surQue_MaxAns${number}`}
                                         value={maxNum} // 아직 객체 참조 안함
-                                        disabled={ReadOnlyState}
+                                        InputProps={{ readOnly: (ReadOnlyState)}}
+                                        // disabled={ReadOnlyState}
                                         name={`surQue_MaxAns${number}`}
                                         label={`surQue_MaxAns${number}`}
                                         onChange={e => setMaxNum(e.target.value)}
