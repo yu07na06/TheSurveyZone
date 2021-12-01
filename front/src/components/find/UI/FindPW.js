@@ -11,7 +11,7 @@ import Container from '@mui/material/Container';
 import { ThemeProvider } from '@mui/material/styles';
 import ContactSupportIcon from '@mui/icons-material/ContactSupport';
 
-const FindPW = ({theme, handleSubmit}) => {
+const FindPW = ({theme, handleSubmit, onChange, phoneNumber, }) => {
     return (
         <>
             <ThemeProvider theme={theme}>
@@ -58,6 +58,9 @@ const FindPW = ({theme, handleSubmit}) => {
                             fullWidth
                             name="user_Tel"
                             label="전화번호"
+                            onChange={onChange}
+                            value={phoneNumber} 
+                            inputProps={{ maxLength: 13 }}
                             type="tel"
                             id="user_Tel"
                             autoComplete="off"
