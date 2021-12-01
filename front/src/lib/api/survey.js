@@ -32,3 +32,8 @@ export const modifySurvey = (sur_ID, surveyInsertDTO) =>
 // 결과 조회
 export const resultSurvey = (sur_ID) =>
     axios.get(`/api/v1/survey/${sur_ID}/result`);
+
+// 설문 참여 체크
+export const surveyCheck = (sur_ID) =>
+    axios.get(`/api/v1/survey/${sur_ID}/Check`);
+
