@@ -17,7 +17,7 @@ import { InputBase } from '@material-ui/core';
 import { PieSeries, Title, Chart } from '@devexpress/dx-react-chart-material-ui';
 import { Animation } from '@devexpress/dx-react-chart';
 
-const Main = ({ data, accUserData, accAgeData, accSexData, reqMain, TAGENUM, setTagSearch, tagSearch, alignment, setAlignment, pageNum, pageChange, setSearchText, classes}) => {
+const Main = ({ data, accUserData, accAgeData, accSexData, reqMain, TAGENUM, setTagSearch, tagSearch, alignment, setAlignment, pageNum, pageChange, setSearchText, searchText, }) => {
     const accNewUserData = []
     for (const value of accUserData) {
         if(value[0]==="day") continue;
@@ -71,6 +71,7 @@ const Main = ({ data, accUserData, accAgeData, accSexData, reqMain, TAGENUM, set
                             textAlign: 'center',
                             fontSize: '20px' 
                         }}
+                        value={searchText}
                         placeholder="Search…"
                         onChange={e=>setSearchText(e.target.value)}
                         inputProps={{ 'aria-label': 'search' }}
