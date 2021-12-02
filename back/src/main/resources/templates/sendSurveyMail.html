@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>DouSurveyZone</title></head>
+<body style="width:100%;margin:0;padding:0;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;background-color:#A9D0F5;">
+<table width="100%" height="100%" cellPadding="0" cellSpacing="0" border="0" align="center" valign="top">
+    <tbody>
+    <tr>
+        <td align="center" valign="top">
+            <table width="600" align="center" cellPadding="0" cellSpacing="0"
+                   style="background-color:#A9D0F5;padding:25px;width:100%" border="0" valign="top">
+                <tbody>
+                <tr>
+                    <td align="center" style="background-color:#A9D0F5;padding:25px 25px 25px 25px"><span
+                            style="font-family:sans-serif;font-size:14px;line-height:14px;color:#000"><h1><a
+                            th:href="${mainLink}" target="_blank"
+                            style="color:#222;text-decoration:none">DouSurveyZone</a></h1></span><span
+                            style="font-family:sans-serif;font-size:14px;line-height:14px;color:#000"><h2
+                            style="color:#222;font-size:16px">The survey starts today!</h2></span></td>
+                </tr>
+                <table align="center" style="width:600px" cellPadding="0" cellSpacing="0" border="0" valign="top">
+                    <tbody>
+                    <tr>
+                        <td style="background-color:#FAFAFA;padding:50px 50px 0px 50px;border-radius:6px 6px 0px 0px">
+                            <span style="font-family:sans-serif;font-size:14px;line-height:14px;color:#222"><h2>안녕하세요! DouSurveyZone입니다!</h2></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="background-color:#FAFAFA;padding:0px 50px 0px 50px"><span
+                                style="font-family:sans-serif;font-size:18px;line-height:18px;color:#222"><p><b>DouSurveyZone</b>의 설문조사 참여 안내 메일입니다.</p>
+                            <hr/>
+                            <div style="text-align:center">
+                            <table style="width:100%; table-layout:fixed">
+                                <tbody style="height:40%">
+                                <tr style="height:10%">
+                                    <th style="width:25%">설문 제목</th>
+                                    <td style="width:75%; word-wrap:break-word"><p th:text = "${Sur_Title}"></p></td>
+                                </tr>
+                                <tr>
+                                    <th style="min-width:55%">설문 작성자</th>
+                                    <td style="width:75%;  word-wrap:break-word"><p th:text = "${Sur_Writer}"></p></td>
+                                </tr>
+                                <tr>
+                                    <th>설문 시작일</th>
+                                    <td style="width:75%;  word-wrap:break-word"><p th:text = "${Sur_StartDate}"></p></td>
+                                </tr>
+                                <tr>
+                                    <th>설문 마감일</th>
+                                    <td style="width:75%;  word-wrap:break-word"><p th:text = "${Sur_EndDate}"></p></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                            <hr/>
+                            <p>설문에 응답하시려면 하단 버튼을 눌려주십시오.</p></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" style="background-color:#FAFAFA;padding:25px 50px 25px 50px">
+                            <a th:href="${linkToSurvey}" target="_blank"
+                               style="color:white;text-decoration:none;font-size:22px;display:inline-block;background:#1976d2;padding:20px 100px;border-radius:6px 6px 6px 6px">설문 응답하기</a></td>
+                    </tr>
+                    <tr>
+                        <td style="background-color:#FAFAFA;padding:0px 50px 50px 50px;border-radius:0px 0px 6px 6px">
+                            <span style="font-family:sans-serif;font-size:14px;line-height:14px;color:#222"><p><a
+                                    target="_blank" style="color:#9f82ff;text-decoration:underline"></a></p></span></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <tr>
+                    <td align="center" style="background-color:#A9D0F5;padding:25px 25px 25px 25px"><span
+                            style="font-family:sans-serif;font-size:14px;line-height:14px;color:#222">© <a
+                            target="_blank" style="color:#222;text-decoration:underline"></a> 2021 all rights reserved.</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
