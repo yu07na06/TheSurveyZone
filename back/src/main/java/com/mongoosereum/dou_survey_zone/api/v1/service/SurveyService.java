@@ -120,6 +120,9 @@ public class SurveyService {
                 .sur_Img(insertSurveyDTO.getSur_Image())
                 .build();
 
+        if(survey_MySQL.getSur_Img() == null)
+            survey_MySQL.setSur_Img("https://surveyzone.s3.ap-northeast-2.amazonaws.com/static/b5e552ea-8d6b-4582-89ae-1d25c25027b8no-image.png");
+
         try {
             surveyDAO.surveyInsert_MySQL(survey_MySQL);
             if(insertSurveyDTO.getSur_Tag() != null) {
@@ -212,18 +215,11 @@ public class SurveyService {
         Survey_Mongo survey_Mongo = surveyDAO.findById_Mongo(_id)
                 .orElseThrow(()-> new NotFoundException(ErrorCode.NOT_FOUND_SURVEY));
 
-        String imageURL = "";
-        if(surveyInsertDTO.getImg()!= null) {
-            try {
-                imageURL = s3Uploader.upload(surveyInsertDTO.getImg(), "static");
-            } catch (Exception e) {
-                throw new RuntimeException();
-            }
-        }
-
         survey_Mongo.setQuestionList(surveyInsertDTO.getQuestionList());
         survey_MySQL.set(surveyInsertDTO);
-        surveyInsertDTO.setSur_Image(imageURL);
+        if(surveyInsertDTO.getSur_Image() == null)
+            surveyInsertDTO.setSur_Image("https://surveyzone.s3.ap-northeast-2.amazonaws.com/static/b5e552ea-8d6b-4582-89ae-1d25c25027b8no-image.png");
+
         System.out.println(survey_MySQL.getSur_State());
         System.out.println(surveyInsertDTO.getSur_State());
 
