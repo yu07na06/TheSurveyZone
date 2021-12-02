@@ -11,5 +11,4 @@
         <typeAlias type="com.mongoosereum.dou_survey_zone.api.v1.domain.tag.Tag" alias="Tag"/>
         <typeAlias type="com.mongoosereum.dou_survey_zone.api.v1.domain.participation.Participation" alias="Participation"/>
     </typeAliases>
-
 </configuration>

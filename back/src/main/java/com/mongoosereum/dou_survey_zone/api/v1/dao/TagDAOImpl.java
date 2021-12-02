@@ -37,6 +37,7 @@ public class TagDAOImpl implements TagDAO {
     public void updateSurveyTag(SurveyTag surveyTag){
         sqlSession.update("updateSurveyTag",surveyTag);
     }
+
     public void deleteSurveyTag(SurveyTag surveyTag){
         sqlSession.delete("deleteSurveyTag",surveyTag);
     }

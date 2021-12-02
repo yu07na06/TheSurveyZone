@@ -17,7 +17,9 @@
     </insert>
 
     <select id="findByEmailAndPassword" parameterType="String" resultType="User_MySQL">
-        select User_Email, User_Password, User_Name from survey.user where User_Email = #{param};
+        select User_Email, User_Password, User_Name
+        from survey.user
+        where User_Email = #{param};
     </select>
 
     <select id="findByEmail" parameterType="User_MySQL" resultType="String">

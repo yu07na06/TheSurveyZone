@@ -27,10 +27,6 @@ public class TestController{
         return userEmail;
     }
 
-    @PostMapping(path="/testS3")
-    public String testS3(@RequestParam("img") MultipartFile multipartFile) throws IOException {
-        return s3Uploader.upload(multipartFile,"static");
-    }
     @GetMapping(path="/testIP")
     public String testIP(HttpServletRequest request){
         String ip = "";

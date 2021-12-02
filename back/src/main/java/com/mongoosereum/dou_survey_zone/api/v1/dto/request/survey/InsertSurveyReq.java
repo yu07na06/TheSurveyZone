@@ -46,7 +46,8 @@ public class InsertSurveyReq {
     @ApiModelProperty(name = "sur_Publish", notes = "설문 공개 여부(공개 : true, 비공개 : false")
     private Boolean sur_Publish; //
 
-    @ApiModelProperty(name = "sur_Image", notes = "설문 이미지, 미구현 ")
+
+    @ApiModelProperty(name = "sur_Image", notes = "설문 이미지 링크 ")
     private String sur_Image; //
 
     @Null
@@ -63,9 +64,4 @@ public class InsertSurveyReq {
 
     @ApiModelProperty(name = "sur_Tag", notes = "설문 태그, v1 : 1개 태그만 가능")
     private Integer sur_Tag; // TODO [정환] 여러개로 변경해야함.
-
-    @JsonProperty("img")
-    @ApiModelProperty(name = "img", notes="이미지 파일")
-    private MultipartFile img;
-
 }
