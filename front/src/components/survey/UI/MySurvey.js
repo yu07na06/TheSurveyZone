@@ -13,8 +13,6 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle'; // 진행중 아�
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked'; // 마감 아이콘
 import OTL from '../../common/UI/OTL';
 
-
-
 const MySurvey = ({ mySurList, callPaging, ApiClick, currentPage, }) => {
     return (
         <>

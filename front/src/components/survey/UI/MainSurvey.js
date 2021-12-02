@@ -30,8 +30,6 @@ const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag,
         }
     },[surveyReqForm])
 
-    surveyReqForm&&console.log("태그 없이 되니?", surveyReqForm.tagList);
-
     return (
         <>
         {surveyReqForm&&
@@ -67,7 +65,6 @@ const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag,
                                 <>
                                     <Grid item xs={4}>
                                         <TextField
-                                            // disabled
                                             InputProps={{ readOnly: true}}
                                             fullWidth
                                             label="시작일"
@@ -76,7 +73,6 @@ const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag,
                                     </Grid>
                                     <Grid item xs={4}>
                                         <TextField
-                                            // disabled
                                             InputProps={{ readOnly: true}}
                                             fullWidth
                                             label="마감일"
@@ -85,7 +81,6 @@ const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag,
                                     </Grid>
                                     <Grid item xs={4}>
                                         <TextField
-                                            // disabled
                                             InputProps={{ readOnly: true}}
                                             fullWidth
                                             value={surveyReqForm.sur_State===0?"진행전":(surveyReqForm.sur_State===1?"진행중":"마감")}
@@ -97,19 +92,18 @@ const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag,
 
                             <Grid item xs={12}>
                                 <TextField
-                                    // disabled={!UpdateKey}
                                     InputProps={{ readOnly: (!UpdateKey)}}
                                     fullWidth
                                     id="Sur_Title"
                                     name="Sur_Title"
                                     label="제목"
+                                    inputProps={{maxLength: 45}}
                                     value={수정할때의데이터제목}
                                     onChange={e=>set수정할때의데이터제목(e.target.value)}
                                 />
                             </Grid>
                             <Grid item xs={10}>
                                 <TextField
-                                    // disabled={!UpdateKey}
                                     InputProps={{ readOnly: (!UpdateKey)}}
                                     fullWidth
                                     id="Sur_Content"
@@ -141,7 +135,6 @@ const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag,
                                     </Box>
                                 :
                                     <TextField
-                                        // InputProps={{ readOnly: true}}
                                         disabled
                                         fullWidth
                                         label={surveyReqForm.tagList.length!==0 && surveyReqForm.tagList[0].tag_Name}

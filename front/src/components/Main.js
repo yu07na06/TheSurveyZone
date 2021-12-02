@@ -8,14 +8,34 @@ import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
-import Chart from 'react-google-charts';
-// import BarChart from 'rechart';
 import Pagination from '@mui/material/Pagination';
 import { Link } from 'react-router-dom';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import SearchIcon from '@material-ui/icons/Search';
+import { InputBase } from '@material-ui/core';
+import { PieSeries, Title, Chart } from '@devexpress/dx-react-chart-material-ui';
+import { Animation } from '@devexpress/dx-react-chart';
 
-const Main = ({ data, accUserData, accAgeData, accSexData, reqMain, TAGENUM, setTagSearch, tagSearch, alignment, setAlignment, pageNum, pageChange, }) => {
+const Main = ({ data, accUserData, accAgeData, accSexData, reqMain, TAGENUM, setTagSearch, tagSearch, alignment, setAlignment, pageNum, pageChange, setSearchText, classes}) => {
+    const accNewUserData = []
+    for (const value of accUserData) {
+        if(value[0]==="day") continue;
+        accNewUserData.push({ day:value[0], people:value[1] })
+    }
+
+    const accNewData = []
+    for (const value of accAgeData) {
+        if(value[0]==="연령") continue;
+        accNewData.push({ age:value[0], people:value[1] })
+    }
+
+    const accNewSexData = []
+    for (const value of accSexData) {
+        if(value[0]==="성별") continue;
+        accNewSexData.push({ sex:value[0], people:value[1] })
+    }
+
     return (
         <>
             {/* 태그 출력 */}
@@ -36,6 +56,22 @@ const Main = ({ data, accUserData, accAgeData, accSexData, reqMain, TAGENUM, set
                         )}
                     </ToggleButtonGroup>
                     </Stack>
+                    
+                    <Stack
+                        direction="row"
+                        justifyContent="center"
+                    >
+                    <SearchIcon />
+                    <InputBase
+                    placeholder="Search…"
+                    classes={{
+                        root: classes.inputRoot,
+                        input: classes.inputInput,
+                    }}
+                    onChange={e=>setSearchText(e.target.value)}
+                    inputProps={{ 'aria-label': 'search' }}
+                    />
+                    </Stack>
                 </Container>
             </Box>
 
@@ -45,55 +81,53 @@ const Main = ({ data, accUserData, accAgeData, accSexData, reqMain, TAGENUM, set
                     {/* 누적 이용자 */}
                     <Grid item xs={4}>
                         <Chart
-                            width={'450px'}
-                            height={'300px'}
-                            chartType="BarChart"
-                            loader={<div>Loading Chart</div>}
-                            data={accUserData}
-                            options={{
-                                title: '11월 누적 이용자 수',
-                                titleFontSize: "18",
-                                captionFontSize: "20px",
-                                chartArea: { width: '90%', height: '70%' },
-                            }}
+                            data={accNewUserData}
+                        >
+                            <PieSeries
+                                argumentField="day"
+                                valueField="people"
+                                innerRadius={0.6}
                             />
+                            <Title
+                                text="누적 이용자"
+                            />
+                            <Animation />
+                        </Chart>
                     </Grid>
 
                     {/* 누적 이용자 연령 비율 */}
                     <Grid item xs={4}>
                         <Chart
-                            width={'400px'}
-                            height={'300px'}
-                            chartType="PieChart"
-                            loader={<div>Loading Chart</div>}
-                            data={accAgeData}
-                            options={{
-                                title: '누적 이용자 연령 비율',
-                                titleFontSize: "18",
-                                pieHole: 0.5,
-                                chartArea: { width: '80%', height: '70%' },
-                            }}
-                            rootProps={{ 'data-testid': '1' }}
+                            data={accNewData}
+                        >
+                            <PieSeries
+                                argumentField="age"
+                                valueField="people"
+                                innerRadius={0.6}
                             />
+                            <Title
+                                text="누적 이용자 연령 비율"
+                            />
+                            <Animation />
+                        </Chart>
                     </Grid>
 
                     {/* 누적 이용자 성별 비율 */}
                     <Grid item xs={4}>
                         <Chart
-                            width={'400px'}
-                            height={'300px'}
-                            chartType="PieChart"
-                            loader={<div>Loading Chart</div>}
-                            data={accSexData}
-                            options={{
-                                title: '누적 이용자 성별 비율',
-                                titleFontSize: "18",
-                                pieHole: 0.5,
-                                chartArea: { width: '80%', height: '70%' },
-                            }}
+                            data={accNewSexData}
+                        >
+                            <PieSeries
+                                argumentField="sex"
+                                valueField="people"
+                                innerRadius={0.6}
                             />
+                            <Title
+                                text="누적 이용자 성별 비율"
+                            />
+                            <Animation />
+                        </Chart>
                     </Grid>
-
 
                     {/* 설문 리스트 출력 */}
                     {reqMain && reqMain.surveylist.map((value) => (

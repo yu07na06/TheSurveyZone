@@ -46,11 +46,12 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
         if(!overlapIP && !realReadState){
             Swal.fire('이미 참여한 설문입니다. 설문 보기 페이지로 이동합니다'); 
             history.push(`/ReadOnlyPage/${surveykey}`)
-        }else if(surState===0 && !realReadState){
+        }else if(surState===0 && !realReadState && !UpdateKey){
             Swal.fire('진행 전 설문입니다. 설문 보기 페이지로 이동합니다'); 
             history.push(`/ReadOnlyPage/${surveykey}`)
         }
     }
+
     useEffect(()=>{
         surveyCheckAPI(surveykey)
             .then(res => { console.log("참여여부 확인", res.data); surveyCheckFunc(res.data.check_IP, res.data.check_State); })
@@ -77,15 +78,14 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
         }
         getSurveyAPI(surveykey)
            .then(res =>{ console.log("요청 결과: ",res.data); setSurveyReqForm(res.data); })
-           .catch(err => ErrorSweet(err.response.status, err.response.statusText, err.response.data.message)); // 설문 참여한 사람이라면, 서버쪽에서 알려주어서 튕구는 걸로 함 403
-           
+           .catch(err => console.log("요청 오류", err)); // 설문 참여한 사람이라면, 서버쪽에서 알려주어서 튕구는 걸로 함 403
    },[surveykey])
 
 
 
    useEffect(()=>{ // 수정/응답시 뿌려주는 용도
        if(surveyReqForm){ // 수정할때도 쓰고~ 응답할때도 쓰는~ 그저 뿌려주는 용도의 useEffect입니다.
-           setDay([surveyReqForm.sur_StartDate, surveyReqForm.sur_EndDate]);
+           setDay([new Date(surveyReqForm.sur_StartDate), new Date(surveyReqForm.sur_EndDate)]);
            count.current = surveyReqForm.questionList.length;
            let newOrderQuestion = surveyReqForm.questionList.map((value, index)=>{
                 switch(value.surQue_QType){
@@ -174,8 +174,12 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
 
     const lastSubmit = (e) => {
         e.preventDefault();
+        console.log("여기 오나요?");
         if (submitCheck.current === false){
             submitCheck.current = true
+            console.log("여기는?");
+            if(realReadState) wayBackHome();
+
         }else{
             const data = new FormData(e.currentTarget);
                 
@@ -288,8 +292,8 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
                 sur_Title: Sur_Title, // 설문 제목
                 sur_Content: Sur_Content, // 설문 본문
                 sur_State: new Date() < day[0]?0:1, // 0 : 진행전, 1 : 진행중 , 2 : 마감
-                sur_StartDate: typeof day[0] == 'string' ? day[0] : day[0].getFullYear()+"-"+ ('0'+(day[0].getMonth()+1)).slice(-2) +"-"+('0'+(day[0].getDate())).slice(-2), // Date 객체로 던지세요.     ---> comp에서 state로 관리중
-                sur_EndDate: typeof day[1] === 'string' ? day[1] : day[1].getFullYear()+"-"+ ('0'+(day[1].getMonth()+1)).slice(-2) +"-"+('0'+(day[1].getDate())).slice(-2),                               // ---> comp에서 state로 관리중
+                sur_StartDate: day[0].getFullYear()+"-"+ ('0'+(day[0].getMonth()+1)).slice(-2) +"-"+('0'+(day[0].getDate())).slice(-2), // Date 객체로 던지세요.     ---> comp에서 state로 관리중
+                sur_EndDate: day[1].getFullYear()+"-"+ ('0'+(day[1].getMonth()+1)).slice(-2) +"-"+('0'+(day[1].getDate())).slice(-2),                               // ---> comp에서 state로 관리중
                 sur_Publish: true, // 공개 여부                ---> comp에서 state로 관리중 [ !false: 공개, !true: (잠금)비공개 ]
                 sur_Image: "image", // 이미지 추후에 현재는 제외
                 // user_Email: "dbsk7885@daum.net",  // 작성자 ID
@@ -324,7 +328,9 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
 
     const wayBackMySurvey = () => {
         Swal.fire('내 설문지로 이동');
-        history.push('/MySurveyPage');
+        setTimeout(()=>{
+            history.goBack();
+        },444);
     }
     return (
         <>
@@ -339,6 +345,7 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
                 wayBackHome={wayBackHome}
                 UpdateKey={UpdateKey}
                 ReadOnlyState={ReadOnlyState}
+                realReadState={realReadState}
             />   
         </>
     );

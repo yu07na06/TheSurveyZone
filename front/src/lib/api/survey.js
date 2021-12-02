@@ -36,4 +36,3 @@ export const resultSurvey = (sur_ID) =>
 // 설문 참여 체크
 export const surveyCheck = (sur_ID) =>
     axios.get(`/api/v1/survey/${sur_ID}/Check`);
-

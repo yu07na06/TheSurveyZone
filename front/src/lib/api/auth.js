@@ -23,4 +23,7 @@ export const searchID = (searchIDReq) =>
 // PW찾기
 export const searchPW = (searchPWReq ) =>
     axios.post('/api/v1/user/searchPW',searchPWReq );
-    
+
+// PW변경
+export const changePW = (chagePWReq) =>
+    axios.put('/api/v1/user/changePW',chagePWReq);

@@ -5,24 +5,22 @@ import { FormControlLabel, Grid } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { submitAction } from '../../../modules/submitReducer';
 
-
 const LinearMagnificationComp = ({ ReadOnlyState, ReadOnlyData, setDelIndex,  number, setCheck, UpdateKey, realReadState,  }) => {
     const [minValue, setMinValue] = useState(null);
     const [maxValue, setMaxValue] = useState(null);
     const [temp, setTemp] = useState('');
     const [makeCircles, setMakeCircles] = useState([]);
+    const [ changeCircle, setChangeCircle ] = useState(null);
+    const dispatch = useDispatch();
     
     let value = [1,2,3,4,5,6,7,8,9];
 
-    const deleteQue = (e) => {
-        setDelIndex(e.target.id);
-    }
+    const deleteQue = e => setDelIndex(e.target.id);
 
     useEffect(()=>{
         (!ReadOnlyState||UpdateKey)&&setCheck({[number]:[ `start_Step${number}`, `start_Name${number}_${minValue}`, `end_Step${number}`, `end_Name${number}_${maxValue}`]});
     },[minValue, maxValue, temp])
 
-    const [ changeCircle, setChangeCircle ] = useState(null);
 
     const circle = (id, number, size) => {
         return(
@@ -49,7 +47,6 @@ const LinearMagnificationComp = ({ ReadOnlyState, ReadOnlyData, setDelIndex,  nu
                 labelPlacement="top"
             />
             </Grid>
-
         );
     }
 
@@ -58,7 +55,6 @@ const LinearMagnificationComp = ({ ReadOnlyState, ReadOnlyData, setDelIndex,  nu
             let newCircle = [];
             const lowNum = Number(ReadOnlyData.selectList[1].surSel_Content);
             const maxNum = Number(ReadOnlyData.selectList[3].surSel_Content);
-            // let num =  maxNum-lowNum;
             for(let i=lowNum; i<=maxNum; i++){
                 newCircle.push(circle(i, number, i+20));
             }
@@ -66,15 +62,10 @@ const LinearMagnificationComp = ({ ReadOnlyState, ReadOnlyData, setDelIndex,  nu
         }
     },[changeCircle])
 
-
-    
-    const dispatch = useDispatch();
     useEffect(()=>{
         if(ReadOnlyState)
             dispatch(submitAction({[number]:`radio_${number}`}))
     },[])
-    
-    console.log('makeCircles', makeCircles);
     
     return (
         <LinearMagnification 

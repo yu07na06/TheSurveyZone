@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 import { ThemeProvider } from '@mui/material/styles';
 
 
-const SurveySubmit = ({ steps, getStepContent, theme, activeStep, lastSubmit, nextPage, wayBackHome, UpdateKey, ReadOnlyState}) => {
+const SurveySubmit = ({ steps, getStepContent, theme, activeStep, lastSubmit, nextPage, wayBackHome, UpdateKey, ReadOnlyState, realReadState, }) => {
     return (
         <>
             <ThemeProvider theme={theme}>
@@ -46,8 +46,8 @@ const SurveySubmit = ({ steps, getStepContent, theme, activeStep, lastSubmit, ne
                             </>
                         }
                         
-                        
                         <React.Fragment>
+                            {/* step : before > main > final */}
                             {getStepContent(activeStep)}
                             
                             <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -63,11 +63,9 @@ const SurveySubmit = ({ steps, getStepContent, theme, activeStep, lastSubmit, ne
                                     
                                 {/* 내 설문지에서 수정 버튼 클릭 시, UpdateKey=true 이므로 수정 완료 버튼이 출력 */}
                                 {UpdateKey ? '수정완료':
-                                    (activeStep === 0 ? '다음' : (activeStep === 1 ? '제출' : '완료'))
+                                    (activeStep === 0 ? '다음' : 
+                                        (activeStep === 1 ? (realReadState? '확인':'제출') : '완료'))
                                 }
-                                {/* {(UpdateKey && activeStep === 1 ) ? '수정완료':
-                                    (activeStep === 0 ? '다음' : (activeStep === 1 ? '제출' : '완료'))
-                                } */}
                                 </Button>
                             </Box>
                         </React.Fragment>

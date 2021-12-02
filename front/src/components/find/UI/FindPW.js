@@ -41,6 +41,7 @@ const FindPW = ({theme, handleSubmit, onChange, phoneNumber, }) => {
                             type="email"
                             id="user_Email"
                             autoComplete="off"
+                            inputProps={{maxLength: 33}}
                             />
                             <TextField
                             margin="normal"

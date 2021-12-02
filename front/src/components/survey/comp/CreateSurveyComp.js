@@ -142,13 +142,10 @@ const CreateSurveyComp = () => {
       questionList,
     }
 
-    console.log("생성 시, 객체 확인합니다.", obj);
+    console.log("생성한 객체 확인", obj);
+    console.log("생성한 객체 JSON으로 확인", JSON.stringify(obj));
 
     let shareURL="http://localhost:3000/SurveySubmitPage/";
-    console.log(obj);
-    console.log(JSON.stringify(obj));
-
-
 
     // 설문지 생성 API
     createSurveyAPI(obj)

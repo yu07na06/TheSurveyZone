@@ -66,6 +66,7 @@ const useStyles = makeStyles((theme) => ({
                   id="User_Email"
                   label="이메일"
                   autoComplete="off"
+                  inputProps={{maxLength: 33}}
                 />
               </Grid>
 
