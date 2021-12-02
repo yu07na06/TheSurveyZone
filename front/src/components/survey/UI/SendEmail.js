@@ -34,7 +34,7 @@ const SendEmail = ({_id}) => {
       // 여기서 list 요청해야함!
       surveySendAPI(_id,emailList)
       .then(res => console.log("성공",res))
-      .then(res => console.log("실패",res));
+      .catch(err => console.log("실패",err));
       setEmailList([])
     }
   
