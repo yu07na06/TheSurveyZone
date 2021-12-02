@@ -12,6 +12,7 @@ import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'; // 진행중 아이콘
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked'; // 마감 아이콘
 import OTL from '../../common/UI/OTL';
+import SendEmail from './SendEmail';
 
 const MySurvey = ({ mySurList, callPaging, ApiClick, currentPage, }) => {
     return (
@@ -41,7 +42,7 @@ const MySurvey = ({ mySurList, callPaging, ApiClick, currentPage, }) => {
                                                 <Link to={`/ReadOnlyPage/${value._id}`} style={{textDecoration:'none', color:'gray'}}>
                                                     <Tab label={mySurList.paginationInfo.firstRecordIndex+index+1+". "+value.sur_Title} style={{fontWeight:'bold'}}/>
                                                 </Link> 
-                                            </ListItemText>
+                                            </ListItemText> 
 
                                             {
                                                 value.sur_State===0
@@ -51,6 +52,7 @@ const MySurvey = ({ mySurList, callPaging, ApiClick, currentPage, }) => {
 
                                             <Button id="del" onClick={(e)=>ApiClick(e,value._id)}>삭제</Button>
                                             
+                                            <SendEmail _id={value._id}/>
                                             {ClipboardCopy("icon",`http://localhost:3000/SurveySubmitPage/${value._id}`)}
                                         </ListItem>
                                     )}
