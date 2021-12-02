@@ -50,8 +50,7 @@
 
 
 import { Route } from 'react-router-dom';
-import Footer from './components/common/UI/Footer';
-import Header from './components/common/UI/Header';
+import { MakeThemeProvider } from './components/common/Function';
 import ChangePWPage from './pages/ChangePWPage';
 import CreateSurveyPage from './pages/CreateSurveyPage';
 import FindIDPage from './pages/FindIDPage';
@@ -68,23 +67,25 @@ import UpdatePage from './pages/UpdatePage';
 const App = () => {
   return (
     <>
-      <Route path="/" component={MainPage} exact/>
-      <Route path="/LoginPage" component={LoginPage} />
-      <Route path="/RegisterPage" component={RegisterPage} />
-      <Route path="/FindIDPage" component={FindIDPage} />
-      <Route path="/FindPWPage" component={FindPWPage} />
-      <Route path="/ChangePWPage" component={ChangePWPage} />
-      <Route path="/CreateSurveyPage" component={CreateSurveyPage} />
-      <Route path="/MySurveyPage" component={MySurveyPage} />
-      
-      {/* surveykey : 응답하려는 설문지의 고유번호(PK)를 의미 */}
-      <Route path="/SurveySubmitPage/:surveykey" component={SurveySubmitPage} /> 
-      {/* surveykey : 설문지의 고유번호(PK)를 의미 */}
-      <Route path="/ReadOnlyPage/:surveykey" component={ReadOnlyPage} /> 
-      {/* surveykey : 설문지의 고유번호(PK)를 의미 */}
-      <Route path="/UpdatePage/:surveykey" component={UpdatePage} /> 
-      {/* surveykey : 설문지의 고유번호(PK)를 의미 */}
-      <Route path="/ResultPage/:surveykey" component={ResultPage} />
+      <MakeThemeProvider>
+        <Route path="/" component={MainPage} exact/>
+        <Route path="/LoginPage" component={LoginPage} />
+        <Route path="/RegisterPage" component={RegisterPage} />
+        <Route path="/FindIDPage" component={FindIDPage} />
+        <Route path="/FindPWPage" component={FindPWPage} />
+        <Route path="/ChangePWPage" component={ChangePWPage} />
+        <Route path="/CreateSurveyPage" component={CreateSurveyPage} />
+        <Route path="/MySurveyPage" component={MySurveyPage} />
+        
+        {/* surveykey : 응답하려는 설문지의 고유번호(PK)를 의미 */}
+        <Route path="/SurveySubmitPage/:surveykey" component={SurveySubmitPage} /> 
+        {/* surveykey : 설문지의 고유번호(PK)를 의미 */}
+        <Route path="/ReadOnlyPage/:surveykey" component={ReadOnlyPage} /> 
+        {/* surveykey : 설문지의 고유번호(PK)를 의미 */}
+        <Route path="/UpdatePage/:surveykey" component={UpdatePage} /> 
+        {/* surveykey : 설문지의 고유번호(PK)를 의미 */}
+        <Route path="/ResultPage/:surveykey" component={ResultPage} />
+      </MakeThemeProvider>
     </>
   );
 }

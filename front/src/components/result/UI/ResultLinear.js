@@ -8,9 +8,6 @@ import LineChart from '../charts/LineChart';
 import ToggleBtn from '../ToggleBtn';
 
 const ResultLinear = ({ value, index, result, makeCircle , chartState, setChartState}) => {
-    useEffect(()=>{
-        chartState&&console.log("chartState",chartState);
-    },[chartState])
     return ( 
         <>
             <Paper elevation={3} sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>

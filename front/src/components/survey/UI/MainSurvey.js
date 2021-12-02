@@ -35,7 +35,7 @@ const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag,
     return (
         <>
         {surveyReqForm&&
-            <ThemeProvider theme={theme}>
+            // <ThemeProvider theme={theme}>
                 <Container component="main" maxWidth="md" sx={{ mb: 4 }} >
                     <Paper levation={3} sx={{ bgcolor: '#C9CBE0', my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
                         <Typography component="h1" variant="h4" align="center">
@@ -199,7 +199,7 @@ const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag,
                             </Paper>}
                         </Paper>    
                     </Container>
-                </ThemeProvider>
+                // </ThemeProvider>
             }
         </>
   );
