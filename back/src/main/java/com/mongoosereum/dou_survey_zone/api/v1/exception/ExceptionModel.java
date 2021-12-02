@@ -2,11 +2,6 @@ package com.mongoosereum.dou_survey_zone.api.v1.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor

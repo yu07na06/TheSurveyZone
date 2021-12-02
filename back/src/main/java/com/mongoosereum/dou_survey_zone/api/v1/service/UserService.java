@@ -2,6 +2,7 @@ package com.mongoosereum.dou_survey_zone.api.v1.service;
 
 import com.mongoosereum.dou_survey_zone.api.v1.dao.UserDAOImpl;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.user.User;
+import com.mongoosereum.dou_survey_zone.api.v1.dto.request.user.ChagePWReq;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.user.SearchPWReq;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.user.SignUpReq;
 import com.mongoosereum.dou_survey_zone.api.v1.exception.*;
@@ -51,7 +52,6 @@ public class UserService {
     }
 
     public boolean checkEmail(final String User_Email){
-        System.out.println("checkEmail: "+ Objects.equals(User_Email, userDAO.emailCheck(User_Email)));
         return Objects.equals(User_Email, userDAO.emailCheck(User_Email));
     }
 
@@ -78,8 +78,8 @@ public class UserService {
     public void signout(HttpServletRequest request){
         //푸는 이유는 블랙리스트를 추가를 하기 위해서이다.
         // 헤더에서 JWT 를 받아옵니다.
-        String token = tokenProvider.resolveToken((HttpServletRequest) request);
-
+        String token = tokenProvider.resolveToken(request);
+        System.out.println(token);
         if(token != null){
             // 전체를 뽑아내서 뽑아내는 토큰
             Jws<Claims> claims = tokenProvider.confirmToken(token);
@@ -144,6 +144,7 @@ public class UserService {
 
         return tempPW;
     }
+
     public User findByEmail(String userEmail){
         if(userEmail==null || userEmail.equals("anonymousUser"))
             throw new ForbiddenException(ErrorCode.UNAUTHORIZED_ACCESS);
@@ -151,4 +152,23 @@ public class UserService {
         return userDAO.existsByEmail_MySQL(userEmail)
                 .orElseThrow(()->new NotFoundException(ErrorCode.NOT_FOUND_USER));
     }
+
+    //비밀번호 변경
+    public void changePW(String Email, ChagePWReq chagePWReq) {
+        User searchUser = userDAO.findByEmailAndPassword_MySQL(Email)
+                .orElseThrow(() -> new UnauthorizedException(ErrorCode.NOT_FOUND_USER));
+        if(passwordEncoder.matches(chagePWReq.getUser_Password(), searchUser.getUser_Password()))
+            throw new UnauthorizedException(ErrorCode.PASSWORD_DUPLICATION);
+
+        String encodedPassword = passwordEncoder.encode(chagePWReq.getUser_Password());
+
+        User user_mySQL =  User.builder()
+                .user_Email(Email)
+                .user_Password(encodedPassword)
+                .build();
+
+        userDAO.changePW(user_mySQL);
+
+    }
+
 }
