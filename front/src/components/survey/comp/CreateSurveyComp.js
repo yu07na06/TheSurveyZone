@@ -9,6 +9,47 @@ import { useHistory } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import  ClipboardCopy from '../../common/Function';
 import ErrorSweet from '../../common/UI/ErrorSweet';
+import axios from 'axios';
+
+const Img = ({setUrl}) => {
+  
+  const [selectedFile, setSelectedFile] = useState(null);
+  
+  // onChange역할 
+  const handleFileChange = (e) => {
+    setSelectedFile(e.target.files[0]);
+  };
+  
+  // formData라는 instance에 담아 보냄
+  const handleFileUpload = (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("img", selectedFile);
+  
+
+  axios.post(`/api/v1/image`,formData)
+  // axios.post(`/api/v1/testS3`,{formData,s1:"hi~"})
+      .then(res => {
+        setUrl(res.data)
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  return (
+    <div>
+        {/* 이미지만 가능하게 하는려면 accept="image/*" 추가 */}
+        <input type="file" accept="image/*" onChange={handleFileChange} />
+        <button onClick={(e)=>handleFileUpload(e)}>업로드</button>
+        <div className="img_box">이미지 밀보기 : </div>
+      </div>
+    );
+
+  }
+
+
+
 
 const CreateSurveyComp = () => {
   const [cookies] = useCookies(['Authorization']);
@@ -24,9 +65,10 @@ const CreateSurveyComp = () => {
   const open = Boolean(anchorEl);
   const count = useRef(0);
   const history = useHistory();
+  const [url,setUrl] = useState(null);
+
 
   useEffect(()=>{
-    console.log("쿠키쿠키", cookies.Authorization);
     if(cookies.Authorization==null){
       Swal.fire({
         icon:'info',
@@ -80,8 +122,6 @@ const CreateSurveyComp = () => {
     }
   },[delIndex]);
 
-
-
   const onClick = (e) => { // 완료 버튼 클릭 시, node에게 보냄
     e.preventDefault(); // 화면 유지
     if(question.length==0){
@@ -94,6 +134,7 @@ const CreateSurveyComp = () => {
     const Sur_Content = data.get('Sur_Content'); // 설문 본문
 
     let newQuestionAnsList = [];
+
     for (const key in question_ans) {
       newQuestionAnsList.push(question_ans[key]);  
     }
@@ -105,7 +146,7 @@ const CreateSurveyComp = () => {
           SurType=0; // 주관식
           break;
         case 'MultipleChoiceComp':
-          SurType=1; // 객관식
+          SurType=1; // 객관식  
           break;
         case 'LinearMagnificationComp': 
           SurType=2; // 선형배율
@@ -137,16 +178,17 @@ const CreateSurveyComp = () => {
       sur_StartDate: day[0].getFullYear()+"-"+ ('0'+(day[0].getMonth()+1)).slice(-2) +"-"+('0'+(day[0].getDate())).slice(-2), // Date 객체로 던지세요.     ---> comp에서 state로 관리중
       sur_EndDate: day[1].getFullYear()+"-"+ ('0'+(day[1].getMonth()+1)).slice(-2) +"-"+('0'+(day[1].getDate())).slice(-2),                               // ---> comp에서 state로 관리중
       sur_Publish: !Sur_Publish, // 공개 여부                ---> comp에서 state로 관리중 [ !false: 공개, !true: (잠금)비공개 ]
-      sur_Image: "image", // 이미지 추후에 현재는 제외
-      // user_Email: "dbsk7885@daum.net",  // 작성자 ID
+      sur_Image: url,
       sur_Tag: data.get(`sur_Tag`), 
       questionList,
     }
 
-    console.log("생성한 객체 확인", obj);
-    console.log("생성한 객체 JSON으로 확인", JSON.stringify(obj));
-
+    
+    console.log("생성 시, 객체 확인합니다.", obj);
     let shareURL="http://localhost:3000/SurveySubmitPage/";
+    console.log(JSON.stringify(obj));
+
+
 
     // 설문지 생성 API
     createSurveyAPI(obj)
@@ -170,7 +212,8 @@ const CreateSurveyComp = () => {
   };
 
   return (
-      <>
+      <>  
+        <Img setUrl={setUrl}/>
         <CreateSurvey 
           onClick={onClick}
           day={day}
