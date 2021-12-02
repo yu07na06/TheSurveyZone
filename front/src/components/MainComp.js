@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
 import { mainList as mainListAPI } from '../lib/api/home';
 import { chartData } from '../modules/chartReducer';
+import ErrorSweet from './common/UI/ErrorSweet';
 import { useStyles } from './common/UI/Header';
 import Main from './Main';
 
@@ -49,6 +50,12 @@ const MainComp = ({match}) => {
     ];
 
     useEffect(()=>{
+        mainListAPI()
+            .then(res => console.log("메인 초기 요청", res))
+            .catch(err => ErrorSweet(err.response.status, err.response.statusText, err.response.data.message))
+    },[dispatch])
+
+    useEffect(()=>{
         if(err !== null){
             Swal.fire({
                 icon: 'error',
@@ -73,7 +80,7 @@ const MainComp = ({match}) => {
             .catch(error => console.log("메인 오류", error))
     },[pageNum, tagSearch, searchText])
 
-    mainListAPI(); // 이게 있어야할 것 같긴 한데,, 확인 부탁
+    // mainListAPI(); // 이게 있어야할 것 같긴 한데,, 확인 부탁
 
     const pageChange = page => setPageNum(page);
 

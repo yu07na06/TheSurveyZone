@@ -15,7 +15,7 @@ import { ThemeProvider } from '@mui/material/styles';
 const SurveySubmit = ({ steps, getStepContent, theme, activeStep, lastSubmit, nextPage, wayBackHome, UpdateKey, ReadOnlyState, realReadState, }) => {
     return (
         <>
-            <ThemeProvider theme={theme}>
+            {/* <ThemeProvider theme={theme}> */}
                 <Box component="form" onSubmit={(e)=>lastSubmit(e)} >
                     <CssBaseline />
                     <AppBar
@@ -73,7 +73,7 @@ const SurveySubmit = ({ steps, getStepContent, theme, activeStep, lastSubmit, ne
                         </Paper>
                     </Container>
                  </Box>
-            </ThemeProvider>
+            {/* </ThemeProvider> */}
         </>
     );
 };

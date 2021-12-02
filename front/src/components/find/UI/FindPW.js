@@ -10,11 +10,12 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { ThemeProvider } from '@mui/material/styles';
 import ContactSupportIcon from '@mui/icons-material/ContactSupport';
+import { Gongback } from '../../common/Function';
 
 const FindPW = ({theme, handleSubmit, onChange, phoneNumber, }) => {
     return (
         <>
-            <ThemeProvider theme={theme}>
+            {/* <ThemeProvider theme={theme}> */}
                 <Container component="main" maxWidth="xs">
                     <CssBaseline />
                     <Box
@@ -88,8 +89,8 @@ const FindPW = ({theme, handleSubmit, onChange, phoneNumber, }) => {
                             </Grid>
                         </Box>
                     </Box>
-                </Container>
-            </ThemeProvider><br/><br/><br/>
+                </Container><Gongback num={3} />
+            {/* </ThemeProvider><br/><br/><br/> */}
         </>
     );
 };
