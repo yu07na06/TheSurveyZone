@@ -55,7 +55,7 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
     useEffect(()=>{
         surveyCheckAPI(surveykey)
             .then(res => { console.log("참여여부 확인", res.data); surveyCheckFunc(res.data.check_IP, res.data.check_State); })
-            .catch(err => { console.log("팅구기", err);})
+            .catch(err => ErrorSweet(err.response.status, err.response.statusText, err.response.data.message))
     },[])
 
     useEffect(()=>{ // 수정 시, mainSurvey 출력 및 태그 목록 불러오기

@@ -26,6 +26,7 @@ const CreateSurveyComp = () => {
   const history = useHistory();
 
   useEffect(()=>{
+    console.log("쿠키쿠키", cookies.Authorization);
     if(cookies.Authorization==null){
       Swal.fire({
         icon:'info',
