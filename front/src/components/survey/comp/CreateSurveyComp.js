@@ -7,17 +7,76 @@ import { createSurvey as createSurveyAPI, getTags as getTagsAPI } from '../../..
 import Swal from 'sweetalert2';
 import { useHistory } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
-import  ClipboardCopy from '../../common/Function';
+import  ClipboardCopy, { Gongback } from '../../common/Function';
 import ErrorSweet from '../../common/UI/ErrorSweet';
 import axios from 'axios';
+import { Paper } from '@mui/material';
+
+// const Img = ({setUrl}) => {
+//   const [selectedFile, setSelectedFile] = useState(null);
+//   const [fileURL, setFileURL] = useState(null);
+  
+//   // onChange역할 
+//   const handleFileChange = (e) => {
+//     setSelectedFile(e.target.files[0]);
+
+//     // 업로드한 이미지 미리보기
+//     const imgEl = document.querySelector('.img_box');
+
+//     const reader = new FileReader();
+//     reader.onload = () => (imgEl.style.backgroundImage = `url(${reader.result})`);
+
+//     reader.readAsDataURL(e.target.files[0]);
+    
+//     console.log("reader", reader);
+//   };
+  
+//   // formData라는 instance에 담아 보냄
+//   const handleFileUpload = (e) => {
+//     e.preventDefault();
+//     const formData = new FormData();
+//     formData.append("img", selectedFile);
+//     console.log("selectedFile", selectedFile);
+  
+//     axios.post(`/api/v1/image`,formData)
+//     // axios.post(`/api/v1/testS3`,{formData,s1:"hi~"})
+//       .then(res => { setUrl(res.data)})
+//       .catch(err => { console.log(err);});
+//   };
+
+//   return (
+//     <div>
+//       {/* 이미지만 가능하게 하는려면 accept="image/*" 추가 */}
+//       <input type="file" accept="image/*" onChange={handleFileChange} />
+//       <button onClick={(e)=>handleFileUpload(e)}>업로드</button>
+//       <div className="img_box">
+//         {/* <img style={{ maxWidth: "100%", height: "auto"}} src="" alt=""/> */}
+//         <img   style={{ width:"500px", height:"500px", backgroundRepeat  : 'no-repeat'}} src="" alt=""/>
+//       </div>
+//     </div>
+//   );
+
+// }
 
 const Img = ({setUrl}) => {
-  
   const [selectedFile, setSelectedFile] = useState(null);
+  const [fileURL, setFileURL] = useState(null);
   
   // onChange역할 
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]);
+
+    // 업로드한 이미지 미리보기
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const previewImage = document.getElementById('img_box');
+      previewImage.src=e.target.result;
+    };
+
+    reader.readAsDataURL(e.target.files[0]);
+    
+    console.log("reader", reader);
+    setFileURL(reader.result)
   };
   
   // formData라는 instance에 담아 보냄
@@ -25,31 +84,25 @@ const Img = ({setUrl}) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("img", selectedFile);
+    console.log("selectedFile", selectedFile);
   
-
-  axios.post(`/api/v1/image`,formData)
-  // axios.post(`/api/v1/testS3`,{formData,s1:"hi~"})
-      .then(res => {
-        setUrl(res.data)
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    axios.post(`/api/v1/image`,formData)
+      .then(res => { setUrl(res.data)})
+      .catch(err => { console.log(err);});
   };
 
   return (
-    <div>
+    <>
+      <Paper style={{ height:"270px" }} sx={{ bgcolor: '#EFF4E7', my: { xs: 3, md: 6 }, p: { xs: 3, md: 3 } }}>
         {/* 이미지만 가능하게 하는려면 accept="image/*" 추가 */}
+        <img id="img_box" height="200px" width="auto" src="" alt=""/><Gongback num={1} />
         <input type="file" accept="image/*" onChange={handleFileChange} />
         <button onClick={(e)=>handleFileUpload(e)}>업로드</button>
-        <div className="img_box">이미지 밀보기 : </div>
-      </div>
-    );
+      </Paper>
+    </>
+  );
 
-  }
-
-
-
+}
 
 const CreateSurveyComp = () => {
   const [cookies] = useCookies(['Authorization']);
@@ -213,7 +266,6 @@ const CreateSurveyComp = () => {
 
   return (
       <>  
-        <Img setUrl={setUrl}/>
         <CreateSurvey 
           onClick={onClick}
           day={day}
@@ -227,6 +279,8 @@ const CreateSurveyComp = () => {
           tag={tag}
           setTag={setTag}
           tags={tags}
+          Img={Img}
+          setUrl={setUrl}
         />  
       </>
   );

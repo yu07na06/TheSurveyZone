@@ -8,8 +8,6 @@ import ResultMultiComp from '../comp/ResultMultiComp';
 import OTL from '../../common/UI/OTL';
 
 const Result = ({result}) => {
-    result&&console.log("result : ",result.answerList[0].length);
-    result&&console.log(" result.answerList&&(result.answerList[0].length) : ", result.answerList&&(result.answerList[0].length));
     return (
         <>
             <Container component="main" maxWidth="lg" sx={{ mb: 4 }} >
@@ -36,6 +34,14 @@ const Result = ({result}) => {
                                     </Grid>
                                     <Grid item xs={12}>
                                         <TextField fullWidth label="본문" value={result.sur_Content} InputProps={{ readOnly: true}} color="success" focused/>
+                                    </Grid>
+
+                                    <Grid item xs={6}>
+                                        {result.sur_Img&&
+                                            <Paper style={{ height:"270px" }} sx={{ bgcolor: '#FFF4EF', my: { xs: 3, md: 6 }, p: { xs: 3, md: 3 } }}>
+                                                <img height="200px" width="auto" src={result.sur_Img} alt=""/>
+                                            </Paper>
+                                        }
                                     </Grid>
                                 </Grid>
                                 {result && result.questionList.map((value, index) => {

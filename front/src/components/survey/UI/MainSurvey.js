@@ -30,6 +30,8 @@ const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag,
         }
     },[surveyReqForm])
 
+    surveyReqForm&&console.log("surveyReqForm", surveyReqForm.sur_Image);
+
     return (
         <>
         {surveyReqForm&&
@@ -141,6 +143,14 @@ const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag,
                                     />
                                 }
 
+                            </Grid>
+
+                            <Grid item xs={6}>
+                                {surveyReqForm.sur_Image&&
+                                    <Paper style={{ height:"270px" }} sx={{ bgcolor: '#EFF4E7', my: { xs: 3, md: 6 }, p: { xs: 3, md: 3 } }}>
+                                        <img height="200px" width="auto" src={surveyReqForm.sur_Image} alt=""/>
+                                    </Paper>
+                                }
                             </Grid>
                         </Grid>
                         <hr/>
