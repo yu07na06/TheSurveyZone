@@ -45,7 +45,7 @@ const MySurveyComp = () => {
           deleteSurveyAPI(id)
             .then(res=>console.log("삭제 성공..?",res))
             .then(()=>{
-                        setMysurList(null);
+                        // setMysurList(null); // 억울해 진짜 안되었는데,,,, 원래 사용한 이유는 아래에서 바뀐 데이터를 넣어도 state가 변경이 안되었다고 했었는데...
                         getMySurveyListAPI(currentPage)
                           .then(res => { console.log("리스트 재요청"); setMysurList(res.data); })
                           .catch(err => ErrorSweet(err.response.status, err.response.statusText, err.response.data.message))

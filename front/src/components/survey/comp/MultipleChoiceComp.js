@@ -61,12 +61,11 @@ const MultipleChoiceComp = ({ number, setCheck, setDelIndex, ReadOnlyState, Read
         setDeleteIndex(null); // 인덱스 중복될 수 있으니
     },[select])
 
-    const deleteBtn = (e) => { console.log("삭제할 버튼 인덱스", e.target.id); setDeleteIndex(e.target.id); }
-    const deleteQue = (e) => { setDelIndex(e.target.id); }
+    const deleteBtn = e => setDeleteIndex(e.target.id);
+    const deleteQue = e => setDelIndex(e.target.id);
 
     const checkCount = (e, addMaxNum) => {
         ccc.current += (e.target.checked)? 1 : -1;
-        // setEssential(ccc.current);
         if(ccc.current>addMaxNum){
             alert('놉!');
             e.target.checked = false;
@@ -87,7 +86,6 @@ const MultipleChoiceComp = ({ number, setCheck, setDelIndex, ReadOnlyState, Read
                     if(splitValue[1]==unRequired && splitValue[0]=="SurQueCheck"){
                         for(let i=0; i<=Number(splitValue[2]); i++){
                             let checkbox1 = document.querySelector(`input[name=SurQueCheck_${unRequired}_${i}]`);
-                            console.log("checkbox 출력", checkbox1);
                             checkbox1.required=false;
                         }
                     }
@@ -115,12 +113,11 @@ const MultipleChoiceComp = ({ number, setCheck, setDelIndex, ReadOnlyState, Read
                     
                     <TextField
 
-                        onChange={(e)=> {console.log("멍멍~"); ReadOnlyState&&set수정할때의데이터(e.target.value)}}
+                        onChange={e => ReadOnlyState&&set수정할때의데이터(e.target.value)}
                         variant="standard"
                         required
                         fullWidth
                         InputProps={{ readOnly: (ReadOnlyState&&!UpdateKey)}}
-                        // disabled={ReadOnlyState&&!UpdateKey}
                         name={`SurQue_Ans_${number}_${count}`}
                         id={`SurQue_Ans_${number}_${count}`}
                         label={`선택지${number}_${count}`}

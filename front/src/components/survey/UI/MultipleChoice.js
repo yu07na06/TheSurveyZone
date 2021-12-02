@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Paper from '@mui/material/Paper';
 import { Grid, TextField } from '@mui/material';
 import NativeSelect from '@mui/material/NativeSelect';
@@ -12,27 +12,24 @@ import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
 import ReqSwitch from '../../common/UI/ReqSwitch';
 
-
-
-
-
 const MultipleChoice = ({number, select, setSelect, AddText, maxNum, setMaxNum, deleteQue, ReadOnlyState, ReadOnlyData, UpdateKey, count, temp, Add }) => {
     const [수정할때의데이터 , set수정할때의데이터] = useState(ReadOnlyState?ReadOnlyData.surQue_Content:null);
 
     return (
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
             <Grid container spacing={2}><br/>
-            {ReadOnlyState&&<Typography sx={{ marginLeft: '82%' }} style={{ color:"red" }} >{ReadOnlyData.surQue_Essential&&"필수항목입니다"}</Typography>}
-            {(!ReadOnlyState||UpdateKey)&&
-                <>
-                    <Grid item xs={6}>
-                        <ReqSwitch number={number} flag={"qeustion"}/>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Button id={number} sx={{ left: '75%' }} onClick={(e)=>deleteQue(e)}>삭제</Button>
-                    </Grid>
-                </>
-            }
+                {ReadOnlyState&&<Typography sx={{ marginLeft: '82%' }} style={{ color:"red" }} >{ReadOnlyData.surQue_Essential&&"필수항목입니다"}</Typography>}
+                {(!ReadOnlyState||UpdateKey)&&
+                    <>
+                        <Grid item xs={6}>
+                            <ReqSwitch number={number} flag={"qeustion"}/>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Button id={number} sx={{ left: '75%' }} onClick={(e)=>deleteQue(e)}>삭제</Button>
+                        </Grid>
+                    </>
+                }
+
                 <Grid item xs={10}>
                     <TextField
                         onChange={(e)=>set수정할때의데이터(e.target.value)}
@@ -47,6 +44,7 @@ const MultipleChoice = ({number, select, setSelect, AddText, maxNum, setMaxNum, 
                         value={수정할때의데이터} // 아직 객체 참조 안함
                     />
                 </Grid>
+
                 <Grid item xs={2}>
                     {UpdateKey?
                         <Box>
@@ -98,18 +96,20 @@ const MultipleChoice = ({number, select, setSelect, AddText, maxNum, setMaxNum, 
 
                     }
                 </Grid>
+
                 <Grid item xs={12}>
                     <Paper variant="outlined">
                         {select.map((value) => value)}
                     </Paper>
                 </Grid>
+                    
                 {(!ReadOnlyState||UpdateKey)&&
                 <Grid item xs={12}>
-                    {/* {count.current+=1} */}
                     <Button onClick={()=>{ count.current+=1; setSelect([...select, <div key={`SurQue_Ans_${number}_${count.current}`}><AddText number={number} ReadOnlyData={ReadOnlyData} addMaxNum={null} checkBoxEssential={null} count={count.current} /></div>  ])}}>
                         <AddIcon/>
                     </Button>
                 </Grid>}
+
             </Grid><br/>
         </Paper>
     );

@@ -4,13 +4,13 @@ import { Chart, PieSeries, Title, } from '@devexpress/dx-react-chart-material-ui
 import { Animation } from '@devexpress/dx-react-chart';
 
 const DoughnutChart = ({data})=> {
-
   const newKey = Object.keys(data);
   const newValue = Object.values(data);
   const newData = []
   for (const key in newValue) {
     newData.push({ select_key:newKey[key], point:newValue[key] })
   }
+  console.log("newData!!!!", newData);
     return (
       <Paper>
           <Chart

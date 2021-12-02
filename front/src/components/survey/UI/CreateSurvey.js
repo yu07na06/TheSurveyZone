@@ -20,11 +20,9 @@ import Select from '@mui/material/Select';
 import { Grid, TextField } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { createTheme } from '@mui/material/styles';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import ReqSwitch from '../../common/UI/ReqSwitch';
 
-const CreateSurvey = ({ onClick, day, setDay, onCheckChange, question, open, anchorEl, handleClick, handleClose, tag, setTag, tags, checkText }) => {
+const CreateSurvey = ({ onClick, day, setDay, question, open, anchorEl, handleClick, handleClose, tag, setTag, tags, checkText }) => {
     return (
         <>
             <ThemeProvider theme={createTheme()}>
@@ -47,8 +45,7 @@ const CreateSurvey = ({ onClick, day, setDay, onCheckChange, question, open, anc
                                 설문지
                             </Typography>
                             <ReqSwitch/>
-                            {/* <Switch id="Sur_Publishs" x={{ left: '85%' }} color="secondary" onChange={onCheckChange} label="비공개"/> false: 공개, true: (잠금)비공개 */}
-                                <br/><hr /><br/>
+                            <br/><hr /><br/>
                             <div style={{marginLeft:160}}>
                                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                                     <DateRangePicker
@@ -79,6 +76,7 @@ const CreateSurvey = ({ onClick, day, setDay, onCheckChange, question, open, anc
                                             name="Sur_Title"
                                             id="Sur_Title"
                                             label="제목"
+                                            inputProps={{maxLength: 45}}
                                         />
                                     </Grid>
                                     <Grid item xs={10}>

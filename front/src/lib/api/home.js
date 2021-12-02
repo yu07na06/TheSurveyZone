@@ -4,8 +4,6 @@ import axios from 'axios';
 export const mainUser = () => 
     axios.get('/api/v1/main/acc');
 
-// main 태그 검색 (page도 함께 요청 필요)
-export const mainList = (page_Num, search_Tag, search_Key) => {
-    console.log("요청한 값", page_Num, search_Tag, search_Key);
-    return axios.get(`/api/v1/main/list/?page_Num=${page_Num}&search_Tag=${search_Tag}&search_Key=${search_Key}`)
-}
+// main 검색 기능
+export const mainList = (page_Num, search_Tag, search_Key) => 
+    axios.get(`/api/v1/main/list/?page_Num=${page_Num}&search_Tag=${search_Tag}&search_Key=${search_Key}`)
