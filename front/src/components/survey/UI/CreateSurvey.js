@@ -26,7 +26,7 @@ import { Gongback } from '../../common/Function';
 const CreateSurvey = ({ onClick, day, setDay, question, open, anchorEl, handleClick, handleClose, tag, setTag, tags, checkText, Img, setUrl, }) => {
     return (
         <>
-            <ThemeProvider theme={createTheme()}>
+            {/* <ThemeProvider theme={createTheme()}> */}
                 <Box component="form" onSubmit={onClick}>
                     <CssBaseline />
                     <AppBar
@@ -159,7 +159,7 @@ const CreateSurvey = ({ onClick, day, setDay, question, open, anchorEl, handleCl
                         </Paper>
                     </Container>
                 </Box>
-            </ThemeProvider>
+            {/* </ThemeProvider> */}
         </>
     );
 };

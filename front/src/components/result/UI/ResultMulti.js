@@ -8,8 +8,6 @@ import LineChart from '../charts/LineChart';
 import ToggleBtn from '../ToggleBtn';
 import { Text } from '../comp/ResultMultiComp';
 
-
-
 const ResultMulti = ({ index, result, chartState, resultKeys, setChartState}) => {
     return (
         <>

@@ -39,7 +39,8 @@ const Main = ({ data, accUserData, accAgeData, accSexData, reqMain, TAGENUM, set
     return (
         <>
             {/* 태그 출력 */}
-            <Box sx={{ bgcolor: 'background.paper', pt: 2 }}>
+            {/* <Box sx={{ bgcolor: 'background.paper', pt: 2 }}> */}
+            <Box sx={{ pt: 2 }}>
                 <Container maxWidth="lg">
                     <Stack
                         direction="row"
@@ -52,7 +53,7 @@ const Main = ({ data, accUserData, accAgeData, accSexData, reqMain, TAGENUM, set
                         onChange={(e,a)=>{ console.log("뭐 출력하니?", a); setAlignment(a);}}
                     >
                         { data.sur_Tag && data.sur_Tag.map((value) => 
-                            <ToggleButton id={`${value.tag_ID}`} onClick={e=>{ pageChange(1); setTagSearch(e.target.id===tagSearch? '':e.target.id); }} value={value.tag_Name}>{'#'+value.tag_Name}</ToggleButton>
+                            <ToggleButton style={{ color:'blue' }} id={`${value.tag_ID}`} onClick={e=>{ pageChange(1); setTagSearch(e.target.id===tagSearch? '':e.target.id); }} value={value.tag_Name}>{'#'+value.tag_Name}</ToggleButton>
                         )}
                     </ToggleButtonGroup>
                     </Stack>
@@ -61,16 +62,21 @@ const Main = ({ data, accUserData, accAgeData, accSexData, reqMain, TAGENUM, set
                         direction="row"
                         justifyContent="center"
                     >
-                    <SearchIcon />
                     <InputBase
-                    placeholder="Search…"
-                    classes={{
-                        root: classes.inputRoot,
-                        input: classes.inputInput,
-                    }}
-                    onChange={e=>setSearchText(e.target.value)}
-                    inputProps={{ 'aria-label': 'search' }}
-                    />
+                        style={{ 
+                            height:'50px',
+                            width: '80%',
+                            borderRadius: '30px',
+                            border:'5px solid green',
+                            textAlign: 'center',
+                            fontSize: '20px' 
+                        }}
+                        placeholder="Search…"
+                        onChange={e=>setSearchText(e.target.value)}
+                        inputProps={{ 'aria-label': 'search' }}
+                    >
+                        <SearchIcon />
+                    </InputBase>
                     </Stack>
                 </Container>
             </Box>
