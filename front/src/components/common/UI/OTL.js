@@ -16,9 +16,12 @@ const OTL = ({flag}) => {
         <>
             <Gongback num={4}/>
                 <div style={{textAlign: "center"}}>
-                    <Typography  fontSize="45px"color="blue">{(flag==="설문")?surText:resText}</Typography>
+                    {/* <Typography  fontSize="45px"color="blue">{(flag==="설문")?surText:resText}</Typography> */}
+                    <Typography  fontSize="45px"color="blue">아무것도 없습니다만?</Typography>
                     <Gongback num={2}/>
-                    <img src="https://ifh.cc/g/AZyg3O.png" alt="이미지 업로드 실패..ㅠ"/>
+                    <a href='https://ifh.cc/v-f5xHEu' target='_blank'><video src='https://ifh.cc/v/f5xHEu.mp4' muted autoplay loop playsinline/></a>
+                    <a href='https://ifh.cc/v-OW1pgK' target='_blank'><video src='https://ifh.cc/v/OW1pgK.mp4' muted autoplay loop playsinline/></a>
+                    {/* <img src="https://ifh.cc/g/AZyg3O.png" alt="이미지 업로드 실패..ㅠ"/> */}
                 </div>
             <Gongback num={4}/>
                 <Grid container justifyContent="center">
