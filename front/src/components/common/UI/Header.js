@@ -140,6 +140,8 @@ export const useStyles = makeStyles((theme) => ({
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
     // const userName = useSelector(state => state.loginReducer.user_Name);
+
+    console.log("cookies.Authorization", cookies.Authorization);
     const userName = localStorage.getItem('user_Name');
 
     const handleMenu = event => {
@@ -246,7 +248,7 @@ export const useStyles = makeStyles((theme) => ({
             <Link to='/CreateSurveyPage' style={{textDecoration:'none', color:'white' }}><Tab label="설문지 생성" style={{fontWeight:'bold'}}/></Link>
             <Link to='/MySurveyPage'style={{textDecoration:'none', color:'white'}}><Tab label="내 설문지" style={{fontWeight:'bold'}}/></Link>
            
-            {!cookies.Authorization?
+            {cookies.Authorization===undefined?
               <>
                 <Link to='/LoginPage'style={{textDecoration:'none', color:'white'}}><Tab label="로그인" style={{fontWeight:'bold'}}/></Link>
                 <Link to='/RegisterPage'style={{textDecoration:'none', color:'white'}}><Tab label="회원가입" style={{fontWeight:'bold'}}/></Link>
