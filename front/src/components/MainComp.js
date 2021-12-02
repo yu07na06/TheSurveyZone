@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
 import { mainList as mainListAPI } from '../lib/api/home';
 import { chartData } from '../modules/chartReducer';
+import { useStyles } from './common/UI/Header';
 import Main from './Main';
 
 const MainComp = ({match}) => {
@@ -12,7 +13,8 @@ const MainComp = ({match}) => {
     const [ alignment, setAlignment ] = useState(null);
     const [ pageNum, setPageNum ] = useState(1);
     const [ tagSearch, setTagSearch ] = useState('');
-    const [ searchKey, setSearchKey ] = useState('');
+    const [ searchText, setSearchText ] = useState(null);
+    const classes = useStyles();
     const TAGENUM = {};
     const dispatch = useDispatch();
 
@@ -56,26 +58,31 @@ const MainComp = ({match}) => {
         }
     },[err]);
 
-    
     // main 차트 요청
     useEffect(()=>{
         dispatch(chartData());
         setPageNum(1);
         setTagSearch('');
-        setSearchKey('');
-        console.log('여기 되나');
+        setSearchText('');
     },[dispatch, match.params]);
     
     // main 리스트, 태그, 검색 요청
     useEffect(()=>{
-        mainListAPI(pageNum, tagSearch, searchKey)
+        mainListAPI(pageNum, tagSearch, searchText)
             .then(res => setReqMain(res.data))
             .catch(error => console.log("메인 오류", error))
-    },[pageNum, tagSearch, searchKey])
+    },[pageNum, tagSearch, searchText])
 
-    const pageChange = (page) =>{
-        setPageNum(page);
-    }
+    mainListAPI(); // 이게 있어야할 것 같긴 한데,, 확인 부탁
+
+    const pageChange = page => setPageNum(page);
+
+    // const newData = []
+    // for (const value of accAgeData) {
+    //     if(value[0]==="연령") continue;
+    //     newData.push({ age:value[0], people:value[1] })
+    // }
+    // console.log("newData", newData);
 
     return (
         <>
@@ -92,6 +99,9 @@ const MainComp = ({match}) => {
                 setAlignment={setAlignment}
                 pageNum={pageNum}
                 pageChange={pageChange}
+                setSearchText={setSearchText}
+                classes={classes}
+                // newData={newData}
              />      
         </>
     );

@@ -10,11 +10,12 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { ThemeProvider } from '@mui/material/styles';
+import { createTheme  } from '@mui/material/styles';
 
 const Login = ({theme, handleSubmit}) => {
     return (
         <>
-            <ThemeProvider theme={theme}>
+            <ThemeProvider theme={createTheme()}>
                 <Container component="main" maxWidth="xs">
                     <CssBaseline />
                     <Box
@@ -42,6 +43,7 @@ const Login = ({theme, handleSubmit}) => {
                             name="User_Email"
                             autoComplete="off"
                             autoFocus
+                            inputProps={{maxLength: 33}}
                             />
                             <TextField
                             margin="normal"

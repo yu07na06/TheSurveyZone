@@ -4,12 +4,11 @@ import { submitAction } from '../../../modules/submitReducer';
 import Subjective from '../UI/Subjective';
 
 const SubjectiveComp = ({ReadOnlyState, ReadOnlyData, setDelIndex, number, setCheck, UpdateKey, realReadState}) => {
+    const dispatch = useDispatch();
     
     const deleteQue = (e) => {
         setDelIndex(e.target.id);
     }
-
-    const dispatch = useDispatch();
 
     useEffect(()=>{
         setTimeout(()=>{

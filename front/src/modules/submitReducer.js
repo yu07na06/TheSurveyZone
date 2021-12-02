@@ -1,7 +1,6 @@
 import { createAction, handleActions } from "redux-actions";
 
-const SUBMIT = "SUBMIT";
-const BEFORESUBMIT = "BEFORESUBMIT";
+const [SUBMIT, BEFORESUBMIT] = ["SUBMIT", "BEFORESUBMIT"];
 
 export const submitAction = createAction(SUBMIT);
 export const beforeAction = createAction(BEFORESUBMIT);

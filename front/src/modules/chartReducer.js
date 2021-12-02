@@ -47,12 +47,7 @@ const chartReducer = handleActions ({
         ...state,
         err
     }),
-
-    // [CHARTDATA_SUCCESS]: (state, { payload: { form, key, value } }) =>
-    // produce(state, draft => {
-    //   draft[form][key] = value; // 예: state.register.username을 바꾼다
-    // }),
-    // [CHARTDATA_FAILURE]:
+    
 }, initialState)
 
 export default chartReducer
