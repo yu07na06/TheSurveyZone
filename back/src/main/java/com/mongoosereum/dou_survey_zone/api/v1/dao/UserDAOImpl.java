@@ -1,6 +1,7 @@
 package com.mongoosereum.dou_survey_zone.api.v1.dao;
 
 import com.mongoosereum.dou_survey_zone.api.v1.domain.user.User;
+import com.mongoosereum.dou_survey_zone.api.v1.dto.request.user.ChagePWReq;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,5 +38,10 @@ public class UserDAOImpl implements UserDAO {
     public Optional<User> findByEmail_Name_Tel(User user){
         return Optional.ofNullable(sqlSession.selectOne("findByEmail_Name_Tel",user));
     }
+
+    public void changePW(User user_MySQL){
+        sqlSession.update("changePW",user_MySQL);
+    }
+
 
 }

@@ -18,6 +18,7 @@ import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.SurveyListPage
 import com.mongoosereum.dou_survey_zone.api.v1.common.paging.PageCriteria;
 import com.mongoosereum.dou_survey_zone.api.v1.common.paging.PaginationInfo;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.tag.Tag;
+import com.mongoosereum.dou_survey_zone.api.v1.exception.BadRequestException;
 import com.mongoosereum.dou_survey_zone.api.v1.exception.ForbiddenException;
 import com.mongoosereum.dou_survey_zone.api.v1.exception.NotFoundException;
 import com.mongoosereum.dou_survey_zone.api.v1.exception.ErrorCode;
@@ -107,16 +108,17 @@ public class SurveyService {
                         .build());
 
 
+        System.out.println(insertSurveyDTO.getImg());
 
 //        S3 image Upload
-//        String imageURL = "";
-//        if(insertSurveyDTO.getImage()!= null) {
-//            try {
-//                imageURL = s3Uploader.upload(insertSurveyDTO.getImage(), "static");
-//            } catch (Exception e) {
-//                return "IMAGE_UPLOAD_FAIL";
-//            }
-//        }
+        String imageURL = "";
+        if(insertSurveyDTO.getImg()!= null) {
+            try {
+                imageURL = s3Uploader.upload(insertSurveyDTO.getImg(), "static");
+            } catch (Exception e) {
+                throw new BadRequestException(ErrorCode.VALID_FAILED);
+            }
+        }
 
         // MySQL insert by MongoDB.id
         Survey_MySQL survey_MySQL = Survey_MySQL.builder()
@@ -127,11 +129,13 @@ public class SurveyService {
                 .sur_StartDate(insertSurveyDTO.getSur_StartDate())
                 .sur_EndDate(insertSurveyDTO.getSur_EndDate())
                 .sur_Publish(insertSurveyDTO.getSur_Publish())
-                .sur_Img(insertSurveyDTO.getSur_Image() /*imageURL*/ )
+                .sur_Img(imageURL)
                 .user_Email(user.getUser_Email())
                 .sur_Type(insertSurveyDTO.getSur_Type().getNum())
                 .tag_ID(insertSurveyDTO.getSur_Tag())
                 .build();
+
+        System.out.println(imageURL);
 
         try {
             surveyDAO.surveyInsert_MySQL(survey_MySQL);
@@ -225,9 +229,18 @@ public class SurveyService {
         Survey_Mongo survey_Mongo = surveyDAO.findById_Mongo(_id)
                 .orElseThrow(()-> new NotFoundException(ErrorCode.NOT_FOUND_SURVEY));
 
+        String imageURL = "";
+        if(surveyInsertDTO.getImg()!= null) {
+            try {
+                imageURL = s3Uploader.upload(surveyInsertDTO.getImg(), "static");
+            } catch (Exception e) {
+                throw new RuntimeException();
+            }
+        }
+
         survey_Mongo.setQuestionList(surveyInsertDTO.getQuestionList());
         survey_MySQL.set(surveyInsertDTO);
-
+        surveyInsertDTO.setSur_Image(imageURL);
         System.out.println(survey_MySQL.getSur_State());
         System.out.println(surveyInsertDTO.getSur_State());
 
