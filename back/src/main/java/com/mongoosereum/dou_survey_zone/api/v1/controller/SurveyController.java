@@ -1,5 +1,8 @@
 package com.mongoosereum.dou_survey_zone.api.v1.controller;
 
+import com.mongoosereum.dou_survey_zone.api.v1.common.S3Uploader;
+import com.mongoosereum.dou_survey_zone.api.v1.exception.BadRequestException;
+import com.mongoosereum.dou_survey_zone.api.v1.exception.ErrorCode;
 import com.mongoosereum.dou_survey_zone.api.v1.service.SurveyService;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.InsertAnswerReq;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.InsertSurveyReq;
@@ -15,6 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -27,6 +31,9 @@ public class SurveyController {
 
     @Autowired
     private SurveyService surveyService;
+
+    @Autowired
+    private S3Uploader s3Uploader;
 
     // selectSurveyList 설문지 리스트 출력
     @GetMapping(path = "/main/list")
@@ -86,6 +93,9 @@ public class SurveyController {
             @AuthenticationPrincipal
                     String userEmail
     ) {
+        System.out.println("시작됐나?");
+        if(insertSurveyReq.getSur_Image() == null)
+            insertSurveyReq.setSur_Image("EMPTY");
         insertSurveyReq.setUser_Email(userEmail);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(surveyService.insertSurvey(insertSurveyReq));

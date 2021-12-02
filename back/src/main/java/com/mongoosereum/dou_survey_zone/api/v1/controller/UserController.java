@@ -30,7 +30,6 @@ public class UserController{
     @Autowired
     private UserService userService;
 
-
     @Autowired
     private MailService mailService;
 
@@ -42,7 +41,8 @@ public class UserController{
     public ResponseEntity CheckEmail(
             @RequestBody
             @ApiParam(value="CheckEmailReq",required = true )
-            @Valid CheckEmailReq checkEmailReq
+            @Valid
+                    CheckEmailReq checkEmailReq
     ) {
         System.out.println(checkEmailReq.getUser_Email());
         return ResponseEntity.status(200).body(userService.checkEmail(checkEmailReq.getUser_Email()));

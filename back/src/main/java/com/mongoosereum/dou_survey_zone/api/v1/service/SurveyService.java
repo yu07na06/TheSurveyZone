@@ -18,6 +18,7 @@ import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.SurveyListPage
 import com.mongoosereum.dou_survey_zone.api.v1.common.paging.PageCriteria;
 import com.mongoosereum.dou_survey_zone.api.v1.common.paging.PaginationInfo;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.tag.Tag;
+import com.mongoosereum.dou_survey_zone.api.v1.exception.BadRequestException;
 import com.mongoosereum.dou_survey_zone.api.v1.exception.ForbiddenException;
 import com.mongoosereum.dou_survey_zone.api.v1.exception.NotFoundException;
 import com.mongoosereum.dou_survey_zone.api.v1.exception.ErrorCode;
@@ -25,6 +26,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -32,21 +34,18 @@ import java.util.*;
 @AllArgsConstructor
 @Service
 public class SurveyService {
-
     @Autowired
     private final SurveyDAO surveyDAO;
 
     @Autowired
     private final UserDAO userDAO;
+
     @Autowired
     private final TagDAO tagDAO;
-
 
     @Autowired
     private final ParticipationDAOImpl participationDAO;
 
-    @Autowired
-    private final S3Uploader s3Uploader;
 
     public SurveyListPageRes selectSurveyList(SurveyListPageReq surveylistDTO) {
         //criteria insert
@@ -94,7 +93,6 @@ public class SurveyService {
     @Transactional
     public String insertSurvey(InsertSurveyReq insertSurveyDTO) /*throws IOException*/ {
         System.out.println("inssertsurvey 서비스 시작");
-        // MongoDB insert
         if(insertSurveyDTO.getUser_Email()==null || insertSurveyDTO.getUser_Email().equals("anonymousUser"))
             throw new ForbiddenException(ErrorCode.UNAUTHORIZED_ACCESS);
 
@@ -106,18 +104,6 @@ public class SurveyService {
                         .questionList(insertSurveyDTO.getQuestionList())
                         .build());
 
-
-
-//        S3 image Upload
-//        String imageURL = "";
-//        if(insertSurveyDTO.getImage()!= null) {
-//            try {
-//                imageURL = s3Uploader.upload(insertSurveyDTO.getImage(), "static");
-//            } catch (Exception e) {
-//                return "IMAGE_UPLOAD_FAIL";
-//            }
-//        }
-
         // MySQL insert by MongoDB.id
         Survey_MySQL survey_MySQL = Survey_MySQL.builder()
                 ._id(survey_mongo.get_id())
@@ -127,10 +113,10 @@ public class SurveyService {
                 .sur_StartDate(insertSurveyDTO.getSur_StartDate())
                 .sur_EndDate(insertSurveyDTO.getSur_EndDate())
                 .sur_Publish(insertSurveyDTO.getSur_Publish())
-                .sur_Img(insertSurveyDTO.getSur_Image() /*imageURL*/ )
                 .user_Email(user.getUser_Email())
                 .sur_Type(insertSurveyDTO.getSur_Type().getNum())
                 .tag_ID(insertSurveyDTO.getSur_Tag())
+                .sur_Img(insertSurveyDTO.getSur_Image())
                 .build();
 
         try {
