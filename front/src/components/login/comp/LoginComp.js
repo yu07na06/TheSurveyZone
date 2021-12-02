@@ -3,6 +3,7 @@ import Login from '../UI/Login';
 import { login as loginAPI } from '../../../lib/api/auth'; 
 import { useHistory } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import ErrorSweet from '../../common/UI/ErrorSweet';
 
 const LoginComp = () => {
     const history = useHistory();
@@ -37,7 +38,7 @@ const LoginComp = () => {
                 localStorage.setItem('user_Name', res.data.user_Name);
                 newPassword(res.data.login_Type);}) 
             .then(() => history.push('/') ) // 메인 화면으로 이동
-            .catch(err => console.log(err)) // DB에 존재하지 않는 데이터로 판정
+            .catch(err => ErrorSweet(err.response.status, err.response.statusText, err.response.data.message)) // DB에 존재하지 않는 데이터로 판정
     };
 
     return (

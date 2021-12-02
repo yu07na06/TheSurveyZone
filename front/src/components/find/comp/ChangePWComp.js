@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router';
 import { changePW as changePWAPI } from '../../../lib/api/auth';
+import ErrorSweet from '../../common/UI/ErrorSweet';
 import ChangePW from '../UI/ChangePW';
 
 const ChangePWComp = () => {
@@ -28,7 +29,7 @@ const ChangePWComp = () => {
         if(PWNOTMATCH&&pwResult.current){
             changePWAPI({"user_Password":passWordConfirm})
             .then(res=>console.log("성공 : ",res))
-            .catch(err=>console.log("실패 : ",err))
+            .catch(err=> ErrorSweet(err.response.status, err.response.statusText, err.response.data.message))
             console.log("회원가입 완료!");
             history.push('/');
         }
