@@ -122,7 +122,7 @@ public class SurveyController {
     @ApiOperation(value = "설문 조회", notes = "설문 조사 참여할때 설문 조사 출력")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공", response = SelectSurveyRes.class),
-            @ApiResponse(code = 404, message = "해당 설문 없음", response = ExceptionModel.class),
+            @ApiResponse(code = 401, message = "해당 설문 없음", response = ExceptionModel.class),
     })
     public ResponseEntity findById(
             @PathVariable("_id")

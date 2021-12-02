@@ -2,6 +2,7 @@ package com.mongoosereum.dou_survey_zone.api.v1.common.mail;
 
 import com.mongoosereum.dou_survey_zone.api.v1.dao.UserDAOImpl;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.Survey_MySQL;
+import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.SendSurveyReq;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -80,7 +81,7 @@ public class MailService {
         System.out.println(survey_MySQL.getSur_StartDate());
 
 
-        String subject = "[DouSurveyZone]설문시작 안내 메일";
+        String subject = "[DouSurveyZone] 설문시작 안내 메일";
 
         Context context = new Context();
         context.setVariable("mainLink", mainPageLink);
@@ -89,7 +90,7 @@ public class MailService {
         context.setVariable("Sur_Publish", survey_MySQL.getSur_Publish() ? "공개" : "비공개" );
         context.setVariable("Sur_StartDate", survey_MySQL.getSur_StartDate());
         context.setVariable("Sur_EndDate", survey_MySQL.getSur_EndDate());
-        context.setVariable("linkToSurvey","http://220.119.14.242:3000/SurveySubmitPage/"+survey_MySQL.get_id());
+        context.setVariable("linkToSurvey",mainPageLink+"/SurveySubmitPage/"+survey_MySQL.get_id());
         String html = templateEngine.process("surveyStartMail",context);
 
         mailSend(sendto,subject,html);
@@ -99,7 +100,7 @@ public class MailService {
 
         String sendto = survey_MySQL.getUser_Email();
 
-        String subject = "[DouSurveyZone]설문종료 안내 메일";
+        String subject = "[DouSurveyZone] 설문종료 안내 메일";
 
         Context context = new Context();
         context.setVariable("mainLink",mainPageLink);
@@ -108,12 +109,28 @@ public class MailService {
         context.setVariable("Sur_Publish", survey_MySQL.getSur_Publish() ? "공개" : "비공개" );
         context.setVariable("Sur_StartDate", survey_MySQL.getSur_StartDate());
         context.setVariable("Sur_EndDate", survey_MySQL.getSur_EndDate());
-        context.setVariable("linkToSurvey","http://220.119.14.242:3000/ResultPage/"+survey_MySQL.get_id());
+        context.setVariable("linkToSurvey",mainPageLink+"/ResultPage/"+survey_MySQL.get_id());
         String html = templateEngine.process("surveyEndMail",context);
 
         mailSend(sendto,subject,html);
     }
 
+    public void sendSurvey(SendSurveyReq sendSurveyReq){
+
+        String subject = "[DouSurveyZone] " + sendSurveyReq.getSurvey().getSur_Content() + " 참여 안내 메일";
+        Context context = new Context();
+        context.setVariable("mainLink",mainPageLink);
+        context.setVariable("Sur_Title", sendSurveyReq.getSurvey().getSur_Title());
+        context.setVariable("Sur_Writer",sendSurveyReq.getFrom().getUser_Name() + "[" + sendSurveyReq.getFrom().getUser_Email() + "]");
+        context.setVariable("Sur_StartDate", sendSurveyReq.getSurvey().getSur_StartDate());
+        context.setVariable("Sur_EndDate", sendSurveyReq.getSurvey().getSur_EndDate());
+        context.setVariable("linkToSurvey",mainPageLink+"/SurveySubmitPage/"+sendSurveyReq.getSurvey().get_id());
+
+        String html = templateEngine.process("sendSurveyMail",context);
+
+        for(String userEmail : sendSurveyReq.getEmailList())
+            mailSend(userEmail,subject,html);
+    }
     public void mailSend(String sendTo, String subject, String html){
         try {
             MailHandler mailHandler = new MailHandler(javaMailSender);

@@ -5,10 +5,7 @@ import com.mongoosereum.dou_survey_zone.api.v1.domain.user.User;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.user.ChagePWReq;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.user.SearchPWReq;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.user.SignUpReq;
-import com.mongoosereum.dou_survey_zone.api.v1.exception.BadRequestException;
-import com.mongoosereum.dou_survey_zone.api.v1.exception.ErrorCode;
-import com.mongoosereum.dou_survey_zone.api.v1.exception.NotFoundException;
-import com.mongoosereum.dou_survey_zone.api.v1.exception.UnauthorizedException;
+import com.mongoosereum.dou_survey_zone.api.v1.exception.*;
 import com.mongoosereum.dou_survey_zone.security.TokenProvider;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -146,6 +143,14 @@ public class UserService {
                         TimeUnit.MINUTES);
 
         return tempPW;
+    }
+
+    public User findByEmail(String userEmail){
+        if(userEmail==null || userEmail.equals("anonymousUser"))
+            throw new ForbiddenException(ErrorCode.UNAUTHORIZED_ACCESS);
+
+        return userDAO.existsByEmail_MySQL(userEmail)
+                .orElseThrow(()->new NotFoundException(ErrorCode.NOT_FOUND_USER));
     }
 
     //비밀번호 변경
