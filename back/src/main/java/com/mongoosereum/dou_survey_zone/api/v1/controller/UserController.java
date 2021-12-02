@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
@@ -137,6 +138,22 @@ public class UserController{
         String tempPW = userService.makeTempPW(searchPWReq);
         mailService.sendTempPW(searchPWReq.getUser_Email(), searchPWReq.getUser_Name(), tempPW);
         return ResponseEntity.ok().body("임시 비밀 번호 전송");
+    }
+
+    @PutMapping(path="/changePW")
+    @ApiOperation("비밀번호 변경")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "비밀번호 변경 성공", response = String.class),
+            @ApiResponse(code = 400, message = "회원 검색 결과 없음(400_1)" , response = ExceptionModel.class),
+            @ApiResponse(code = 400, message = "이전 비밀번호와 동일(400_4)" , response = ExceptionModel.class)
+    })
+    public ResponseEntity changePW(
+            @AuthenticationPrincipal String userEmail,
+            @RequestBody
+            @Valid ChagePWReq chagePWReq
+            ){
+        userService.changePW(userEmail, chagePWReq);
+        return ResponseEntity.ok().body("Change Success");
     }
 
 }

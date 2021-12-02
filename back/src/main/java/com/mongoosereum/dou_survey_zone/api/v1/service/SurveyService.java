@@ -104,6 +104,7 @@ public class SurveyService {
                         .questionList(insertSurveyDTO.getQuestionList())
                         .build());
 
+
         // MySQL insert by MongoDB.id
         Survey_MySQL survey_MySQL = Survey_MySQL.builder()
                 ._id(survey_mongo.get_id())
@@ -211,9 +212,18 @@ public class SurveyService {
         Survey_Mongo survey_Mongo = surveyDAO.findById_Mongo(_id)
                 .orElseThrow(()-> new NotFoundException(ErrorCode.NOT_FOUND_SURVEY));
 
+        String imageURL = "";
+        if(surveyInsertDTO.getImg()!= null) {
+            try {
+                imageURL = s3Uploader.upload(surveyInsertDTO.getImg(), "static");
+            } catch (Exception e) {
+                throw new RuntimeException();
+            }
+        }
+
         survey_Mongo.setQuestionList(surveyInsertDTO.getQuestionList());
         survey_MySQL.set(surveyInsertDTO);
-
+        surveyInsertDTO.setSur_Image(imageURL);
         System.out.println(survey_MySQL.getSur_State());
         System.out.println(surveyInsertDTO.getSur_State());
 

@@ -1,5 +1,6 @@
 package com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.type.SurveyType;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.Question;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.type.SurveyProgressType;
@@ -44,6 +45,7 @@ public class InsertSurveyReq {
     @NotNull
     @ApiModelProperty(name = "sur_Publish", notes = "설문 공개 여부(공개 : true, 비공개 : false")
     private Boolean sur_Publish; //
+
 
     @ApiModelProperty(name = "sur_Image", notes = "설문 이미지 링크 ")
     private String sur_Image; //
