@@ -78,7 +78,7 @@
 // export default Header;
 
 
-import React, { useEffect, useRef, useState }  from 'react';
+import React, { useState }  from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import MenuIcon from "@material-ui/icons/Menu";
@@ -87,7 +87,6 @@ import { alpha, makeStyles, useTheme } from '@material-ui/core/styles';
 import { Link, useHistory } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { logout as logoutAPI } from '../../../lib/api/auth';
-import { useSelector } from 'react-redux';
 
 export const useStyles = makeStyles((theme) => ({
     search: {
@@ -139,18 +138,17 @@ export const useStyles = makeStyles((theme) => ({
     const open = Boolean(anchorEl);
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-    // const userName = useSelector(state => state.loginReducer.user_Name);
-
-    console.log("cookies.Authorization", cookies.Authorization);
     const userName = localStorage.getItem('user_Name');
 
     const handleMenu = event => {
       setAnchorEl(event.currentTarget);
     };
+
     const handleMenuClick = pageURL => {
       history.push(pageURL);
       setAnchorEl(null);
     };
+
     const menuItems = !cookies.Authorization?
     [
       {
@@ -181,6 +179,7 @@ export const useStyles = makeStyles((theme) => ({
       menuTitle: "로그아웃",
       pageURL: "/"
     }];
+    
   return (
       <>
           <AppBar position="static">
