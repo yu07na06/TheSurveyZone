@@ -5,8 +5,8 @@ import java.util.Map;
 
 public interface ParticipationDAO {
         Long ACCTotal();
-        Map<String, Long> ACCAge();
-        Map<String,Long> ACCGender();
+        Map<String, Long> part_Age_Man();
+        Map<String,Long> part_Age_Woman();
         int findByIP(String _id, String ip);
         void insertParticipation(Participation participation);
 }

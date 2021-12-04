@@ -17,11 +17,11 @@ public class ParticipationDAOImpl implements ParticipationDAO {
     public Long ACCTotal() {
         return sqlSession.selectOne("countTotal");
     }
-    public Map<String, Long> ACCAge() {
-        return sqlSession.selectOne("countAge");
+    public Map<String, Long> part_Age_Man() {
+        return sqlSession.selectOne("part_Age_Man");
     }
-    public Map<String,Long> ACCGender() {
-        return sqlSession.selectOne("countGender");
+    public Map<String,Long> part_Age_Woman() {
+        return sqlSession.selectOne("part_Age_Woman");
     }
     public int findByIP(String _id, String ip){
         Map<String, String> map = new HashMap<>();
