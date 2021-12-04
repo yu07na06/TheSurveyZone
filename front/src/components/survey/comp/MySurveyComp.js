@@ -61,14 +61,14 @@ const MySurveyComp = () => {
   }
 
   return (
-      <>
-          <MySurvey 
+    <>
+        <MySurvey 
             ApiClick={ApiClick}
             mySurList={mySurList}
             callPaging={callPaging}
             currentPage={currentPage}
-          />
-      </>
+        />
+    </>
   );
 };
 
