@@ -21,11 +21,12 @@ import { Grid, TextField } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { createTheme } from '@mui/material/styles';
 import ReqSwitch from '../../common/UI/ReqSwitch';
+import { Gongback } from '../../common/Function';
 
-const CreateSurvey = ({ onClick, day, setDay, question, open, anchorEl, handleClick, handleClose, tag, setTag, tags, checkText }) => {
+const CreateSurvey = ({ onClick, day, setDay, question, open, anchorEl, handleClick, handleClose, tag, setTag, tags, checkText, Img, setUrl, }) => {
     return (
         <>
-            <ThemeProvider theme={createTheme()}>
+            {/* <ThemeProvider theme={createTheme()}> */}
                 <Box component="form" onSubmit={onClick}>
                     <CssBaseline />
                     <AppBar
@@ -107,8 +108,12 @@ const CreateSurvey = ({ onClick, day, setDay, question, open, anchorEl, handleCl
                                                 </Select>
                                             </FormControl>
                                         </Box>
-                                    </Grid>                                            
-                                        <br/><br/><br/><br/>
+                                    </Grid>
+                                        <Gongback num={4} />
+                                    
+                                    <Grid item xs={6} >
+                                        <Img style={{ height:"233px" }} setUrl={setUrl}/>
+                                    </Grid>
 
                                     <Grid item xs={12}>
                                         {question.map((value) => value)}     
@@ -154,7 +159,7 @@ const CreateSurvey = ({ onClick, day, setDay, question, open, anchorEl, handleCl
                         </Paper>
                     </Container>
                 </Box>
-            </ThemeProvider>
+            {/* </ThemeProvider> */}
         </>
     );
 };

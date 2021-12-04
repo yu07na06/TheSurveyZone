@@ -30,10 +30,12 @@ const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag,
         }
     },[surveyReqForm])
 
+    surveyReqForm&&console.log("surveyReqForm", surveyReqForm.sur_Image);
+
     return (
         <>
         {surveyReqForm&&
-            <ThemeProvider theme={theme}>
+            // <ThemeProvider theme={theme}>
                 <Container component="main" maxWidth="md" sx={{ mb: 4 }} >
                     <Paper levation={3} sx={{ bgcolor: '#C9CBE0', my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
                         <Typography component="h1" variant="h4" align="center">
@@ -142,6 +144,14 @@ const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag,
                                 }
 
                             </Grid>
+
+                            <Grid item xs={6}>
+                                {surveyReqForm.sur_Image&&
+                                    <Paper style={{ height:"270px" }} sx={{ bgcolor: '#EFF4E7', my: { xs: 3, md: 6 }, p: { xs: 3, md: 3 } }}>
+                                        <img height="200px" width="auto" src={surveyReqForm.sur_Image} alt=""/>
+                                    </Paper>
+                                }
+                            </Grid>
                         </Grid>
                         <hr/>
                             {(!UpdateKey&&!ReadOnlyState)&&
@@ -189,7 +199,7 @@ const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag,
                             </Paper>}
                         </Paper>    
                     </Container>
-                </ThemeProvider>
+                // </ThemeProvider>
             }
         </>
   );

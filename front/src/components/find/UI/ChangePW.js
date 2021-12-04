@@ -11,11 +11,12 @@ import Container from '@mui/material/Container';
 import { ThemeProvider } from '@mui/material/styles';
 import ContactSupportIcon from '@mui/icons-material/ContactSupport';
 import { createTheme  } from '@mui/material/styles';
+import { Gongback } from '../../common/Function';
 
 const ChangePW = ({handleSubmit, confirm, PWNOTMATCH, }) => {
     return (
         <>
-            <ThemeProvider theme={createTheme()}>
+            {/* <ThemeProvider theme={createTheme()}> */}
                 <Container component="main" maxWidth="xs">
                     <CssBaseline />
                     <Box
@@ -88,8 +89,8 @@ const ChangePW = ({handleSubmit, confirm, PWNOTMATCH, }) => {
                             </Grid>
                         </Box>
                     </Box>
-                </Container>
-            </ThemeProvider><br/><br/><br/>
+                </Container><Gongback num={3} />
+            {/* </ThemeProvider><br/><br/><br/> */}
         </>
     );
 };

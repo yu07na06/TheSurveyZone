@@ -1,7 +1,7 @@
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import { useEffect } from 'react';
 import Swal from 'sweetalert2';
-
+import { createTheme } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 
 // 함수의 매개변수로 들어온 값을 클립보드에 저장해주는 함수입니다.
 const ClipboardCopy = (flag, copyText) =>{
@@ -42,6 +42,15 @@ export const Gongback = ({num}) => {
             {nbsp.map(v=><br/>)}
         </>
     )
+}
+
+export const MakeThemeProvider = ({ children }) => {
+    const changeTheme = createTheme({ palette:{ mode: 'light'}})
+    return(
+        <ThemeProvider theme={changeTheme}>
+            {children}
+        </ThemeProvider>
+    );
 }
 
 

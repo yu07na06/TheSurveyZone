@@ -7,6 +7,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { logout as logoutAPI } from '../../../lib/api/auth';
 
+
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import LoginIcon from '@mui/icons-material/Login';
@@ -44,19 +45,49 @@ export const useStyles = makeStyles((theme) => ({
     const open = Boolean(anchorEl);
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-    // const userName = useSelector(state => state.loginReducer.user_Name);
-
-    console.log("cookies.Authorization", cookies.Authorization);
     const userName = localStorage.getItem('user_Name');
 
     const handleMenu = event => {
       setAnchorEl(event.currentTarget);
     };
+
     const handleMenuClick = pageURL => {
       history.push(pageURL);
       setAnchorEl(null);
     };
-   
+
+
+    const menuItems = !cookies.Authorization?
+    [
+      {
+        menuTitle: "설문지 생성",
+        pageURL: "/CreateSurveyPage"
+      },
+      {
+        menuTitle: "내 설문지",
+        pageURL: "/MySurveyPage"
+      },
+      {
+        menuTitle: "로그인",
+        pageURL: "/LoginPage"
+      },
+      {
+        menuTitle: "회원가입",
+        pageURL: "/RegisterPage"
+      }
+    ]:[{
+      menuTitle: "설문지 생성",
+      pageURL: "/CreateSurveyPage"
+    },
+    {
+      menuTitle: "내 설문지",
+      pageURL: "/MySurveyPage"
+    },
+    {
+      menuTitle: "로그아웃",
+      pageURL: "/"
+    }];
+    
   return (
     <>
     <AppBar position="static" >

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
 import { mainList as mainListAPI } from '../lib/api/home';
 import { chartData } from '../modules/chartReducer';
-import { useStyles } from './common/UI/Header';
+import ErrorSweet from './common/UI/ErrorSweet';
 import Main from './Main';
 
 const MainComp = ({match}) => {
@@ -13,8 +13,7 @@ const MainComp = ({match}) => {
     const [ alignment, setAlignment ] = useState(null);
     const [ pageNum, setPageNum ] = useState(1);
     const [ tagSearch, setTagSearch ] = useState('');
-    const [ searchText, setSearchText ] = useState(null);
-    const classes = useStyles();
+    const [ searchText, setSearchText ] = useState('');
     const TAGENUM = {};
     const dispatch = useDispatch();
 
@@ -95,7 +94,7 @@ const MainComp = ({match}) => {
 
     // main 차트 요청
     useEffect(()=>{
-        dispatch(chartData());
+        console.log('이거 되니');
         setPageNum(1);
         setTagSearch('');
         setSearchText('');
@@ -103,21 +102,14 @@ const MainComp = ({match}) => {
     
     // main 리스트, 태그, 검색 요청
     useEffect(()=>{
+        dispatch(chartData());
+        if(pageNum===undefined || tagSearch===undefined || searchText===undefined) return;
         mainListAPI(pageNum, tagSearch, searchText)
             .then(res => setReqMain(res.data))
-            .catch(error => console.log("메인 오류", error))
+            .catch(err => ErrorSweet(err.response.status, err.response.statusText, err.response.data.message))
     },[pageNum, tagSearch, searchText])
 
-    // mainListAPI(); // 이게 있어야할 것 같긴 한데,, 확인 부탁
-
     const pageChange = page => setPageNum(page);
-
-    // const newData = []
-    // for (const value of accAgeData) {
-    //     if(value[0]==="연령") continue;
-    //     newData.push({ age:value[0], people:value[1] })
-    // }
-    // console.log("newData", newData);
 
     return (
         <>
