@@ -3,7 +3,6 @@ import { ThemeProvider } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import Image from "material-ui-image";
 import { autocompleteClasses, Button, Grid, TextField } from '@mui/material';
 import SubjectiveComp from '../comp/SubjectiveComp';
 import MultipleChoiceComp from '../comp/MultipleChoiceComp';
@@ -20,6 +19,7 @@ import AddIcon from '@mui/icons-material/Add';
 import Switch from '@mui/material/Switch';
 import Fab from '@mui/material/Fab';
 import ReqSwitch from '../../common/UI/ReqSwitch';
+
 const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag, tags, handleClick, anchorEl, open, handleClose, question, ReadOnlyState, }) => {
     const [수정할때의데이터제목, set수정할때의데이터제목] = useState();
     const [수정할때의데이터본문, set수정할때의데이터본문] = useState();

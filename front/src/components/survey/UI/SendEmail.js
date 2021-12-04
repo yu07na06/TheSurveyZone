@@ -52,13 +52,11 @@ const SendEmail = ({ _id }) => {
   
     return (
       <>
-         <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
           <Tooltip title="Account settings">
-            <IconButton onClick={handleClick} size="small" sx={{ ml: 2 }}>
+            <IconButton onClick={handleClick} size="small" sx={{ }}>
               <ForwardToInboxIcon onClick={(e)=>console.log("나를 눌렀는가?")}/>
             </IconButton>
           </Tooltip>
-        </Box>
         <Menu
           anchorEl={anchorEl}
           open={open}
