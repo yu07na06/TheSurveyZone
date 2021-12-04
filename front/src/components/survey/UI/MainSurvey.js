@@ -3,13 +3,13 @@ import { ThemeProvider } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { Button, Grid, TextField } from '@mui/material';
+import Image from "material-ui-image";
+import { autocompleteClasses, Button, Grid, TextField } from '@mui/material';
 import SubjectiveComp from '../comp/SubjectiveComp';
 import MultipleChoiceComp from '../comp/MultipleChoiceComp';
 import LinearMagnificationComp from '../comp/LinearMagnificationComp';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateRangePicker from '@mui/lab/DateRangePicker';
-import Box from '@mui/material/Box';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
@@ -19,190 +19,224 @@ import Menu from '@mui/material/Menu';
 import AddIcon from '@mui/icons-material/Add';
 import Switch from '@mui/material/Switch';
 import Fab from '@mui/material/Fab';
-
+import ReqSwitch from '../../common/UI/ReqSwitch';
 const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag, tags, handleClick, anchorEl, open, handleClose, question, ReadOnlyState, }) => {
-    const [수정할때의데이터제목 , set수정할때의데이터제목] = useState();
-    const [수정할때의데이터본문 , set수정할때의데이터본문] = useState();
-    useEffect(()=>{
-        if(surveyReqForm!=null){
+    const [수정할때의데이터제목, set수정할때의데이터제목] = useState();
+    const [수정할때의데이터본문, set수정할때의데이터본문] = useState();
+    const defaultImage = "https://surveyzone.s3.ap-northeast-2.amazonaws.com/static/b5e552ea-8d6b-4582-89ae-1d25c25027b8no-image.png";
+    useEffect(() => {
+        if (surveyReqForm != null) {
             set수정할때의데이터제목(surveyReqForm.sur_Title)
             set수정할때의데이터본문(surveyReqForm.sur_Content)
         }
-    },[surveyReqForm])
+    }, [surveyReqForm])
 
-    surveyReqForm&&console.log("surveyReqForm", surveyReqForm.sur_Image);
+    surveyReqForm && console.log("surveyReqForm", surveyReqForm.sur_Image);
 
     return (
         <>
-        {surveyReqForm&&
-            // <ThemeProvider theme={theme}>
+            {surveyReqForm &&
+                // <ThemeProvider theme={theme}>
                 <Container component="main" maxWidth="md" sx={{ mb: 4 }} >
-                    <Paper levation={3} sx={{ bgcolor: '#C9CBE0', my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-                        <Typography component="h1" variant="h4" align="center">
-                            설문지
-                        </Typography><br/><br/>
-                        <Grid container spacing={2}>
-                            {UpdateKey?
-                                <div style={{marginLeft:120}}>
-                                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                        <DateRangePicker
-                                            minDate={new Date()}
-                                            startText="시작일"
-                                            endText="마감일"
-                                            value={day}
-                                            onChange={(newValue) => {
-                                                setDay(newValue);
-                                            }}
-                                            renderInput={(startProps, endProps) => (
-                                            <React.Fragment>
-                                                <TextField {...startProps} />
-                                                <Box sx={{ mx: 2}}> to </Box>
-                                                <TextField {...endProps} />
-                                            </React.Fragment>
-                                            )}
-                                        />
-                                    </LocalizationProvider>
-                                </div> 
+                    <Paper levation={2} sx={{ bgcolor: '#C9CBE0', my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+                        <ReqSwitch /> {/*여기 ReadOnlyState면 안바뀌게 변하는거 넣어야함 */}
+                        {UpdateKey ?
+                            <Grid item xs={12} >
+                                <TextField
+                                    sx={{ my: 1 }}
+                                    InputProps={{ readOnly: (!UpdateKey) }}
+                                    fullWidth
+                                    id="Sur_Title"
+                                    name="Sur_Title"
+                                    label="제목"
+                                    placeholder="제목을 입력해주세요. (45자 이내)"
+                                    inputProps={{ maxLength: 45 }}
+                                    value={수정할때의데이터제목}
+                                    onChange={e => set수정할때의데이터제목(e.target.value)}
+                                />
+                            </Grid>
                             :
+                            <Typography component="h1" variant="h4" align="center">
+                                {surveyReqForm.sur_Title}
+                            </Typography>
+                        }
+                        <hr /><br />
+                        <Grid container xs={{ mx: "auto" }}>
+                            {UpdateKey ?
                                 <>
-                                    <Grid item xs={4}>
+                                    <Grid xs={12} >
+                                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                            <DateRangePicker
+                                                minDate={new Date()}
+                                                startText="시작일"
+                                                endText="마감일"
+                                                value={day}
+                                                onChange={(newValue) => {
+                                                    setDay(newValue);
+                                                }}
+                                                renderInput={(startProps, endProps) => (
+                                                    <React.Fragment>
+                                                        <TextField {...startProps} sx={{ pr: 1 }} />
+                                                        <TextField {...endProps} />
+                                                    </React.Fragment>
+                                                )}
+                                            />
+                                        </LocalizationProvider>
+                                    </Grid>
+                                    <Grid xs={6} sx={{ px: 1 }}></Grid>
+                                    <Grid xs={6} sx={{ px: 1, my: 1 }}>
+                                        <FormControl>
+                                            <InputLabel id="demo-simple-select-label">태그</InputLabel>
+                                            {tags && <NativeSelect
+                                                labelId="sur_Tag"
+                                                id="sur_Tag"
+                                                name="sur_Tag"
+                                                value={tag}
+                                                defaultValue={surveyReqForm.tagList.length === 0 ? "" : surveyReqForm.tagList[0].tag_ID}
+                                                label="sur_Tag"
+                                                onChange={e => setTag(e.target.value)}
+                                            >
+                                                <option value=""></option>
+                                                {tags.map(v => <option value={v.tag_ID}>{v.tag_Name}</option>)}
+                                            </NativeSelect>}
+                                        </FormControl>
+                                    </Grid>
+                                </>
+                                :
+                                <>
+                                    <Grid item xs={6}>
                                         <TextField
-                                            InputProps={{ readOnly: true}}
+                                            sx={{ my: 1, px: 1 }}
+                                            InputProps={{ readOnly: true }}
                                             fullWidth
                                             label="시작일"
                                             value={surveyReqForm.sur_StartDate}
                                         />
                                     </Grid>
-                                    <Grid item xs={4}>
+                                    <Grid item xs={6}>
                                         <TextField
-                                            InputProps={{ readOnly: true}}
+                                            sx={{ my: 1, px: 1 }}
+                                            InputProps={{ readOnly: true }}
                                             fullWidth
                                             label="마감일"
                                             value={surveyReqForm.sur_EndDate}
                                         />
                                     </Grid>
-                                    <Grid item xs={4}>
+
+                                    <Grid item xs={6}>
                                         <TextField
-                                            InputProps={{ readOnly: true}}
+                                            sx={{ my: 1, px: 1 }}
+                                            InputProps={{ readOnly: true }}
                                             fullWidth
-                                            value={surveyReqForm.sur_State===0?"진행전":(surveyReqForm.sur_State===1?"진행중":"마감")}
-                                            label="진행상태"
+                                            value={surveyReqForm.sur_State === 0 ? "진행전" : (surveyReqForm.sur_State === 1 ? "진행중" : "마감")}
+                                            label="진행"
+                                        />
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <TextField
+                                            sx={{ my: 1, px: 1 }}
+                                            InputProps={{ readOnly: true }}
+                                            fullWidth
+                                            label="태그"
+                                            value={(surveyReqForm.tagList.length !== 0) ? surveyReqForm.tagList[0].tag_Name : "X"}
                                         />
                                     </Grid>
                                 </>
                             }
 
-                            <Grid item xs={12}>
+                            <Grid item xs={12} >
                                 <TextField
-                                    InputProps={{ readOnly: (!UpdateKey)}}
+                                    sx={{ my: 1 }}
+                                    InputProps={{ readOnly: (!UpdateKey) }}
                                     fullWidth
                                     id="Sur_Title"
                                     name="Sur_Title"
                                     label="제목"
-                                    inputProps={{maxLength: 45}}
+                                    placeholder="제목을 입력해주세요. (45자 이내)"
+                                    inputProps={{ maxLength: 45 }}
                                     value={수정할때의데이터제목}
-                                    onChange={e=>set수정할때의데이터제목(e.target.value)}
+                                    onChange={e => set수정할때의데이터제목(e.target.value)}
                                 />
                             </Grid>
-                            <Grid item xs={10}>
+                            <Grid item xs={12}>
                                 <TextField
-                                    InputProps={{ readOnly: (!UpdateKey)}}
+                                    InputProps={{ readOnly: (!UpdateKey) }}
+                                    sx={{ mx: "auto", my: 1 }}
+                                    multiline
+                                    placeholder="본문을 입력해주세요. (300자 이내)"
                                     fullWidth
+                                    rows={8}
+                                    rowsmax={8}
+                                    inputProps={{ maxLength: 300 }}
                                     id="Sur_Content"
                                     name="Sur_Content"
                                     label="본문"
                                     value={수정할때의데이터본문}
-                                    onChange={e=>set수정할때의데이터본문(e.target.value)}
+                                    onChange={e => set수정할때의데이터본문(e.target.value)}
                                 />
                             </Grid>
 
-                            <Grid item xs={2}>
-                                {UpdateKey?
-                                    <Box>
-                                        <FormControl fullWidth>
-                                            <InputLabel  id="demo-simple-select-label">태그</InputLabel>
-                                                {tags&&<NativeSelect
-                                                    labelId="sur_Tag"
-                                                    id="sur_Tag"
-                                                    name="sur_Tag"
-                                                    value={tag}
-                                                    defaultValue={surveyReqForm.tagList.length===0 ?"": surveyReqForm.tagList[0].tag_ID}
-                                                    label="sur_Tag"
-                                                    onChange={e => setTag(e.target.value)}
-                                                    >
-                                                    <option value=""></option>
-                                                    {tags.map(v=><option value={v.tag_ID}>{v.tag_Name}</option>)}
-                                                </NativeSelect>}
-                                        </FormControl>
-                                    </Box>
-                                :
-                                    <TextField
-                                        disabled
-                                        fullWidth
-                                        label={surveyReqForm.tagList.length!==0 && surveyReqForm.tagList[0].tag_Name}
-                                    />
-                                }
-
-                            </Grid>
-
-                            <Grid item xs={6}>
-                                {surveyReqForm.sur_Image&&
-                                    <Paper style={{ height:"270px" }} sx={{ bgcolor: '#EFF4E7', my: { xs: 3, md: 6 }, p: { xs: 3, md: 3 } }}>
-                                        <img height="200px" width="auto" src={surveyReqForm.sur_Image} alt=""/>
-                                    </Paper>
-                                }
-                            </Grid>
+                            {surveyReqForm.sur_Image != defaultImage &&
+                                <Grid xs={12}>
+                                    <Container sx={{ py: 3, my: 3 }} align="center">
+                                        <img src={surveyReqForm.sur_Image}
+                                            style=
+                                            {{
+                                                mx: "auto", my: "auto", maxWidth: "100%",
+                                                height: "auto", objectFit: "cover"
+                                            }} />
+                                    </Container>
+                                </Grid>
+                            }
                         </Grid>
-                        <hr/>
-                            {(!UpdateKey&&!ReadOnlyState)&&
-                            surveyReqForm.questionList.map((value)=>{
-                                switch(value.surQue_QType){
+                        <hr />
+                        {(!UpdateKey && !ReadOnlyState) &&
+                            surveyReqForm.questionList.map((value) => {
+                                switch (value.surQue_QType) {
                                     case 0: // 주관식
-                                        return <SubjectiveComp ReadOnlyState={ReadOnlyState} ReadOnlyData={value} setDelIndex={null} number={value.surQue_Order} setCheck={null} UpdateKey={UpdateKey}/>
+                                        return <SubjectiveComp ReadOnlyState={ReadOnlyState} ReadOnlyData={value} setDelIndex={null} number={value.surQue_Order} setCheck={null} UpdateKey={UpdateKey} />
                                     case 1: // 객관식
-                                        return <MultipleChoiceComp ReadOnlyState={ReadOnlyState} ReadOnlyData={value} setDelIndex={null} number={value.surQue_Order} setCheck={null} UpdateKey={UpdateKey}/>
+                                        return <MultipleChoiceComp ReadOnlyState={ReadOnlyState} ReadOnlyData={value} setDelIndex={null} number={value.surQue_Order} setCheck={null} UpdateKey={UpdateKey} />
                                     case 2: // 선형배율
-                                        return <LinearMagnificationComp ReadOnlyState={ReadOnlyState} ReadOnlyData={value} setDelIndex={null} number={value.surQue_Order} setCheck={null} UpdateKey={UpdateKey}/>
+                                        return <LinearMagnificationComp ReadOnlyState={ReadOnlyState} ReadOnlyData={value} setDelIndex={null} number={value.surQue_Order} setCheck={null} UpdateKey={UpdateKey} />
                                     default: break;
                                 }
                                 console.log("질문타입 확인", value);
                             })}
 
-                            {question.map((value) => value)} 
-                            {UpdateKey&&<Paper variant="outlined" palette={{ mode: 'dark' }} sx={{ bgcolor: '#FFFFFF', my: { xs: 1, md: 6 }, p: { xs: 1, md: 1 } }}>
-                                <Switch sx={{ left: '92%' }} defaultChecked color="secondary" />
-                                <Button
-                                    id="basic-button"
-                                    aria-controls="basic-menu"
-                                    aria-haspopup="true"
-                                    aria-expanded={open ? 'true' : undefined}
-                                    onClick={handleClick}
-                                    sx={{ right: '7%' }}
-                                >
+                        {question.map((value) => value)}
+                        {UpdateKey && <Paper variant="outlined" palette={{ mode: 'dark' }} sx={{ bgcolor: '#FFFFFF', my: { xs: 1, md: 6 }, p: { xs: 1, md: 1 } }}>
+                            <Button
+                                id="basic-button"
+                                aria-controls="basic-menu"
+                                aria-haspopup="true"
+                                aria-expanded={open ? 'true' : undefined}
+                                onClick={handleClick}
+                            >
                                 <Fab size="small" color="secondary" aria-label="add">
                                     <AddIcon />
                                 </Fab>
-                                </Button>
-                                <Menu
-                                    id="basic-menu"
-                                    anchorEl={anchorEl}
-                                    open={open}
-                                    onClose={handleClose}
-                                    MenuListProps={{
+                            </Button>
+                            <Menu
+                                id="basic-menu"
+                                anchorEl={anchorEl}
+                                open={open}
+                                onClose={handleClose}
+                                MenuListProps={{
                                     'aria-labelledby': 'basic-button',
-                                    }}
-                                    >
-                                    <MenuItem id='객관식' onClick={e => handleClose(e)}>객관식</MenuItem>
-                                    <MenuItem id='주관식' onClick={e => handleClose(e)}>주관식</MenuItem>
-                                    <MenuItem id='선형배율' onClick={e => handleClose(e)}>선형배율</MenuItem>
-                                </Menu>
-                            </Paper>}
-                        </Paper>    
-                    </Container>
+                                }}
+                            >
+                                <MenuItem id='객관식' onClick={e => handleClose(e)}>객관식</MenuItem>
+                                <MenuItem id='주관식' onClick={e => handleClose(e)}>주관식</MenuItem>
+                                <MenuItem id='선형배율' onClick={e => handleClose(e)}>선형배율</MenuItem>
+                            </Menu>
+                        </Paper>}
+                    </Paper>
+                </Container>
                 // </ThemeProvider>
             }
         </>
-  );
+    );
 };
 
 export default MainSurvey;
