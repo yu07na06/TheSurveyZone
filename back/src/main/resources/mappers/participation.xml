@@ -14,21 +14,24 @@
         select count(*) from survey.participation;
     </select>
 
-    <select id="countGender" resultType="Map">
-        select
-               count(case when Part_Gender='M' then 1 end) as man,
-               count(case when Part_Gender='W' then 1 end) as woman
-        from survey.participation;
-    </select>
-
-    <select id="countAge" resultType="Map">
+    <select id="part_Age_Man" resultType="Map">
         select count(case when Part_Age=10 then 1 end) as age_10,
         count(case when Part_Age=20 then 1 end) as age_20,
         count(case when Part_Age=30 then 1 end) as age_30,
         count(case when Part_Age=40 then 1 end) as age_40,
         count(case when Part_Age=50 then 1 end) as age_50,
         count(case when Part_Age=60 then 1 end) as age_60
-        from survey.participation;
+        from survey.participation where Part_Gender = "M";
+    </select>
+
+    <select id="part_Age_Woman" resultType="Map">
+        select count(case when Part_Age=10 then 1 end) as age_10,
+        count(case when Part_Age=20 then 1 end) as age_20,
+        count(case when Part_Age=30 then 1 end) as age_30,
+        count(case when Part_Age=40 then 1 end) as age_40,
+        count(case when Part_Age=50 then 1 end) as age_50,
+        count(case when Part_Age=60 then 1 end) as age_60
+        from survey.participation where Part_Gender = "W";
     </select>
 
 </mapper>

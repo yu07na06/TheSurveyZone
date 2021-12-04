@@ -26,8 +26,8 @@ public class ParticipationService {
         return MainInfoRes.builder()
                 .part_Total(participationDAO.ACCTotal())
                 .survey_Total(surveyDAO.surveyTotal())
-                .part_Age(participationDAO.ACCAge())
-                .part_Gender(participationDAO.ACCGender())
+                .part_Age_Man(participationDAO.part_Age_Man())
+                .part_Age_Woman(participationDAO.part_Age_Woman())
                 .sur_Tag(tagDAO.findById(""))
                 .build();
     }
