@@ -39,10 +39,11 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
     const history = useHistory();
     const dispatch = useDispatch()
     const steps = ['데이터 수집', '설문지', '제출 완료'];
+    const [url,setUrl] = useState(null);
+    const [Sur_Publish, setSur_Publish] = useState(false);
 
     const surveyCheckFunc = (overlapIP, surState) => {
         // 참여한 IP=false / 참여안한 IP=true
-        console.log("realReadState", realReadState);
         if(!overlapIP && !realReadState){
             Swal.fire('이미 참여한 설문입니다. 설문 보기 페이지로 이동합니다'); 
             history.push(`/ReadOnlyPage/${surveykey}`)
@@ -54,7 +55,7 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
 
     useEffect(()=>{
         surveyCheckAPI(surveykey)
-            .then(res => { console.log("참여여부 확인", res.data); surveyCheckFunc(res.data.check_IP, res.data.check_State); })
+            .then(res => surveyCheckFunc(res.data.check_IP, res.data.check_State))
             .catch(err => ErrorSweet(err.response.status, err.response.statusText, err.response.data.message))
     },[])
 
@@ -126,6 +127,8 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
                             handleClose={handleClose}
                             question={question}
                             ReadOnlyState={true}
+                            setUrl={setUrl}
+                            setSur_Publish={setSur_Publish}
                         /> ;
             case 2:
                 return  <React.Fragment>
@@ -174,10 +177,8 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
 
     const lastSubmit = (e) => {
         e.preventDefault();
-        console.log("여기 오나요?");
         if (submitCheck.current === false){
             submitCheck.current = true
-            console.log("여기는?");
             if(realReadState) wayBackHome();
 
         }else{
@@ -191,7 +192,6 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
             for (const key in surAns_Content) {
                 let splitValue=surAns_Content[key].split('_');
                 temp = data.get(surAns_Content[key]);
-                console.log('temp!!!', temp);
                 
                 switch(splitValue[0]){
                     case 'SurQueAnswer': // 주관식
@@ -242,7 +242,6 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
             const answerList = tempArray.map((v)=>{
                 return {'surAns_Content':v}
             })
-            console.log("정답을 보여줘 : ",answerList );
 
             if(UpdateKey){ // 수정 버튼 클릭 ----------------------------------------------------------------------------
                 const data = new FormData(e.currentTarget);
@@ -251,11 +250,8 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
 
                 let newQuestionAnsList = [];
                 for (const key in question_ans) {
-                newQuestionAnsList.push(question_ans[key]);  
+                    newQuestionAnsList.push(question_ans[key]);  
                 }
-                console.log("question_ans", question_ans);
-                console.log("newQuestionAnsList", newQuestionAnsList);
-                
                 let questionList = question.map((value, index)=>{ // 질문 들어가는 배열
                 let SurType = null;
                 switch(value.props.children.type.name){
@@ -270,7 +266,6 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
                         break;
                     default: break;
                 }
-
                 return {
                     surQue_Content: data.get(`SurQue_Content${value.key}`), // 질문 내용
                     surQue_QType: SurType, // 질문 타입 주관식(0), 객관식(1), 선형배율(2)
@@ -279,7 +274,7 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
                     surQue_Order: index, // 질문의 순서
                     answerList : [],
                     selectList: newQuestionAnsList[index].map((v, idx)=>{ // 객관식만 처리한 상태이므로, 주관식과 선형배율 error(수정 부탁)
-                    return {
+                        return {
                         surSel_Content: v!='null'?data.get(v):'', // 보기 내용 --> 주관식의 경우, ''빈값으로 보냄
                         surSel_Order: v!='null'?idx:'' // 보기 순서 --> 주관식의 경우, ''빈값으로 보냄
                     };
@@ -294,8 +289,8 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
                 sur_State: new Date() < day[0]?0:1, // 0 : 진행전, 1 : 진행중 , 2 : 마감
                 sur_StartDate: day[0].getFullYear()+"-"+ ('0'+(day[0].getMonth()+1)).slice(-2) +"-"+('0'+(day[0].getDate())).slice(-2), // Date 객체로 던지세요.     ---> comp에서 state로 관리중
                 sur_EndDate: day[1].getFullYear()+"-"+ ('0'+(day[1].getMonth()+1)).slice(-2) +"-"+('0'+(day[1].getDate())).slice(-2),                               // ---> comp에서 state로 관리중
-                sur_Publish: true, // 공개 여부                ---> comp에서 state로 관리중 [ !false: 공개, !true: (잠금)비공개 ]
-                sur_Image: "image", // 이미지 추후에 현재는 제외
+                sur_Publish: !Sur_Publish, // 공개 여부                ---> comp에서 state로 관리중 [ !false: 공개, !true: (잠금)비공개 ]
+                sur_Image: url, // 이미지 추후에 현재는 제외
                 // user_Email: "dbsk7885@daum.net",  // 작성자 ID
                 sur_Tag: data.get(`sur_Tag`),
                 questionList,
@@ -308,7 +303,6 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
                     .catch(err=> ErrorSweet(err.response.status, err.response.statusText, err.response.data.message));
                 wayBackMySurvey();
             }else{ // 질문 응답 버튼 클릭 시 ---------------------------------------------------------------------------------------------------------------------------
-                console.log('제출 했니?');
                 postSurveyAPI(surveykey,{"age":sexAge.age, "gender":sexAge.sex, "answerList":[...answerList]})
                     .then(res => console.log("제출 성공..?",res))
                     .catch(err => ErrorSweet(err.response.status, err.response.statusText, err.response.data.message));
@@ -346,6 +340,7 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
                 UpdateKey={UpdateKey}
                 ReadOnlyState={ReadOnlyState}
                 realReadState={realReadState}
+                setUrl={setUrl}
             />   
         </>
     );

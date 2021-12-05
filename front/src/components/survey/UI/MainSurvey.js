@@ -19,8 +19,10 @@ import Menu from '@mui/material/Menu';
 import AddIcon from '@mui/icons-material/Add';
 import Switch from '@mui/material/Switch';
 import Fab from '@mui/material/Fab';
+import { Img } from '../comp/CreateSurveyComp';
+import ReqSwitch from '../../common/UI/ReqSwitch';
 
-const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag, tags, handleClick, anchorEl, open, handleClose, question, ReadOnlyState, }) => {
+const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag, tags, handleClick, anchorEl, open, handleClose, question, ReadOnlyState, setUrl, setSur_Publish, }) => {
     const [수정할때의데이터제목 , set수정할때의데이터제목] = useState();
     const [수정할때의데이터본문 , set수정할때의데이터본문] = useState();
     useEffect(()=>{
@@ -29,9 +31,6 @@ const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag,
             set수정할때의데이터본문(surveyReqForm.sur_Content)
         }
     },[surveyReqForm])
-
-    surveyReqForm&&console.log("surveyReqForm", surveyReqForm.sur_Image);
-
     return (
         <>
         {surveyReqForm&&
@@ -42,6 +41,13 @@ const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag,
                             설문지
                         </Typography><br/><br/>
                         <Grid container spacing={2}>
+                        {(!ReadOnlyState||UpdateKey)&&
+                            <>
+                                <Grid item xs={6}>
+                                    <ReqSwitch essential={surveyReqForm.sur_Publish} setSur_Publish={setSur_Publish}/>
+                                </Grid>
+                            </>
+                        }
                             {UpdateKey?
                                 <div style={{marginLeft:120}}>
                                     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -146,11 +152,7 @@ const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag,
                             </Grid>
 
                             <Grid item xs={6}>
-                                {surveyReqForm.sur_Image&&
-                                    <Paper style={{ height:"270px" }} sx={{ bgcolor: '#EFF4E7', my: { xs: 3, md: 6 }, p: { xs: 3, md: 3 } }}>
-                                        <img height="200px" width="auto" src={surveyReqForm.sur_Image} alt=""/>
-                                    </Paper>
-                                }
+                                {surveyReqForm.sur_Image&& <Img setUrl={setUrl} imageSRC={surveyReqForm.sur_Image} />}
                             </Grid>
                         </Grid>
                         <hr/>

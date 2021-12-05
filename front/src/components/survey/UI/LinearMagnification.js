@@ -19,11 +19,11 @@ const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxVal
     return (
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
             <Grid container spacing={2}>
-                {ReadOnlyState&&<Typography sx={{ marginLeft: '82%' }} style={{ color:"red" }} >{ReadOnlyData.surQue_Essential&&"필수항목입니다"}</Typography>}
+                {ReadOnlyState&&<Typography sx={{ marginLeft: '82%' }} style={{ color:"red" }} >{(ReadOnlyData.surQue_Essential&&!UpdateKey)&&"필수항목입니다"}</Typography>}
                 {(!ReadOnlyState||UpdateKey)&&
                     <>
                         <Grid item xs={6}>
-                            <ReqSwitch number={number} flag={"qeustion"}/>
+                            <ReqSwitch number={number} flag={"qeustion"} essential={ReadOnlyData.surQue_Essential}/>
                         </Grid>
                         <Grid item xs={6}>
                             <Button id={number} sx={{ left: '75%' }} onClick={(e)=>deleteQue(e)}>삭제</Button>

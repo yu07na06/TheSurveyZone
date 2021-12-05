@@ -12,53 +12,7 @@ import ErrorSweet from '../../common/UI/ErrorSweet';
 import axios from 'axios';
 import { Paper } from '@mui/material';
 
-// const Img = ({setUrl}) => {
-//   const [selectedFile, setSelectedFile] = useState(null);
-//   const [fileURL, setFileURL] = useState(null);
-  
-//   // onChange역할 
-//   const handleFileChange = (e) => {
-//     setSelectedFile(e.target.files[0]);
-
-//     // 업로드한 이미지 미리보기
-//     const imgEl = document.querySelector('.img_box');
-
-//     const reader = new FileReader();
-//     reader.onload = () => (imgEl.style.backgroundImage = `url(${reader.result})`);
-
-//     reader.readAsDataURL(e.target.files[0]);
-    
-//     console.log("reader", reader);
-//   };
-  
-//   // formData라는 instance에 담아 보냄
-//   const handleFileUpload = (e) => {
-//     e.preventDefault();
-//     const formData = new FormData();
-//     formData.append("img", selectedFile);
-//     console.log("selectedFile", selectedFile);
-  
-//     axios.post(`/api/v1/image`,formData)
-//     // axios.post(`/api/v1/testS3`,{formData,s1:"hi~"})
-//       .then(res => { setUrl(res.data)})
-//       .catch(err => { console.log(err);});
-//   };
-
-//   return (
-//     <div>
-//       {/* 이미지만 가능하게 하는려면 accept="image/*" 추가 */}
-//       <input type="file" accept="image/*" onChange={handleFileChange} />
-//       <button onClick={(e)=>handleFileUpload(e)}>업로드</button>
-//       <div className="img_box">
-//         {/* <img style={{ maxWidth: "100%", height: "auto"}} src="" alt=""/> */}
-//         <img   style={{ width:"500px", height:"500px", backgroundRepeat  : 'no-repeat'}} src="" alt=""/>
-//       </div>
-//     </div>
-//   );
-
-// }
-
-const Img = ({setUrl}) => {
+export const Img = ({ setUrl, imageSRC, }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileURL, setFileURL] = useState(null);
   
@@ -77,27 +31,51 @@ const Img = ({setUrl}) => {
     
     console.log("reader", reader);
     setFileURL(reader.result)
+
+    // handleFileUpload(e);
   };
   
   // formData라는 instance에 담아 보냄
-  const handleFileUpload = (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append("img", selectedFile);
-    console.log("selectedFile", selectedFile);
+
+  useEffect(()=>{
+    if(selectedFile){
+      const formData = new FormData();
+      formData.append("img", selectedFile);
+      console.log("selectedFile", selectedFile);
+    
+      axios.post(`/api/v1/image`,formData)
+        .then(res => { setUrl(res.data)})
+        .catch(err => { console.log(err);});
+      console.log("업로드도 되었지롱");
+    }
+  },[selectedFile])
   
-    axios.post(`/api/v1/image`,formData)
-      .then(res => { setUrl(res.data)})
-      .catch(err => { console.log(err);});
-  };
+  // const handleFileUpload = (e) => {
+  //   e.preventDefault();
+    
+  // };
+  // const handleFileUpload = (e) => {
+  //   e.preventDefault();
+  //   const formData = new FormData();
+  //   formData.append("img", selectedFile);
+  //   console.log("selectedFile", selectedFile);
+  
+  //   axios.post(`/api/v1/image`,formData)
+  //     .then(res => { setUrl(res.data)})
+  //     .catch(err => { console.log(err);});
+  //   console.log("업로드도 되었지롱");
+  // };
 
   return (
     <>
       <Paper style={{ height:"270px" }} sx={{ bgcolor: '#EFF4E7', my: { xs: 3, md: 6 }, p: { xs: 3, md: 3 } }}>
         {/* 이미지만 가능하게 하는려면 accept="image/*" 추가 */}
-        <img id="img_box" height="200px" width="auto" src="" alt=""/><Gongback num={1} />
+        {imageSRC
+          ? <><img id="img_box" height="200px" width="auto" src={imageSRC} alt=""/><Gongback num={1} /></>
+          : <><img id="img_box" height="200px" width="auto" src="" alt=""/><Gongback num={1} /></>
+        }
         <input type="file" accept="image/*" onChange={handleFileChange} />
-        <button onClick={(e)=>handleFileUpload(e)}>업로드</button>
+        {/* <button onClick={(e)=>handleFileUpload(e)}>업로드</button> */}
       </Paper>
     </>
   );
@@ -237,10 +215,9 @@ const CreateSurveyComp = () => {
     }
 
     
-    console.log("생성 시, 객체 확인합니다.", obj);
     let shareURL="http://localhost:3000/SurveySubmitPage/";
+    console.log("생성 시, 객체 확인합니다.", obj);
     console.log(JSON.stringify(obj));
-
 
 
     // 설문지 생성 API

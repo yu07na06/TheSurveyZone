@@ -13,7 +13,6 @@ import { surveySend as surveySendAPI } from '../../../lib/api/survey';
 
 
 const SendEmail = ({_id}) => {
-
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
   

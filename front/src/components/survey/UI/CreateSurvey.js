@@ -23,7 +23,7 @@ import { createTheme } from '@mui/material/styles';
 import ReqSwitch from '../../common/UI/ReqSwitch';
 import { Gongback } from '../../common/Function';
 
-const CreateSurvey = ({ onClick, day, setDay, question, open, anchorEl, handleClick, handleClose, tag, setTag, tags, checkText, Img, setUrl, }) => {
+const CreateSurvey = ({ onClick, day, setDay, question, open, anchorEl, handleClick, handleClose, tag, setTag, tags, Img, setUrl, setSur_Publish, }) => {
     return (
         <>
             {/* <ThemeProvider theme={createTheme()}> */}
@@ -45,7 +45,7 @@ const CreateSurvey = ({ onClick, day, setDay, question, open, anchorEl, handleCl
                             <Typography component="h1" variant="h4" align="center">
                                 설문지
                             </Typography>
-                            <ReqSwitch/>
+                            <ReqSwitch setSur_Publish={setSur_Publish}/>
                             <br/><hr /><br/>
                             <div style={{marginLeft:160}}>
                                 <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -112,7 +112,7 @@ const CreateSurvey = ({ onClick, day, setDay, question, open, anchorEl, handleCl
                                         <Gongback num={4} />
                                     
                                     <Grid item xs={6} >
-                                        <Img style={{ height:"233px" }} setUrl={setUrl}/>
+                                        <Img style={{ height:"233px" }} setUrl={setUrl} imageSRC={null} />
                                     </Grid>
 
                                     <Grid item xs={12}>

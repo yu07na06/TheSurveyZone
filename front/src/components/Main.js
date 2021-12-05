@@ -40,65 +40,14 @@ import {
 
     return (
         <>
-        <Container sx={{ py: 2 }} maxWidth="lg">
-                    
-                    <Typography variant="h5" marginLeft="5px" style = {{fontWeight:'bold' , color:"#2E2E2E"}}>
-                    설문 통계
-                    </Typography>
+            <Container sx={{ py: 2 }} maxWidth="lg">
+                <Typography variant="h5" marginLeft="5px" style = {{fontWeight:'bold' , color:"#2E2E2E"}}>
+                설문 통계
+                </Typography>
 
-                    <div style={{flexGrow: 1}}/>
-
-// const Main = ({ data, accUserData, accAgeData, accSexData, reqMain, TAGENUM, setTagSearch, tagSearch, alignment, setAlignment, pageNum, pageChange, setSearchText, searchText, }) => {
-
-//     return (
-//         <>
-//             {/* 태그 출력 */}
-//             {/* <Box sx={{ bgcolor: 'background.paper', pt: 2 }}> */}
-//             <Box sx={{ pt: 2 }}>
-//                 <Container maxWidth="lg">
-//                     <Stack
-//                         direction="row"
-//                         justifyContent="center"
-//                     >
-//                     <ToggleButtonGroup
-//                         color="success"
-//                         value={alignment}
-//                         exclusive
-//                         onChange={(e,a)=>{ console.log("뭐 출력하니?", a); setAlignment(a);}}
-//                     >
-//                         { data.sur_Tag && data.sur_Tag.map((value) => 
-//                             <ToggleButton style={{ color:'blue' }} id={`${value.tag_ID}`} onClick={e=>{ pageChange(1); setTagSearch(e.target.id===tagSearch? '':e.target.id); }} value={value.tag_Name}>{'#'+value.tag_Name}</ToggleButton>
-//                         )}
-//                     </ToggleButtonGroup>
-//                     </Stack>
-                    
-//                     <Stack
-//                         direction="row"
-//                         justifyContent="center"
-//                     >
-//                     <InputBase
-//                         style={{ 
-//                             height:'50px',
-//                             width: '80%',
-//                             borderRadius: '30px',
-//                             border:'5px solid green',
-//                             textAlign: 'center',
-//                             fontSize: '20px' 
-//                         }}
-//                         value={searchText}
-//                         placeholder="Search…"
-//                         onChange={e=>setSearchText(e.target.value)}
-//                         inputProps={{ 'aria-label': 'search' }}
-//                     >
-//                         <SearchIcon />
-//                     </InputBase>
-//                     </Stack>
-//                 </Container>
-//             </Box>
-
-
-        <hr style = {{borderWidth:1, borderColor: "#2E2E2E"}} />
-        </Container>  
+                <div style={{flexGrow: 1}}/>
+                <hr style = {{borderWidth:1, borderColor: "#2E2E2E"}} />
+            </Container>  
 
             {isMobile ?
             <SurveyDialog
