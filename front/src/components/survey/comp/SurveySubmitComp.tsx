@@ -1,9 +1,8 @@
 import { Typography } from '@mui/material';
 import React, { useRef } from 'react';
 import SurveySubmit from '../UI/SurveySubmit';
-import BeforeSurveyComp from '../comp/BeforeSurveyComp'; 
-import MainSurveyComp from '../comp/MainSurveyComp';
-import { createTheme } from '@mui/material/styles';
+import BeforeSurveyComp from './BeforeSurveyComp'; 
+import MainSurveyComp from './MainSurveyComp';
 import { useEffect } from 'react';
 import { getSurvey as getSurveyAPI, getTags as getTagsAPI, modifySurvey as modifySurveyAPI, postSurvey as postSurveyAPI, surveyCheck as surveyCheckAPI } from '../../../lib/api/survey';
 import { useState } from 'react';
@@ -15,6 +14,7 @@ import MultipleChoiceComp from './MultipleChoiceComp';
 import SubjectiveComp from './SubjectiveComp';
 import LinearMagnificationComp from './LinearMagnificationComp';
 import ErrorSweet from '../../common/UI/ErrorSweet';
+import submitOBJ from '../../common/TypeFunction';
 
 const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) => {
     const sexAge = useSelector(state=>state.submitReducer.beforeData)
@@ -35,7 +35,6 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
     const submitCheck = useRef(false);
     const open = Boolean(anchorEl);
     const count = useRef(0);
-    const theme = createTheme();
     const history = useHistory();
     const dispatch = useDispatch()
     const steps = ['데이터 수집', '설문지', '제출 완료'];
@@ -82,8 +81,6 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
            .catch(err => console.log("요청 오류", err)); // 설문 참여한 사람이라면, 서버쪽에서 알려주어서 튕구는 걸로 함 403
    },[surveykey])
 
-
-
    useEffect(()=>{ // 수정/응답시 뿌려주는 용도
        if(surveyReqForm){ // 수정할때도 쓰고~ 응답할때도 쓰는~ 그저 뿌려주는 용도의 useEffect입니다.
            setDay([new Date(surveyReqForm.sur_StartDate), new Date(surveyReqForm.sur_EndDate)]);
@@ -103,11 +100,7 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
        }
    },[surveyReqForm])
 
-
-
-
     const handleClick = (event) => setAnchorEl(event.currentTarget);
-    
     const getStepContent = (step) => {
         switch (step) {
             case 0:
@@ -162,7 +155,7 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
         setAnchorEl(null); // 메뉴 닫기
         switch(e.target.id){
             case '객관식':
-                setQuestion([...question, <div key={count.current}><MultipleChoiceComp ReadOnlyState={false} ReadOnlyData={null} setDelIndex={setDelIndex} number={count.current} setCheck={setCheck} UpdateKey={false} checkboxlistState={checkboxlistState}/></div>  ]);
+                setQuestion([...question, <div key={count.current}><MultipleChoiceComp ReadOnlyState={false} ReadOnlyData={null} setDelIndex={setDelIndex} number={count.current} setCheck={setCheck} UpdateKey={false} /></div>  ]);
                 break;
             case '주관식':
                 setQuestion([...question, <div key={count.current}><SubjectiveComp ReadOnlyState={false} ReadOnlyData={null} setDelIndex={setDelIndex} number={count.current} setCheck={setCheck} UpdateKey={false}/></div>  ]);
@@ -244,58 +237,7 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
             })
 
             if(UpdateKey){ // 수정 버튼 클릭 ----------------------------------------------------------------------------
-                const data = new FormData(e.currentTarget);
-                const Sur_Title = data.get('Sur_Title'); // 설문 제목
-                const Sur_Content = data.get('Sur_Content'); // 설문 본문
-
-                let newQuestionAnsList = [];
-                for (const key in question_ans) {
-                    newQuestionAnsList.push(question_ans[key]);  
-                }
-                let questionList = question.map((value, index)=>{ // 질문 들어가는 배열
-                let SurType = null;
-                switch(value.props.children.type.name){
-                    case 'SubjectiveComp':
-                        SurType=0; // 주관식
-                        break;
-                    case 'MultipleChoiceComp':
-                        SurType=1; // 객관식
-                        break;
-                    case 'LinearMagnificationComp':
-                        SurType=2; // 선형배율
-                        break;
-                    default: break;
-                }
-                return {
-                    surQue_Content: data.get(`SurQue_Content${value.key}`), // 질문 내용
-                    surQue_QType: SurType, // 질문 타입 주관식(0), 객관식(1), 선형배율(2)
-                    surQue_Essential: data.get(`SurQue_Essential${value.key}`)==='on'?true:false, // true:필수, false:옵션
-                    surQue_MaxAns: data.get(`surQue_MaxAns${value.key}`), // 최대 선택갯수, 이건 아마 객관식에만 들어갈예정
-                    surQue_Order: index, // 질문의 순서
-                    answerList : [],
-                    selectList: newQuestionAnsList[index].map((v, idx)=>{ // 객관식만 처리한 상태이므로, 주관식과 선형배율 error(수정 부탁)
-                        return {
-                        surSel_Content: v!='null'?data.get(v):'', // 보기 내용 --> 주관식의 경우, ''빈값으로 보냄
-                        surSel_Order: v!='null'?idx:'' // 보기 순서 --> 주관식의 경우, ''빈값으로 보냄
-                    };
-                    })
-                };
-                });
-
-                let obj = {
-                sur_Type:1, // 오정환 주입! 일단 하라고 하시넹 오키
-                sur_Title: Sur_Title, // 설문 제목
-                sur_Content: Sur_Content, // 설문 본문
-                sur_State: new Date() < day[0]?0:1, // 0 : 진행전, 1 : 진행중 , 2 : 마감
-                sur_StartDate: day[0].getFullYear()+"-"+ ('0'+(day[0].getMonth()+1)).slice(-2) +"-"+('0'+(day[0].getDate())).slice(-2), // Date 객체로 던지세요.     ---> comp에서 state로 관리중
-                sur_EndDate: day[1].getFullYear()+"-"+ ('0'+(day[1].getMonth()+1)).slice(-2) +"-"+('0'+(day[1].getDate())).slice(-2),                               // ---> comp에서 state로 관리중
-                sur_Publish: !Sur_Publish, // 공개 여부                ---> comp에서 state로 관리중 [ !false: 공개, !true: (잠금)비공개 ]
-                sur_Image: url, // 이미지 추후에 현재는 제외
-                // user_Email: "dbsk7885@daum.net",  // 작성자 ID
-                sur_Tag: data.get(`sur_Tag`),
-                questionList,
-                }
-
+                const obj = submitOBJ(e, question_ans, question, day, Sur_Publish, url);
                 console.log("수정 데이터", obj);
 
                 modifySurveyAPI(surveykey, obj)
@@ -331,16 +273,13 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
             <SurveySubmit 
                 steps={steps}
                 getStepContent={getStepContent}
-                theme={theme}
                 activeStep={activeStep}
-                setActiveStep={setActiveStep}
                 lastSubmit={lastSubmit}
                 nextPage={nextPage}
                 wayBackHome={wayBackHome}
                 UpdateKey={UpdateKey}
                 ReadOnlyState={ReadOnlyState}
                 realReadState={realReadState}
-                setUrl={setUrl}
             />   
         </>
     );
