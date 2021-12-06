@@ -24,7 +24,7 @@ import { createTheme } from '@mui/material/styles';
 import ReqSwitch from '../../common/UI/ReqSwitch';
 import { Gongback } from '../../common/Function';
 
-const CreateSurvey = ({ onClick, day, setDay, question, open, anchorEl, handleClick, handleClose, tag, setTag, tags, checkText, Img, setUrl, }) => {
+const CreateSurvey = ({ onClick, day, setDay, question, open, anchorEl, handleClick, handleClose, tag, setTag, tags, Img, setUrl, setSur_Publish, }) => {
     return (
         <>
             {/* <ThemeProvider theme={createTheme()}> */}
@@ -41,9 +41,10 @@ const CreateSurvey = ({ onClick, day, setDay, question, open, anchorEl, handleCl
                 >
                 </AppBar>
 
+
                 <Container component="main" maxWidth="md" sx={{ mb: 4 }} >
                     <Paper elevation={2} sx={{ bgcolor: '#C9CBE0', my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-                        <ReqSwitch />
+                        <ReqSwitch setSur_Publish={setSur_Publish}/>
                         <Grid item xs={12}>
                             <TextField
                                 sx={{ my: 1 }}
@@ -60,6 +61,7 @@ const CreateSurvey = ({ onClick, day, setDay, question, open, anchorEl, handleCl
                         <hr /><br />
                         <Grid container xs={{ mx: "auto" }}>
                             <Grid my="2" >
+
                                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                                     <DateRangePicker
                                         minDate={new Date()}
@@ -75,6 +77,7 @@ const CreateSurvey = ({ onClick, day, setDay, question, open, anchorEl, handleCl
                                         )}
                                     />
                                 </LocalizationProvider>
+
                             </Grid>
                             <Grid sx={{ ml: "auto", my: 1 }}>
                                 <FormControl>
@@ -108,9 +111,8 @@ const CreateSurvey = ({ onClick, day, setDay, question, open, anchorEl, handleCl
                                 />
                             </Grid>
                             <Gongback num={4} />
-
                             <Grid item xs={12}>
-                                <Img sx={{ mx: "auto" }} setUrl={setUrl} />
+                              <Img sx={{ mx: "auto" }} setUrl={setUrl} imageSRC={null} />
                             </Grid>
 
                             <Grid item xs={12}>

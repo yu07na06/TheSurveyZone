@@ -13,6 +13,7 @@ import Typography from '@mui/material/Typography';
 import ReqSwitch from '../../common/UI/ReqSwitch';
 
 const MultipleChoice = ({ number, select, setSelect, AddText, maxNum, setMaxNum, deleteQue, ReadOnlyState, ReadOnlyData, UpdateKey, count, temp, Add }) => {
+
     const [수정할때의데이터, set수정할때의데이터] = useState(ReadOnlyState ? ReadOnlyData.surQue_Content : null);
 
     return (
@@ -22,7 +23,8 @@ const MultipleChoice = ({ number, select, setSelect, AddText, maxNum, setMaxNum,
                 {(!ReadOnlyState || UpdateKey) &&
                     <>
                         <Grid item xs={3}>
-                            <ReqSwitch number={number} flag={"qeustion"} />
+                            <ReqSwitch number={number} flag={"qeustion"} essential={ReadOnlyData&&ReadOnlyData.surQue_Essential}/>
+
                         </Grid>
                         <Grid item xs={9}>
                             <Button id={number} onClick={(e) => deleteQue(e)}>삭제</Button>

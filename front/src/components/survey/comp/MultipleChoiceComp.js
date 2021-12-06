@@ -6,7 +6,7 @@ import Checkbox from '@mui/material/Checkbox';
 import { useDispatch, useSelector } from 'react-redux';
 import { submitAction } from '../../../modules/submitReducer';
 
-const MultipleChoiceComp = ({ number, setCheck, setDelIndex, ReadOnlyState, ReadOnlyData, UpdateKey, checkboxlistState, realReadState }) => {
+const MultipleChoiceComp = ({ number, setCheck, setDelIndex, ReadOnlyState, ReadOnlyData, UpdateKey, realReadState }) => {
     const surAns_Content = useSelector(state=>state.submitReducer.surAns_Content)
     const [select, setSelect] = useState([]); // 보기 덩어리가 들어가있음
     const [deleteIndex, setDeleteIndex] = useState(null);
@@ -41,8 +41,10 @@ const MultipleChoiceComp = ({ number, setCheck, setDelIndex, ReadOnlyState, Read
     },[ReadOnlyState])
 
     useEffect(()=>{
-        if(!ReadOnlyData || UpdateKey){ //생성할때 사용하고, 수정할때 사용할꺼야
-            setCheck({[number]:temp});
+        if((!ReadOnlyData || UpdateKey)&&temp.length!==0){ //생성할때 사용하고, 수정할때 사용할꺼야
+            setTimeout(()=>{
+                setCheck({[number]:temp});
+            },444);
         }
     },[temp]);
 

@@ -40,16 +40,14 @@ import {
 
     return (
         <>
-        <Container sx={{ py: 2 }} maxWidth="lg">
-                    
-                    <Typography variant="h5" marginLeft="5px" style = {{fontWeight:'bold' , color:"#2E2E2E"}}>
-                    설문 통계
-                    </Typography>
+            <Container sx={{ py: 2 }} maxWidth="lg">
+                <Typography variant="h5" marginLeft="5px" style = {{fontWeight:'bold' , color:"#2E2E2E"}}>
+                설문 통계
+                </Typography>
 
-                    <div style={{flexGrow: 1}}/>
-
-        <hr style = {{borderWidth:1, borderColor: "#2E2E2E"}} />
-        </Container>  
+                <div style={{flexGrow: 1}}/>
+                <hr style = {{borderWidth:1, borderColor: "#2E2E2E"}} />
+            </Container>  
 
             {isMobile ?
             <SurveyDialog

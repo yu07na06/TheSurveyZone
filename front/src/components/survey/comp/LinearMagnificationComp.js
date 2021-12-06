@@ -18,7 +18,11 @@ const LinearMagnificationComp = ({ ReadOnlyState, ReadOnlyData, setDelIndex,  nu
     const deleteQue = e => setDelIndex(e.target.id);
 
     useEffect(()=>{
-        (!ReadOnlyState||UpdateKey)&&setCheck({[number]:[ `start_Step${number}`, `start_Name${number}_${minValue}`, `end_Step${number}`, `end_Name${number}_${maxValue}`]});
+        if(!ReadOnlyData || UpdateKey){ //생성할때 사용하고, 수정할때 사용할꺼야
+            setTimeout(()=>{
+                setCheck({[number]:[ `start_Step${number}`, `start_Name${number}_${minValue}`, `end_Step${number}`, `end_Name${number}_${maxValue}`]});
+            },444);
+        }
     },[minValue, maxValue, temp])
 
 
