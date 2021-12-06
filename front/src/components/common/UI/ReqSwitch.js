@@ -5,7 +5,7 @@ import Switch from '@mui/material/Switch';
 
 const ReqSwitch = ({number, flag, setSur_Publish, essential, }) => {
 
-    const [checkText, setCheckText] = useState((flag==="qeustion")?"필수 응답":"공개 설문")
+    const [checkText, setCheckText] = useState((flag === "qeustion") ? "필수 응답" : "공개 설문")
 
     useEffect(()=>{
         if(!essential){
@@ -31,17 +31,18 @@ const ReqSwitch = ({number, flag, setSur_Publish, essential, }) => {
         }
     }
 
-    return(
+    return (
         <>
             {(flag=="qeustion")
             ?
                 <FormControlLabel checked={checkText==="필수 응답"} control={ <Switch onChange={e=>onCheckChange(e)} id={`SurQue_Essential${number}`} name={`SurQue_Essential${number}`} sx={{ left: '5%' }} defaultChecked color="secondary" />} label={checkText} />
             :
                 <FormControlLabel checked={checkText==="비공개 설문"} control={<Switch id="Sur_Publishs" x={{ left: '85%' }} color="secondary" onChange={onCheckChange}/>} label={checkText} />
+
             }
         </>
     )
-    
+
 }
 
 export default ReqSwitch

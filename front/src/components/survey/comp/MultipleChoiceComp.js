@@ -114,7 +114,6 @@ const MultipleChoiceComp = ({ number, setCheck, setDelIndex, ReadOnlyState, Read
                     }
                     
                     <TextField
-
                         onChange={e => ReadOnlyState&&set수정할때의데이터(e.target.value)}
                         variant="standard"
                         required
@@ -133,7 +132,7 @@ const MultipleChoiceComp = ({ number, setCheck, setDelIndex, ReadOnlyState, Read
                     <Button 
                         id={`SurQue_Ans_${number}_${count}`}
                         onClick={(e)=>deleteBtn(e)}
-                        >삭제</Button><br/>
+                    >삭제</Button><br/>
                     </Grid>
                 }
             </Grid>

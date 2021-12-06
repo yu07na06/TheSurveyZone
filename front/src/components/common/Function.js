@@ -2,9 +2,10 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Swal from 'sweetalert2';
 import { createTheme } from '@mui/material/styles';
 import { ThemeProvider } from '@mui/material/styles';
+import Button from '@mui/material/Button';
 
 // 함수의 매개변수로 들어온 값을 클립보드에 저장해주는 함수입니다.
-const ClipboardCopy = (flag, copyText) =>{
+const ClipboardCopy = (flag, copyText) => {
     const doCopy = text => {
         if (!document.queryCommandSupported("copy")) {
             return alert("복사하기가 지원되지 않는 브라우저입니다.");
@@ -23,30 +24,30 @@ const ClipboardCopy = (flag, copyText) =>{
         document
             .body
             .removeChild(textarea);
-            Swal.fire('URL 복사 성공');
+        Swal.fire('설문 URL이 복사되었습니다.');
     };
     // flag값이 icon이라면? icon을 반환!! 그외에는 입력된값을 클립보드에 저장!!
-    return (flag==="icon"?<ContentCopyIcon onClick={()=>doCopy(copyText)}/>:doCopy(copyText));
+    return (flag === "icon" ? <Button><ContentCopyIcon onClick={() => doCopy(copyText)} /></Button> : doCopy(copyText));
 }
 
-export const Gongback = ({num}) => {
+export const Gongback = ({ num }) => {
     let nbsp = [];
 
-        for(var i=0;i<num;i++){
-            nbsp.push(i)
-        }
+    for (var i = 0; i < num; i++) {
+        nbsp.push(i)
+    }
 
-    
-    return(
+
+    return (
         <>
-            {nbsp.map(v=><br/>)}
+            {nbsp.map(v => <br />)}
         </>
     )
 }
 
 export const MakeThemeProvider = ({ children }) => {
-    const changeTheme = createTheme({ palette:{ mode: 'light'}})
-    return(
+    const changeTheme = createTheme({ palette: { mode: 'light' } })
+    return (
         <ThemeProvider theme={changeTheme}>
             {children}
         </ThemeProvider>
