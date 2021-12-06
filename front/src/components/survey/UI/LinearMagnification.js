@@ -27,8 +27,8 @@ const LinearMagnification = ({ number, minValue, setMinValue, maxValue, setMaxVa
                             <ReqSwitch number={number} flag={"qeustion"} essential={ReadOnlyData&&ReadOnlyData.surQue_Essential}/>
 
                         </Grid>
-                        <Grid item xs={3}>
-                            <Button id={number} sx={{ left: '75%' }} onClick={(e) => deleteQue(e)}>삭제</Button>
+                        <Grid item xs={3} textAlign="right">
+                            <Button id={number} onClick={(e) => deleteQue(e)}>삭제</Button>
                         </Grid>
                     </>
                 }
@@ -48,7 +48,7 @@ const LinearMagnification = ({ number, minValue, setMinValue, maxValue, setMaxVa
                     />
                 </Grid>
 
-                <Grid item xs={2}>
+                <Grid item xs={6} md={6}>
                     <TextField
                         onChange={(e) => { set수정할때의데이터시작(e.target.value); setTemp(e.target.value); }}
                         required
@@ -62,7 +62,7 @@ const LinearMagnification = ({ number, minValue, setMinValue, maxValue, setMaxVa
                 </Grid>
 
                 {(!ReadOnlyState || UpdateKey) &&
-                    <Grid item xs={4}>
+                    <Grid item xs={6} md={6}>
                         {UpdateKey ?
                             <Box>
                                 <FormControl fullWidth>
@@ -108,16 +108,7 @@ const LinearMagnification = ({ number, minValue, setMinValue, maxValue, setMaxVa
                     </Grid>
                 }
 
-                {(ReadOnlyState && !UpdateKey) &&
-                    <Grid container xs={8}
-                        justifyContent="center"
-                        alignItems="center">
-                        {ReadOnlyState &&
-                            makeCircles.map(value => value)}
-                    </Grid>
-                }
-
-                <Grid item xs={2}>
+                <Grid item  xs={6} md={6}  textAlign="right">
                     <TextField
                         onChange={(e) => { set수정할때의데이터끝(e.target.value); setTemp(e.target.value); }}
                         required
@@ -130,9 +121,20 @@ const LinearMagnification = ({ number, minValue, setMinValue, maxValue, setMaxVa
                     />
                 </Grid>
 
+                {(ReadOnlyState && !UpdateKey) &&
+                    <Grid container xs={12}
+                        justifyContent="center"
+                        alignItems="center">
+                        {ReadOnlyState &&
+                            makeCircles.map(value => value)}
+                    </Grid>
+                }
+
+                
+
 
                 {(!ReadOnlyState || UpdateKey) &&
-                    <Grid item xs={4}>
+                    <Grid item xs={6} md={4}>
                         {UpdateKey ?
                             <Box>
                                 <FormControl fullWidth>

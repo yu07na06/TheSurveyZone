@@ -22,17 +22,17 @@ const MultipleChoice = ({ number, select, setSelect, AddText, maxNum, setMaxNum,
                 {ReadOnlyState && <Grid item xs={12} sx={{ textAlign: "right" }}><Typography style={{ color: "red" }} >{ReadOnlyData.surQue_Essential && "필수항목"}</Typography></Grid>}
                 {(!ReadOnlyState || UpdateKey) &&
                     <>
-                        <Grid item xs={3}>
+                        <Grid item xs={9}>
                             <ReqSwitch number={number} flag={"qeustion"} essential={ReadOnlyData&&ReadOnlyData.surQue_Essential}/>
 
                         </Grid>
-                        <Grid item xs={9}>
+                        <Grid item xs={3} textAlign="right" >
                             <Button id={number} onClick={(e) => deleteQue(e)}>삭제</Button>
                         </Grid>
                     </>
                 }
 
-                <Grid item xs={10}>
+                <Grid item xs={12} md={10}>
                     <TextField
                         onChange={(e) => set수정할때의데이터(e.target.value)}
                         variant="outlined"
@@ -47,7 +47,7 @@ const MultipleChoice = ({ number, select, setSelect, AddText, maxNum, setMaxNum,
                     />
                 </Grid>
 
-                <Grid item xs={2}>
+                <Grid item xs={12} md={2}>
                     {UpdateKey ?
                         <Box>
                             <FormControl fullWidth>

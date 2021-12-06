@@ -43,8 +43,9 @@ const CreateSurvey = ({ onClick, day, setDay, question, open, anchorEl, handleCl
 
 
                 <Container component="main" maxWidth="md" sx={{ mb: 4 }} >
-                    <Paper elevation={2} sx={{ bgcolor: '#C9CBE0', my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+                    <Paper elevation={2} sx={{ bgcolor: '#F2EFFB', my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
                         <ReqSwitch setSur_Publish={setSur_Publish}/>
+
                         <Grid item xs={12}>
                             <TextField
                                 sx={{ my: 1 }}
@@ -111,7 +112,7 @@ const CreateSurvey = ({ onClick, day, setDay, question, open, anchorEl, handleCl
                                 />
                             </Grid>
                             <Gongback num={4} />
-                            <Grid item xs={12}>
+                            <Grid align='center' item xs={12}>
                               <Img sx={{ mx: "auto" }} setUrl={setUrl} imageSRC={null} />
                             </Grid>
 
@@ -137,7 +138,7 @@ const CreateSurvey = ({ onClick, day, setDay, question, open, anchorEl, handleCl
                                         MenuListProps={{
                                             'aria-labelledby': 'basic-button',
                                         }}
-                                    >
+                                        >
                                         <MenuItem id='객관식' onClick={e => handleClose(e)}>객관식</MenuItem>
                                         <MenuItem id='주관식' onClick={e => handleClose(e)}>주관식</MenuItem>
                                         <MenuItem id='선형배율' onClick={e => handleClose(e)}>선형배율</MenuItem>
@@ -152,10 +153,12 @@ const CreateSurvey = ({ onClick, day, setDay, question, open, anchorEl, handleCl
                                 sx={{ ml: "auto" }}
                             >
                                 생성
+                                
                             </Button>
                         </Grid>
                     </Paper>
                 </Container>
+                
             </Box>
             {/* </ThemeProvider> */}
         </>
