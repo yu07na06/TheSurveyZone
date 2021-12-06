@@ -1,4 +1,4 @@
-import { Button, Grid, Typography } from "@mui/material"
+import { Button, Container, Grid, Typography } from "@mui/material"
 import { Link } from "react-router-dom"
 import { Gongback } from "../Function"
 
@@ -7,30 +7,31 @@ const OTL = ({flag}) => {
 
     const surText = "아직 작성한 설문이 존재하지않습니다.";
     const surBtnText = "설문생성 하러가기" ;
-    const resText = "응답이없다..";
+    const resText = "아직 설문에 응답한 사람이 없습니다.";
     const resBtnText = "내설문 돌아가기" ;
     const surLink="/CreateSurveyPage";
     const resLink="/MySurveyPage";
 
     return(
         <>
-            <Gongback num={4}/>
-                <div style={{textAlign: "center"}}>
-                    {/* <Typography  fontSize="45px"color="blue">{(flag==="설문")?surText:resText}</Typography> */}
-                    <Typography  fontSize="45px"color="blue">아무것도 없습니다만?</Typography>
-                    <Gongback num={2}/>
-                    <a href='https://ifh.cc/v-f5xHEu' target='_blank'><video src='https://ifh.cc/v/f5xHEu.mp4' muted autoplay loop playsinline/></a>
-                    <a href='https://ifh.cc/v-OW1pgK' target='_blank'><video src='https://ifh.cc/v/OW1pgK.mp4' muted autoplay loop playsinline/></a>
-                    {/* <img src="https://ifh.cc/g/AZyg3O.png" alt="이미지 업로드 실패..ㅠ"/> */}
-                </div>
-            <Gongback num={4}/>
-                <Grid container justifyContent="center">
+        <Container>
+            <Grid container>
+                <Grid item xs={12}>
+                <Gongback num={4}/>
+                    <div style={{textAlign: "center"}}>
+                    <Typography  variant='h5' color="gray">{(flag==="설문")?surText:resText}</Typography>
+                    </div>
+                </Grid>
+                <Grid item align="center" xs={12}>
+                <Gongback num={4}/>
                     {/* <Link to='/LoginPage'style={{textDecoration:'none', color:'white'}}><Tab label="로그인" style={{fontWeight:'bold'}}/></Link> */}
-                    <Link to={(flag==="설문")?surLink:resLink} style={{textDecoration:'none', color:'white'}}>
-                        <Button color="secondary" variant="outlined" size="large"><Typography fontSize="30px">{(flag==="설문")?surBtnText:resBtnText}</Typography></Button>
+                    <Link  to={(flag==="설문")?surLink:resLink} style={{textDecoration:'none', color:'white'}}>
+                        <Button variant="outlined" size="medium"><Typography fontSize="20px">{(flag==="설문")?surBtnText:resBtnText}</Typography></Button>
                     </Link>
                 </Grid>
+            </Grid>
             <Gongback num={8}/>
+        </Container>
         </>
     )
 }

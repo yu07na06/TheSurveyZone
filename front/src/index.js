@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -9,6 +9,7 @@ import rootReducer, { rootSaga } from './modules';
 import { CookiesProvider } from 'react-cookie';
 import createSagaMiddleware from 'redux-saga';
 import { composeWithDevTools } from 'redux-devtools-extension';
+import "./App.css";
 
 const sagaMiddleware = createSagaMiddleware();
 

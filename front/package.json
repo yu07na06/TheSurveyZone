@@ -10,6 +10,10 @@
     "@devexpress/dx-react-core": "^2.7.6",
     "@emotion/react": "^11.5.0",
     "@emotion/styled": "^11.3.0",
+    "@fullcalendar/core": "^5.10.1",
+    "@fullcalendar/daygrid": "^5.10.1",
+    "@fullcalendar/list": "^5.10.1",
+    "@fullcalendar/react": "^5.10.1",
     "@material-ui/core": "^4.12.3",
     "@material-ui/icons": "^4.11.2",
     "@mui/icons-material": "^5.1.0",
@@ -42,9 +46,9 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -66,5 +70,9 @@
     ]
   },
 
-  "proxy": "http://218.154.207.145:8080"
+  "proxy": "http://218.154.207.223:8080",
+  "devDependencies": {
+    "customize-cra": "^1.0.0",
+    "react-app-rewired": "^2.1.8"
+  }
 }

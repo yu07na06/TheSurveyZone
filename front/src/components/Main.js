@@ -41,7 +41,6 @@ const Main = ({ data, accAgeGenderData, accAgeTotalData, accGenderTotalData, req
     return (
         <>
             <Container sx={{ py: 2 }} maxWidth="lg">
-
                 <Typography variant="h5" marginLeft="5px" style={{ fontWeight: 'bold', color: "#2E2E2E" }}>
                     설문 통계
                 </Typography>

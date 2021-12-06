@@ -12,7 +12,8 @@ const Subjective = ({ number, deleteQue, ReadOnlyState, ReadOnlyData, UpdateKey,
                 {(!ReadOnlyState || UpdateKey) && // 읽기 상태일때는 switch를 보여주지 않지만, 업데이트 상태일떄는 보여준다.
                     <>
                         <Grid item xs={6}>
-                            <ReqSwitch number={number} flag={"qeustion"} />
+                            <ReqSwitch number={number} flag={"qeustion"} essential={ReadOnlyData&&ReadOnlyData.surQue_Essential}/>
+
                         </Grid>
                         <Grid item xs={6} textAlign="right">
                             <Button id={number} onClick={(e) => deleteQue(e)}>삭제</Button>
