@@ -9,18 +9,18 @@ const MyCalendar = ({data}) => {
 
     useEffect(()=>{
         data&&setSurveyList(data.surveylist);
-      },[{data}]);
+    },[data]); // [{data}] --> [data] 이렇게 사용해야하므로 수정
     
-
+    
     surveyList.forEach(function(e) {
          const event = {
             title: e.sur_Title,
             start: e.sur_StartDate,
             end : e.sur_EndDate 
-         }
+        }
          console.log(event);
          eventList.push(event);
-        })
+    })
 
 
     return (

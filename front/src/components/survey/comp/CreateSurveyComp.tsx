@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import CreateSurvey from '../UI/CreateSurvey';
-import MultipleChoiceComp from '../comp/MultipleChoiceComp';
+import MultipleChoiceComp from './MultipleChoiceComp';
 import SubjectiveComp from './SubjectiveComp';
 import LinearMagnificationComp from './LinearMagnificationComp';
 import { createSurvey as createSurveyAPI, getTags as getTagsAPI } from '../../../lib/api/survey';
@@ -10,10 +10,8 @@ import { useCookies } from 'react-cookie';
 import ClipboardCopy, { Gongback } from '../../common/Function';
 import ErrorSweet from '../../common/UI/ErrorSweet';
 import axios from 'axios';
-import { Paper } from '@mui/material';
-import { Grid } from '@mui/material';
-import Button from '@mui/material/Button';
 import Input from '@mui/material/Input';
+import submitOBJ from '../../common/TypeFunction';
 
 export const Img = ({ setUrl, imageSRC, }) => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -40,26 +38,26 @@ export const Img = ({ setUrl, imageSRC, }) => {
 
   // formData라는 instance에 담아 보냄
 
-  useEffect(()=>{
-    if(selectedFile){
+  useEffect(() => {
+    if (selectedFile) {
       const formData = new FormData();
       formData.append("img", selectedFile);
       console.log("selectedFile", selectedFile);
-    
-      axios.post(`/api/v1/image`,formData)
-        .then(res => { setUrl(res.data)})
-        .catch(err => { console.log(err);});
+
+      axios.post(`/api/v1/image`, formData)
+        .then(res => { setUrl(res.data) })
+        .catch(err => { console.log(err); });
       console.log("업로드도 되었지롱");
     }
-  },[selectedFile])
+  }, [selectedFile])
 
   return (
-    <>    
-        {imageSRC  
-          ?<><img width="100%" height="auto" id="img_box" src={imageSRC} alt="" /><Gongback num={1} /></>
-          :<><img width="100%" height="auto" id="img_box" src="" alt="" /><Gongback num={1} /></>
-        } 
-         
+    <>
+      {imageSRC
+        ? <><img width="100%" height="auto" id="img_box" src={imageSRC} alt="" /><Gongback num={1} /></>
+        : <><img width="100%" height="auto" id="img_box" src="" alt="" /><Gongback num={1} /></>
+      }
+
       <Input sx={{ ml: "auto" }} type="file" accept="image/*" onChange={handleFileChange} />
     </>
   );
@@ -82,7 +80,6 @@ const CreateSurveyComp = () => {
   const history = useHistory();
   const [url, setUrl] = useState(null);
 
-
   useEffect(() => {
     if (cookies.Authorization == null) {
       Swal.fire({
@@ -100,7 +97,6 @@ const CreateSurveyComp = () => {
   }, [])
 
   const handleClick = (event) => setAnchorEl(event.currentTarget);
-  const onCheckChange = (e) => setSur_Publish(e.target.checked);
 
   const handleClose = (e) => {
     setAnchorEl(null); // 메뉴 닫기
@@ -143,60 +139,7 @@ const CreateSurveyComp = () => {
       alert('최소 하나의 질문이 필요합니다.')
       return;
     }
-
-    const data = new FormData(e.currentTarget);
-    const Sur_Title = data.get('Sur_Title'); // 설문 제목
-    const Sur_Content = data.get('Sur_Content'); // 설문 본문
-
-    let newQuestionAnsList = [];
-
-    for (const key in question_ans) {
-      newQuestionAnsList.push(question_ans[key]);
-    }
-
-    let questionList = question.map((value, index) => { // 질문 들어가는 배열
-      let SurType = null;
-      switch (value.props.children.type.name) {
-        case 'SubjectiveComp':
-          SurType = 0; // 주관식
-          break;
-        case 'MultipleChoiceComp':
-          SurType = 1; // 객관식  
-          break;
-        case 'LinearMagnificationComp':
-          SurType = 2; // 선형배율
-          break;
-        default: break;
-      }
-
-      return {
-        surQue_Content: data.get(`SurQue_Content${value.key}`), // 질문 내용
-        surQue_QType: SurType, // 질문 타입 주관식(0), 객관식(1), 선형배율(2)
-        surQue_Essential: data.get(`SurQue_Essential${value.key}`) === 'on' ? true : false, // true:필수, false:옵션
-        surQue_MaxAns: data.get(`surQue_MaxAns${value.key}`), // 최대 선택갯수, 이건 아마 객관식에만 들어갈예정
-        surQue_Order: index, // 질문의 순서
-        answerList: [],
-        selectList: newQuestionAnsList[index].map((v, idx) => { // 객관식만 처리한 상태이므로, 주관식과 선형배율 error(수정 부탁)
-          return {
-            surSel_Content: v != null ? data.get(v) : '', // 보기 내용 --> 주관식의 경우, ''빈값으로 보냄
-            surSel_Order: v != null ? idx : '' // 보기 순서 --> 주관식의 경우, ''빈값으로 보냄
-          };
-        })
-      };
-    });
-
-    let obj = {
-      sur_Type: 1, // 오정환 주입! 일단 하라고 하시넹 오키
-      sur_Title: Sur_Title, // 설문 제목
-      sur_Content: Sur_Content, // 설문 본문
-      sur_State: new Date() < day[0] ? 0 : 1, // 0 : 진행전, 1 : 진행중 , 2 : 마감
-      sur_StartDate: day[0].getFullYear() + "-" + ('0' + (day[0].getMonth() + 1)).slice(-2) + "-" + ('0' + (day[0].getDate())).slice(-2), // Date 객체로 던지세요.     ---> comp에서 state로 관리중
-      sur_EndDate: day[1].getFullYear() + "-" + ('0' + (day[1].getMonth() + 1)).slice(-2) + "-" + ('0' + (day[1].getDate())).slice(-2),                               // ---> comp에서 state로 관리중
-      sur_Publish: !Sur_Publish, // 공개 여부                ---> comp에서 state로 관리중 [ !false: 공개, !true: (잠금)비공개 ]
-      sur_Image: url,
-      sur_Tag: data.get(`sur_Tag`),
-      questionList,
-    }
+    const obj = submitOBJ(e, question_ans, question, day, Sur_Publish, url);
 
     let shareURL = "http://localhost:3000/SurveySubmitPage/";
     console.log("생성 시, 객체 확인합니다.", obj);
@@ -230,7 +173,6 @@ const CreateSurveyComp = () => {
         onClick={onClick}
         day={day}
         setDay={setDay}
-        onCheckChange={onCheckChange}
         question={question}
         open={open}
         anchorEl={anchorEl}
