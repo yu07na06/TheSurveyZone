@@ -1,4 +1,3 @@
-
 import { Button, TextField } from '@mui/material';
 import ForwardToInboxIcon from '@mui/icons-material/ForwardToInbox';
 import Box from '@mui/material/Box';
@@ -6,14 +5,14 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import React,{ useState } from 'react';
+import React, { useState } from 'react';
 import EList from './EList';
 import { surveySend as surveySendAPI } from '../../../lib/api/survey';
 
 
 
-const SendEmail = ({_id}) => {
 
+const SendEmail = ({ _id }) => {
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
   
@@ -53,13 +52,11 @@ const SendEmail = ({_id}) => {
   
     return (
       <>
-         <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
           <Tooltip title="Account settings">
-            <IconButton onClick={handleClick} size="small" sx={{ ml: 2 }}>
+            <IconButton onClick={handleClick} size="small" sx={{ }}>
               <ForwardToInboxIcon onClick={(e)=>console.log("나를 눌렀는가?")}/>
             </IconButton>
           </Tooltip>
-        </Box>
         <Menu
           anchorEl={anchorEl}
           open={open}
@@ -106,4 +103,4 @@ const SendEmail = ({_id}) => {
       </>
     );
   }
-  export default SendEmail;
+export default SendEmail;

@@ -17,35 +17,70 @@ const MainComp = ({match}) => {
     const TAGENUM = {};
     const dispatch = useDispatch();
 
-    const accUserData = [ 
-        ['day', 'people'],
-        ['18일', 3],
-        ['19일', 8],
-        ['20일', 9],
-        ['21일', 10],
-        ['22일', 12],
-        ['23일', data.part_Total],
+    let accAgeGenderData = ""
+    let accAgeTotalData = ""
+    let accGenderTotalData = ""
+
+    if(data.part_Age_Man&&data.part_Age_Woman){
+    accAgeGenderData = 
+    [
+        {
+            "id" : "Woman",
+            "data" :  [
+                { 'x': "10대", 'y': data.part_Age_Woman.age_10 },
+                { 'x': "20대", 'y': data.part_Age_Woman.age_20 },
+                { 'x': "30대", 'y': data.part_Age_Woman.age_30 },
+                { 'x': "40대", 'y': data.part_Age_Woman.age_40 },
+                { 'x': "50대", 'y': data.part_Age_Woman.age_50 },
+                { 'x': "60대", 'y': data.part_Age_Woman.age_60 }
+              ]
+        },
+        {
+            "id" : "Man",
+            "data" :  [
+                { 'x': "10대", 'y': data.part_Age_Man['age_10'] },
+                { 'x': "20대", 'y': data.part_Age_Man['age_20'] },
+                { 'x': "30대", 'y': data.part_Age_Man['age_30'] },
+                { 'x': "40대", 'y': data.part_Age_Man['age_40'] },
+                { 'x': "50대", 'y': data.part_Age_Man['age_50'] },
+                { 'x': "60대", 'y': data.part_Age_Man['age_60'] }
+              ]
+        },
+        {
+            "id" : "Total",
+            "data" :  [
+                { "x": "10대", "y": data.part_Age_Man.age_10+data.part_Age_Woman.age_10 },
+                { "x": "20대", "y": data.part_Age_Man.age_20+data.part_Age_Woman.age_20 },
+                { "x": "30대", "y": data.part_Age_Man.age_30+data.part_Age_Woman.age_30 },
+                { "x": "40대", "y": data.part_Age_Man.age_40+data.part_Age_Woman.age_40 },
+                { "x": "50대", "y": data.part_Age_Man.age_50+data.part_Age_Woman.age_50 },
+                { "x": "60대", "y": data.part_Age_Man.age_60+data.part_Age_Woman.age_60 }
+              ]
+        }
+    ]
+
+    accAgeTotalData = [
+        { "id": "10대", "vlaue": data.part_Age_Man.age_10+data.part_Age_Woman.age_10 },
+        { "id": "20대", "value": data.part_Age_Man.age_20+data.part_Age_Woman.age_20 },
+        { "id": "30대", "value": data.part_Age_Man.age_30+data.part_Age_Woman.age_30 },
+        { "id": "40대", "value": data.part_Age_Man.age_40+data.part_Age_Woman.age_40 },
+        { "id": "50대", "value": data.part_Age_Man.age_50+data.part_Age_Woman.age_50 },
+        { "id": "60대", "value": data.part_Age_Man.age_60+data.part_Age_Woman.age_60 }
+      ];
+
+
+    accGenderTotalData = [
+        { "id": "여성", "value": data.part_Age_Woman.age_10+data.part_Age_Woman.age_20+data.part_Age_Woman.age_30+data.part_Age_Woman.age_40+data.part_Age_Woman.age_50+data.part_Age_Woman.age_60, "color": "hsl(153, 70%, 50%)" },
+        { "id": "남성", "value": data.part_Age_Man.age_10+data.part_Age_Man.age_20+data.part_Age_Man.age_30+data.part_Age_Man.age_40+data.part_Age_Man.age_50+data.part_Age_Man.age_60, "color": "hsl(255, 70%, 50%)" },
     ];
 
-    const accAgeData = [
-        ['연령', '연령수'],
-        ['10대', data.part_Age.age_10],
-        ['20대', data.part_Age.age_20],
-        ['30대', data.part_Age.age_30],
-        ['40대', data.part_Age.age_40],
-        ['50대', data.part_Age.age_50],
-        ['60대', data.part_Age.age_60],
-    ];
+    }
 
+    
+    
     for (const value of data.sur_Tag) { // 태그 enum으로 사용하기
         TAGENUM[value.tag_ID] = value.tag_Name;
     }
-
-    const accSexData = [
-        ['성별', '성별수'],
-        ['여성', data.part_Gender.woman],
-        ['남성', data.part_Gender.man],
-    ];
 
     useEffect(()=>{
         if(err !== null){
@@ -80,9 +115,9 @@ const MainComp = ({match}) => {
         <>
             <Main
                 data={data}
-                accUserData={accUserData}
-                accAgeData={accAgeData}
-                accSexData={accSexData}
+                accAgeGenderData={accAgeGenderData}
+                accAgeTotalData={accAgeTotalData}
+                accGenderTotalData={accGenderTotalData}
                 reqMain={reqMain}
                 TAGENUM={TAGENUM}
                 setTagSearch={setTagSearch}
