@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import FindID from '../UI/FindID';
 import { createTheme  } from '@mui/material/styles';
 import { searchID } from '../../../lib/api/auth';
-import ErrorSweet from '../../common/UI/ErrorSweet';
+import ErrorSweet from '../../common/modules/ErrorSweet';
 import Swal from 'sweetalert2';
 import { useHistory } from 'react-router';
 

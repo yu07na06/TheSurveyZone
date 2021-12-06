@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
-import Paper from '@mui/material/Paper';
 import { Button, Grid, TextField, Typography } from '@mui/material';
-import Switch from '@mui/material/Switch';
 import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import NativeSelect from '@mui/material/NativeSelect';
-import ReqSwitch from '../../common/UI/ReqSwitch';
+import Paper from '@mui/material/Paper';
+import Select from '@mui/material/Select';
+import React, { useState } from 'react';
+import ReqSwitch from '../../common/modules/ReqSwitch';
 
 const LinearMagnification = ({ number, minValue, setMinValue, maxValue, setMaxValue, value, setTemp, deleteQue, ReadOnlyState, ReadOnlyData, makeCircles, UpdateKey, }) => {
     const [수정할때의데이터, set수정할때의데이터] = useState(ReadOnlyState ? ReadOnlyData.surQue_Content : null);

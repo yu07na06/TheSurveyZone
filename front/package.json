@@ -27,6 +27,7 @@
     "@testing-library/user-event": "^12.1.10",
     "axios": "^0.24.0",
     "date-fns": "^2.25.0",
+    "global": "^4.4.0",
     "immer": "^9.0.6",
     "material-ui-image": "^3.3.2",
     "react": "^17.0.2",

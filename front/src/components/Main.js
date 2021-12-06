@@ -11,15 +11,15 @@ import { InputBase, makeStyles } from '@material-ui/core';
 import { Paper, useMediaQuery, useTheme } from '@mui/material';
 import MyResponsivePie from './result/charts/MyResponsivePie'
 import MyResponsiveLine from './result/charts/MyResponsiveLine'
-import { BackgoundColor, FontColor } from './common/UI/TagColor'
+import { BackgoundColor, FontColor } from './common/modules/TagColor'
 
-import SurveyDialog from './common/UI/SurveyDialog';
+import SurveyDialog from './common/modules/SurveyDialog';
 
 import {
     FiCard,
     FiCardContent,
     FiCardMedia
-} from "./common/UI/FullImageCard";
+} from "./common/modules/FullImageCard";
 
 const useStyles = makeStyles({
 

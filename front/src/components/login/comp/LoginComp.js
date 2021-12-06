@@ -3,7 +3,7 @@ import Login from '../UI/Login';
 import { login as loginAPI } from '../../../lib/api/auth'; 
 import { useHistory } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import ErrorSweet from '../../common/UI/ErrorSweet';
+import ErrorSweet from '../../common/modules/ErrorSweet';
 
 const LoginComp = () => {
     const history = useHistory();

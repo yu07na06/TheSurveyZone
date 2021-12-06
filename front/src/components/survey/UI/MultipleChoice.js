@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import Paper from '@mui/material/Paper';
-import { Grid, TextField } from '@mui/material';
-import NativeSelect from '@mui/material/NativeSelect';
-import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
-import MenuItem from '@mui/material/MenuItem';
+import { Grid, TextField } from '@mui/material';
 import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
+import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import NativeSelect from '@mui/material/NativeSelect';
+import Paper from '@mui/material/Paper';
 import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
-import ReqSwitch from '../../common/UI/ReqSwitch';
+import React, { useState } from 'react';
+import ReqSwitch from '../../common/modules/ReqSwitch';
 
 const MultipleChoice = ({ number, select, setSelect, AddText, maxNum, setMaxNum, deleteQue, ReadOnlyState, ReadOnlyData, UpdateKey, count, temp, Add }) => {
 

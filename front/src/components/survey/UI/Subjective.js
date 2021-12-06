@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import Paper from '@mui/material/Paper';
 import { Button, Grid, TextField, Typography } from '@mui/material';
-import ReqSwitch from '../../common/UI/ReqSwitch';
+import Paper from '@mui/material/Paper';
+import React, { useState } from 'react';
+import ReqSwitch from '../../common/modules/ReqSwitch';
 
 const Subjective = ({ number, deleteQue, ReadOnlyState, ReadOnlyData, UpdateKey, realReadState }) => {
     const [수정할때의데이터, set수정할때의데이터] = useState(ReadOnlyState ? ReadOnlyData.surQue_Content : null);

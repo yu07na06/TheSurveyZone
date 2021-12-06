@@ -1,17 +1,19 @@
+import Input from '@mui/material/Input';
+import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
+import { useCookies } from 'react-cookie';
+import { useHistory } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import { createSurvey as createSurveyAPI, getTags as getTagsAPI } from '../../../lib/api/survey';
+import ClipboardCopy, { Gongback } from '../../common/Function';
+import ErrorSweet from '../../common/modules/ErrorSweet';
+import submitOBJ from '../../common/TypeFunction';
 import CreateSurvey from '../UI/CreateSurvey';
+import LinearMagnificationComp from './LinearMagnificationComp';
 import MultipleChoiceComp from './MultipleChoiceComp';
 import SubjectiveComp from './SubjectiveComp';
-import LinearMagnificationComp from './LinearMagnificationComp';
-import { createSurvey as createSurveyAPI, getTags as getTagsAPI } from '../../../lib/api/survey';
-import Swal from 'sweetalert2';
-import { useHistory } from 'react-router-dom';
-import { useCookies } from 'react-cookie';
-import ClipboardCopy, { Gongback } from '../../common/Function';
-import ErrorSweet from '../../common/UI/ErrorSweet';
-import axios from 'axios';
-import Input from '@mui/material/Input';
-import submitOBJ from '../../common/TypeFunction';
+
+
 
 export const Img = ({ setUrl, imageSRC, }) => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -58,7 +60,7 @@ export const Img = ({ setUrl, imageSRC, }) => {
         : <><img width="100%" height="auto" id="img_box" src="" alt="" /><Gongback num={1} /></>
       }
 
-      <Input sx={{ ml: "auto" }} type="file" accept="image/*" onChange={handleFileChange} />
+      <Input sx={{ ml: "auto" }} type="file" inputProps={{accept:"image/*"}} onChange={handleFileChange} />
     </>
   );
 
@@ -102,13 +104,13 @@ const CreateSurveyComp = () => {
     setAnchorEl(null); // 메뉴 닫기
     switch (e.target.id) {
       case '객관식':
-        setQuestion([...question, <div key={count.current}><MultipleChoiceComp ReadOnlyState={false} ReadOnlyData={null} setDelIndex={setDelIndex} number={count.current} setCheck={setCheck} UpdateKey={false} /></div>]);
+        setQuestion([...question, <div key={count.current}><MultipleChoiceComp ReadOnlyState={false} ReadOnlyData={null} setDelIndex={setDelIndex} number={count.current} setCheck={setCheck} UpdateKey={false} realReadState={undefined} /></div>]);
         break;
       case '주관식':
-        setQuestion([...question, <div key={count.current}><SubjectiveComp ReadOnlyState={false} ReadOnlyData={null} setDelIndex={setDelIndex} number={count.current} setCheck={setCheck} UpdateKey={false} /></div>]);
+        setQuestion([...question, <div key={count.current}><SubjectiveComp ReadOnlyState={false} ReadOnlyData={null} setDelIndex={setDelIndex} number={count.current} setCheck={setCheck} UpdateKey={false} realReadState={undefined} /></div>]);
         break;
       case '선형배율':
-        setQuestion([...question, <div key={count.current}><LinearMagnificationComp ReadOnlyState={false} ReadOnlyData={null} setDelIndex={setDelIndex} number={count.current} setCheck={setCheck} UpdateKey={false} /></div>]);
+        setQuestion([...question, <div key={count.current}><LinearMagnificationComp ReadOnlyState={false} ReadOnlyData={null} setDelIndex={setDelIndex} number={count.current} setCheck={setCheck} UpdateKey={false} realReadState={undefined} /></div>]);
         break;
       default: break;
     }

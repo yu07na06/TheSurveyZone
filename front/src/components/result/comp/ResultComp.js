@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { resultSurvey as resultSurveyAPI } from '../../../lib/api/survey';
 import Result from '../UI/Result';
-import ErrorSweet from '../../common/UI/ErrorSweet';
+import ErrorSweet from '../../common/modules/ErrorSweet';
 
 const ResultComp = ({surveykey}) => {
 

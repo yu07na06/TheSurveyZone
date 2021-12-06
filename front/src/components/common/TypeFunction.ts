@@ -1,3 +1,11 @@
+
+// mainPage에서 paging처리할때 사용될 dataType
+export interface pagingType {
+  pageNum:number;
+  tagSearch:string|undefined;
+  searchText:string|undefined;
+}
+
 interface objType {
     sur_Type: number;
     sur_Title: string
