@@ -11,22 +11,22 @@ import { Text } from '../comp/ResultMultiComp';
 const ResultMulti = ({ index, result, chartState, resultKeys, setChartState }) => {
     return (
         <>
-            <Paper elevation={3} sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+            <Paper elevation={3} sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 }, backgroundColor:'#E0ECF8' }}>
                 <Grid container spacing={2}>
                     <Grid container justifyContent="center">
-                        <Grid item xs={10}>
-                            <Paper elevation={2} sx={{ my: { xs: 3, md: 3 } }} >
-                                <TextField fullWidth label="질문명" value={result && result.questionList[index].surQue_Content} variant="standard" color="success" focused va InputProps={{ readOnly: true }} />
+                        <Grid item xs={11}>
+                            <Paper elevation={1} sx={{ my: { xs: 2, md: 2 }, p: { xs: 2, md: 2 } }}>
+                                <TextField fullWidth label="질문명" value={result&&result.questionList[index].surQue_Content}  variant="standard"  focused va InputProps={{ readOnly: true}} />
                             </Paper>
                         </Grid>
                     </Grid>
                     <Grid item xs={12} md={6} lg={6}>
-                        <Paper elevation={3} sx={{ bgcolor: '#C4F2CE', my: { xs: 1 }, p: { xs: 2 } }}>
+                        <Paper elevation={3} sx={{ bgcolor: '#A9D0F5', my: { xs: 1 }, p: { xs: 2 } }}>
                             <Text result={result.resultMap} index={index} flag={"보기"} resultKeys={resultKeys} />
                         </Paper>
                     </Grid>
                     <Grid item xs={12} md={6} lg={6}>
-                        <Paper elevation={3} sx={{ bgcolor: '#9FDEBD', my: { xs: 1 }, p: { xs: 2 } }}>
+                        <Paper elevation={3} sx={{ bgcolor: '#81BEF7', my: { xs: 1 }, p: { xs: 2 } }}>
                             <Text result={result.resultMap} index={index} flag={"결과"} resultKeys={resultKeys} />
                         </Paper>
                     </Grid>
@@ -34,7 +34,7 @@ const ResultMulti = ({ index, result, chartState, resultKeys, setChartState }) =
                         <ToggleBtn fullWidth chartState={chartState} setChartState={setChartState} />
                     </Grid>
                     <Grid item xs={12}>
-                        <Paper elevation={3} sx={{ bgcolor: '#80CEBE', p: { xs: 2 } }}>
+                        <Paper elevation={3} sx={{ bgcolor: '#58ACFA', p: { xs: 2 } }}>
                             {
                                 (() => {
                                     switch (chartState) {

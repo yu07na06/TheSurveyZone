@@ -183,9 +183,9 @@ const Main = ({ data, accAgeGenderData, accAgeTotalData, accGenderTotalData, req
             </Container>
 
             {/* 태그 출력 */}
-            <Container maxWidth="sm" align='center'>
+            <Container maxWidth="sm" align='center'  >
                 <Grid container
-                    justify='center'
+                    justifyContent="center"
                     alignItems="center"
                     direction="row"
                     rowSpacing={2}>

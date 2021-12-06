@@ -26,14 +26,14 @@ const SurveySubmit = ({ steps, getStepContent, activeStep, lastSubmit, nextPage,
                     }}
                 >
                 </AppBar>
-                <Container component="main" maxWidth="md" sx={{ mb: 4 }}>
+                <Container component="main" maxWidth="md" sx={{ mb: 4 , py : 2}}>
                     {/* <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}> */}
                     {/*(찐보기 상태를 요구할때) ReadOnlyPage에서 내려왔을때, ReadOnlyState=true, UpdateKey=false 일떄? steps를 보여주지않는다! */}
                     {(!ReadOnlyState && !UpdateKey) &&
-                        <Grid container>
+                        <>
                             <Grid item xs={12}>
                                 <Typography component="h1" variant="h4" align="center">
-                                    Survey
+                                    Survey Submit
                                 </Typography>
                             </Grid>
                             <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
@@ -43,7 +43,7 @@ const SurveySubmit = ({ steps, getStepContent, activeStep, lastSubmit, nextPage,
                                     </Step>
                                 ))}
                             </Stepper>
-                        </Grid>
+                        </>
                     }
 
                     <React.Fragment>
