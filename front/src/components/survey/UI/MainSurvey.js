@@ -18,20 +18,19 @@ import Menu from '@mui/material/Menu';
 import AddIcon from '@mui/icons-material/Add';
 import Switch from '@mui/material/Switch';
 import Fab from '@mui/material/Fab';
+import { Img } from '../comp/CreateSurveyComp';
 import ReqSwitch from '../../common/UI/ReqSwitch';
 
-const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag, tags, handleClick, anchorEl, open, handleClose, question, ReadOnlyState, }) => {
-    const [수정할때의데이터제목, set수정할때의데이터제목] = useState();
-    const [수정할때의데이터본문, set수정할때의데이터본문] = useState();
-    const defaultImage = "https://surveyzone.s3.ap-northeast-2.amazonaws.com/static/b5e552ea-8d6b-4582-89ae-1d25c25027b8no-image.png";
-    useEffect(() => {
-        if (surveyReqForm != null) {
-            set수정할때의데이터제목(surveyReqForm.sur_Title)
-            set수정할때의데이터본문(surveyReqForm.sur_Content)
-        }
-    }, [surveyReqForm])
-
-    surveyReqForm && console.log("surveyReqForm", surveyReqForm.sur_Image);
+const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag, tags, handleClick, anchorEl, open, handleClose, question, ReadOnlyState, setUrl, setSur_Publish, }) => {
+    const [수정할때의데이터제목 , set수정할때의데이터제목] = useState();
+    const [수정할때의데이터본문 , set수정할때의데이터본문] = useState();
+    const defaultImage = "https://surveyzone.s3.ap-northeast-2.amazonaws.com/static/b5e552ea-8d6b-4582-89ae-1d25c25027b8no-image.png";  
+    useEffect(()=>{
+          if(surveyReqForm!=null){
+              set수정할때의데이터제목(surveyReqForm.sur_Title)
+              set수정할때의데이터본문(surveyReqForm.sur_Content)
+          }
+      },[surveyReqForm])
 
     return (
         <>
@@ -39,7 +38,7 @@ const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag,
                 // <ThemeProvider theme={theme}>
                 <Container component="main" maxWidth="md" sx={{ mb: 4 }} >
                     <Paper levation={2} sx={{ bgcolor: '#C9CBE0', my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-                        <ReqSwitch /> {/*여기 ReadOnlyState면 안바뀌게 변하는거 넣어야함 */}
+                        <ReqSwitch essential={surveyReqForm.sur_Publish} setSur_Publish={setSur_Publish}/>
                         {UpdateKey ?
                             <Grid item xs={12} >
                                 <TextField
@@ -179,12 +178,14 @@ const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag,
                             {surveyReqForm.sur_Image != defaultImage &&
                                 <Grid xs={12}>
                                     <Container sx={{ py: 3, my: 3 }} align="center">
-                                        <img src={surveyReqForm.sur_Image}
+                                        <Img setUrl={setUrl}
                                             style=
                                             {{
                                                 mx: "auto", my: "auto", maxWidth: "100%",
                                                 height: "auto", objectFit: "cover"
-                                            }} />
+                                            }} 
+                                            imageSRC={surveyReqForm.sur_Image}
+                                            />
                                     </Container>
                                 </Grid>
                             }
