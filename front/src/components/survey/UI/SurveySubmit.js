@@ -53,7 +53,7 @@ const SurveySubmit = ({ steps, getStepContent, theme, activeStep, lastSubmit, ne
                         {getStepContent(activeStep)}
 
                         <Grid item xs={12} textAlign="right">
-                            <Box >
+                            <Box>
                                 <Button
                                     type="submit"
                                     variant="contained"
