@@ -8,7 +8,7 @@ const ReqSwitch = ({number, flag, setSur_Publish, essential, }) => {
     const [checkText, setCheckText] = useState((flag === "qeustion") ? "필수 응답" : "공개 설문")
 
     useEffect(()=>{
-        if(!essential){
+        if(essential!==undefined&&essential==false){
             if(flag==="qeustion"){
                 setCheckText("     ");
             }else{

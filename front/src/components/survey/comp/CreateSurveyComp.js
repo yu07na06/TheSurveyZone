@@ -241,6 +241,7 @@ const CreateSurveyComp = () => {
         tags={tags}
         Img={Img}
         setUrl={setUrl}
+        setSur_Publish={setSur_Publish}
       />
     </>
   );

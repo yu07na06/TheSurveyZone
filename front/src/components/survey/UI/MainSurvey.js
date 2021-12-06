@@ -31,7 +31,7 @@ const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag,
               set수정할때의데이터본문(surveyReqForm.sur_Content)
           }
       },[surveyReqForm])
-
+      surveyReqForm&&console.log("surveyReqForm.sur_State", surveyReqForm.sur_State);
     return (
         <>
             {surveyReqForm &&
@@ -143,20 +143,6 @@ const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag,
                                 </>
                             }
 
-                            <Grid item xs={12} >
-                                <TextField
-                                    sx={{ my: 1 }}
-                                    InputProps={{ readOnly: (!UpdateKey) }}
-                                    fullWidth
-                                    id="Sur_Title"
-                                    name="Sur_Title"
-                                    label="제목"
-                                    placeholder="제목을 입력해주세요. (45자 이내)"
-                                    inputProps={{ maxLength: 45 }}
-                                    value={수정할때의데이터제목}
-                                    onChange={e => set수정할때의데이터제목(e.target.value)}
-                                />
-                            </Grid>
                             <Grid item xs={12}>
                                 <TextField
                                     InputProps={{ readOnly: (!UpdateKey) }}
