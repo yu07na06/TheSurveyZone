@@ -9,13 +9,11 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { ThemeProvider } from '@mui/material/styles';
-import { Grid, TextField } from '@mui/material';
+import { Grid } from '@mui/material';
 
-const SurveySubmit = ({ steps, getStepContent, theme, activeStep, lastSubmit, nextPage, wayBackHome, UpdateKey, ReadOnlyState, realReadState, }) => {
+const SurveySubmit = ({ steps, getStepContent, activeStep, lastSubmit, nextPage, wayBackHome, UpdateKey, ReadOnlyState, realReadState, }) => {
     return (
         <>
-            {/* <ThemeProvider theme={theme}> */}
             <Box component="form" onSubmit={(e) => lastSubmit(e)} >
                 <CssBaseline />
                 <AppBar
@@ -73,10 +71,8 @@ const SurveySubmit = ({ steps, getStepContent, theme, activeStep, lastSubmit, ne
                             </Box>
                         </Grid>
                     </React.Fragment>
-                    {/* </Paper> */}
                 </Container>
             </Box>
-            {/* </ThemeProvider> */}
         </>
     );
 };
