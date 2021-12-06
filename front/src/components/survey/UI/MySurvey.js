@@ -6,7 +6,7 @@ import Container from '@mui/material/Container';
 import { Button, Grid, Pagination, Tab, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import ClipboardCopy from '../../common/Function';
-import OTL from '../../common/UI/OTL';
+import OTL from '../../common/modules/OTL';
 import SendEmail from './SendEmail';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';

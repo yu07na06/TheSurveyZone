@@ -19,7 +19,7 @@ import AddIcon from '@mui/icons-material/Add';
 import Switch from '@mui/material/Switch';
 import Fab from '@mui/material/Fab';
 import { Img } from '../comp/CreateSurveyComp';
-import ReqSwitch from '../../common/UI/ReqSwitch';
+import ReqSwitch from '../../common/modules/ReqSwitch';
 
 const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag, tags, handleClick, anchorEl, open, handleClose, question, ReadOnlyState, setUrl, setSur_Publish, }) => {
     const [수정할때의데이터제목 , set수정할때의데이터제목] = useState();
@@ -37,7 +37,7 @@ const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag,
             {surveyReqForm &&
                 // <ThemeProvider theme={theme}>
                 <Container component="main" maxWidth="md" sx={{ mb: 4 }} >
-                    <Paper levation={2} sx={{ bgcolor: '#C9CBE0', my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+                    <Paper levation={2} sx={{ bgcolor: '#F2EFFB', my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
                         <ReqSwitch essential={surveyReqForm.sur_Publish} setSur_Publish={setSur_Publish}/>
                         {UpdateKey ?
                             <Grid item xs={12} >
@@ -55,51 +55,53 @@ const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag,
                                 />
                             </Grid>
                             :
-                            <Typography component="h1" variant="h4" align="center">
+                            <Grid item xs={12} >
+                            <Typography style={{wordWrap:"break-word" }}component="h1" variant="h4" align="center">
                                 {surveyReqForm.sur_Title}
                             </Typography>
+                            </Grid>
                         }
                         <hr /><br />
                         <Grid container xs={{ mx: "auto" }}>
                             {UpdateKey ?
                                 <>
-                                    <Grid xs={12} >
+                                    <Grid my="2" >
                                         <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                            <DateRangePicker
-                                                minDate={new Date()}
-                                                startText="시작일"
-                                                endText="마감일"
-                                                value={day}
-                                                onChange={(newValue) => {
-                                                    setDay(newValue);
-                                                }}
-                                                renderInput={(startProps, endProps) => (
-                                                    <React.Fragment>
-                                                        <TextField {...startProps} sx={{ pr: 1 }} />
-                                                        <TextField {...endProps} />
-                                                    </React.Fragment>
-                                                )}
-                                            />
+                                                        <DateRangePicker
+                                                            minDate={new Date()}
+                                                            startText="시작일"
+                                                            endText="마감일"
+                                                            value={day}
+                                                            onChange={(newValue) => {
+                                                                setDay(newValue);
+                                                            }}
+                                                            renderInput={(startProps, endProps) => (
+                                                                <React.Fragment>
+                                                                    <TextField {...startProps} sx={{ pr: 1 }} />
+                                                                    <TextField {...endProps} />
+                                                                </React.Fragment>
+                                                            )}
+                                                        />
                                         </LocalizationProvider>
-                                    </Grid>
-                                    <Grid xs={6} sx={{ px: 1 }}></Grid>
-                                    <Grid xs={6} sx={{ px: 1, my: 1 }}>
+                                                            
+                                        </Grid>
+                                        <Grid sx={{ ml: "auto", my: 1 }}>
                                         <FormControl>
-                                            <InputLabel id="demo-simple-select-label">태그</InputLabel>
-                                            {tags && <NativeSelect
-                                                labelId="sur_Tag"
-                                                id="sur_Tag"
-                                                name="sur_Tag"
-                                                value={tag}
-                                                defaultValue={surveyReqForm.tagList.length === 0 ? "" : surveyReqForm.tagList[0].tag_ID}
-                                                label="sur_Tag"
-                                                onChange={e => setTag(e.target.value)}
-                                            >
-                                                <option value=""></option>
-                                                {tags.map(v => <option value={v.tag_ID}>{v.tag_Name}</option>)}
-                                            </NativeSelect>}
-                                        </FormControl>
-                                    </Grid>
+                                                        <InputLabel id="demo-simple-select-label">태그</InputLabel>
+                                                        {tags && <NativeSelect
+                                                            labelId="sur_Tag"
+                                                            id="sur_Tag"
+                                                            name="sur_Tag"
+                                                            value={tag}
+                                                            defaultValue={surveyReqForm.tagList.length === 0 ? "" : surveyReqForm.tagList[0].tag_ID}
+                                                            label="sur_Tag"
+                                                            onChange={e => setTag(e.target.value)}
+                                                        >
+                                                            <option value=""></option>
+                                                            {tags.map(v => <option value={v.tag_ID}>{v.tag_Name}</option>)}
+                                                        </NativeSelect>}
+                                                    </FormControl>
+                                        </Grid>
                                 </>
                                 :
                                 <>

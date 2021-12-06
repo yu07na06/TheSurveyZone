@@ -4,7 +4,7 @@ import { useCookies } from 'react-cookie';
 import Swal from 'sweetalert2';
 import { useHistory } from 'react-router-dom';
 import {deleteSurvey as deleteSurveyAPI, getMySurveyList as getMySurveyListAPI } from '../../../lib/api/survey';
-import ErrorSweet from '../../common/UI/ErrorSweet';
+import ErrorSweet from '../../common/modules/ErrorSweet';
 
 const MySurveyComp = () => {
   const [cookies] = useCookies(['Authorization']);

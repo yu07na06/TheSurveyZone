@@ -5,19 +5,21 @@ import ResultLinearComp from '../comp/ResultLinearComp';
 import ResultSubjective from './ResultSubjective';
 import { TextField, Grid } from '@mui/material';
 import ResultMultiComp from '../comp/ResultMultiComp';
-import OTL from '../../common/UI/OTL';
+import OTL from '../../common/modules/OTL';
 
 const Result = ({ result }) => {
     const defaultImage = "https://surveyzone.s3.ap-northeast-2.amazonaws.com/static/b5e552ea-8d6b-4582-89ae-1d25c25027b8no-image.png";
     return (
         <>
             <Container component="main" maxWidth="md" sx={{ mb: 4 }} >
-                <Paper elevation={3} sx={{ bgcolor: '#EFF4E7', my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+                <Paper elevation={3} sx={{ bgcolor: '#EFF2FB', my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
                     {
                         result.answerList && (result.answerList[0].length === 0) ?
                             <OTL />
                             :
                             <div>
+                                <Paper>
+                                <Container sx={{bgcolor: '#E0ECF8', py:2}}>
                                 <Grid container spacing={1}>
                                     <Grid item xs={12} md={9} lg={9}>
                                         <TextField
@@ -26,8 +28,8 @@ const Result = ({ result }) => {
                                             label="제목"
                                             value={result.sur_Title}
                                             InputProps={{ readOnly: true }}
-                                            color="success"
-                                            focused />
+                                            focused
+                                        />
                                     </Grid>
                                     <Grid item xs={6} md={3} lg={3}>
                                         <TextField
@@ -35,7 +37,6 @@ const Result = ({ result }) => {
                                             label="태그"
                                             value={result.sur_Tag}
                                             InputProps={{ readOnly: true }}
-                                            color="success"
                                             focused />
                                     </Grid>
                                     <Grid item xs={6} lg={3}>
@@ -44,7 +45,6 @@ const Result = ({ result }) => {
                                             label="시작날짜"
                                             value={result.sur_StartDate}
                                             InputProps={{ readOnly: true }}
-                                            color="success"
                                             focused />
                                     </Grid>
                                     <Grid item xs={6} lg={3}>
@@ -53,7 +53,6 @@ const Result = ({ result }) => {
                                             label="마감날짜"
                                             value={result.sur_EndDate}
                                             InputProps={{ readOnly: true }}
-                                            color="success"
                                             focused />
                                     </Grid>
                                     <Grid item xs={6} lg={3}>
@@ -62,7 +61,6 @@ const Result = ({ result }) => {
                                             label="진행상태"
                                             value={result.sur_State === 1 ? "진행중" : "마감"}
                                             InputProps={{ readOnly: true }}
-                                            color="success"
                                             focused />
                                     </Grid>
                                     <Grid item xs={6} lg={3}>
@@ -71,22 +69,21 @@ const Result = ({ result }) => {
                                             label="공개여부"
                                             value={result.sur_Publish ? "공개" : "비공개"}
                                             InputProps={{ readOnly: true }}
-                                            color="success"
                                             focused />
                                     </Grid>
                                     <Grid item xs={12}>
                                         <TextField
+                                            fullWidth
+                                            value={result.sur_Content}
+                                            inputProps={{ readOnly: true }}
+                                            focused
                                             sx={{ my: 1 }}
                                             variant="outlined"
                                             multiline
-                                            fullWidth
                                             rows={4}
                                             rowsmax={8}
-                                            inputProps={{ readOnly: true }}
                                             name="Sur_Content"
                                             id="Sur_Content"
-                                            value={result.sur_Content}
-                                            labe="본문"
                                         />
                                     </Grid>
                                     {result.sur_Img != defaultImage || result.sur_Img == "EMPTY" &&
@@ -98,6 +95,8 @@ const Result = ({ result }) => {
                                     }
 
                                 </Grid>
+                                </Container>
+                                </Paper>
                                 {result && result.questionList.map((value, index) => {
                                     switch (value.surQue_QType) {
                                         case 0: // 주관식

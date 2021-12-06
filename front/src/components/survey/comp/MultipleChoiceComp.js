@@ -100,8 +100,8 @@ const MultipleChoiceComp = ({ number, setCheck, setDelIndex, ReadOnlyState, Read
         !UpdateKey && setTemp([...temp, `SurQue_Ans_${number}_${count}`]); // 질문에 대한 보기 이름 덩어리 합치는 중
         dispatch(submitAction({[number]:`SurQueCheck_${number}_${count}`}))
         return(
-            <Grid key={`SurQue_Ans_${number}_${count}`} container spacing={2}>
-                <Grid item xs={11} key={`SurQue_Ans_${number}_${count}`}>
+            <Grid key={`SurQue_Ans_${number}_${count}`} container spacing={1}>
+                <Grid item xs={9} sm={10} key={`SurQue_Ans_${number}_${count}`}>
                     {(ReadOnlyState&&!UpdateKey)&&
                         <Checkbox
                             disabled={realReadState}
@@ -111,8 +111,7 @@ const MultipleChoiceComp = ({ number, setCheck, setDelIndex, ReadOnlyState, Read
                             id={`SurQueCheck_${number}_${count}`}
                             onClick={(e)=>{ checkClick(e); checkCount(e, addMaxNum);}}
                         />
-                    }
-                    
+                }
                     <TextField
                         onChange={e => ReadOnlyState&&set수정할때의데이터(e.target.value)}
                         variant="standard"
@@ -128,8 +127,8 @@ const MultipleChoiceComp = ({ number, setCheck, setDelIndex, ReadOnlyState, Read
                 </Grid>
 
                 {(!ReadOnlyState||UpdateKey)&&
-                    <Grid item xs={1}>
-                    <Button 
+                    <Grid item textAlign = "right" xs={3} sm={2} >
+                    <Button
                         id={`SurQue_Ans_${number}_${count}`}
                         onClick={(e)=>deleteBtn(e)}
                     >삭제</Button><br/>

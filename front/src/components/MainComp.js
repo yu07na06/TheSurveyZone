@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
 import { mainList as mainListAPI } from '../lib/api/home';
 import { chartData } from '../modules/chartReducer';
-import ErrorSweet from './common/UI/ErrorSweet';
+import ErrorSweet from './common/modules/ErrorSweet';
 import Main from './Main';
 
 const MainComp = ({match}) => {
@@ -99,7 +99,7 @@ const MainComp = ({match}) => {
         setTagSearch('');
         setSearchText('');
     },[dispatch, match.params]);
-    
+
     // main 리스트, 태그, 검색 요청
     useEffect(()=>{
         dispatch(chartData());

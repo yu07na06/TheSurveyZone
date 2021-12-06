@@ -13,7 +13,7 @@ import Swal from 'sweetalert2';
 import MultipleChoiceComp from './MultipleChoiceComp';
 import SubjectiveComp from './SubjectiveComp';
 import LinearMagnificationComp from './LinearMagnificationComp';
-import ErrorSweet from '../../common/UI/ErrorSweet';
+import ErrorSweet from '../../common/modules/ErrorSweet';
 import submitOBJ from '../../common/TypeFunction';
 
 const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) => {

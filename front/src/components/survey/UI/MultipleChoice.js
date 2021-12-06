@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import Paper from '@mui/material/Paper';
-import { Grid, TextField } from '@mui/material';
-import NativeSelect from '@mui/material/NativeSelect';
-import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
-import MenuItem from '@mui/material/MenuItem';
+import { Grid, TextField } from '@mui/material';
 import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
+import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import NativeSelect from '@mui/material/NativeSelect';
+import Paper from '@mui/material/Paper';
 import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
-import ReqSwitch from '../../common/UI/ReqSwitch';
+import React, { useState } from 'react';
+import ReqSwitch from '../../common/modules/ReqSwitch';
 
 const MultipleChoice = ({ number, select, setSelect, AddText, maxNum, setMaxNum, deleteQue, ReadOnlyState, ReadOnlyData, UpdateKey, count, temp, Add }) => {
 
@@ -22,17 +22,17 @@ const MultipleChoice = ({ number, select, setSelect, AddText, maxNum, setMaxNum,
                 {ReadOnlyState && <Grid item xs={12} sx={{ textAlign: "right" }}><Typography style={{ color: "red" }} >{ReadOnlyData.surQue_Essential && "필수항목"}</Typography></Grid>}
                 {(!ReadOnlyState || UpdateKey) &&
                     <>
-                        <Grid item xs={3}>
+                        <Grid item xs={9}>
                             <ReqSwitch number={number} flag={"qeustion"} essential={ReadOnlyData&&ReadOnlyData.surQue_Essential}/>
 
                         </Grid>
-                        <Grid item xs={9}>
+                        <Grid item xs={3} textAlign="right" >
                             <Button id={number} onClick={(e) => deleteQue(e)}>삭제</Button>
                         </Grid>
                     </>
                 }
 
-                <Grid item xs={10}>
+                <Grid item xs={12} md={10}>
                     <TextField
                         onChange={(e) => set수정할때의데이터(e.target.value)}
                         variant="outlined"
@@ -47,7 +47,7 @@ const MultipleChoice = ({ number, select, setSelect, AddText, maxNum, setMaxNum,
                     />
                 </Grid>
 
-                <Grid item xs={2}>
+                <Grid item xs={12} md={2}>
                     {UpdateKey ?
                         <Box>
                             <FormControl fullWidth>

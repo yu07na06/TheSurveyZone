@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router';
 import { changePW as changePWAPI } from '../../../lib/api/auth';
-import ErrorSweet from '../../common/UI/ErrorSweet';
+import ErrorSweet from '../../common/modules/ErrorSweet';
 import ChangePW from '../UI/ChangePW';
 
 const ChangePWComp = () => {
