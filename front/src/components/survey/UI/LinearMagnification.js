@@ -24,7 +24,7 @@ const LinearMagnification = ({ number, minValue, setMinValue, maxValue, setMaxVa
                 {(!ReadOnlyState || UpdateKey) &&
                     <>
                         <Grid item xs={9}>
-                            <ReqSwitch number={number} flag={"qeustion"} essential={ReadOnlyData.surQue_Essential}/>
+                            <ReqSwitch number={number} flag={"qeustion"} essential={ReadOnlyData&&ReadOnlyData.surQue_Essential}/>
 
                         </Grid>
                         <Grid item xs={3}>
