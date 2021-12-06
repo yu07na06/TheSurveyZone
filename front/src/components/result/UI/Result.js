@@ -5,7 +5,7 @@ import ResultLinearComp from '../comp/ResultLinearComp';
 import ResultSubjective from './ResultSubjective';
 import { TextField, Grid } from '@mui/material';
 import ResultMultiComp from '../comp/ResultMultiComp';
-import OTL from '../../common/UI/OTL';
+import OTL from '../../common/modules/OTL';
 
 const Result = ({ result }) => {
     const defaultImage = "https://surveyzone.s3.ap-northeast-2.amazonaws.com/static/b5e552ea-8d6b-4582-89ae-1d25c25027b8no-image.png";

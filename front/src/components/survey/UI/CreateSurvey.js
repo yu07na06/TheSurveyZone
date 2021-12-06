@@ -16,7 +16,7 @@ import DateRangePicker from '@mui/lab/DateRangePicker';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import { Grid, TextField } from '@mui/material';
-import ReqSwitch from '../../common/UI/ReqSwitch';
+import ReqSwitch from '../../common/modules/ReqSwitch';
 import { Gongback } from '../../common/Function';
 
 const CreateSurvey = ({ onClick, day, setDay, question, open, anchorEl, handleClick, handleClose, tag, setTag, tags, Img, setUrl, setSur_Publish, }) => {

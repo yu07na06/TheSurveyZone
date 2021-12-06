@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Register from '../UI/Register';
 import { email as emailAPI, register as registerAPI } from '../../../lib/api/auth'; 
 import { useHistory } from 'react-router';
-import ErrorSweet from '../../common/UI/ErrorSweet';
+import ErrorSweet from '../../common/modules/ErrorSweet';
 
 const RegisterComp = () => {
 

@@ -19,7 +19,7 @@ import AddIcon from '@mui/icons-material/Add';
 import Switch from '@mui/material/Switch';
 import Fab from '@mui/material/Fab';
 import { Img } from '../comp/CreateSurveyComp';
-import ReqSwitch from '../../common/UI/ReqSwitch';
+import ReqSwitch from '../../common/modules/ReqSwitch';
 
 const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag, tags, handleClick, anchorEl, open, handleClose, question, ReadOnlyState, setUrl, setSur_Publish, }) => {
     const [수정할때의데이터제목 , set수정할때의데이터제목] = useState();
