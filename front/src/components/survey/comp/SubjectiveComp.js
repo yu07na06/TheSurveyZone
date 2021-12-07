@@ -1,36 +1,38 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { submitAction } from '../../../modules/submitReducer';
 import Subjective from '../UI/Subjective';
 
-const SubjectiveComp = ({ ReadOnlyState, ReadOnlyData, setDelIndex, number, setCheck, UpdateKey, realReadState }) => {
+const SubjectiveComp = ({ ReadOnlyState, ReadOnlyData, UpdateKey, realReadState, number, setCheck, setDelIndex, }) => {
+    const [updateData, setUpdateData] = useState(ReadOnlyState ? ReadOnlyData.surQue_Content : null);
     const dispatch = useDispatch();
 
-    const deleteQue = (e) => {
-        setDelIndex(e.target.id);
-    }
+    const deleteQue = (e) => setDelIndex(e.target.id);
 
     useEffect(() => {
+        if (ReadOnlyState)
+            dispatch(submitAction({ [number]: `SurQueAnswer_${number}` }))
+        
         setTimeout(() => {
             if (!ReadOnlyState || UpdateKey)
                 setCheck({ [number]: [null] });
         }, 444)
     }, [])
 
-    useEffect(() => {
-        if (ReadOnlyState)
-            dispatch(submitAction({ [number]: `SurQueAnswer_${number}` }))
-    }, [])
-
     return (
         <>
             <Subjective
-                deleteQue={deleteQue}
-                number={number}
+                // 부모로부터
                 ReadOnlyState={ReadOnlyState}
                 ReadOnlyData={ReadOnlyData}
                 UpdateKey={UpdateKey}
                 realReadState={realReadState}
+                number={number}
+
+                // 컴포넌트로부터
+                updateData={updateData}
+                setUpdateData={setUpdateData}
+                deleteQue={deleteQue}
             />
         </>
     );

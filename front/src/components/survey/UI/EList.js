@@ -4,9 +4,6 @@ import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import React from 'react';
 
-
-
-
 const EList = ({emailList, setEmailList}) => {
     const del = (e) =>{
       setEmailList(emailList.filter((v,i)=>i!=e.target.id))

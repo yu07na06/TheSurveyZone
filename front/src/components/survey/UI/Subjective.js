@@ -1,10 +1,17 @@
 import { Button, Grid, TextField, Typography } from '@mui/material';
 import Paper from '@mui/material/Paper';
-import React, { useState } from 'react';
+import React from 'react';
 import ReqSwitch from '../../common/modules/ReqSwitch';
 
-const Subjective = ({ number, deleteQue, ReadOnlyState, ReadOnlyData, UpdateKey, realReadState }) => {
-    const [수정할때의데이터, set수정할때의데이터] = useState(ReadOnlyState ? ReadOnlyData.surQue_Content : null);
+const Subjective = ({ 
+    ReadOnlyState, 
+    ReadOnlyData, 
+    UpdateKey, 
+    realReadState, 
+    number, 
+    updateData, 
+    setUpdateData, 
+    deleteQue, }) => {
     return (
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
             <Grid container spacing={2} alignItems="center"><br />
@@ -30,17 +37,12 @@ const Subjective = ({ number, deleteQue, ReadOnlyState, ReadOnlyData, UpdateKey,
                         id={`SurQue_Content${number}`}
                         label={`주관식${number}`}
                         autoComplete="userId"
-                        onChange={(e) => set수정할때의데이터(e.target.value)}
+                        onChange={(e) => setUpdateData(e.target.value)}
                         InputProps={{ readOnly: (ReadOnlyState && !UpdateKey) }}
-                        value={수정할때의데이터}
+                        value={updateData}
                     />
                 </Grid>
-                {/* 
-                                                                            ReadOnlyState | UpdateKey
-                    - 응답상태일떄, 주관식 정답 입력창을 보여주고 싶어        : true          | false      ---> disabled=false이므로 입력 가능!
-                    - 찐 보기상태일떄, 주관식 정답 입력창을 보여주고 싶어     : true          | true      ---> disabled=true이므로 입력 불가능!
-                    - 업데이트 상태일때, 주관식 정답 입력창을 보여주기 싫어   : false         | true       ---> disabled 상관없음. 안보여주므로 
-                 */}
+
                 {(ReadOnlyState && !UpdateKey) && // 응답상태에서만 보여주려고!
                     <Grid item xs={12}>
                         <TextField
