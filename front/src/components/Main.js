@@ -203,7 +203,7 @@ const Main = ({ data, accAgeGenderData, accAgeTotalData, accGenderTotalData, req
                                     <FiCardContent 
                                         justify='center'
                                         style={{ color: "#ffffff",
-                                        backgroundColor: "#bdbdbd" }}
+                                        backgroundColor: "rgba(0,0,0,.24)" }}
                                     >
                                         <Typography sx={{ fontWeight: 'bold', height: "250px" }} variant="h6" component="p">
                                             {(value.sur_Title).length > 20 ? (value.sur_Title).substring(0, 20) + "..." : (value.sur_Title)}
