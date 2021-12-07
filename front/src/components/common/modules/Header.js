@@ -40,7 +40,7 @@ const Header = () => {
   const history = useHistory();
   const classes = useStyles();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleMenu = event => setAnchorEl(event.currentTarget);
   const handleMenuClick = pageURL => { history.push(pageURL); setAnchorEl(null); };
@@ -128,7 +128,7 @@ const Header = () => {
                 </>
               :
                 <>
-                  <MenuItem onClick={()=>{handleMenuClick('/');logoutAPI().then(res=>{ removeCookie('Authorization');console.log("로그아웃 성공", res)}).catch(err=>console.log("로그아웃 실패", err));}}>
+                  <MenuItem onClick={()=>{handleMenuClick('/');logoutAPI().then(res=>{ removeCookie('Authorization', { path: '/' });console.log("로그아웃 성공", res)}).catch(err=>console.log("로그아웃 실패", err));}}>
                     <LogoutIcon style={{paddingRight: "10px"}}/>
                       <Typography variant="body2" noWrap>
                         로그아웃
@@ -156,7 +156,7 @@ const Header = () => {
                 :
                   <>
                     <Tabs>
-                      <Link to='/'style={{textDecoration:'none', color:'white'}}><Tab label="로그아웃" onClick={()=>{logoutAPI().then(res=>{removeCookie('Authorization');console.log("로그아웃 성공", res)}).catch(err=>console.log("로그아웃 실패", err));}} style={{fontWeight:'bold' , fontSize:'17px'}}/></Link>
+                      <Link to='/'style={{textDecoration:'none', color:'white'}}><Tab label="로그아웃" onClick={()=>{logoutAPI().then(res=>{removeCookie('Authorization', { path: '/' });console.log("로그아웃 성공", res)}).catch(err=>console.log("로그아웃 실패", err));}} style={{fontWeight:'bold' , fontSize:'17px'}}/></Link>
                     </Tabs>
 
                     <AccountCircle  fontSize="medium" color="action" style={{paddingRight: "5px"}}/>

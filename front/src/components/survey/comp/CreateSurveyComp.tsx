@@ -1,12 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useHistory } from 'react-router-dom';
-import Swal from 'sweetalert2';
-import { createSurvey as createSurveyAPI, getTags as getTagsAPI } from '../../../lib/api/survey';
-import ClipboardCopy from '../../common/Function';
 import { getTags as getTagsAPI } from '../../../lib/api/survey';
 import debounceCreate from '../../common/debounceFunction';
-import { Gongback } from '../../common/Function';
 import ErrorSweet from '../../common/modules/ErrorSweet';
 import submitOBJ from '../../common/TypeFunction';
 import CreateSurvey from '../UI/CreateSurvey';

@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 import React from 'react';
 import ReqSwitch from '../../common/modules/ReqSwitch';
 
-const MultipleChoice = ({ ReadOnlyState, ReadOnlyData, UpdateKey, count, number, updateData, setUpdateDate, select, setSelect, AddText, maxNum, setMaxNum, deleteQue, }) => {
+const MultipleChoice = ({ ReadOnlyState, ReadOnlyData, UpdateKey, count, number, updateData, setUpdateData, select, setSelect, AddText, maxNum, setMaxNum, deleteQue, }) => {
     return (
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
             <Grid container spacing={2}><br />
@@ -31,7 +31,7 @@ const MultipleChoice = ({ ReadOnlyState, ReadOnlyData, UpdateKey, count, number,
 
                 <Grid item xs={12} md={10}>
                     <TextField
-                        onChange={(e) => setUpdateDate(e.target.value)}
+                        onChange={(e) => setUpdateData(e.target.value)}
                         variant="outlined"
                         required
                         fullWidth
