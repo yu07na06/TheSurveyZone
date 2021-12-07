@@ -15,7 +15,7 @@ const ResultSubjective = ({result, index}) =>{
                             </Paper>
                         </Grid>
                     <Grid item xs={11}>
-                        <div style={{maxHeight: 500, overflow: 'auto'}} >
+                        <div style={{maxHeight: 350, overflow: 'auto'}} >
                         {result&&result.answerList[index].map((answer, index)=>{
                             return <TextField fullWidth label={`답변 리스트 ${index+1}`} value={`${answer}`} variant="standard"  focused va InputProps={{ readOnly: true}} />
                         })}

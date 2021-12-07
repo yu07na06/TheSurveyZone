@@ -5,17 +5,23 @@ import {useEffect} from 'react';
 import Checkbox from '@mui/material/Checkbox';
 import { useDispatch, useSelector } from 'react-redux';
 import { submitAction } from '../../../modules/submitReducer';
+import ErrorSweet from '../../common/modules/ErrorSweet';
 
-const MultipleChoiceComp = ({ number, setCheck, setDelIndex, ReadOnlyState, ReadOnlyData, UpdateKey, realReadState }) => {
+const MultipleChoiceComp = ({ ReadOnlyState, ReadOnlyData, UpdateKey, realReadState, number, setCheck, setDelIndex, }) => {
+    const [updateData, setUpdateData] = useState(ReadOnlyState ? ReadOnlyData.surQue_Content : null);
     const surAns_Content = useSelector(state=>state.submitReducer.surAns_Content)
-    const [select, setSelect] = useState([]); // 보기 덩어리가 들어가있음
     const [deleteIndex, setDeleteIndex] = useState(null);
-    const [temp, setTemp] = useState([]);
-    const [maxNum, setMaxNum] = useState(null);
     const [unRequired, setUnRequired] = useState(null);
+    const [maxNum, setMaxNum] = useState(null);
+    const [select, setSelect] = useState([]); // 보기 덩어리가 들어가있음
+    const [temp, setTemp] = useState([]);
+    const accChecked = useRef(0);
     const count = useRef(-1);
-    const ccc = useRef(0);
     const dispatch = useDispatch();
+
+    const deleteBtn = e => setDeleteIndex(e.target.id);
+    const deleteQue = e => setDelIndex(e.target.id);
+    const checkClick = e => setUnRequired((e.target.name).split('_')[1]);
 
     useEffect(()=>{
         if(ReadOnlyState){
@@ -63,30 +69,12 @@ const MultipleChoiceComp = ({ number, setCheck, setDelIndex, ReadOnlyState, Read
         setDeleteIndex(null); // 인덱스 중복될 수 있으니
     },[select])
 
-    const deleteBtn = e => setDeleteIndex(e.target.id);
-    const deleteQue = e => setDelIndex(e.target.id);
-
-    const checkCount = (e, addMaxNum) => {
-        ccc.current += (e.target.checked)? 1 : -1;
-        if(ccc.current>addMaxNum){
-            alert('놉!');
-            e.target.checked = false;
-            ccc.current -= 1;
-        }
-    }
-
-    const checkClick = (e)=>{
-        let splitNum = (e.target.name).split('_')[1];
-        setUnRequired(splitNum);
-    }
-
     useEffect(()=>{
         if(surAns_Content){
             for (const key in surAns_Content) {
-                    let splitValue = surAns_Content[key].split('_');
-                    // unRequired 는 required를 해제할 객관식 보기의 number이다.
-                    if(splitValue[1]==unRequired && splitValue[0]=="SurQueCheck"){
-                        for(let i=0; i<=Number(splitValue[2]); i++){
+                    const splitValue = surAns_Content[key].split('_');
+                    if(splitValue[1]==unRequired && splitValue[0]=="SurQueCheck"){ // unRequired 는 required를 해제할 객관식 보기의 number이다.
+                        for(const i=0; i<=Number(splitValue[2]); i++){
                             let checkbox1 = document.querySelector(`input[name=SurQueCheck_${unRequired}_${i}]`);
                             checkbox1.required=false;
                         }
@@ -95,8 +83,17 @@ const MultipleChoiceComp = ({ number, setCheck, setDelIndex, ReadOnlyState, Read
         }
     },[unRequired])
 
+    const checkCount = (e, addMaxNum) => {
+        accChecked.current += (e.target.checked)? 1 : -1;
+        if(accChecked.current > addMaxNum){
+            ErrorSweet('info', null, "응답 불가", "최대 응답 가능 범위를 초과했습니다.")
+            e.target.checked = false;
+            accChecked.current -= 1;
+        }
+    }
+
     const AddText = ({number, ReadOnlyData, addMaxNum, checkBoxEssential, count}) => {
-        const [수정할때의데이터 , set수정할때의데이터] = useState(ReadOnlyState?ReadOnlyData.surSel_Content:null);
+        const [updateDataAddText , setUpdateDataAddText] = useState(ReadOnlyState?ReadOnlyData.surSel_Content:null);
         !UpdateKey && setTemp([...temp, `SurQue_Ans_${number}_${count}`]); // 질문에 대한 보기 이름 덩어리 합치는 중
         dispatch(submitAction({[number]:`SurQueCheck_${number}_${count}`}))
         return(
@@ -111,9 +108,9 @@ const MultipleChoiceComp = ({ number, setCheck, setDelIndex, ReadOnlyState, Read
                             id={`SurQueCheck_${number}_${count}`}
                             onClick={(e)=>{ checkClick(e); checkCount(e, addMaxNum);}}
                         />
-                }
+                    }
                     <TextField
-                        onChange={e => ReadOnlyState&&set수정할때의데이터(e.target.value)}
+                        onChange={e => ReadOnlyState&&setUpdateDataAddText(e.target.value)}
                         variant="standard"
                         required
                         fullWidth
@@ -121,41 +118,44 @@ const MultipleChoiceComp = ({ number, setCheck, setDelIndex, ReadOnlyState, Read
                         name={`SurQue_Ans_${number}_${count}`}
                         id={`SurQue_Ans_${number}_${count}`}
                         label={`선택지${number}_${count}`}
-                        value={수정할때의데이터}
-                        >
+                        value={updateDataAddText}
+                    >
                     </TextField>
                 </Grid>
 
                 {(!ReadOnlyState||UpdateKey)&&
                     <Grid item textAlign = "right" xs={3} sm={2} >
-                    <Button
-                        id={`SurQue_Ans_${number}_${count}`}
-                        onClick={(e)=>deleteBtn(e)}
-                    >삭제</Button><br/>
+                        <Button
+                            id={`SurQue_Ans_${number}_${count}`}
+                            onClick={(e)=>deleteBtn(e)}
+                        >
+                        삭제
+                        </Button><br/>
                     </Grid>
                 }
             </Grid>
         );
     }
 
-    const Add = () => temp.map((value, index)=> <option value={index+1}> {index+1} </option>) ;
-
     return (
         <>
             <MultipleChoice 
+                // 부모로부터
+                ReadOnlyState={ReadOnlyState}
+                ReadOnlyData={ReadOnlyData}
+                UpdateKey={UpdateKey}
                 number={number}
+                
+                // 컴포넌트로부터
+                updateData={updateData}
+                setUpdateData={setUpdateData}
                 select={select}
                 setSelect={setSelect}
                 AddText={AddText}
                 maxNum={maxNum}
                 setMaxNum={setMaxNum}
                 deleteQue={deleteQue}
-                ReadOnlyState={ReadOnlyState}
-                ReadOnlyData={ReadOnlyData}
-                UpdateKey={UpdateKey}
                 count={count}
-                temp={temp}
-                Add={Add}
             />
         </>
     );

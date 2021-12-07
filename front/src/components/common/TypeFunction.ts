@@ -6,7 +6,7 @@ export interface pagingType {
   searchText:string|undefined;
 }
 
-interface objType {
+export interface objType {
     sur_Type: number;
     sur_Title: string
     sur_Content: string
@@ -15,7 +15,7 @@ interface objType {
     sur_EndDate: string;
     sur_Publish: boolean;
     sur_Image: string;
-    sur_Tag: number | null;
+    sur_Tag: string | null;
     questionList: questionType[];
   };
   
@@ -82,7 +82,7 @@ function submitOBJ(e:any, question_ans:any, question:any, day:any, Sur_Publish:a
       sur_EndDate: day[1].getFullYear() + "-" + ('0' + (day[1].getMonth() + 1)).slice(-2) + "-" + ('0' + (day[1].getDate())).slice(-2),                               // ---> comp에서 state로 관리중
       sur_Publish: !Sur_Publish, // 공개 여부                ---> comp에서 state로 관리중 [ !false: 공개, !true: (잠금)비공개 ]
       sur_Image: url,
-      sur_Tag: Number(data.get(`sur_Tag`)),
+      sur_Tag: String(data.get(`sur_Tag`)),
       questionList,
     }
 

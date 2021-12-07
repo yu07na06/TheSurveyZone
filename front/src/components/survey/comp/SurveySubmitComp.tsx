@@ -1,20 +1,18 @@
 import { Typography } from '@mui/material';
-import React, { useRef } from 'react';
-import SurveySubmit from '../UI/SurveySubmit';
-import BeforeSurveyComp from './BeforeSurveyComp'; 
-import MainSurveyComp from './MainSurveyComp';
-import { useEffect } from 'react';
-import { getSurvey as getSurveyAPI, getTags as getTagsAPI, modifySurvey as modifySurveyAPI, postSurvey as postSurveyAPI, surveyCheck as surveyCheckAPI } from '../../../lib/api/survey';
-import { useState } from 'react';
+import axios from 'axios';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { beforeAction } from '../../../modules/submitReducer';
 import { useHistory } from 'react-router';
-import Swal from 'sweetalert2';
-import MultipleChoiceComp from './MultipleChoiceComp';
-import SubjectiveComp from './SubjectiveComp';
-import LinearMagnificationComp from './LinearMagnificationComp';
+import { getSurvey as getSurveyAPI, getTags as getTagsAPI, modifySurvey as modifySurveyAPI, postSurvey as postSurveyAPI, surveyCheck as surveyCheckAPI } from '../../../lib/api/survey';
+import { beforeAction } from '../../../modules/submitReducer';
 import ErrorSweet from '../../common/modules/ErrorSweet';
 import submitOBJ from '../../common/TypeFunction';
+import SurveySubmit from '../UI/SurveySubmit';
+import BeforeSurveyComp from './BeforeSurveyComp';
+import LinearMagnificationComp from './LinearMagnificationComp';
+import MainSurveyComp from './MainSurveyComp';
+import MultipleChoiceComp from './MultipleChoiceComp';
+import SubjectiveComp from './SubjectiveComp';
 
 const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) => {
     const sexAge = useSelector(state=>state.submitReducer.beforeData)
@@ -44,10 +42,10 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
     const surveyCheckFunc = (overlapIP, surState) => {
         // 참여한 IP=false / 참여안한 IP=true
         if(!overlapIP && !realReadState){
-            Swal.fire('이미 참여한 설문입니다. 설문 보기 페이지로 이동합니다'); 
+            ErrorSweet(null, "중복 참여", "이미 참여한 설문입니다. 설문 보기 페이지로 이동합니다")
             history.push(`/ReadOnlyPage/${surveykey}`)
         }else if(surState===0 && !realReadState && !UpdateKey){
-            Swal.fire('진행 전 설문입니다. 설문 보기 페이지로 이동합니다'); 
+            ErrorSweet(null, "참여 불가", "진행 전 설문입니다. 설문 보기 페이지로 이동합니다")
             history.push(`/ReadOnlyPage/${surveykey}`)
         }
     }
@@ -55,16 +53,20 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
     useEffect(()=>{
         surveyCheckAPI(surveykey)
             .then(res => surveyCheckFunc(res.data.check_IP, res.data.check_State))
-            .catch(err => ErrorSweet(err.response.status, err.response.statusText, err.response.data.message))
+            .catch(err => ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message))
     },[])
 
     useEffect(()=>{ // 수정 시, mainSurvey 출력 및 태그 목록 불러오기
         if(UpdateKey){ 
+            axios.get(`/api/v1/survey/${surveykey}/ModifyCheck`) // 수정 시, 권한 여부 확인
+                .then(res=>console.log("수정 권한 있음", res))
+                .catch(err=>ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message)) // 403 오류
+                
             submitCheck.current = true
             setActiveStep(1); // mainSurveyComp 바로 이동
             getTagsAPI() // 태그 목록 불러오기
                 .then(res=> setTags(res.data))
-                .catch(err=> ErrorSweet(err.response.status, err.response.statusText, err.response.data.message));
+                .catch(err=> ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message));
         }
     },[])
 
@@ -168,6 +170,10 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
         count.current+=1;
     };
 
+    useEffect(()=>{
+        surveyReqForm&&setUrl(surveyReqForm.sur_Image);
+    },[surveyReqForm])
+
     const lastSubmit = (e) => {
         e.preventDefault();
         if (submitCheck.current === false){
@@ -242,12 +248,12 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
 
                 modifySurveyAPI(surveykey, obj)
                     .then(res=>console.log("수정 성공..?", res))
-                    .catch(err=> ErrorSweet(err.response.status, err.response.statusText, err.response.data.message));
+                    .catch(err=> ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message));
                 wayBackMySurvey();
             }else{ // 질문 응답 버튼 클릭 시 ---------------------------------------------------------------------------------------------------------------------------
                 postSurveyAPI(surveykey,{"age":sexAge.age, "gender":sexAge.sex, "answerList":[...answerList]})
                     .then(res => console.log("제출 성공..?",res))
-                    .catch(err => ErrorSweet(err.response.status, err.response.statusText, err.response.data.message));
+                    .catch(err => ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message));
             }
             
             submitCheck.current = false;
@@ -258,16 +264,17 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
     const nextPage = () => dispatch(beforeAction({age:age,sex:sex}));
 
     const wayBackHome = () =>{
-        Swal.fire('Way Back Home ~');
+        ErrorSweet('success', null, "참여 완료", "메인 페이지로 이동합니다.");
         history.push('/');
     }
 
     const wayBackMySurvey = () => {
-        Swal.fire('내 설문지로 이동');
+        ErrorSweet('success', null, "완료", "내 설문지로 이동합니다.")
         setTimeout(()=>{
             history.goBack();
         },444);
     }
+
     return (
         <>
             <SurveySubmit 

@@ -38,7 +38,7 @@ const FindPWComp = () => {
 
         searchPW(searchPWReq)
             .then(res=> {console.log("성공했다 : ",res); successPW(res.data)})
-            .catch(err=> ErrorSweet(err.response.status, err.response.statusText, err.response.data.message));
+            .catch(err=> ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message));
     };
 
       const onChange = (e) => {

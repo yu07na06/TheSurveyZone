@@ -1,25 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import { ThemeProvider } from '@mui/material/styles';
+import AddIcon from '@mui/icons-material/Add';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import DateRangePicker from '@mui/lab/DateRangePicker';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { Button, Grid, TextField } from '@mui/material';
+import Container from '@mui/material/Container';
+import Fab from '@mui/material/Fab';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import NativeSelect from '@mui/material/NativeSelect';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { autocompleteClasses, Button, Grid, TextField } from '@mui/material';
-import SubjectiveComp from '../comp/SubjectiveComp';
-import MultipleChoiceComp from '../comp/MultipleChoiceComp';
-import LinearMagnificationComp from '../comp/LinearMagnificationComp';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DateRangePicker from '@mui/lab/DateRangePicker';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import InputLabel from '@mui/material/InputLabel';
-import FormControl from '@mui/material/FormControl';
-import NativeSelect from '@mui/material/NativeSelect';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
-import AddIcon from '@mui/icons-material/Add';
-import Switch from '@mui/material/Switch';
-import Fab from '@mui/material/Fab';
-import { Img } from '../comp/CreateSurveyComp';
+import React, { useEffect, useState } from 'react';
+import { Img } from '../../common/Function';
 import ReqSwitch from '../../common/modules/ReqSwitch';
+import LinearMagnificationComp from '../comp/LinearMagnificationComp';
+import MultipleChoiceComp from '../comp/MultipleChoiceComp';
+import SubjectiveComp from '../comp/SubjectiveComp';
 
 const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag, tags, handleClick, anchorEl, open, handleClose, question, ReadOnlyState, setUrl, setSur_Publish, }) => {
     const [수정할때의데이터제목 , set수정할때의데이터제목] = useState();
@@ -166,7 +164,7 @@ const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag,
                             {surveyReqForm.sur_Image != defaultImage &&
                                 <Grid xs={12}>
                                     <Container sx={{ py: 3, my: 3 }} align="center">
-                                        <Img setUrl={setUrl}
+                                        <Img setUrl={setUrl} showBtn={UpdateKey}
                                             style=
                                             {{
                                                 mx: "auto", my: "auto", maxWidth: "100%",
