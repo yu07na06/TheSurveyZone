@@ -1,5 +1,6 @@
 // install (please make sure versions match peerDependencies)
 // yarn add @nivo/core @nivo/line
+
 import { ResponsiveLine } from '@nivo/line'
 
 // make sure parent container have a defined height when using
