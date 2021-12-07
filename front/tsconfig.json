@@ -6,6 +6,7 @@
     "noImplicitAny": false,
     "strictNullChecks": false,
     "noUnusedParameters": true,
+    // "removeComments": true, // 출력 시, 주석 제거 설정
     "baseUrl": "./",
     "outDir": "./build",
     "sourceMap": true,
