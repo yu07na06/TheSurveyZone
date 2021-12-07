@@ -25,20 +25,20 @@ const MyCalendar = ({data}) => {
 
     return (
         <>
-         <FullCalendar
-                                plugins={[dayGridPlugin, listPlugin]}
-                                aspectRatio = '2'
-                                calendarWeekends = 'true'
-                                max="700px"
-                                contentHeight = {550}
-                                locale = 'ko'
-                                expandRows = "true" 
-                                events={eventList}
-                                headerToolbar={{ end: "prev,next", start: "title"}}
-                                dayHeaderFormat={{ weekday: "short"}}
-                                dayMaxEventRows={2}
-                                showNonCurrentDates = {0}                                
-                            />
+            <FullCalendar
+                plugins={[dayGridPlugin, listPlugin]}
+                aspectRatio = '2'
+                calendarWeekends = 'true'
+                max="700px"
+                contentHeight = {550}
+                locale = 'ko'
+                expandRows = "true" 
+                events={eventList}
+                headerToolbar={{ end: "prev,next", start: "title"}}
+                dayHeaderFormat={{ weekday: "short"}}
+                dayMaxEventRows={2}
+                showNonCurrentDates = {0}                                
+            />
         </>
     );
 };

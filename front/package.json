@@ -19,16 +19,19 @@
     "@mui/icons-material": "^5.1.0",
     "@mui/lab": "^5.0.0-alpha.54",
     "@mui/material": "^5.1.0",
+    "@nivo/bar": "^0.74.0",
     "@nivo/core": "^0.74.0",
     "@nivo/line": "^0.74.0",
     "@nivo/pie": "^0.74.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "@types/lodash": "^4.14.177",
     "axios": "^0.24.0",
     "date-fns": "^2.25.0",
     "global": "^4.4.0",
     "immer": "^9.0.6",
+    "lodash": "^4.17.21",
     "material-ui-image": "^3.3.2",
     "react": "^17.0.2",
     "react-cookie": "^4.1.1",
@@ -71,7 +74,7 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://218.154.207.223:8080",
+  "proxy": "http://218.154.207.145:8080",
   "devDependencies": {
     "customize-cra": "^1.0.0",
     "react-app-rewired": "^2.1.8"
