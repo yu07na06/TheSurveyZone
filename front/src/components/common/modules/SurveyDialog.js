@@ -7,7 +7,6 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import { Container, Grid, Paper, Typography } from "@mui/material";
 import MyResponsiveLine from "../../result/charts/MyResponsiveLine";
 import MyResponsivePie from "../../result/charts/MyResponsivePie";
-import { width } from "@mui/system";
 
 export default function SurveyDialog({ data, accAgeGenderData, accAgeTotalData, accGenderTotalData }) {
   const [open, setOpen] = React.useState(false);

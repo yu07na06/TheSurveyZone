@@ -1,7 +1,6 @@
 import * as React from 'react';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import { Grid } from '@mui/material';
 
 const ToggleBtn = ({ chartState, setChartState }) => {
 

@@ -13,7 +13,6 @@ import RegisterPage from './pages/RegisterPage';
 import ResultPage from './pages/ResultPage';
 import SurveySubmitPage from './pages/SurveySubmitPage';
 import UpdatePage from './pages/UpdatePage';
-import Yuna from './pages/Yuna';
 
 const App = () => {
   return (
@@ -21,7 +20,6 @@ const App = () => {
       <MakeThemeProvider>
         <Container>
           <Route path="/" component={MainPage} exact/>
-          <Route path="/Yuna" component={Yuna} exact/>
           <Route path="/LoginPage" component={LoginPage} />
           <Route path="/RegisterPage" component={RegisterPage} />
           <Route path="/FindIDPage" component={FindIDPage} />
