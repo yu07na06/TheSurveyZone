@@ -8,14 +8,12 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { ThemeProvider } from '@mui/material/styles';
 import ContactSupportIcon from '@mui/icons-material/ContactSupport';
 import { Gongback } from '../../common/Function';
 
-const FindID = ({theme, handleSubmit, onChange, phoneNumber, }) => {
+const FindID = ({ handleSubmit, onChange, phoneNumber, }) => {
     return (
         <>
-            {/* <ThemeProvider theme={theme}> */}
                 <Container component="main" maxWidth="xs">
                     <CssBaseline />
                     <Box

@@ -8,7 +8,7 @@ import axios from 'axios';
 import { Input } from '@mui/material';
 
 // 함수의 매개변수로 들어온 값을 클립보드에 저장해주는 함수입니다.
-const ClipboardCopy = (flag, copyText) => {
+const ClipboardCopy = (flag, copyText) => { 
     const doCopy = text => {
         if (!document.queryCommandSupported("copy")) {
             return alert("복사하기가 지원되지 않는 브라우저입니다.");
@@ -36,7 +36,7 @@ const ClipboardCopy = (flag, copyText) => {
 // 파일 이미지 업로드 함수
 export const Img = ({ setUrl, imageSRC, showBtn }) => {
     const [selectedFile, setSelectedFile] = useState(null);
-    const [fileURL, setFileURL] = useState(null);
+    const [, setFileURL] = useState(null);
   
     // onChange역할 
     const handleFileChange = (e) => {

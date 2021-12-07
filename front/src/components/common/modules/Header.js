@@ -33,7 +33,7 @@ export const useStyles = makeStyles((theme) => ({
 }));
   
 const Header = () => {
-  const [cookies, _, removeCookie] = useCookies(['Authorization']);
+  const [cookies, , removeCookie] = useCookies(['Authorization']);
   const [anchorEl, setAnchorEl] = useState(null);
   const userName = localStorage.getItem('user_Name');
   const open = Boolean(anchorEl);
