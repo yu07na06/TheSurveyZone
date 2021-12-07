@@ -60,7 +60,7 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
         if(UpdateKey){ 
             axios.get(`/api/v1/survey/${surveykey}/ModifyCheck`) // 수정 시, 권한 여부 확인
                 .then(res=>console.log("수정 권한 있음", res))
-                .catch(err=>ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message)) // 403 오류
+                .catch(err=>{ ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message); history.push('/'); }) // 403 오류
                 
             submitCheck.current = true
             setActiveStep(1); // mainSurveyComp 바로 이동

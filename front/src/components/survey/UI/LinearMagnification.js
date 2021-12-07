@@ -147,7 +147,7 @@ const LinearMagnification = ({
                 }
 
                 {(!ReadOnlyState || UpdateKey) &&
-                    <Grid item xs={12} md={4}>
+                    <Grid item xs={12} md={6}>
                         {UpdateKey ?
                             <Box>
                                 <FormControl fullWidth>
