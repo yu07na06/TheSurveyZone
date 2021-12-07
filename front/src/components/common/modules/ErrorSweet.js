@@ -1,11 +1,11 @@
 import Swal from 'sweetalert2';
 
-const ErrorSweet = (errCode, errText, errComment) => {
-    
-    Swal.fire({
-        icon:'error',
-        title:`[${errCode}] ${errText}`,
-        text: errComment
+const ErrorSweet = (icon, errCode, errText, errComment, etc) => {
+    return Swal.fire({
+        icon: icon,
+        title: errCode==null?errText:`[${errCode}] ${errText}`,
+        text: errComment,
+        etc
     })
 };
 

@@ -9,13 +9,10 @@ import NativeSelect from '@mui/material/NativeSelect';
 import Paper from '@mui/material/Paper';
 import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
-import React, { useState } from 'react';
+import React from 'react';
 import ReqSwitch from '../../common/modules/ReqSwitch';
 
-const MultipleChoice = ({ number, select, setSelect, AddText, maxNum, setMaxNum, deleteQue, ReadOnlyState, ReadOnlyData, UpdateKey, count, temp, Add }) => {
-
-    const [수정할때의데이터, set수정할때의데이터] = useState(ReadOnlyState ? ReadOnlyData.surQue_Content : null);
-
+const MultipleChoice = ({ ReadOnlyState, ReadOnlyData, UpdateKey, count, number, updateData, setUpdateDate, select, setSelect, AddText, maxNum, setMaxNum, deleteQue, }) => {
     return (
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
             <Grid container spacing={2}><br />
@@ -34,16 +31,15 @@ const MultipleChoice = ({ number, select, setSelect, AddText, maxNum, setMaxNum,
 
                 <Grid item xs={12} md={10}>
                     <TextField
-                        onChange={(e) => set수정할때의데이터(e.target.value)}
+                        onChange={(e) => setUpdateDate(e.target.value)}
                         variant="outlined"
                         required
                         fullWidth
                         InputProps={{ readOnly: (ReadOnlyState && !UpdateKey) }}
-                        // disabled={ReadOnlyState&&!UpdateKey}
                         name={`SurQue_Content${number}`}
                         id={`SurQue_Content${number}`}
                         label={`객관식${number}`}
-                        value={수정할때의데이터} // 아직 객체 참조 안함
+                        value={updateData}
                     />
                 </Grid>
 
@@ -55,9 +51,8 @@ const MultipleChoice = ({ number, select, setSelect, AddText, maxNum, setMaxNum,
                                 <NativeSelect
                                     labelId={`surQue_MaxAns${number}`}
                                     id={`surQue_MaxAns${number}`}
-                                    value={maxNum} // 아직 객체 참조 안함
+                                    value={maxNum}
                                     InputProps={{ readOnly: (ReadOnlyState && !UpdateKey) }}
-                                    // disabled={ReadOnlyState&&!UpdateKey}
                                     defaultValue={ReadOnlyData.surQue_MaxAns}
                                     name={`surQue_MaxAns${number}`}
                                     label={`surQue_MaxAns${number}`}
@@ -81,9 +76,8 @@ const MultipleChoice = ({ number, select, setSelect, AddText, maxNum, setMaxNum,
                                             required
                                             labelId={`surQue_MaxAns${number}`}
                                             id={`surQue_MaxAns${number}`}
-                                            value={maxNum} // 아직 객체 참조 안함
+                                            value={maxNum}
                                             InputProps={{ readOnly: (ReadOnlyState) }}
-                                            // disabled={ReadOnlyState}
                                             name={`surQue_MaxAns${number}`}
                                             label={`surQue_MaxAns${number}`}
                                             onChange={e => setMaxNum(e.target.value)}

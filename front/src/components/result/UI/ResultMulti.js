@@ -2,13 +2,26 @@ import React from 'react';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import { Grid } from '@mui/material';
-import BarChart from '../charts/BarChart';
-import DoughnutChart from '../charts/DoughnutChart';
-import LineChart from '../charts/LineChart';
 import ToggleBtn from '../ToggleBtn';
 import { Text } from '../comp/ResultMultiComp';
+import MyResponsivePie from '../charts/MyResponsivePie';
+import MyResponsiveLine from '../charts/MyResponsiveLine';
+import MyResponsiveBar from '../charts/MyResponsiveBar';
 
 const ResultMulti = ({ index, result, chartState, resultKeys, setChartState }) => {
+    const newKey = Object.keys(result.resultMap[index]);
+    const newValue = Object.values(result.resultMap[index]);
+    const newData = []
+    for (const key in newValue) {
+        newData.push({ "id":newKey[key], "value":newValue[key]});
+    }
+
+    const newKey1 = Object.keys(result.resultMap[index]);
+    const newValue1 = Object.values(result.resultMap[index]);
+    const newData1 = []
+    for (const key in newValue1) {
+        newData1.push({ "x":newKey1[key], "y":newValue1[key]});
+    }
     return (
         <>
             <Paper elevation={3} sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 }, backgroundColor:'#E0ECF8' }}>
@@ -35,22 +48,26 @@ const ResultMulti = ({ index, result, chartState, resultKeys, setChartState }) =
                     </Grid>
                     <Grid item xs={12}>
                         <Paper elevation={3} sx={{ bgcolor: '#58ACFA', p: { xs: 2 } }}>
-                            {
-                                (() => {
-                                    switch (chartState) {
-                                        case "BarChart":
-                                            return <BarChart data={result.resultMap[index]} />
-                                        case "DoughnutChart":
-                                            return <DoughnutChart data={result.resultMap[index]} />
-                                        case "LineChart":
-                                            return <LineChart data={result.resultMap[index]} />
-                                        default:
-                                            break;
+                            <Paper elevation={1}>
+                                <div style={{ height: 350 }}>
+                                    {
+                                        (() => {
+                                            switch (chartState) {
+                                                case "BarChart":
+                                                    return <MyResponsiveBar data={newData}/>;
+                                                case "DoughnutChart":
+                                                    return <MyResponsivePie data={newData} />;
+                                                case "LineChart":
+                                                    return <MyResponsiveLine data={[{ "id":'결과', "data":newData1}]} />;
+                                                default:
+                                                    break;
+                                            }
+                                        })()
                                     }
-                                })()
-                            }
-                            {/* <BarChart data={result.resultMap[index]}/>
-                            <DoughnutChart data={result.resultMap[index]} /> */}
+                                {/* <BarChart data={result.resultMap[index]}/>
+                                <DoughnutChart data={result.resultMap[index]} /> */}
+                                </div>
+                            </Paper>
                         </Paper>
                     </Grid>
                 </Grid>

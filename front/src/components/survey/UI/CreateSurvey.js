@@ -1,25 +1,25 @@
-import React from 'react';
-import CssBaseline from '@mui/material/CssBaseline';
-import AppBar from '@mui/material/AppBar';
-import Container from '@mui/material/Container';
-import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import DateRangePicker from '@mui/lab/DateRangePicker';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { Grid, TextField } from '@mui/material';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import CssBaseline from '@mui/material/CssBaseline';
 import Fab from '@mui/material/Fab';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import Box from '@mui/material/Box';
 import NativeSelect from '@mui/material/NativeSelect';
-import DateRangePicker from '@mui/lab/DateRangePicker';
-import InputLabel from '@mui/material/InputLabel';
-import FormControl from '@mui/material/FormControl';
-import { Grid, TextField } from '@mui/material';
+import Paper from '@mui/material/Paper';
+import React from 'react';
+import { Gongback, Img } from '../../common/Function';
 import ReqSwitch from '../../common/modules/ReqSwitch';
-import { Gongback } from '../../common/Function';
 
-const CreateSurvey = ({ onClick, day, setDay, question, open, anchorEl, handleClick, handleClose, tag, setTag, tags, Img, setUrl, setSur_Publish, }) => {
+const CreateSurvey = ({ onClick, day, setDay, question, open, anchorEl, handleClick, handleClose, tag, setTag, tags, setUrl, setSur_Publish, }) => {
     return (
         <>
             {/* <ThemeProvider theme={createTheme()}> */}
@@ -108,7 +108,7 @@ const CreateSurvey = ({ onClick, day, setDay, question, open, anchorEl, handleCl
                             </Grid>
                             <Gongback num={4} />
                             <Grid align='center' item xs={12}>
-                              <Img sx={{ mx: "auto" }} setUrl={setUrl} imageSRC={null} />
+                            <Img sx={{ mx: "auto" }} setUrl={setUrl} imageSRC={null} showBtn={true} />
                             </Grid>
 
                             <Grid item xs={12}>

@@ -1,5 +1,3 @@
-
-
 const tagColorList  = [
     {"back":"#F6CECE","font":"#FE2E2E"},
     {"back":"#F6D8CE","font":"#FE642E"},
@@ -22,7 +20,6 @@ const tagColorList  = [
     ]
  
 export const BackgoundColor = ({tagid}) => {
-    console.log(tagid)
     const tagcolor = tagColorList[tagid-1]
     return tagcolor.back;
 };

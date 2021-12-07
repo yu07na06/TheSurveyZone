@@ -8,7 +8,6 @@ import ErrorSweet from '../../common/modules/ErrorSweet';
 const LoginComp = () => {
     const history = useHistory();
 
-
     // 임시 비밀번호로 로그인한 경우
     const newPassword = (infoPW) => {
         if(infoPW === "TempPW"){
@@ -38,7 +37,7 @@ const LoginComp = () => {
                 localStorage.setItem('user_Name', res.data.user_Name);
                 newPassword(res.data.login_Type);}) 
             .then(() => history.push('/') ) // 메인 화면으로 이동
-            .catch(err => ErrorSweet(err.response.status, err.response.statusText, err.response.data.message)) // DB에 존재하지 않는 데이터로 판정
+            .catch(err => ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message)) // DB에 존재하지 않는 데이터로 판정
     };
 
     return (

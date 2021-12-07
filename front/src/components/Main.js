@@ -1,42 +1,22 @@
-import React, { useEffect } from 'react';
-import Container from '@mui/material/Container';
+import { Paper, useMediaQuery, useTheme } from '@mui/material';
 import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
 import Pagination from '@mui/material/Pagination';
+import Typography from '@mui/material/Typography';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { InputBase, makeStyles } from '@material-ui/core';
-import { Paper, useMediaQuery, useTheme } from '@mui/material';
-import MyResponsivePie from './result/charts/MyResponsivePie'
-import MyResponsiveLine from './result/charts/MyResponsiveLine'
-import { BackgoundColor, FontColor } from './common/modules/TagColor'
-
+import { FiCard, FiCardContent, FiCardMedia } from "./common/modules/FullImageCard";
 import SurveyDialog from './common/modules/SurveyDialog';
+import { BackgoundColor, FontColor } from './common/modules/TagColor';
+import MyResponsiveLine from './result/charts/MyResponsiveLine';
+import MyResponsivePie from './result/charts/MyResponsivePie';
 
-import {
-    FiCard,
-    FiCardContent,
-    FiCardMedia
-} from "./common/modules/FullImageCard";
-
-const useStyles = makeStyles({
-
-    fiCardContent: {
-        color: "#ffffff",
-        backgroundColor: "rgba(0,0,0,.24)"
-    },
-});
-
-
-const Main = ({ data, accAgeGenderData, accAgeTotalData, accGenderTotalData, reqMain, TAGENUM, setTagSearch, tagSearch, alignment, setAlignment, pageNum, pageChange, setSearchText, searchText }) => {
-
+const Main = ({ data, accAgeGenderData, accAgeTotalData, accGenderTotalData, reqMain, TAGENUM, setTagSearch, tagSearch, pageNum, pageChange, searchText, setSearchText, }) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-
-    const classes = useStyles();
-
 
     return (
         <>
@@ -162,7 +142,7 @@ const Main = ({ data, accAgeGenderData, accAgeTotalData, accGenderTotalData, req
 
                     <Grid item xs={6} sm={4} md={4} lg={3}>
                         <Container maxWidth="lg" align="center">
-                            <InputBase InputBase
+                            <input 
                                 style={{
                                     height: '35px',
                                     width: '100%',
@@ -171,11 +151,10 @@ const Main = ({ data, accAgeGenderData, accAgeTotalData, accGenderTotalData, req
                                     textAlign: 'center',
                                     fontSize: '20px',
                                 }}
-                                value={searchText}
                                 placeholder="   Search..."
                                 onChange={e => setSearchText(e.target.value)}
-                                inputProps={{ 'aria-label': 'search' }}>
-                            </InputBase>
+                                inputProps={{ 'aria-label': 'search', textAlign: 'center', }}>
+                            </input>
                         </Container>
                     </Grid>
                 </Grid>
@@ -213,15 +192,19 @@ const Main = ({ data, accAgeGenderData, accAgeTotalData, accGenderTotalData, req
                                 <FiCard
                                     justify='center'
                                     alignItems="center"
-                                    className={classes.card} style={{ height: "250px" }}>
+                                    style={{ height: "250px" }}
+                                >
                                     <FiCardMedia
                                         media="picture"
                                         alt="Contemplative Reptile"
                                         image={(value.sur_Img)}
                                         title="Contemplative Reptile"
                                     />
-                                    <FiCardContent justify='center'
-                                        className={classes.fiCardContent} >
+                                    <FiCardContent 
+                                        justify='center'
+                                        style={{ color: "#ffffff",
+                                        backgroundColor: "#bdbdbd" }}
+                                    >
                                         <Typography sx={{ fontWeight: 'bold', height: "250px" }} variant="h6" component="p">
                                             {(value.sur_Title).length > 20 ? (value.sur_Title).substring(0, 20) + "..." : (value.sur_Title)}
                                         </Typography>

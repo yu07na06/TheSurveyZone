@@ -6,15 +6,34 @@ import MenuItem from '@mui/material/MenuItem';
 import NativeSelect from '@mui/material/NativeSelect';
 import Paper from '@mui/material/Paper';
 import Select from '@mui/material/Select';
-import React, { useState } from 'react';
+import React from 'react';
 import ReqSwitch from '../../common/modules/ReqSwitch';
+import { debounce } from 'lodash';
 
-const LinearMagnification = ({ number, minValue, setMinValue, maxValue, setMaxValue, value, setTemp, deleteQue, ReadOnlyState, ReadOnlyData, makeCircles, UpdateKey, }) => {
-    const [수정할때의데이터, set수정할때의데이터] = useState(ReadOnlyState ? ReadOnlyData.surQue_Content : null);
-    const [수정할때의데이터시작, set수정할때의데이터시작] = useState(ReadOnlyState ? ReadOnlyData.selectList[0].surSel_Content : null);
-    const [수정할때의데이터시작값, set수정할때의데이터시작값] = useState(ReadOnlyState ? Number(ReadOnlyData.selectList[1].surSel_Content) : null);
-    const [수정할때의데이터끝, set수정할때의데이터끝] = useState(ReadOnlyState ? ReadOnlyData.selectList[2].surSel_Content : null);
-    const [수정할때의데이터끝값, set수정할때의데이터끝값] = useState(ReadOnlyState ? Number(ReadOnlyData.selectList[3].surSel_Content) : null);
+const LinearMagnification = ({ 
+    ReadOnlyState, 
+    ReadOnlyData, 
+    UpdateKey, 
+    number,
+
+    updateData,
+    setUpdateData,
+    updateDataStart,
+    setUpdateDataStart,
+    updateDataStartValue,
+    setUpdateDataStartValue,
+    updateDataEnd,
+    setUpdateDataEnd,
+    updateDataEndValue,
+    setUpdateDataEndValue,
+    value, 
+    minValue, 
+    setMinValue, 
+    maxValue, 
+    setMaxValue, 
+    makeCircles, 
+    setTemp, 
+    deleteQue, }) => {
     return (
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
             <Grid container spacing={2}>
@@ -34,34 +53,33 @@ const LinearMagnification = ({ number, minValue, setMinValue, maxValue, setMaxVa
 
                 <Grid item xs={12}>
                     <TextField
-                        onChange={(e) => set수정할때의데이터(e.target.value)}
+                        onChange={(e) => setUpdateData(e.target.value)}
                         variant="outlined"
                         required
                         fullWidth
                         InputProps={{ readOnly: (ReadOnlyState && !UpdateKey) }}
-                        // disabled={ReadOnlyState&&!UpdateKey}
                         name={`SurQue_Content${number}`}
                         id={`SurQue_Content${number}`}
                         label={`선형배율${number}`}
-                        value={수정할때의데이터} // 객체 참조 안함
+                        value={updateData}
                     />
                 </Grid>
 
-                <Grid item xs={6} md={6}>
+                <Grid item xs={12} md={6}>
                     <TextField
-                        onChange={(e) => { set수정할때의데이터시작(e.target.value); setTemp(e.target.value); }}
+                        fullWidth
+                        onChange={(e) => { setUpdateDataStart(e.target.value); debounce(()=>{console.log('나야 나ㅎㅎㅎ좋아'); setTemp(e.target.value); },1777)(); }}
                         required
                         variant="filled"
                         name={`start_Step${number}`}
                         label="시작"
                         InputProps={{ readOnly: (ReadOnlyState && !UpdateKey) }}
-                        // disabled={ReadOnlyState&&!UpdateKey}
-                        value={수정할때의데이터시작} // 객체 참조 안함
+                        value={updateDataStart}
                     />
                 </Grid>
 
                 {(!ReadOnlyState || UpdateKey) &&
-                    <Grid item xs={6} md={6}>
+                    <Grid item xs={12} md={6}>
                         {UpdateKey ?
                             <Box>
                                 <FormControl fullWidth>
@@ -72,11 +90,10 @@ const LinearMagnification = ({ number, minValue, setMinValue, maxValue, setMaxVa
                                             id={`start_Name${number}_${minValue}`}
                                             name={`start_Name${number}_${minValue}`}
                                             label={`start_Name${number}_${minValue}`}
-                                            onChange={e => set수정할때의데이터시작값(e.target.value)}
+                                            onChange={e => setUpdateDataStartValue(e.target.value)}
                                             InputProps={{ readOnly: (ReadOnlyState && !UpdateKey) }}
-                                            // disabled={ReadOnlyState&&!UpdateKey}
-                                            value={minValue} // 객체 참조 안함
-                                            defaultValue={수정할때의데이터시작값}
+                                            value={minValue}
+                                            defaultValue={updateDataStartValue}
                                         >
                                             <option value={0}>0</option>
                                             <option value={1}>1</option>
@@ -84,7 +101,7 @@ const LinearMagnification = ({ number, minValue, setMinValue, maxValue, setMaxVa
                                     }
                                 </FormControl>
                             </Box>
-                            :
+                        :
                             <Box>
                                 <FormControl fullWidth>
                                     <InputLabel id="demo-simple-select-label">시작 값</InputLabel>
@@ -96,7 +113,7 @@ const LinearMagnification = ({ number, minValue, setMinValue, maxValue, setMaxVa
                                         label={`start_Name${number}_${minValue}`}
                                         onChange={e => setMinValue(e.target.value)}
                                         InputProps={{ readOnly: (ReadOnlyState && !UpdateKey) }}
-                                        value={minValue} // 객체 참조 안함
+                                        value={minValue}
                                     >
                                         <MenuItem value="0">0</MenuItem>
                                         <MenuItem value="1">1</MenuItem>
@@ -107,16 +124,16 @@ const LinearMagnification = ({ number, minValue, setMinValue, maxValue, setMaxVa
                     </Grid>
                 }
 
-                <Grid item  xs={6} md={6}  textAlign="right">
+                <Grid item  xs={12} md={6}  textAlign="left">
                     <TextField
-                        onChange={(e) => { set수정할때의데이터끝(e.target.value); setTemp(e.target.value); }}
+                        fullWidth
+                        onChange={(e) => { setUpdateDataEnd(e.target.value); debounce(()=>{console.log('나야 나ㅎㅎㅎ좋아끝'); setTemp(e.target.value); },1777)(); }}
                         required
                         variant="filled"
                         name={`end_Step${number}`}
                         label="끝"
                         InputProps={{ readOnly: (ReadOnlyState && !UpdateKey) }}
-                        // disabled={ReadOnlyState&&!UpdateKey}
-                        value={수정할때의데이터끝} // 객체 참조 안함
+                        value={updateDataEnd}
                     />
                 </Grid>
 
@@ -129,11 +146,8 @@ const LinearMagnification = ({ number, minValue, setMinValue, maxValue, setMaxVa
                     </Grid>
                 }
 
-                
-
-
                 {(!ReadOnlyState || UpdateKey) &&
-                    <Grid item xs={6} md={4}>
+                    <Grid item xs={12} md={4}>
                         {UpdateKey ?
                             <Box>
                                 <FormControl fullWidth>
@@ -143,9 +157,9 @@ const LinearMagnification = ({ number, minValue, setMinValue, maxValue, setMaxVa
                                         id={`end_Name${number}_${maxValue}`}
                                         name={`end_Name${number}_${maxValue}`}
                                         label={`end_Name${number}_${maxValue}`}
-                                        onChange={e => set수정할때의데이터끝값(e.target.value)}
-                                        value={maxValue} // 객체 참조 안함                                                
-                                        defaultValue={수정할때의데이터끝값}
+                                        onChange={e => setUpdateDataEndValue(e.target.value)}
+                                        value={maxValue}                                              
+                                        defaultValue={updateDataEndValue}
                                     >
                                         {value.map(v =>
                                             (minValue === 0) ? <option value={v}>{v}</option> : <option value={v + 1}>{v + 1}</option>
@@ -165,7 +179,7 @@ const LinearMagnification = ({ number, minValue, setMinValue, maxValue, setMaxVa
                                         label={`end_Name${number}_${maxValue}`}
                                         onChange={e => setMaxValue(e.target.value)}
                                         disabled={ReadOnlyState && !UpdateKey}
-                                        value={maxValue} // 객체 참조 안함
+                                        value={maxValue}
                                     >
                                         {/* value = [1,2,3,4,5,6,7,8,9] */}
                                         {value.map(v =>
