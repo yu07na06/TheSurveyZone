@@ -75,7 +75,7 @@ const MySurvey = ({ mySurList, currentPage, callPaging, ApiClick, surStateMark, 
                                                             </Grid>
                                                                 
                                                             <Grid item xs={3} md={1} lg={3} justifyContent="center" textAlign="center">
-                                                                {ClipboardCopy("icon", `http://localhost:3000/SurveySubmitPage/${value._id}`)}
+                                                                {ClipboardCopy("icon", `http://10.0.3.135:3000/SurveySubmitPage/${value._id}`)}
                                                             </Grid>
                                                         </Grid>
                                                     </Paper>

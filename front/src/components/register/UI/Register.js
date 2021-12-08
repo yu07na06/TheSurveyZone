@@ -145,7 +145,7 @@ const useStyles = makeStyles((theme) => ({
               <Grid item xs={12}>
                 <FormControlLabel
                   control={<Checkbox  name="checkbox" value="allowExtraEmails" color="primary"  onChange={onChange}/>}
-                  label="목숨을 우리에게 주는것을 동의합니까?"
+                  label="데이터 정보 수집에 동의하십니까?"
                 />
               </Grid>
             </Grid>

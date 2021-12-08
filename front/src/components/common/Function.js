@@ -101,8 +101,8 @@ export const Gongback = ({ num }) => {
 
 // 다크모드 아직 확정 아님
 export const MakeThemeProvider = ({ children }) => {
-    // const changeTheme = createTheme({ palette: { mode: 'light' } })
-    const changeTheme = createTheme()
+    const changeTheme = createTheme({ palette: { mode: 'light' } })
+    // const changeTheme = createTheme()
     return (
         <ThemeProvider theme={changeTheme}>
             {children}

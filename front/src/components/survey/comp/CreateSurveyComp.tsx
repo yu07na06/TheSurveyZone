@@ -80,7 +80,7 @@ const CreateSurveyComp = () => {
     }
 
     const obj = submitOBJ(e, question_ans, question, day, Sur_Publish, url);
-    const shareURL = "http://localhost:3000/SurveySubmitPage/";
+    const shareURL = "http://10.0.3.135:3000/SurveySubmitPage/";
 
     console.log("생성 시, 객체 확인합니다.", obj);
     console.log(JSON.stringify(obj));
