@@ -101,7 +101,6 @@ public class SurveyController {
                 .body(surveyService.insertSurvey(insertSurveyReq));
     }
 
-    // TODO 일단 보류
     @GetMapping(path = "/survey/{_id}/Check")
     @ApiOperation(value = "설문 참여 체크", notes = "설문 조사 참여할때 중복 참여 체크")
     @ApiResponses({
@@ -115,6 +114,22 @@ public class SurveyController {
     ) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(surveyService.checkPart(_id, request));
+    }
+
+    @GetMapping(path = "/survey/{_id}/ModifyCheck")
+    @ApiOperation(value = "설문 수정 체크", notes = "설문 수정할때 설문 생성자 체크")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "유저 일치시", response = boolean.class),
+            @ApiResponse(code = 404, message = "설문 존재하지 않음" , response = ExceptionModel.class),
+            @ApiResponse(code = 403, message = "설문 생성자가 일치하지 않음" , response = ExceptionModel.class)
+    })
+    public ResponseEntity ModifyCheck(
+            @PathVariable("_id")
+                    String _id,
+            @AuthenticationPrincipal String userEmail
+    ) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(surveyService.checkPart(_id, userEmail));
     }
 
 

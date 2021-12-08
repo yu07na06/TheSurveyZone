@@ -159,6 +159,15 @@ public class SurveyService {
                 .build();
     }
 
+    public Boolean checkPart(String _id,String userEmail) {
+        if (!userEmail.equals(surveyDAO.selectOwner(_id)
+                .orElseThrow(() ->
+                        new NotFoundException(ErrorCode.NOT_FOUND_SURVEY))
+        ))
+        {    throw new ForbiddenException(ErrorCode.NOT_OWNER_SURVEY); }
+        return true;
+    }
+
     public SelectSurveyRes findById(String _id) {
         Survey_MySQL resultMySQL = surveyDAO.findById_MySQL(_id)
                 .orElseThrow(()-> new NotFoundException(ErrorCode.NOT_FOUND_SURVEY));
