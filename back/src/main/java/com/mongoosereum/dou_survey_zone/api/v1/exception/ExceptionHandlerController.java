@@ -12,12 +12,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import javax.servlet.ServletException;
-import javax.validation.ConstraintViolation;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 @RestControllerAdvice
 public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
@@ -74,14 +68,14 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     @ExceptionHandler(UnauthorizedException.class)
     public ResponseEntity<ExceptionModel> authenticationExceptionHandler(UnauthorizedException e){
         logger.error("AuthenticationException :", e);
-        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(ExceptionModel.of(e));
     }
 
     @ExceptionHandler(ForbiddenException.class)
     public ResponseEntity<ExceptionModel> authorizationExceptionHandler(ForbiddenException e){
         logger.error("ForbiddenException :", e);
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body(ExceptionModel.of(e));
     }
 
