@@ -13,9 +13,10 @@ import SurveyDialog from './common/modules/SurveyDialog';
 import { BackgoundColor, FontColor } from './common/modules/TagColor';
 import MyResponsiveLine from './result/charts/MyResponsiveLine';
 import MyResponsivePie from './result/charts/MyResponsivePie';
+import { Comment } from './MainComp';
 
-const Main = ({ data, accAgeGenderData, accAgeTotalData, accGenderTotalData, reqMain, TAGENUM, setTagSearch, tagSearch, pageNum, pageChange, searchText, setSearchText, }) => {
-    const theme = useTheme();
+const Main = ({ data, accAgeGenderData, accAgeTotalData, accGenderTotalData, reqMain, TAGENUM, setTagSearch, tagSearch, pageNum, pageChange, setSearchText, }) => {
+    const theme = useTheme()
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
     return (
@@ -240,6 +241,7 @@ const Main = ({ data, accAgeGenderData, accAgeTotalData, accGenderTotalData, req
                                             마감
                                         </Typography>
                                     }
+                                    <Comment />
                                     <div style={{ flexGrow: 1 }} />
                                     {value.sur_State === 1 ? <Link to={`/SurveySubmitPage/${value._id}`} style={{ textDecoration: 'none', color: 'blue', fontWeight: 'bold' }}><Button><Typography>참여</Typography></Button></Link> : null}
                                 </CardActions>
