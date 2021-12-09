@@ -14,6 +14,8 @@ const ResultLinearComp = ({ value, index, result, }) => {
                 style={{ marginLeft:"0", marginRight:"0" }}
                 value="top"
                 control={<Radio
+                            key={`result_${idx}`}
+                            onClick={()=>console.log("???? : ",idx)}
                             onChange={(e)=>setChangeCircle(e.target.value)}
                             value={`radio_1_1`}
                             name={`radio_1`}
