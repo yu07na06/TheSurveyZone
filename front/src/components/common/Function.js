@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Input } from '@mui/material';
+import ErrorSweet from '../common/modules/ErrorSweet';
 
 // 함수의 매개변수로 들어온 값을 클립보드에 저장해주는 함수입니다.
 const ClipboardCopy = (flag, copyText) => { 
@@ -27,7 +28,7 @@ const ClipboardCopy = (flag, copyText) => {
         document
             .body
             .removeChild(textarea);
-        Swal.fire('설문 URL이 복사되었습니다.');
+        ErrorSweet('info', null, "복사 성공", "참여 설문 URL 복사", 'url창에 붙여넣기 해보세요.');
     };
     // flag값이 icon이라면? icon을 반환!! 그외에는 입력된값을 클립보드에 저장!!
     return (flag === "icon" ? <Button><ContentCopyIcon onClick={() => doCopy(copyText)} /></Button> : doCopy(copyText));
@@ -101,8 +102,8 @@ export const Gongback = ({ num }) => {
 
 // 다크모드 아직 확정 아님
 export const MakeThemeProvider = ({ children }) => {
-    // const changeTheme = createTheme({ palette: { mode: 'light' } })
-    const changeTheme = createTheme()
+    const changeTheme = createTheme({ palette: { mode: 'light' } })
+    // const changeTheme = createTheme()
     return (
         <ThemeProvider theme={changeTheme}>
             {children}

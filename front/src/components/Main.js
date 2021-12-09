@@ -53,7 +53,7 @@ const Main = ({ data, accAgeGenderData, accAgeTotalData, accGenderTotalData, req
 
                                             <Grid item xs={9.5} >
                                                 <Typography variant="h6" style={{ fontWeight: 'bold', margin: "5px" }}>
-                                                    누적 설문 조사
+                                                    설문 조사
                                                 </Typography>
                                                 <Typography variant="h6" style={{ color: 'gray', margin: "5px" }}>
                                                     {data.survey_Total} 개

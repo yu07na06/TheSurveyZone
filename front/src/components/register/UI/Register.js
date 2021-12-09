@@ -37,8 +37,6 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-  
-  
   const Register = ({onSubmit, PWNOTMATCH, onChange, phoneNumber, errorText, emailText, }) => {
     console.log("emailText : ",emailText);
     const classes = useStyles();
@@ -74,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
                   <Typography variant="h7" style={{color:"#FF5555"}}>* 이미 존재하는 이메일입니다.</Typography>
                 </Grid> : null
               }
-  
+
               <Grid item xs={12}>
                 <TextField
                   variant="outlined"
@@ -90,6 +88,8 @@ const useStyles = makeStyles((theme) => ({
                 />
               </Grid>
   
+              <Typography variant="h7" style={{color:"#FF5555"}}>숫자, 영문, 특수문자를 포함한 8자이상 작성해주세요</Typography>
+              
               <Grid item xs={12}>
                 <TextField
                   variant="outlined"
@@ -145,7 +145,7 @@ const useStyles = makeStyles((theme) => ({
               <Grid item xs={12}>
                 <FormControlLabel
                   control={<Checkbox  name="checkbox" value="allowExtraEmails" color="primary"  onChange={onChange}/>}
-                  label="목숨을 우리에게 주는것을 동의합니까?"
+                  label="데이터 정보 수집에 동의하십니까?"
                 />
               </Grid>
             </Grid>

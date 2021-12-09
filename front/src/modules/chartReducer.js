@@ -18,7 +18,7 @@ export function* mainViewSaga(){
 const initialState = {
     responseAcc : {
         part_Total: 0,
-        survey_Total : 23,
+        survey_Total : 0,
         part_Age_Man: 
         {
             age_10: 0,

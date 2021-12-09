@@ -10,7 +10,7 @@ const ResultComp = ({surveykey}) => {
     useEffect(()=>{
         resultSurveyAPI(surveykey)
         .then(res=>{setResult(res.data)})
-        .catch(err=> ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message));
+        .catch(err=> ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null));
     },[])
 
     return (

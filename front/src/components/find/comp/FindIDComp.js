@@ -3,7 +3,6 @@ import FindID from '../UI/FindID';
 import { createTheme  } from '@mui/material/styles';
 import { searchID } from '../../../lib/api/auth';
 import ErrorSweet from '../../common/modules/ErrorSweet';
-import Swal from 'sweetalert2';
 import { useHistory } from 'react-router';
 
 const FindIDComp = () => {
@@ -12,12 +11,7 @@ const FindIDComp = () => {
     const theme = createTheme();
 
     const successID = (findId) => {
-        Swal.fire({
-            icon:'info',
-            title:`아이디 찾기`,
-            text: findId,
-            footer: '로그인 창으로 이동합니다.' 
-        })
+        ErrorSweet('info', null, '아이디 찾기', findId, '로그인 창으로 이동합니다.');
         history.push('/LoginPage');
     }
 
@@ -34,7 +28,7 @@ const FindIDComp = () => {
         });
         searchID(searchIDReq)
             .then(res=>{console.log("성공했다 : ",res); successID(res.data);})
-            .catch(err=> ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message));
+            .catch(err=> ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null));
     };
     
     const onChange = (e) => {

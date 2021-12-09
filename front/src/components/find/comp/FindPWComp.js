@@ -4,7 +4,6 @@ import { createTheme  } from '@mui/material/styles';
 import { searchPW } from '../../../lib/api/auth';
 import ErrorSweet from '../../common/modules/ErrorSweet';
 import { useHistory } from 'react-router';
-import Swal from 'sweetalert2';
 
 const FindPWComp = () => {
     const [phoneNumber, setPhoneNumber] = useState();
@@ -12,12 +11,7 @@ const FindPWComp = () => {
     const theme = createTheme();
 
     const successPW = (findPW) => {
-        Swal.fire({
-            icon:'info',
-            title:`비밀번호 찾기`,
-            text: findPW,
-            footer: '로그인 페이지로 이동합니다.' 
-        })
+        ErrorSweet('info', null, '비밀번호 찾기', findPW, '로그인 페이지로 이동합니다.')
         history.push('/LoginPage');
     }
 
@@ -38,7 +32,7 @@ const FindPWComp = () => {
 
         searchPW(searchPWReq)
             .then(res=> {console.log("성공했다 : ",res); successPW(res.data)})
-            .catch(err=> ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message));
+            .catch(err=> ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null));
     };
 
       const onChange = (e) => {

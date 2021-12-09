@@ -16,7 +16,7 @@ const MultipleChoice = ({ ReadOnlyState, ReadOnlyData, UpdateKey, count, number,
     return (
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
             <Grid container spacing={2}><br />
-                {ReadOnlyState && <Grid item xs={12} sx={{ textAlign: "right" }}><Typography style={{ color: "red" }} >{ReadOnlyData.surQue_Essential && "필수항목"}</Typography></Grid>}
+                {(ReadOnlyState && !UpdateKey) && <Grid item xs={12} sx={{ textAlign: "right" }}><Typography style={{ color: "red" }} >{ReadOnlyData.surQue_Essential && "필수항목"}</Typography></Grid>}
                 {(!ReadOnlyState || UpdateKey) &&
                     <>
                         <Grid item xs={9}>

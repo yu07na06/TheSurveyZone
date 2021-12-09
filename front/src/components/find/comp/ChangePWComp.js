@@ -29,7 +29,7 @@ const ChangePWComp = () => {
         if(PWNOTMATCH&&pwResult.current){
             changePWAPI({"user_Password":passWordConfirm})
             .then(res=>console.log("성공 : ",res))
-            .catch(err=> ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message))
+            .catch(err=> ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null))
             console.log("회원가입 완료!");
             history.push('/');
         }

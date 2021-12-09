@@ -14,7 +14,30 @@ import ResultPage from './pages/ResultPage';
 import SurveySubmitPage from './pages/SurveySubmitPage';
 import UpdatePage from './pages/UpdatePage';
 
+
+
 const App = () => {
+  console.log("오정환~~~ ㅎㅇㅎㅇ");
+  console.log("오정환~~~ ㅎㅇㅎㅇ");
+  console.log("오정환~~~ ㅎㅇㅎㅇ");
+  console.log("오정환~~~ ㅎㅇㅎㅇ");
+  console.log("오정환~~~ ㅎㅇㅎㅇ");
+  console.log("오정환~~~ ㅎㅇㅎㅇ");
+  console.log("오정환~~~ ㅎㅇㅎㅇ");
+  console.log("오정환~~~ ㅎㅇㅎㅇ");
+  console.log("오정환~~~ ㅎㅇㅎㅇ");
+  console.log("오정환~~~ ㅎㅇㅎㅇ");
+  console.log("오정환~~~ ㅎㅇㅎㅇ");
+  console.log("오정환~~~ ㅎㅇㅎㅇ");
+  console.log("오정환~~~ ㅎㅇㅎㅇ");
+  console.log("오정환~~~ ㅎㅇㅎㅇ");
+  console.log("오정환~~~ ㅎㅇㅎㅇ");
+  console.log("오정환~~~ ㅎㅇㅎㅇ");
+  console.log("오정환~~~ ㅎㅇㅎㅇ");
+  console.log("오정환~~~ ㅎㅇㅎㅇ");
+  console.log("오정환~~~ ㅎㅇㅎㅇ");
+  console.log("오정환~~~ ㅎㅇㅎㅇ");
+  console.log("오정환~~~ ㅎㅇㅎㅇ");
   return (
     <>
       <MakeThemeProvider>

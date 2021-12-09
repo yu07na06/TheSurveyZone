@@ -2,7 +2,6 @@ import React from 'react';
 import Login from '../UI/Login';
 import { login as loginAPI } from '../../../lib/api/auth'; 
 import { useHistory } from 'react-router-dom';
-import Swal from 'sweetalert2';
 import ErrorSweet from '../../common/modules/ErrorSweet';
 
 const LoginComp = () => {
@@ -11,11 +10,8 @@ const LoginComp = () => {
     // 임시 비밀번호로 로그인한 경우
     const newPassword = (infoPW) => {
         if(infoPW === "TempPW"){
-            Swal.fire({
-                title:'비밀번호 변경 페이지로 이동'
-            }).then(()=>{
-                history.push('/ChangePWPage');
-            })
+            ErrorSweet('info', null, '일회용 로그인', '임시 비밀번호로 로그인하셨습니다', '비밀번호 변경 페이지로 이동합니다.')
+            .then(()=> history.push('/ChangePWPage'));
             return false;
         }
         return true;
@@ -37,7 +33,7 @@ const LoginComp = () => {
                 localStorage.setItem('user_Name', res.data.user_Name);
                 newPassword(res.data.login_Type);}) 
             .then(() => history.push('/') ) // 메인 화면으로 이동
-            .catch(err => ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message)) // DB에 존재하지 않는 데이터로 판정
+            .catch(err => ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null)) // DB에 존재하지 않는 데이터로 판정
     };
 
     return (

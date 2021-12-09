@@ -99,14 +99,14 @@ const Header = () => {
               <MenuItem onClick={()=>handleMenuClick('/CreateSurveyPage')}>
                 <NoteAddOutlinedIcon style={{paddingRight: "10px"}}/>
                   <Typography variant="body2" noWrap>
-                    설문지 생성
+                    설문 생성
                   </Typography>
               </MenuItem>
 
               <MenuItem onClick={()=>handleMenuClick('/MySurveyPage')}>
                 <ContentPasteIcon style={{paddingRight: "10px"}}/>
                   <Typography variant="body2" noWrap>
-                    내 설문지
+                    내 설문
                   </Typography>
               </MenuItem>
 
@@ -142,8 +142,8 @@ const Header = () => {
             ( //PC환경 (Width가 좁을 경우 모바일환경처럼 출력)
               <>
                 <Tabs opacity="1" aria-label="simple tabs example" >
-                  <Link to='/CreateSurveyPage' style={{textDecoration:'none', color:'white' }}><Tab label="설문지 생성" style={{fontWeight:'bold', fontSize:'17px'}}/></Link>
-                  <Link to='/MySurveyPage'style={{textDecoration:'none', color:'white'}}><Tab label="내 설문지" style={{fontWeight:'bold', fontSize:'17px'}}/></Link>
+                  <Link to='/CreateSurveyPage' style={{textDecoration:'none', color:'white' }}><Tab label="설문 생성" style={{fontWeight:'bold', fontSize:'17px'}}/></Link>
+                  <Link to='/MySurveyPage'style={{textDecoration:'none', color:'white'}}><Tab label="내 설문" style={{fontWeight:'bold', fontSize:'17px'}}/></Link>
                 </Tabs>
 
                 {!cookies.Authorization?
