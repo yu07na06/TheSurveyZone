@@ -36,28 +36,33 @@ const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag,
                 // <ThemeProvider theme={theme}>
                 <Container component="main" maxWidth="md" sx={{ mb: 4 }} >
                     <Paper levation={2} sx={{ bgcolor: '#F2EFFB', my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-                        <ReqSwitch essential={surveyReqForm.sur_Publish} setSur_Publish={setSur_Publish}/>
                         {UpdateKey ?
-                            <Grid item xs={12} >
-                                <TextField
-                                    sx={{ my: 1 }}
-                                    InputProps={{ readOnly: (!UpdateKey) }}
-                                    fullWidth
-                                    id="Sur_Title"
-                                    name="Sur_Title"
-                                    label="제목"
-                                    placeholder="제목을 입력해주세요. (45자 이내)"
-                                    inputProps={{ maxLength: 45 }}
-                                    value={수정할때의데이터제목}
-                                    onChange={e => set수정할때의데이터제목(e.target.value)}
-                                />
-                            </Grid>
+                            <>
+                                <ReqSwitch essential={surveyReqForm.sur_Publish} setSur_Publish={setSur_Publish}/>
+                                <Grid item xs={12} >
+                                    <TextField
+                                        sx={{ my: 1 }}
+                                        InputProps={{ readOnly: (!UpdateKey) }}
+                                        fullWidth
+                                        id="Sur_Title"
+                                        name="Sur_Title"
+                                        label="제목"
+                                        placeholder="제목을 입력해주세요. (45자 이내)"
+                                        inputProps={{ maxLength: 45 }}
+                                        value={수정할때의데이터제목}
+                                        onChange={e => set수정할때의데이터제목(e.target.value)}
+                                    />
+                                </Grid>
+                            </>
                             :
+                            <>
+                            <Typography color="textSecondary">{surveyReqForm.sur_Publish?"공개설문":"비공개설문"}</Typography>
                             <Grid item xs={12} >
                             <Typography style={{wordWrap:"break-word" }}component="h1" variant="h4" align="center">
                                 {surveyReqForm.sur_Title}
                             </Typography>
                             </Grid>
+                            </>
                         }
                         <hr /><br />
                         <Grid container xs={{ mx: "auto" }}>

@@ -3,9 +3,7 @@ import Register from '../UI/Register';
 import { useHistory } from 'react-router';
 import { debounceCheck } from '../../common/debounceFunction';
 
-
 const RegisterComp = () => {
-
     const [PWNOTMATCH, setPWNOTMATCH] = useState();
     const [User_Password, setUser_Password] = useState();
     const [passWordConfirm, setPassWordConfirm] = useState();
@@ -13,7 +11,6 @@ const RegisterComp = () => {
     const [errorText, setErrorText] = useState();
     const [emailText, setEmailText] = useState(true);
     const history = useHistory();
-
 
     useEffect(()=>{
         console.log("emailTextemailText : ",emailText);
@@ -56,8 +53,11 @@ const RegisterComp = () => {
     },[User_Password, passWordConfirm]);
 
 
+    //숫자, 영문, 특수문자 각 1자리 이상이면서 8자에서 16자 사이 통과
+    const regexPW = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,16}$/;
+    // const regexPW = /(?=.*\d{1,50})(?=.*[~`!@#$%\^&*()-+=]{1,50})(?=.*[a-zA-Z]{2,50}).{8,50}$/; 유나가 준거
+    // const regexPW = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{7,}$/; 원본
 
-    const regexPW = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{7,15}$/;
     const regexEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
     const regexPhone = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
     const pwResult = useRef(null);

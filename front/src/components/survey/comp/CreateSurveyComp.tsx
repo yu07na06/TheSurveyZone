@@ -28,12 +28,12 @@ const CreateSurveyComp = () => {
 
   useEffect(() => {
     if (cookies.Authorization == null) {
-      ErrorSweet('info', null, "권한 없음", "로그인이 필요한 페이지입니다.")
+      ErrorSweet('info', null, "권한 없음", "로그인이 필요한 페이지입니다.", '로그인 페이지로 이동합니다.')
       history.push('/LoginPage');
     }else{
       getTagsAPI()
         .then((res) => { setTags(res.data); })
-        .catch(err => ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message))
+        .catch(err => ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null))
     }
   }, [])
 
@@ -43,13 +43,14 @@ const CreateSurveyComp = () => {
     setAnchorEl(null); // 메뉴 닫기
     switch (e.target.id) {
       case '객관식':
-        setQuestion([...question, <div key={count.current}><MultipleChoiceComp ReadOnlyState={false} ReadOnlyData={null} setDelIndex={setDelIndex} number={count.current} setCheck={setCheck} UpdateKey={false} realReadState={undefined} /></div>]);
+        setQuestion([...question, <div key={count.current}><MultipleChoiceComp key="Mul" ReadOnlyState={false} ReadOnlyData={null} setDelIndex={setDelIndex} number={count.current} setCheck={setCheck} UpdateKey={false} realReadState={undefined} /></div>]);
         break;
       case '주관식':
-        setQuestion([...question, <div key={count.current}><SubjectiveComp ReadOnlyState={false} ReadOnlyData={null} setDelIndex={setDelIndex} number={count.current} setCheck={setCheck} UpdateKey={false} realReadState={undefined} /></div>]);
+        setQuestion([...question, <div key={count.current}><SubjectiveComp key="Sub" ReadOnlyState={false} ReadOnlyData={null} setDelIndex={setDelIndex} number={count.current} setCheck={setCheck} UpdateKey={false} realReadState={undefined} /></div>]);
+        // setQuestion([...question, <div key={count.current}><div key="Sub"><SubjectiveComp ReadOnlyState={false} ReadOnlyData={null} setDelIndex={setDelIndex} number={count.current} setCheck={setCheck} UpdateKey={false} realReadState={undefined} /></div></div>]);
         break;
       case '선형배율':
-        setQuestion([...question, <div key={count.current}><LinearMagnificationComp ReadOnlyState={false} ReadOnlyData={null} setDelIndex={setDelIndex} number={count.current} setCheck={setCheck} UpdateKey={false} realReadState={undefined} /></div>]);
+        setQuestion([...question, <div key={count.current}><LinearMagnificationComp key="Lin" ReadOnlyState={false} ReadOnlyData={null} setDelIndex={setDelIndex} number={count.current} setCheck={setCheck} UpdateKey={false} realReadState={undefined} /></div>]);
         break;
       default: break;
     }
@@ -75,12 +76,12 @@ const CreateSurveyComp = () => {
   const onClick = (e) => { // 완료 버튼 클릭 시, node에게 보냄
     e.preventDefault(); // 화면 유지
     if (question.length == 0) {
-      ErrorSweet('info', null, "생성 양식 미충족", "최소 하나의 질문이 필요합니다.");
+      ErrorSweet('info', null, "생성 양식 미충족", "최소 하나의 질문이 필요합니다.", null);
       return;
     }
 
     const obj = submitOBJ(e, question_ans, question, day, Sur_Publish, url);
-    const shareURL = "http://10.0.3.135:3000/SurveySubmitPage/";
+    const shareURL = "http://web-1537894173.ap-northeast-2.elb.amazonaws.com/SurveySubmitPage/";
 
     console.log("생성 시, 객체 확인합니다.", obj);
     console.log(JSON.stringify(obj));

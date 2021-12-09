@@ -74,7 +74,7 @@ const MultipleChoiceComp = ({ ReadOnlyState, ReadOnlyData, UpdateKey, realReadSt
             for (const key in surAns_Content) {
                     const splitValue = surAns_Content[key].split('_');
                     if(splitValue[1]==unRequired && splitValue[0]=="SurQueCheck"){ // unRequired 는 required를 해제할 객관식 보기의 number이다.
-                        for(const i=0; i<=Number(splitValue[2]); i++){
+                        for(let i=0; i<=Number(splitValue[2]); i++){
                             let checkbox1 = document.querySelector(`input[name=SurQueCheck_${unRequired}_${i}]`);
                             checkbox1.required=false;
                         }
@@ -86,7 +86,7 @@ const MultipleChoiceComp = ({ ReadOnlyState, ReadOnlyData, UpdateKey, realReadSt
     const checkCount = (e, addMaxNum) => {
         accChecked.current += (e.target.checked)? 1 : -1;
         if(accChecked.current > addMaxNum){
-            ErrorSweet('info', null, "응답 불가", "최대 응답 가능 범위를 초과했습니다.")
+            ErrorSweet('info', null, "응답 불가", "최대 응답 가능 범위를 초과했습니다.", null)
             e.target.checked = false;
             accChecked.current -= 1;
         }

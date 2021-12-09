@@ -23,7 +23,7 @@ const MainComp = ({ match }) => {
 
     useEffect(()=>{
         if(err !== null){
-            ErrorSweet(null,"네트워크 오류", err)
+            ErrorSweet('error', null, "네트워크 오류", err, null);
         }
     },[err]);
 
@@ -40,7 +40,7 @@ const MainComp = ({ match }) => {
         if(pageNum===undefined || tagSearch===undefined || searchText===undefined) return;
         mainListAPI(pageNum, tagSearch, searchText)
             .then(res => setReqMain(res.data))
-            .catch(err => ErrorSweet(null, "네트워크 오류", err))
+            .catch(err => ErrorSweet('error', null, "네트워크 오류", err, null))
     },[pageNum, tagSearch])
         
     useEffect(()=>{
@@ -97,8 +97,6 @@ const dataProcessing = (data) =>{ // 차트 데이터 가공
             }
         }
     }
-    console.log("accEachAgeWoman", accEachAgeWoman);
-    console.log("accEachAgeMan", accEachAgeMan);
     const accAgeGenderData = [
         { "id" : "Woman", "data" : accEachAgeWoman.map((v, i)=> ({ 'x': `${i+1}0대`, 'y': accEachAgeWoman[5-i] })) },
         { "id" : "Man", "data" : accEachAgeMan.map((v, i)=> ({ 'x': `${i+1}0대`, 'y': accEachAgeMan[5-i] })) },

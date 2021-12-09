@@ -44,14 +44,14 @@ function submitOBJ(e:any, question_ans:any, question:any, day:any, Sur_Publish:a
 
     let questionList = question.map((value:any, index:any) => { // 질문 들어가는 배열
       let SurType = null;
-      switch (value.props.children.type.name) {
-        case 'SubjectiveComp':
+      switch (value.props.children.key) {
+        case 'Sub':
           SurType = 0; // 주관식
           break;
-        case 'MultipleChoiceComp':
+        case 'Mul':
           SurType = 1; // 객관식  
           break;
-        case 'LinearMagnificationComp':
+        case 'Lin':
           SurType = 2; // 선형배율
           break;
         default: break;
