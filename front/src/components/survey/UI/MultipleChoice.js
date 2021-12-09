@@ -16,7 +16,17 @@ const MultipleChoice = ({ ReadOnlyState, ReadOnlyData, UpdateKey, count, number,
     return (
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
             <Grid container spacing={2}><br />
-                {(ReadOnlyState && !UpdateKey) && <Grid item xs={12} sx={{ textAlign: "right" }}><Typography style={{ color: "red" }} >{ReadOnlyData.surQue_Essential && "필수항목"}</Typography></Grid>}
+                {(ReadOnlyState && !UpdateKey) && 
+                    <>
+                    <Grid item xs={6}>
+                        <Typography style={{ color: "red" }} >{ReadOnlyData.surQue_Essential && "*필수항목"}</Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Typography style={{ color: "blue" }} sx={{ textAlign: "right" }}>{(ReadOnlyState && !UpdateKey) && <Typography>중복답변{ReadOnlyData.surQue_MaxAns}개</Typography>}</Typography>
+                    </Grid>
+                    </>
+                    
+                }
                 {(!ReadOnlyState || UpdateKey) &&
                     <>
                         <Grid item xs={9}>
@@ -28,8 +38,8 @@ const MultipleChoice = ({ ReadOnlyState, ReadOnlyData, UpdateKey, count, number,
                         </Grid>
                     </>
                 }
-
-                <Grid item xs={12} md={10}>
+                <Grid item xs={10} md={10}>
+                {UpdateKey||!ReadOnlyState?
                     <TextField
                         onChange={(e) => setUpdateData(e.target.value)}
                         variant="outlined"
@@ -41,9 +51,12 @@ const MultipleChoice = ({ ReadOnlyState, ReadOnlyData, UpdateKey, count, number,
                         label={`객관식${number}`}
                         value={updateData}
                     />
+                :
+                    <Typography component="h6" variant="h6" >{updateData}</Typography>
+                }
                 </Grid>
 
-                <Grid item xs={12} md={2}>
+                <Grid item xs={2} md={2}>
                     {UpdateKey ?
                         <Box>
                             <FormControl fullWidth>
@@ -69,7 +82,6 @@ const MultipleChoice = ({ ReadOnlyState, ReadOnlyData, UpdateKey, count, number,
                         :
                         <Box>
                             <FormControl fullWidth>
-                                {(ReadOnlyState && !UpdateKey) && <Typography>중복답변{ReadOnlyData.surQue_MaxAns}개</Typography>}
                                 {(!ReadOnlyState || UpdateKey) &&
                                     <><InputLabel id="demo-simple-select-label">중복답변</InputLabel>
                                         <Select
@@ -94,9 +106,7 @@ const MultipleChoice = ({ ReadOnlyState, ReadOnlyData, UpdateKey, count, number,
                 </Grid>
 
                 <Grid item xs={12}>
-                    <Paper variant="outlined">
-                        {select.map((value) => value)}
-                    </Paper>
+                    {select.map((value) => value)}
                 </Grid>
 
                 {(!ReadOnlyState || UpdateKey) &&

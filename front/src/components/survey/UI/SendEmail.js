@@ -8,6 +8,7 @@ import Tooltip from '@mui/material/Tooltip';
 import React, { useState } from 'react';
 import EList from './EList';
 import { surveySend as surveySendAPI } from '../../../lib/api/survey';
+
 const SendEmail = ({ _id }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -48,7 +49,7 @@ const SendEmail = ({ _id }) => {
 
   return (
     <>
-      <Tooltip title="Account settings">
+      <Tooltip title="이메일 전송">
         <IconButton onClick={handleClick} size="small" sx={{}}>
           <ForwardToInboxIcon onClick={(e) => console.log("나를 눌렀는가?")} />
         </IconButton>

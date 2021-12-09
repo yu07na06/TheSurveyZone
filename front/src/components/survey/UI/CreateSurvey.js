@@ -22,7 +22,6 @@ import ReqSwitch from '../../common/modules/ReqSwitch';
 const CreateSurvey = ({ onClick, day, setDay, question, open, anchorEl, handleClick, handleClose, tag, setTag, tags, setUrl, setSur_Publish, }) => {
     return (
         <>
-            {/* <ThemeProvider theme={createTheme()}> */}
             <Box component="form" onSubmit={onClick}>
                 <CssBaseline />
                 <AppBar
@@ -36,9 +35,9 @@ const CreateSurvey = ({ onClick, day, setDay, question, open, anchorEl, handleCl
                 >
                 </AppBar>
 
-
                 <Container component="main" maxWidth="md" sx={{ mb: 4 }} >
                     <Paper elevation={2} sx={{ bgcolor: '#F2EFFB', my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+                        
                         <ReqSwitch setSur_Publish={setSur_Publish}/>
 
                         <Grid item xs={12}>
@@ -57,7 +56,6 @@ const CreateSurvey = ({ onClick, day, setDay, question, open, anchorEl, handleCl
                         <hr /><br />
                         <Grid container xs={{ mx: "auto" }}>
                             <Grid my="2" >
-
                                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                                     <DateRangePicker
                                         minDate={new Date()}
@@ -97,7 +95,7 @@ const CreateSurvey = ({ onClick, day, setDay, question, open, anchorEl, handleCl
                                     multiline
                                     placeholder="본문을 입력해주세요. (300자 이내)"
                                     fullWidth
-                                    rows={8}
+                                    rows={2}
                                     rowsmax={8}
                                     inputProps={{ maxLength: 300 }}
                                     required
@@ -106,9 +104,10 @@ const CreateSurvey = ({ onClick, day, setDay, question, open, anchorEl, handleCl
                                     label="본문"
                                 />
                             </Grid>
-                            <Gongback num={4} />
+                            <Gongback num={1} />
+
                             <Grid align='center' item xs={12}>
-                            <Img sx={{ mx: "auto" }} setUrl={setUrl} imageSRC={null} showBtn={true} />
+                                <Img sx={{ mx: "auto" }} setUrl={setUrl} imageSRC={null} showBtn={true} />
                             </Grid>
 
                             <Grid item xs={12}>
@@ -148,7 +147,6 @@ const CreateSurvey = ({ onClick, day, setDay, question, open, anchorEl, handleCl
                                 sx={{ ml: "auto" }}
                             >
                                 생성
-                                
                             </Button>
                         </Grid>
                     </Paper>

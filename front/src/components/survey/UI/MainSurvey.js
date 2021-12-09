@@ -19,7 +19,7 @@ import LinearMagnificationComp from '../comp/LinearMagnificationComp';
 import MultipleChoiceComp from '../comp/MultipleChoiceComp';
 import SubjectiveComp from '../comp/SubjectiveComp';
 
-const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag, tags, handleClick, anchorEl, open, handleClose, question, ReadOnlyState, setUrl, setSur_Publish, }) => {
+const MainSurvey = ({ surveyReqForm, UpdateKey, day, setDay, tag, setTag, tags, handleClick, anchorEl, open, handleClose, question, ReadOnlyState, setUrl, setSur_Publish, }) => {
     const [수정할때의데이터제목 , set수정할때의데이터제목] = useState();
     const [수정할때의데이터본문 , set수정할때의데이터본문] = useState();
     const defaultImage = "https://surveyzone.s3.ap-northeast-2.amazonaws.com/static/b5e552ea-8d6b-4582-89ae-1d25c25027b8no-image.png";  
@@ -33,9 +33,8 @@ const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag,
     return (
         <>
             {surveyReqForm &&
-                // <ThemeProvider theme={theme}>
                 <Container component="main" maxWidth="md" sx={{ mb: 4 }} >
-                    <Paper levation={2} sx={{ bgcolor: '#F2EFFB', my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+                    <Paper levation={2} sx={{ bgcolor: UpdateKey?"#F2EFFB":"#F5F5DC", my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
                         {UpdateKey ?
                             <>
                                 <ReqSwitch essential={surveyReqForm.sur_Publish} setSur_Publish={setSur_Publish}/>
@@ -58,13 +57,16 @@ const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag,
                             <>
                             <Typography color="textSecondary">{surveyReqForm.sur_Publish?"공개설문":"비공개설문"}</Typography>
                             <Grid item xs={12} >
-                            <Typography style={{wordWrap:"break-word" }}component="h1" variant="h4" align="center">
-                                {surveyReqForm.sur_Title}
-                            </Typography>
+                                <Typography style={{wordWrap:"break-word" }} component="h1" variant="h4" align="center">
+                                    {surveyReqForm.sur_Title}
+                                </Typography>
+                                <Typography color="gray" component="h6" variant="h6" align="center">
+                                    {수정할때의데이터본문}
+                                </Typography>
                             </Grid>
                             </>
                         }
-                        <hr /><br />
+                        <hr />
                         <Grid container xs={{ mx: "auto" }}>
                             {UpdateKey ?
                                 <>
@@ -105,70 +107,44 @@ const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag,
                                                         </NativeSelect>}
                                                     </FormControl>
                                         </Grid>
+                                        <Grid item xs={12}>
+                                            <TextField
+                                                InputProps={{ readOnly: (!UpdateKey) }}
+                                                sx={{ mx: "auto", my: 1 }}
+                                                multiline
+                                                placeholder="본문을 입력해주세요. (300자 이내)"
+                                                fullWidth
+                                                rows={2}
+                                                rowsmax={8}
+                                                inputProps={{ maxLength: 300 }}
+                                                id="Sur_Content"
+                                                name="Sur_Content"
+                                                label="본문"
+                                                value={수정할때의데이터본문}
+                                                onChange={e => set수정할때의데이터본문(e.target.value)}
+                                            />
+                                        </Grid>
                                 </>
                                 :
                                 <>
                                     <Grid item xs={6}>
-                                        <TextField
-                                            sx={{ my: 1, px: 1 }}
-                                            InputProps={{ readOnly: true }}
-                                            fullWidth
-                                            label="시작일"
-                                            value={surveyReqForm.sur_StartDate}
-                                        />
+                                        <Typography color="green">
+                                            응답기간 : {surveyReqForm.sur_StartDate} ~ {surveyReqForm.sur_EndDate}  ({surveyReqForm.sur_State === 0 ? "진행전" : (surveyReqForm.sur_State === 1 ? "진행중" : "마감")})
+                                        </Typography>
                                     </Grid>
                                     <Grid item xs={6}>
-                                        <TextField
-                                            sx={{ my: 1, px: 1 }}
-                                            InputProps={{ readOnly: true }}
-                                            fullWidth
-                                            label="마감일"
-                                            value={surveyReqForm.sur_EndDate}
-                                        />
-                                    </Grid>
-
-                                    <Grid item xs={6}>
-                                        <TextField
-                                            sx={{ my: 1, px: 1 }}
-                                            InputProps={{ readOnly: true }}
-                                            fullWidth
-                                            value={surveyReqForm.sur_State === 0 ? "진행전" : (surveyReqForm.sur_State === 1 ? "진행중" : "마감")}
-                                            label="진행"
-                                        />
-                                    </Grid>
-                                    <Grid item xs={6}>
-                                        <TextField
-                                            sx={{ my: 1, px: 1 }}
-                                            InputProps={{ readOnly: true }}
-                                            fullWidth
-                                            label="태그"
-                                            value={(surveyReqForm.tagList.length !== 0) ? surveyReqForm.tagList[0].tag_Name : "X"}
-                                        />
+                                        <Typography align="right">
+                                            태그 [ {(surveyReqForm.tagList.length !== 0) ? surveyReqForm.tagList[0].tag_Name : "X"} ]
+                                        </Typography>
                                     </Grid>
                                 </>
                             }
 
-                            <Grid item xs={12}>
-                                <TextField
-                                    InputProps={{ readOnly: (!UpdateKey) }}
-                                    sx={{ mx: "auto", my: 1 }}
-                                    multiline
-                                    placeholder="본문을 입력해주세요. (300자 이내)"
-                                    fullWidth
-                                    rows={8}
-                                    rowsmax={8}
-                                    inputProps={{ maxLength: 300 }}
-                                    id="Sur_Content"
-                                    name="Sur_Content"
-                                    label="본문"
-                                    value={수정할때의데이터본문}
-                                    onChange={e => set수정할때의데이터본문(e.target.value)}
-                                />
-                            </Grid>
+                            
 
                             {surveyReqForm.sur_Image != defaultImage &&
                                 <Grid xs={12}>
-                                    <Container sx={{ py: 3, my: 3 }} align="center">
+                                    <Container sx={{ py: 1, my: 1 }} align="center">
                                         <Img setUrl={setUrl} showBtn={UpdateKey}
                                             style=
                                             {{
@@ -225,7 +201,6 @@ const MainSurvey = ({ theme, surveyReqForm, UpdateKey, day, setDay, tag, setTag,
                         </Paper>}
                     </Paper>
                 </Container>
-                // </ThemeProvider>
             }
         </>
     );

@@ -35,6 +35,9 @@ const MySurveyComp = () => {
 
   const ApiClick = debounce((e, id) => {
     switch(e.target.id){
+      case "read":
+        history.push(`/ReadOnlyPage/${id}`);
+        break;
       case "mod" : 
         history.push(`/UpdatePage/${id}`);
         break;
