@@ -132,7 +132,7 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
                             </Typography>
                         </React.Fragment>;
             default:
-                throw new Error('Unknown step');
+                break; // 여기로 올때, 해결해야하는데,
         }
     }
     
