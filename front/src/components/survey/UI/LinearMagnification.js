@@ -37,8 +37,13 @@ const LinearMagnification = ({
     return (
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
             <Grid container spacing={2}>
-
-                {(ReadOnlyState && !UpdateKey) && <Grid item xs={12} sx={{ textAlign: "right" }}><Typography style={{ color: "red" }} >{ReadOnlyData.surQue_Essential && "필수항목"}</Typography></Grid>}
+                {(ReadOnlyState && !UpdateKey) && 
+                    <Grid item xs={12} >
+                        <Typography style={{ color: "red" }} >
+                            {ReadOnlyData.surQue_Essential && "*필수항목"}
+                        </Typography>
+                    </Grid>
+                }
                 {(!ReadOnlyState || UpdateKey) &&
                     <>
                         <Grid item xs={9}>
@@ -52,6 +57,7 @@ const LinearMagnification = ({
                 }
 
                 <Grid item xs={12}>
+                {UpdateKey||!ReadOnlyState?
                     <TextField
                         onChange={(e) => setUpdateData(e.target.value)}
                         variant="outlined"
@@ -63,20 +69,30 @@ const LinearMagnification = ({
                         label={`선형배율${number}`}
                         value={updateData}
                     />
+                :
+                    <Typography component="h6" variant="h6" >{updateData}</Typography>
+                }
                 </Grid>
 
-                <Grid item xs={12} md={6}>
-                    <TextField
-                        fullWidth
-                        onChange={(e) => { setUpdateDataStart(e.target.value); debounce(()=>{console.log('나야 나ㅎㅎㅎ좋아'); setTemp(e.target.value); },1777)(); }}
-                        required
-                        variant="filled"
-                        name={`start_Step${number}`}
-                        label="시작"
-                        InputProps={{ readOnly: (ReadOnlyState && !UpdateKey) }}
-                        value={updateDataStart}
-                    />
-                </Grid>
+                {UpdateKey||!ReadOnlyState?
+                    <Grid item xs={12} md={6}>
+                        <TextField
+                            fullWidth
+                            onChange={(e) => { setUpdateDataStart(e.target.value); debounce(()=>{console.log('나야 나ㅎㅎㅎ좋아'); setTemp(e.target.value); },1777)(); }}
+                            required
+                            variant="filled"
+                            name={`start_Step${number}`}
+                            label="시작"
+                            InputProps={{ readOnly: (ReadOnlyState && !UpdateKey) }}
+                            value={updateDataStart}
+                        />
+                    </Grid>
+                :   
+                    <Grid item xs={6} md={6}>
+                        <Typography >{updateDataStart}</Typography>
+                    </Grid>
+                }
+                
 
                 {(!ReadOnlyState || UpdateKey) &&
                     <Grid item xs={12} md={6}>
@@ -124,19 +140,25 @@ const LinearMagnification = ({
                     </Grid>
                 }
 
-                <Grid item  xs={12} md={6}  textAlign="left">
-                    <TextField
-                        fullWidth
-                        onChange={(e) => { setUpdateDataEnd(e.target.value); debounce(()=>{console.log('나야 나ㅎㅎㅎ좋아끝'); setTemp(e.target.value); },1777)(); }}
-                        required
-                        variant="filled"
-                        name={`end_Step${number}`}
-                        label="끝"
-                        InputProps={{ readOnly: (ReadOnlyState && !UpdateKey) }}
-                        value={updateDataEnd}
-                    />
-                </Grid>
-
+                    {UpdateKey||!ReadOnlyState?
+                        <Grid item  xs={12} md={6}  textAlign="left">
+                            <TextField
+                                fullWidth
+                                onChange={(e) => { setUpdateDataEnd(e.target.value); debounce(()=>{console.log('나야 나ㅎㅎㅎ좋아끝'); setTemp(e.target.value); },1777)(); }}
+                                required
+                                variant="filled"
+                                name={`end_Step${number}`}
+                                label="끝"
+                                InputProps={{ readOnly: (ReadOnlyState && !UpdateKey) }}
+                                value={updateDataEnd}
+                            />
+                        </Grid>
+                    :
+                        <Grid item xs={6} md={6}>
+                            <Typography sx={{ textAlign: "right" }}>{updateDataEnd}</Typography>
+                        </Grid>
+                    }
+                    
                 {(ReadOnlyState && !UpdateKey) &&
                     <Grid container xs={12}
                         justifyContent="center"

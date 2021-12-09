@@ -1,4 +1,4 @@
-import { Button, Grid, TextField } from '@mui/material';
+import { Button, Grid, TextField, Typography } from '@mui/material';
 import React, { useRef, useState } from 'react';
 import MultipleChoice from '../UI/MultipleChoice';
 import {useEffect} from 'react';
@@ -6,6 +6,7 @@ import Checkbox from '@mui/material/Checkbox';
 import { useDispatch, useSelector } from 'react-redux';
 import { submitAction } from '../../../modules/submitReducer';
 import ErrorSweet from '../../common/modules/ErrorSweet';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 const MultipleChoiceComp = ({ ReadOnlyState, ReadOnlyData, UpdateKey, realReadState, number, setCheck, setDelIndex, }) => {
     const [updateData, setUpdateData] = useState(ReadOnlyState ? ReadOnlyData.surQue_Content : null);
@@ -100,27 +101,33 @@ const MultipleChoiceComp = ({ ReadOnlyState, ReadOnlyData, UpdateKey, realReadSt
             <Grid key={`SurQue_Ans_${number}_${count}`} container spacing={1}>
                 <Grid item xs={9} sm={10} key={`SurQue_Ans_${number}_${count}`}>
                     {(ReadOnlyState&&!UpdateKey)&&
-                        <Checkbox
-                            disabled={realReadState}
-                            required={checkBoxEssential}
-                            value={ReadOnlyState?ReadOnlyData.surSel_Content:null}
-                            name={`SurQueCheck_${number}_${count}`}
-                            id={`SurQueCheck_${number}_${count}`}
-                            onClick={(e)=>{ checkClick(e); checkCount(e, addMaxNum);}}
+                        <FormControlLabel
+                            label={ReadOnlyState?ReadOnlyData.surSel_Content:null}
+                            control={
+                                <Checkbox
+                                    disabled={realReadState}
+                                    required={checkBoxEssential}
+                                    name={`SurQueCheck_${number}_${count}`}
+                                    id={`SurQueCheck_${number}_${count}`}
+                                    onClick={(e)=>{ checkClick(e); checkCount(e, addMaxNum);}}
+                                />
+                            }
                         />
                     }
-                    <TextField
-                        onChange={e => ReadOnlyState&&setUpdateDataAddText(e.target.value)}
-                        variant="standard"
-                        required
-                        fullWidth
-                        InputProps={{ readOnly: (ReadOnlyState&&!UpdateKey)}}
-                        name={`SurQue_Ans_${number}_${count}`}
-                        id={`SurQue_Ans_${number}_${count}`}
-                        label={`선택지${number}_${count}`}
-                        value={updateDataAddText}
-                    >
-                    </TextField>
+                    {UpdateKey&&
+                        <TextField
+                            onChange={e => ReadOnlyState&&setUpdateDataAddText(e.target.value)}
+                            variant="standard"
+                            required
+                            fullWidth
+                            InputProps={{ readOnly: (ReadOnlyState&&!UpdateKey)}}
+                            name={`SurQue_Ans_${number}_${count}`}
+                            id={`SurQue_Ans_${number}_${count}`}
+                            label={`선택지${number}_${count}`}
+                            value={updateDataAddText}
+                        >
+                        </TextField>
+                    }
                 </Grid>
 
                 {(!ReadOnlyState||UpdateKey)&&

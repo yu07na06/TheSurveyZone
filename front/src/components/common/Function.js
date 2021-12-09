@@ -76,8 +76,8 @@ export const Img = ({ setUrl, imageSRC, showBtn }) => {
     return (
       <>
         {imageSRC
-          ? <><img width="100%" height="auto" id="img_box" src={imageSRC} alt="" /><Gongback num={1} /></>
-          : <><img width="100%" height="auto" id="img_box" src="" alt="" /><Gongback num={1} /></>
+          ? <><img width="30%" height="auto" id="img_box" src={imageSRC} alt="" /><Gongback num={1} /></>
+          : <><img width="30%" height="auto" id="img_box" src="" alt="" /><Gongback num={1} /></>
         }
   
         {showBtn&&<Input sx={{ ml: "auto" }} type="file" inputProps={{accept:"image/*"}} onChange={handleFileChange} />}
