@@ -3,7 +3,7 @@ import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import { Grid } from '@mui/material';
 import ToggleBtn from '../ToggleBtn';
-import { Text } from '../comp/ResultMultiComp';
+import { ResultChart, Text } from '../comp/ResultMultiComp';
 import MyResponsivePie from '../charts/MyResponsivePie';
 import MyResponsiveLine from '../charts/MyResponsiveLine';
 import MyResponsiveBar from '../charts/MyResponsiveBar';

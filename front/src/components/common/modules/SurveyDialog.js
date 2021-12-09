@@ -21,15 +21,15 @@ export default function SurveyDialog({ data, accAgeGenderData, accAgeTotalData, 
 
   return (
     <>
-
       <Container sx={{ py: 1 }} maxWidth="md">
       <div align = 'center'>
-      <Button variant="outlined" color="default" size="Large" onClick={handleClickOpen} style = {{fontWeight:'bold' ,width: "90%"}}>
+      <Button variant="outlined" size="Large" onClick={handleClickOpen} style = {{fontWeight:'bold' ,width: "90%"}}>
       Statistics Result
       </Button>
       </div>
       </Container>
       
+      {data&&
       <Dialog
         open={open}
         onClose={handleClose}
@@ -134,6 +134,7 @@ export default function SurveyDialog({ data, accAgeGenderData, accAgeTotalData, 
           </Button>
         </DialogActions>
       </Dialog>
+      }
     </>
   );
 }
