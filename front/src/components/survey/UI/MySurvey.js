@@ -12,6 +12,7 @@ import SendEmail from './SendEmail';
 import Tooltip from '@mui/material/Tooltip';
 
 const MySurvey = ({ mySurList, currentPage, callPaging, ApiClick, surStateMark, }) => {
+    // console.log('렌더링!!');
     return (
         <>
             <Container component="main" maxWidth="lg" sx={{ mb: 4 }} >
@@ -88,7 +89,7 @@ const MySurvey = ({ mySurList, currentPage, callPaging, ApiClick, surStateMark, 
 
                                                             <Grid item xs={2} md={2} lg={2} justifyContent="center" textAlign="center">
                                                                 <Tooltip title="url 복사">
-                                                                    {ClipboardCopy("icon", `http://web-1537894173.ap-northeast-2.elb.amazonaws.com/SurveySubmitPage/${value._id}`)}
+                                                                    {ClipboardCopy("icon", process.env.REACT_APP_URL+value._id)}
                                                                 </Tooltip>
                                                             </Grid>
 
@@ -115,3 +116,4 @@ const MySurvey = ({ mySurList, currentPage, callPaging, ApiClick, surStateMark, 
 };
 
 export default MySurvey;
+// export default React.memo(MySurvey);

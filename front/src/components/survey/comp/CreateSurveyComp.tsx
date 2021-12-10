@@ -81,13 +81,13 @@ const CreateSurveyComp = () => {
     }
 
     const obj = submitOBJ(e, question_ans, question, day, Sur_Publish, url);
-    const shareURL = "http://web-1537894173.ap-northeast-2.elb.amazonaws.com/SurveySubmitPage/";
 
     console.log("생성 시, 객체 확인합니다.", obj);
     console.log(JSON.stringify(obj));
-
     // 설문지 생성 API
-    debounceCreate(obj, shareURL, history);
+    console.log("process.env.shareURL", process.env.REACT_APP_URL);
+    
+    debounceCreate(obj, process.env.REACT_APP_URL, history);
   };
 
   return (

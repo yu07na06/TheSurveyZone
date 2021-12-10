@@ -51,7 +51,7 @@ const debounceCreate = debounce((obj, shareURL, history)=>{
             confirmButtonText: '확인'
           }).then(async (result) => {
             if (result.isDenied) {
-              await ClipboardCopy("아님~", `http://web-1537894173.ap-northeast-2.elb.amazonaws.com/${res.data}`)
+              await ClipboardCopy("아님~", shareURL+res.data)
               ErrorSweet('success', null, "복사 성공", "참여 설문 URL 복사", 'url창에 붙여넣기 해보세요.')
             }
             history.push('/MySurveyPage'); // test 기간까지 history 사용하지 않겠다.

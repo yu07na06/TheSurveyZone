@@ -5,7 +5,11 @@ import ErrorSweet from '../../common/modules/ErrorSweet';
 import { useHistory } from 'react-router';
 
 const newData = {
-    "partList" : { "M" : 30, "W" : 27 },
+    "partList" : {
+      "남성" : [0,1,2,3,3,4],
+      "여성" : [3,2,1,1,2,1],
+      "total" : [3,3,3,4,5,5]
+      },
     "sur_Title": "프로젝트 진행도 검사",
     "sur_Content": "더 존 채용 연계형 교육\r\n최종 프로젝트 진행 경과 검사 ",
     "sur_State": 1,
@@ -156,27 +160,33 @@ const newData = {
 
 
 const ResultComp = ({surveykey}) => {
-    const [result, setResult]=useState("")
+    const [result, setResult]=useState("");
+    const [chartState, setChartState] = useState();
     const history = useHistory();
     
     useEffect(()=>{
         // 임시로 데이터 주입
-        setResult(newData);
+        // setResult(newData);
 
-        // resultSurveyAPI(surveykey)
-        // .then(res=>{setResult(res.data)})
-        // .catch(err=> console.log(err));
+        resultSurveyAPI(surveykey)
+          .then(res=>{setResult(res.data)})
+          .catch(err=> console.log(err));
         // // .catch(err=> ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null));
     },[])
 
     const wayBackMySurvey = () => {
-        ErrorSweet('success', null, "완료", "내 설문지로 이동합니다.", null)
+      ErrorSweet('success', null, "완료", "내 설문지로 이동합니다.", null)
         .then(() => history.goBack());
     }
 
     return (
         <>
-            <Result result={result} wayBackMySurvey={wayBackMySurvey} />
+            <Result 
+              result={result} 
+              wayBackMySurvey={wayBackMySurvey}
+              chartState={chartState}
+              setChartState={setChartState}
+            />
         </>
     );
 };

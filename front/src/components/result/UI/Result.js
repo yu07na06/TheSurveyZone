@@ -8,8 +8,9 @@ import ResultMultiComp from '../comp/ResultMultiComp';
 import OTL from '../../common/modules/OTL';
 import MyResponsiveBar from '../charts/MyResponsiveBar';
 import MyResponsivePie from '../charts/MyResponsivePie';
+import ToggleBtn from '../ToggleBtn';
 
-const Result = ({ result, wayBackMySurvey,  }) => {
+const Result = ({ result, wayBackMySurvey, chartState, setChartState }) => {
     const defaultImage = "https://surveyzone.s3.ap-northeast-2.amazonaws.com/static/b5e552ea-8d6b-4582-89ae-1d25c25027b8no-image.png";
     
     return (
@@ -23,8 +24,8 @@ const Result = ({ result, wayBackMySurvey,  }) => {
                             <div>
                                 <Paper>
                                 <Container sx={{bgcolor: '#E0ECF8', py:2}}>
-                                <Grid container spacing={1}>
-                                <Grid item xs={12} md={12} lg={8} container spacing={1}>
+                                <Grid container spacing={4}>
+                                <Grid style = {{height : 330}} sx={{py:4}} item xs={12} md={12} lg={9} container spacing={2}>
                                     <Grid item xs={12} md={9} lg={9}>
                                         <TextField
                                             multiline
@@ -99,14 +100,27 @@ const Result = ({ result, wayBackMySurvey,  }) => {
                                     }
 
                                 </Grid>
-                                <Grid item xs={12} md={12} lg={4} container>
-                                    <Paper>
-                                        {result&&console.log("result", result)}
-                                        {result&&console.log("result.partList.W", result.partList.W)}
-                                        <div style={{ height : 300, width: 350 }}>
-                                            {result&&<MyResponsivePie data={[{ 'id':'M', 'value':result.partList.M }, { 'id':'W', 'value':result.partList.W }]} />}
+                                <Grid item xs={12} md={12} lg={3} container>
+                                    {/* <Paper> */}
+                                        <Grid item xs={12} textAlign="right">
+                                            <ToggleBtn fullWidth chartState={chartState} setChartState={setChartState} toggleValue={["성별", "연령별"]}/>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                        <div style={{ height : 230, width: 250 }}>
+                                            {result&&
+                                                ( () => {
+                                                    switch(chartState){
+                                                        case "연령별":
+                                                            return <MyResponsivePie data={result.partList.total.reduce((acc,c,i) => { acc.push({'id':`${i+1}0대`, 'value': c }); return acc; },[]) } />
+                                                        default:
+                                                            return <MyResponsivePie data={[{ 'id':'남성', 'value':result.partList.남성.reduce((a,b)=>a+b) }, { 'id':'여성', 'value':result.partList.여성.reduce((a,b)=>a+b) }]} />
+                                                        }
+                                                    }
+                                                )()
+                                            }
                                         </div>
-                                    </Paper>
+                                        </Grid>
+                                    {/* </Paper> */}
                                 </Grid>
                                 </Grid>
                                 </Container>

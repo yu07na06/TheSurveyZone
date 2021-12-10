@@ -21,7 +21,7 @@ const QrCodeUrl = ({ id }) => {
         const pngUrl = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
         let downloadLink = document.createElement("a");
         downloadLink.href = pngUrl;
-        downloadLink.download = `http://web-1537894173.ap-northeast-2.elb.amazonaws.com/SurveySubmitPage/${id}.png`;
+        downloadLink.download = process.env.REACT_APP_URL+id+'.png';
         document.body.appendChild(downloadLink);
         downloadLink.click();
         document.body.removeChild(downloadLink);
@@ -70,7 +70,7 @@ const QrCodeUrl = ({ id }) => {
                 <MenuItem>
                     <QRCode 
                         id="qr-gen" 
-                        value={`http://web-1537894173.ap-northeast-2.elb.amazonaws.com/SurveySubmitPage/${id}`} 
+                        value={process.env.REACT_APP_URL+id} 
                         size="200"
                         level={"H"}
                         includeMargin={true}

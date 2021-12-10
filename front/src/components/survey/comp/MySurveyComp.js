@@ -1,5 +1,5 @@
 import { Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useHistory } from 'react-router-dom';
 import { deleteSurvey as deleteSurveyAPI, getMySurveyList as getMySurveyListAPI } from '../../../lib/api/survey';
@@ -12,7 +12,11 @@ const MySurveyComp = () => {
   const [mySurList, setMysurList] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const history = useHistory();
-  
+
+  // useEffect(()=>{
+  //   console.log('렌더링!!');
+  // })
+
   useEffect(()=>{
     if(cookies.Authorization==null){
       ErrorSweet('info', null, "권한 없음", "로그인이 필요한 페이지입니다.", null)
@@ -26,6 +30,10 @@ const MySurveyComp = () => {
   useEffect(()=>{
     mySurList&&setCurrentPage(mySurList.paginationInfo.criteria.page_Num);
   },[mySurList]);
+
+  // useMemo(()=>{
+  //   mySurList&&setCurrentPage(mySurList.paginationInfo.criteria.page_Num)
+  // },[mySurList]);
 
   const callPaging = (pageNum) => {
     getMySurveyListAPI(pageNum)

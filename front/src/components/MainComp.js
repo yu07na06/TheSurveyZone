@@ -8,13 +8,17 @@ import { debounceText } from './common/debounceFunction';
 import CommentIcon from '@mui/icons-material/Comment';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import { Button, Grid, TextField, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { Paper } from '@mui/material';
 import { Box } from '@mui/system';
 import Modal from '@mui/material/Modal';
 import ModeEditOutlineTwoToneIcon from '@mui/icons-material/ModeEditOutlineTwoTone';
-import { Gongback } from './common/Function';
+import { commentInsert as commentInsertAPI, commentSelect as commentSelectAPI, commentModify as commentModifyAPI, commentDelete as commentDeleteAPI, } from '../lib/api/survey';
+// import { DataGridPro } from '@mui/x-data-grid-pro';
+// import { useDemoData } from '@mui/x-data-grid-generator';
 
 
 
@@ -95,42 +99,53 @@ const style = {
   };
 
 
-export const Comment = () => {
+export const Comment = ({_id}) => {
+
     const [ commentList, setCommentList ] = useState([]);
     const [ anchorEl, setAnchorEl ] = useState(null);
     const open = Boolean(anchorEl);
 
-    const handleClick = (e) => setAnchorEl(e.currentTarget);
+    const handleClick = (e) =>{
+        setAnchorEl(e.currentTarget);
+        // 댓글 조회 API 요청
+        commentSelectAPI(_id)
+        // .then(res=>{console.log("성공!! : ",res.data)})
+        .then(res=>{setCommentList(res.data)})
+        .catch(err=>console.log("실패 : ",err));
+    } 
     const handleClose = () => setAnchorEl(null);
-
+    
     const addCom = (e) => {
         e.preventDefault();
-        console.log(e.target.com_Nickname.value);
-        console.log(e.target.com_Password.value);
-        console.log(e.target.com_Context.value);
-        setCommentList([...commentList, e.target.com_Context.value ]);
-        
+        const commentObj = {com_Nickname:e.target.com_Nickname.value,
+                            com_Password:e.target.com_Password.value,
+                            com_Context:e.target.com_Context.value };
+            
         const com_Nickname = document.querySelector('#com_Nickname');
         const com_Password = document.querySelector('#com_Password');
         const com_Context = document.querySelector('#com_Context');
-        com_Nickname.value = '';
-        com_Password.value = '';
-        com_Context.value = '';
+            
+        const init=()=>{
+            com_Nickname.value = '';
+            com_Password.value = '';
+            com_Context.value = '';
+        }
 
-        // api 요청할 데이터 form 
-        const commentObj = {com_Nickname, com_Password, com_Context };
-
+        // 댓글 등록 API요청
+        commentInsertAPI(_id,commentObj)
+        .then(()=>{init();commentSelectAPI(_id) // 성공하면 댓글 목록 다시 요청
+             .then(res=>{setCommentList(res.data)})
+             .catch(err=>console.log("실패 : ",err))})
+        .catch(err=>console.log("실패 : ",err));
     }
 
-    const textEdit = (e) => {
-
-    }
-
-
+    useEffect(()=>{
+        console.log("commentList", commentList);
+    },[commentList])
 
     return(
         <>
-            <Tooltip title="QRcode 생성">
+            <Tooltip title="댓글">
                 <IconButton onClick={handleClick} size="small">
                     <CommentIcon color="action" />
                 </IconButton>
@@ -145,25 +160,27 @@ export const Comment = () => {
                 <Box sx={style}>
                     <Paper sx={{ height: 400, width: 400 }} >
                         <Grid container spacing={2}>
-                            {commentList.map((v, i)=>
+                            {commentList&&commentList.map((v, i)=>{
+                                if(v.com_Context==null) return;
+                                return(
                                 <>
+                                    {console.log("무슨값 ?  : ",v)}
                                     <Grid item xs={9}>
-                                        <Typography>{`${v} : ${v}`}</Typography>
+                                        <Typography>{`[${v.com_Nickname}] : ${v.com_Context} - ${v.com_Date}`}</Typography>
                                     </Grid>
                                     <Grid item xs={3}>
-                                        <ModifyComment text={v}/>
-                                        <DelComment id={i}/>
+                                        <ModifyComment _id={_id} data={v}/>
+                                        <DelComment _id={_id} data={v} />
                                     </Grid>
-                                </>
-                            )}
+                                </>)
+                            })}
                         </Grid>
                     </Paper>
-                    <Gongback num={1}/>
 
                     <Box component="form" onSubmit={e=>addCom(e)}>
-                        <TextField id='com_Nickname' label="닉네임" inputProps={{maxLength: 8}} required/>
-                        <TextField id='com_Password' type='password' label="비밀번호" inputProps={{maxLength: 8}} required/><br/>
-                        <TextField id='com_Context' fullWidth label="입력란" inputProps={{maxLength: 30}} required/>
+                        <TextField id='com_Nickname' label="닉네임" inputProps={{maxLength: 8}} required autoComplete="off"/>
+                        <TextField id='com_Password' type='password' label="비밀번호" inputProps={{maxLength: 8}} required autoComplete="off"/><br/>
+                        <TextField id='com_Context' fullWidth label="입력란" inputProps={{maxLength: 30}} required autoComplete="off"/>
                         <Button type="submit">댓글달기</Button>
                     </Box>
                     <Button onClick={handleClose}>닫기</Button>
@@ -176,21 +193,27 @@ export const Comment = () => {
 
 
 
-export const DelComment = ({ id }) => {
+export const DelComment = ({ _id, data, }) => {
     const [ anchorEl, setAnchorEl ] = useState(null);
     const open = Boolean(anchorEl);
 
     const handleClick = (e) => setAnchorEl(e.currentTarget);
     const handleClose = () => setAnchorEl(null);
-
+    console.log("삭제버튼 눌렸따?? : ",data);
     const delCom = (e) => {
         e.preventDefault();
-        console.log(e.target.com_Password.value);
-        const com_Password = document.querySelector('#com_Password');
-        com_Password.value = '';
+        // console.log(e.target.com_Password.value);
         
         // api 요청할 데이터 form 
-        const delCommentObj = { com_Password };
+        const com_Password = document.querySelector('#com_Password');
+
+        const delCommentObj = {com_ID: data.com_ID,
+                               com_Password: e.target.com_Password.value};
+
+        commentDeleteAPI(_id, delCommentObj)
+        .then(res=>console.log("삭제 성공~!!!? : ", res.data))
+        .catch(err=> console.log("삭제 실패 : ",err ));
+        com_Password.value = '';
         handleClose();
     }
 
@@ -217,22 +240,27 @@ export const DelComment = ({ id }) => {
     );
 }
 
-export const ModifyComment = ({ text }) => {
-    const [modiText, setModiText] = useState(text);
+export const ModifyComment = ({ data, _id }) => {
+    const [modiText, setModiText] = useState(data.com_Context);
     const [ anchorEl, setAnchorEl ] = useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (e) => setAnchorEl(e.currentTarget);
     const handleClose = () => setAnchorEl(null);
-
+    console.log("???????????? : ",_id);
     const modiCom = (e) => {
         e.preventDefault();
-        console.log(modiText);
-        
         // api 요청할 데이터 form 
-        const modiCommentObj = { modiText };
-        // handleClose();
-        // 혹시 수정하고 api요청 안하고 닫기 눌렀을 경우를 대비해서 state 초기화
-        setModiText(text)
+        const modiCommentObj = { com_ID: data.com_ID,
+                                 com_Password: e.target.com_Password.value,
+                                 com_Context:modiText};
+        handleClose();
+
+        // 수정 API 요청
+        commentModifyAPI(_id, modiCommentObj)
+            .then(res=>console.log("성공 : ",res))
+            .catch(err=>console.log("실패 : ",err));
+        // 혹시 수정하고 api요청 안하고 닫기 눌렀을 경우를  대비해서 state 초기화
+        setModiText(data.com_Context)
     }
 
     return(
@@ -248,7 +276,7 @@ export const ModifyComment = ({ text }) => {
             >
             
             <Box component="form" onSubmit={e=>modiCom(e)} sx={style}>
-                <TextField id='com_Password' onChange={e=>setModiText(e.target.value)} value={modiText} label="댓글" inputProps={{maxLength: 30}} required/><br/>
+                <TextField onChange={e=>setModiText(e.target.value)} value={modiText} label="댓글" inputProps={{maxLength: 30}} required/><br/>
                 <TextField id='com_Password' type='password' label="비밀번호" inputProps={{maxLength: 8}} required/><br/>
                 <Button onClick={handleClose}>닫기</Button>
                 <Button type="submit">수정</Button>

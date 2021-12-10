@@ -3,7 +3,7 @@ import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import { Grid } from '@mui/material';
 import ToggleBtn from '../ToggleBtn';
-import { ResultChart, Text } from '../comp/ResultMultiComp';
+import { Text } from '../comp/ResultMultiComp';
 import MyResponsivePie from '../charts/MyResponsivePie';
 import MyResponsiveLine from '../charts/MyResponsiveLine';
 import MyResponsiveBar from '../charts/MyResponsiveBar';
@@ -46,7 +46,7 @@ const ResultMulti = ({ index, result, chartState, resultKeys, setChartState }) =
                         </Paper>
                     </Grid>
                     <Grid item xs={12} textAlign="right">
-                        <ToggleBtn fullWidth chartState={chartState} setChartState={setChartState} />
+                        <ToggleBtn fullWidth chartState={chartState} setChartState={setChartState} toggleValue={["Bar", "Doughnut", "Line"]}/>
                     </Grid>
                     <Grid item xs={12}>
                         <Paper elevation={3} sx={{ bgcolor: '#58ACFA', p: { xs: 2 } }}>
@@ -55,14 +55,12 @@ const ResultMulti = ({ index, result, chartState, resultKeys, setChartState }) =
                                     {
                                         (() => {
                                             switch (chartState) {
-                                                case "BarChart":
-                                                    return <MyResponsiveBar data={newData}/>;
-                                                case "DoughnutChart":
+                                                case "Doughnut":
                                                     return <MyResponsivePie data={newData} />;
-                                                case "LineChart":
+                                                case "Line":
                                                     return <MyResponsiveLine data={[{ "id":'결과', "data":newData1}]} />;
-                                                default:
-                                                    break;
+                                                default: // Bar
+                                                    return <MyResponsiveBar data={newData}/>;
                                             }
                                         })()
                                     }

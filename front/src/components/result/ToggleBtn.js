@@ -2,7 +2,7 @@ import * as React from 'react';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
-const ToggleBtn = ({ chartState, setChartState }) => {
+const ToggleBtn = ({ chartState, setChartState, toggleValue }) => {
 
   const handleChange = (event, newAlignment) => {
     console.log("클릭 이벤트 발생!!? : ", event.target.value);
@@ -19,9 +19,7 @@ const ToggleBtn = ({ chartState, setChartState }) => {
         exclusive
         onChange={handleChange}
       >
-        <ToggleButton value="BarChart">Bar</ToggleButton>
-        <ToggleButton value="DoughnutChart">Doughnut</ToggleButton>
-        <ToggleButton value="LineChart">Line</ToggleButton>
+        {toggleValue.map(v=><ToggleButton value={v}>{v}</ToggleButton>)}
       </ToggleButtonGroup >
     </>
   );
