@@ -1,8 +1,7 @@
 package com.mongoosereum.dou_survey_zone.api.v1.controller;
 
 import com.mongoosereum.dou_survey_zone.api.v1.common.S3Uploader;
-import com.mongoosereum.dou_survey_zone.api.v1.exception.BadRequestException;
-import com.mongoosereum.dou_survey_zone.api.v1.exception.ErrorCode;
+import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.InsertCommentReq;
 import com.mongoosereum.dou_survey_zone.api.v1.service.SurveyService;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.InsertAnswerReq;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.InsertSurveyReq;
@@ -18,7 +17,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -101,6 +99,7 @@ public class SurveyController {
                 .body(surveyService.insertSurvey(insertSurveyReq));
     }
 
+    // TODO 일단 보류
     @GetMapping(path = "/survey/{_id}/Check")
     @ApiOperation(value = "설문 참여 체크", notes = "설문 조사 참여할때 중복 참여 체크")
     @ApiResponses({
@@ -114,22 +113,6 @@ public class SurveyController {
     ) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(surveyService.checkPart(_id, request));
-    }
-
-    @GetMapping(path = "/survey/{_id}/ModifyCheck")
-    @ApiOperation(value = "설문 수정 체크", notes = "설문 수정할때 설문 생성자 체크")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "유저 일치시", response = boolean.class),
-            @ApiResponse(code = 404, message = "설문 존재하지 않음" , response = ExceptionModel.class),
-            @ApiResponse(code = 403, message = "설문 생성자가 일치하지 않음" , response = ExceptionModel.class)
-    })
-    public ResponseEntity ModifyCheck(
-            @PathVariable("_id")
-                    String _id,
-            @AuthenticationPrincipal String userEmail
-    ) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(surveyService.checkPart(_id, userEmail));
     }
 
 
@@ -225,5 +208,87 @@ public class SurveyController {
                     String userEmail
     ) {
         return ResponseEntity.status(HttpStatus.OK).body(surveyService.resultSurvey(userEmail,_id));
+    }
+
+    @GetMapping(path = "/survey/{_id}/comment")
+    @ApiOperation(value = "설문 댓글 조회")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "설문 결과", response = SurveyResultRes.class),
+            @ApiResponse(code = 404, message = "해당 설문 없음", response =ExceptionModel.class)
+    })
+    public ResponseEntity surComentList(
+            @PathVariable("_id")
+            @ApiParam(value = "설문조사 PK (영어+숫자 24글자)", required = true, example = "619b39da46f35902f0cc7757")
+                    String _id
+    ) {
+        return ResponseEntity.status(HttpStatus.OK).body("ok");
+    }
+
+    @PostMapping(path = "/survey/{_id}/comment")
+    @ApiOperation(value = "설문 댓글 생성")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "설문 결과", response = SurveyResultRes.class),
+            @ApiResponse(code = 404, message = "해당 설문 없음", response =ExceptionModel.class)
+    })
+    public ResponseEntity surComentCreate(
+            @PathVariable("_id")
+            @ApiParam(value = "설문조사 PK (영어+숫자 24글자)", required = true, example = "619b39da46f35902f0cc7757")
+                    String _id,
+            @RequestBody
+                    InsertCommentReq insertCommentReq
+            ) {
+        surveyService.insertComment(insertCommentReq);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Success");
+    }
+
+    @PutMapping(path = "/survey/{_id}/commentPW")
+    @ApiOperation(value = "설문 댓글 비밀번호 체크")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "설문 결과", response = SurveyResultRes.class),
+            @ApiResponse(code = 404, message = "해당 설문 없음", response =ExceptionModel.class)
+    })
+    public ResponseEntity surComentCheckPW(
+            @PathVariable("_id")
+            @ApiParam(value = "설문조사 PK (영어+숫자 24글자)", required = true, example = "619b39da46f35902f0cc7757")
+                    String _id,
+            @RequestBody
+                    Long com_ID, String com_Password
+    ) {
+        return ResponseEntity.status(HttpStatus.OK).body(surveyService.checkCommentPW(com_ID,com_Password));
+    }
+
+
+    @PutMapping(path = "/survey/{_id}/comment")
+    @ApiOperation(value = "설문 댓글 수정")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "설문 결과", response = SurveyResultRes.class),
+            @ApiResponse(code = 404, message = "해당 설문 없음", response =ExceptionModel.class)
+    })
+    public ResponseEntity surComentModify(
+            @PathVariable("_id")
+            @ApiParam(value = "설문조사 PK (영어+숫자 24글자)", required = true, example = "619b39da46f35902f0cc7757")
+                    String _id,
+            @RequestBody
+                    Long com_ID, String com_Context
+            ) {
+        surveyService.updateComment(com_ID,com_Context);
+        return ResponseEntity.status(HttpStatus.OK).body("Success");
+    }
+
+    @DeleteMapping(path = "/survey/{_id}/comment")
+    @ApiOperation(value = "설문 댓글 삭제")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "설문 결과", response = SurveyResultRes.class),
+            @ApiResponse(code = 404, message = "해당 설문 없음", response =ExceptionModel.class)
+    })
+    public ResponseEntity surComentDelete(
+            @PathVariable("_id")
+            @ApiParam(value = "설문조사 PK (영어+숫자 24글자)", required = true, example = "619b39da46f35902f0cc7757")
+                    String _id,
+            @RequestBody
+                    Long com_ID, String com_Password
+            ) {
+        surveyService.deleteComment(com_ID,com_Password);
+        return ResponseEntity.status(HttpStatus.OK).body("Success");
     }
 }

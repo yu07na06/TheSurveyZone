@@ -1,10 +1,8 @@
 package com.mongoosereum.dou_survey_zone.api.v1.service;
 
 import com.mongoosereum.dou_survey_zone.api.v1.common.S3Uploader;
-import com.mongoosereum.dou_survey_zone.api.v1.dao.ParticipationDAOImpl;
-import com.mongoosereum.dou_survey_zone.api.v1.dao.SurveyDAO;
-import com.mongoosereum.dou_survey_zone.api.v1.dao.TagDAO;
-import com.mongoosereum.dou_survey_zone.api.v1.dao.UserDAO;
+import com.mongoosereum.dou_survey_zone.api.v1.dao.*;
+import com.mongoosereum.dou_survey_zone.api.v1.domain.comment.Comment;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.participation.Participation;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.Question;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.Survey_Mongo;
@@ -12,18 +10,17 @@ import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.Survey_MySQL;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.tag.SurveyTag;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.user.User;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.InsertAnswerReq;
+import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.InsertCommentReq;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.InsertSurveyReq;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.*;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.SurveyListPageReq;
 import com.mongoosereum.dou_survey_zone.api.v1.common.paging.PageCriteria;
 import com.mongoosereum.dou_survey_zone.api.v1.common.paging.PaginationInfo;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.tag.Tag;
-import com.mongoosereum.dou_survey_zone.api.v1.exception.BadRequestException;
-import com.mongoosereum.dou_survey_zone.api.v1.exception.ForbiddenException;
-import com.mongoosereum.dou_survey_zone.api.v1.exception.NotFoundException;
-import com.mongoosereum.dou_survey_zone.api.v1.exception.ErrorCode;
+import com.mongoosereum.dou_survey_zone.api.v1.exception.*;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,11 +41,16 @@ public class SurveyService {
     private final TagDAO tagDAO;
 
     @Autowired
-    private final ParticipationDAOImpl participationDAO;
+    private final ParticipationDAO participationDAO;
+
+     @Autowired
+     private final CommentDAO commentDAO;
+
+     @Autowired
+     private final PasswordEncoder passwordEncoder;
 
 
     public SurveyListPageRes selectSurveyList(SurveyListPageReq surveylistDTO) {
-        //criteria insert
         PageCriteria criteria = new PageCriteria();
         criteria.setPage_Num(surveylistDTO.getPage_Num());
         criteria.setSearch_Key(surveylistDTO.getSearch_Key());
@@ -104,7 +106,6 @@ public class SurveyService {
                         .questionList(insertSurveyDTO.getQuestionList())
                         .build());
 
-
         // MySQL insert by MongoDB.id
         Survey_MySQL survey_MySQL = Survey_MySQL.builder()
                 ._id(survey_mongo.get_id())
@@ -157,15 +158,6 @@ public class SurveyService {
                 .check_State(survey_mySQL.getSur_State())
                 .check_IP(participationDAO.findByIP(_id, ip) < 1)
                 .build();
-    }
-
-    public Boolean checkPart(String _id,String userEmail) {
-        if (!userEmail.equals(surveyDAO.selectOwner(_id)
-                .orElseThrow(() ->
-                        new NotFoundException(ErrorCode.NOT_FOUND_SURVEY))
-        ))
-        {    throw new ForbiddenException(ErrorCode.NOT_OWNER_SURVEY); }
-        return true;
     }
 
     public SelectSurveyRes findById(String _id) {
@@ -255,8 +247,7 @@ public class SurveyService {
     public SurveyResultRes resultSurvey(String User_Email, String _id) {
         if(!User_Email.equals(surveyDAO.selectOwner(_id)
                 .orElseThrow(() ->
-                                new NotFoundException(ErrorCode.NOT_FOUND_SURVEY))
-        ) )
+                        new NotFoundException(ErrorCode.NOT_FOUND_SURVEY)) ) )
             throw new ForbiddenException(ErrorCode.NOT_OWNER_SURVEY);
 
         Survey_Mongo survey_mongo = surveyDAO.findById_Mongo(_id)
@@ -265,9 +256,17 @@ public class SurveyService {
         Survey_MySQL survey_mySQL = surveyDAO.findById_MySQL(_id)
                 .orElseThrow(()->new NotFoundException(ErrorCode.NOT_FOUND_SURVEY));
 
+        List<Participation> part_mySQL= participationDAO.resultPart(_id);
+
         List<Question> questionList = survey_mongo.getQuestionList();
         SurveyResultRes surveyResultDTO = new SurveyResultRes();
+        surveyResultDTO.setPartList(part_mySQL);
 
+        boolean [] isMulti = new boolean[questionList.size()];
+        for(int i=0;i<questionList.size();i++){
+            if(questionList.get(i).getSurQue_QType()==1)
+                isMulti[i] = true;
+        }
         surveyResultDTO.setSurvey(survey_mySQL);
 
         for (int i = 0; i < questionList.size(); i++) {
@@ -277,7 +276,7 @@ public class SurveyService {
             // TODO 정환. 유저 정보를 담게 변경되는 경우 아래 코드 추가해야함
             // surveyResultDTO.getUserList().add(questionList.get(i).getUserInfo());
 
-            List<Object> ansList = new ArrayList<>(); // 제출한 응답을 담을 ArrayList
+            List<String []> ansList = new ArrayList<>(); // 제출한 응답을 담을 ArrayList
             //객관식 유형
             switch (nowQuestion.getSurQue_QType()) {
                 /*case QuestionType.ESSAY: 주관식 */
@@ -285,7 +284,7 @@ public class SurveyService {
                     surveyResultDTO.getSelectList().add(null); // Select가 없으므로 null
                     for (int j = 0; j < nowQuestion.getAnswerList().size(); j++) {
                         String ans = nowQuestion.getAnswerList().get(j).getSurAns_Content();
-                        ansList.add(ans);
+                        ansList.add(new String []{ans});
                     }
                     surveyResultDTO.getResultMap().add(null); // Select가 없으므로 resultMap도 null
                     break;
@@ -299,7 +298,7 @@ public class SurveyService {
                     for (int j = 0; j < nowQuestion.getAnswerList().size(); j++) {
                         String ans[] = nowQuestion.getAnswerList().get(j).getSurAns_Content().split("Θ");
                         if (ans.length == 1) { // 중복응답이 아닌경우
-                            ansList.add(ans[0]); // 제출한 응답 리스트에 추가
+                            ansList.add(ans); // 제출한 응답 리스트에 추가
                             if (resultMap.containsKey(ans[0])) // Map에 답변이 존재
                                 resultMap.put(ans[0], resultMap.get(ans[0]) + 1);
                         } else { // 중복응답인 경우
@@ -323,19 +322,67 @@ public class SurveyService {
                         resultMap.put(String.valueOf(j), 0L);
 
                     surveyResultDTO.getSelectList().add(nowQuestion.getSelectList()); // DTO에 selectList추가
+                    String[] strArr = new String[nowQuestion.getAnswerList().size()];
                     for (int j = 0; j < nowQuestion.getAnswerList().size(); j++) {
-                        String ans = nowQuestion.getAnswerList().get(j).getSurAns_Content();
-                        ansList.add(ans); // 제출한 응답 리스트에 추가
-                        if (resultMap.containsKey(ans)) // Map에 답변이 존재
-                            resultMap.put(ans, resultMap.get(ans) + 1);
+                        strArr[j] = nowQuestion.getAnswerList().get(j).getSurAns_Content();
+                        if (resultMap.containsKey(strArr[j])) // Map에 답변이 존재
+                            resultMap.put(strArr[j], resultMap.get(strArr[j]) + 1);
                     }
+                    ansList.add(strArr); // 제출한 응답 리스트에 추가
                     surveyResultDTO.getResultMap().add(resultMap);
                     break;
                 }
             }
             surveyResultDTO.getAnswerList().add(ansList); // 이번 질문에 대한 모든 ansList를 추가
         }
+
+        List< LinkedHashMap<String,List<Integer> > > selectResultMap = new ArrayList<>();
+        for(int i=0;i<surveyResultDTO.getSelectList().size();i++){
+            if(surveyResultDTO.getSelectList().get(i) == null){
+                selectResultMap.add(null);
+            }
+            else{
+                selectResultMap.add( new LinkedHashMap <String,List<Integer> >());
+                for(int j=0;j<surveyResultDTO.getSelectList().get(i).size();j++){
+                    if(surveyResultDTO.getSelectList().get(i).get(j).equals(""))
+                        continue;
+                    List<Integer> list = new ArrayList<Integer>();
+                    for(int k=0;k<12;k++)
+                        list.add(0);
+                    selectResultMap.get(i).put(
+                                surveyResultDTO.getSelectList().get(i).get(j)
+                                        .getSurSel_Content(), list);
+                }
+            }
+        }
+
+        for(int i=0;i<surveyResultDTO.getAnswerList().size();i++){
+            if(selectResultMap.get(i) == null || !isMulti[i]) {
+                selectResultMap.set(i,null);
+                continue;
+            }
+            for(int j=0; j<surveyResultDTO.getAnswerList().get(i).size();j++){
+                for(int k=0;k< surveyResultDTO.getAnswerList().get(i).get(j).length;k++){
+                    if(surveyResultDTO.getAnswerList().get(i).get(j)[k].equals(""))
+                        continue;
+                    System.out.println("selectResultMap" + selectResultMap.get(i).keySet());
+                    System.out.println("answerList Key : "+surveyResultDTO.getAnswerList().get(i).get(j)[k]);
+                    System.out.println(selectResultMap.get(i).get(surveyResultDTO.getAnswerList().get(i).get(j)[k]));
+                    List<Integer> arrayList = selectResultMap.get(i).get(surveyResultDTO.getAnswerList().get(i).get(j)[k]);
+                    int idx = getIndex(part_mySQL.get(k).getPart_Gender(),part_mySQL.get(k).getPart_Age());
+                    arrayList.set(idx,arrayList.get(idx)+1);
+                    selectResultMap.get(i).put(surveyResultDTO.getAnswerList().get(i).get(j)[k], arrayList);
+                }
+            }
+        }
+        surveyResultDTO.setSelectResultMap(selectResultMap);
         return surveyResultDTO;
+    }
+    public int getIndex(char gender, int age){
+        int temp = age/10 - 1;
+        if(gender == 'W')
+            temp++;
+        return temp;
     }
     public String getIP(HttpServletRequest request){
         String ip = null;
@@ -352,5 +399,73 @@ public class SurveyService {
                 return ip;
         }
         return request.getRemoteAddr();
+    }
+
+    public List<CommentListRes> getCommentList (String _id) {
+
+        List<Comment> result = commentDAO.commentlist(_id);
+
+        System.out.println(result);
+
+        return null;
+    }
+
+    public void insertComment (InsertCommentReq insertCommentReq) {
+        Comment comment = Comment.builder()
+                .Com_ID(insertCommentReq.getCom_ID())
+                ._id(insertCommentReq.get_id())
+                .Com_Nickname(insertCommentReq.getCom_Nickname())
+                .Com_Password( passwordEncoder.encode(insertCommentReq.getCom_Password()))
+                .Com_Context(insertCommentReq.getCom_Context())
+                .build();
+        commentDAO.insertComment(comment);
+    }
+
+    public Boolean checkCommentPW (Long com_ID, String com_Password) {
+
+        Comment comment = Comment.builder()
+                .Com_ID(com_ID)
+                .Com_Password(com_Password)
+                .build();
+
+        String result = commentDAO.checkCommentPW(comment);
+
+        if(passwordEncoder.matches(com_Password, result))
+        {
+            System.out.println("합격");
+//          return commentDAO.selectComment(Comment)
+            return true;
+        }
+
+        throw new UnauthorizedException(ErrorCode.UNAUTHORIZED_ACCESS);
+    }
+
+    public void updateComment(Long com_ID ,String context){
+
+        Comment comment = Comment.builder()
+                .Com_ID(com_ID)
+                .Com_Password(context)
+                .build();
+
+        commentDAO.updateComment(comment);
+
+    }
+
+    public void deleteComment(Long com_ID, String com_Password) {
+
+        Comment comment = Comment.builder()
+                .Com_ID(com_ID)
+                .Com_Password(com_Password)
+                .build();
+
+        String result = commentDAO.checkCommentPW(comment);
+
+        if(passwordEncoder.matches(com_Password, result))
+        {
+            System.out.println("합격");
+            commentDAO.deleteComment(comment);
+        }
+
+        throw new UnauthorizedException(ErrorCode.UNAUTHORIZED_ACCESS);
     }
 }

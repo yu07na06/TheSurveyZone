@@ -20,7 +20,7 @@ public class MailService {
 
     private JavaMailSender javaMailSender;
 
-    final String mainPageLink = "http://220.119.14.242:3000/";
+    final String mainPageLink = "http://web-1537894173.ap-northeast-2.elb.amazonaws.com";
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -66,7 +66,11 @@ public class MailService {
         context.setVariable("userName",User_Name);
         context.setVariable("mainLink", mainPageLink);
         context.setVariable("tempPW", tempPW);
-        context.setVariable("linkToLogin",mainPageLink + "LoginPage");
+        context.setVariable("linkToLogin",mainPageLink + "/" +
+                "" +
+                "" +
+                "" +
+                "LoginPage");
         String html = templateEngine.process("resetPW",context);
 
         mailSend(User_Email,subject,html);

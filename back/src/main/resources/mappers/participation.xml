@@ -34,5 +34,10 @@
         from survey.participation where Part_Gender = "W";
     </select>
 
+    <select id="ResultPart" parameterType="String" resultType="Participation">
+        SELECT *
+        FROM survey.participation
+        where _id = #{_id} order by Part_id;
+    </select>
 </mapper>
 
