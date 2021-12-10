@@ -15,7 +15,6 @@ const ResultLinear = ({ value, index, result, makeCircle , chartState, setChartS
     for (const key in newValue) {
         newData.push({ "id":newKey[key], "value":newValue[key]});
     }
-    console.log("newData!!!!", newData);
 
     const newKey1 = Object.keys(result.resultMap[index]);
     const newValue1 = Object.values(result.resultMap[index]);
@@ -23,7 +22,6 @@ const ResultLinear = ({ value, index, result, makeCircle , chartState, setChartS
     for (const key in newValue1) {
         newData1.push({ "x":newKey1[key], "y":newValue1[key]});
     }
-    console.log("newData1!!!!", newData1);
     return ( 
         <>
             <Paper elevation={3} sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 }, backgroundColor:'#E0ECF8' }}>

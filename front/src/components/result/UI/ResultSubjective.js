@@ -4,7 +4,6 @@ import Grid from '@material-ui/core/Grid';
 import { TextField } from '@mui/material';
 
 const ResultSubjective = ({result, index}) =>{
-    console.log("result", result);
     return(
         <>  
             <Paper elevation={2}  sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 }, backgroundColor:'#E0ECF8' }}>
@@ -16,7 +15,7 @@ const ResultSubjective = ({result, index}) =>{
                             </Paper>
                         </Grid>
                     <Grid item xs={11}>
-                        <div style={{maxHeight: 350, overflow: 'auto'}} >
+                        <div style={{maxHeight: 300, overflow: 'auto'}} >
                             {result&&result.answerList[index].map((answer, index)=>{
                                 if(answer==='') return false;
                                 return <TextField fullWidth label={`답변 리스트 ${index+1}`} value={`${answer}`} variant="standard"  focused va InputProps={{ readOnly: true}} />

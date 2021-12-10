@@ -35,12 +35,14 @@ const ResultMulti = ({ index, result, chartState, resultKeys, setChartState }) =
                     </Grid>
                     <Grid item xs={12} md={6} lg={6}>
                         <Paper elevation={3} sx={{ bgcolor: '#A9D0F5', my: { xs: 1 }, p: { xs: 2 } }}>
-                            <Text result={result.resultMap} index={index} flag={"보기"} resultKeys={resultKeys} />
+                            <Text result={result} index={index} flag={"보기"} resultKeys={resultKeys} />
+                            {/* <Text result={result.resultMap} index={index} flag={"보기"} resultKeys={resultKeys} /> */}
                         </Paper>
                     </Grid>
                     <Grid item xs={12} md={6} lg={6}>
                         <Paper elevation={3} sx={{ bgcolor: '#81BEF7', my: { xs: 1 }, p: { xs: 2 } }}>
-                            <Text result={result.resultMap} index={index} flag={"결과"} resultKeys={resultKeys} />
+                            <Text result={result} index={index} flag={"결과"} resultKeys={resultKeys} />
+                            {/* <Text result={result.resultMap} index={index} flag={"결과"} resultKeys={resultKeys} /> */}
                         </Paper>
                     </Grid>
                     <Grid item xs={12} textAlign="right">
@@ -49,7 +51,7 @@ const ResultMulti = ({ index, result, chartState, resultKeys, setChartState }) =
                     <Grid item xs={12}>
                         <Paper elevation={3} sx={{ bgcolor: '#58ACFA', p: { xs: 2 } }}>
                             <Paper elevation={1}>
-                                <div style={{ height: 350 }}>
+                                <div style={{ height: 300 }}>
                                     {
                                         (() => {
                                             switch (chartState) {
