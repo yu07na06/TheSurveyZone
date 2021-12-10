@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Input } from '@mui/material';
 import ErrorSweet from '../common/modules/ErrorSweet';
+import { getImgURL as getImgURLAPI } from '../../lib/api/survey';
 
 // 함수의 매개변수로 들어온 값을 클립보드에 저장해주는 함수입니다.
 const ClipboardCopy = (flag, copyText) => { 
@@ -36,40 +37,32 @@ const ClipboardCopy = (flag, copyText) => {
 
 // 파일 이미지 업로드 함수
 export const Img = ({ setUrl, imageSRC, showBtn }) => {
-    const [selectedFile, setSelectedFile] = useState(null);
-    const [, setFileURL] = useState(null);
+    const [ selectedFile, setSelectedFile ] = useState(null);
   
     // onChange역할 
     const handleFileChange = (e) => {
-      setSelectedFile(e.target.files[0]);
-  
       // 업로드한 이미지 미리보기
       const reader = new FileReader();
       reader.onload = (e) => {
         const previewImage = document.getElementById('img_box');
         previewImage.src = e.target.result;
       };
-  
+      
+      if(e.target.files[0]==undefined || e.target.files[0]==null) 
+        return;
+      setSelectedFile(e.target.files[0]);
       reader.readAsDataURL(e.target.files[0]);
-  
-      console.log("reader", reader);
-      setFileURL(reader.result)
-  
-      // handleFileUpload(e);
     };
-  
-    // formData라는 instance에 담아 보냄
-  
+    
+    // 파일 선택 시, S3로부터 이미지 URL 받아오기
     useEffect(() => {
       if (selectedFile) {
         const formData = new FormData();
         formData.append("img", selectedFile);
-        console.log("selectedFile", selectedFile);
-  
-        axios.post(`/api/v1/image`, formData)
-          .then(res => { setUrl(res.data) })
-          .catch(err => { console.log(err); });
-        console.log("업로드도 되었지롱");
+        
+        getImgURLAPI(formData)
+          .then(res => setUrl(res.data))
+          .catch(err => ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null)); //// @@@ ### @@@### ErrorSweet 안되는 부분 안됨. 에러 안됨. 에러 안되는거. 정환님께 말해야하는거
       }
     }, [selectedFile])
   
