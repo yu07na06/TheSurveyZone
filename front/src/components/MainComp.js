@@ -8,12 +8,14 @@ import { debounceText } from './common/debounceFunction';
 import CommentIcon from '@mui/icons-material/Comment';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import { Button, Grid, TextField, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { Paper } from '@mui/material';
 import { Box } from '@mui/system';
+import Modal from '@mui/material/Modal';
+import ModeEditOutlineTwoToneIcon from '@mui/icons-material/ModeEditOutlineTwoTone';
+import { Gongback } from './common/Function';
+
 
 
 const MainComp = ({ match }) => {
@@ -80,6 +82,19 @@ const MainComp = ({ match }) => {
 export default MainComp;
 
 
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
+
+
 export const Comment = () => {
     const [ commentList, setCommentList ] = useState([]);
     const [ anchorEl, setAnchorEl ] = useState(null);
@@ -90,21 +105,28 @@ export const Comment = () => {
 
     const addCom = (e) => {
         e.preventDefault();
-        console.log(e.target.nickName.value);
-        console.log(e.target.password.value);
-        console.log(e.target.inputText.value);
-        setCommentList([...commentList, e.target.inputText.value ]);
+        console.log(e.target.com_Nickname.value);
+        console.log(e.target.com_Password.value);
+        console.log(e.target.com_Context.value);
+        setCommentList([...commentList, e.target.com_Context.value ]);
         
-        const nickName = document.querySelector('#nickName');
-        const password = document.querySelector('#password');
-        const inputText = document.querySelector('#inputText');
-        nickName.value = '';
-        password.value = '';
-        inputText.value = '';
+        const com_Nickname = document.querySelector('#com_Nickname');
+        const com_Password = document.querySelector('#com_Password');
+        const com_Context = document.querySelector('#com_Context');
+        com_Nickname.value = '';
+        com_Password.value = '';
+        com_Context.value = '';
 
         // api 요청할 데이터 form 
-        const commentObj = { nickName, password, inputText };
+        const commentObj = {com_Nickname, com_Password, com_Context };
+
     }
+
+    const textEdit = (e) => {
+
+    }
+
+
 
     return(
         <>
@@ -113,68 +135,46 @@ export const Comment = () => {
                     <CommentIcon color="action" />
                 </IconButton>
             </Tooltip>
-            <Menu
-                anchorEl={anchorEl}
+
+            <Modal
                 open={open}
-                PaperProps={{
-                        elevation: 0,
-                        sx: {
-                            overflow: 'visible',
-                            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                            mt: 1.5,
-                            '& .MuiAvatar-root': {
-                            width: 32,
-                            height: 32,
-                            ml: -0.5,
-                            mr: 1,
-                            },
-                            '&:before': {
-                            content: '""',
-                            display: 'block',
-                            position: 'absolute',
-                            top: 0,
-                            right: 14,
-                            width: 10,
-                            height: 10,
-                            bgcolor: 'background.paper',
-                            transform: 'translateY(-50%) rotate(45deg)',
-                            zIndex: 0,
-                            },
-                        },
-                    }}
-                transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
             >
-                <MenuItem>
-                    <Paper rows={2} rowsmax={8}>
-                    {/* <Paper sx={{ bgcolor: '#F2EFFB', my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}> */}
+                <Box sx={style}>
+                    <Paper sx={{ height: 400, width: 400 }} >
                         <Grid container spacing={2}>
                             {commentList.map((v, i)=>
                                 <>
-                                    <Grid item xs={10}>
-                                        <Typography>{v}</Typography>
+                                    <Grid item xs={9}>
+                                        <Typography>{`${v} : ${v}`}</Typography>
                                     </Grid>
-                                    <Grid item xs={2}>
+                                    <Grid item xs={3}>
+                                        <ModifyComment text={v}/>
                                         <DelComment id={i}/>
                                     </Grid>
                                 </>
                             )}
                         </Grid>
                     </Paper>
-                </MenuItem>
-                <MenuItem>
+                    <Gongback num={1}/>
+
                     <Box component="form" onSubmit={e=>addCom(e)}>
-                        <TextField id='nickName' label="닉네임" inputProps={{maxLength: 8}} required/>
-                        <TextField id='password' type='password' label="비밀번호" inputProps={{maxLength: 8}} required/><br/>
-                        <TextField id='inputText' fullWidth label="입력란" inputProps={{maxLength: 30}} required/>
+                        <TextField id='com_Nickname' label="닉네임" inputProps={{maxLength: 8}} required/>
+                        <TextField id='com_Password' type='password' label="비밀번호" inputProps={{maxLength: 8}} required/><br/>
+                        <TextField id='com_Context' fullWidth label="입력란" inputProps={{maxLength: 30}} required/>
                         <Button type="submit">댓글달기</Button>
                     </Box>
-                </MenuItem>
-                <Button onClick={handleClose}>닫기</Button>
-            </Menu>
+                    <Button onClick={handleClose}>닫기</Button>
+                </Box>
+            </Modal>
         </>
     );
 }
+
+
+
 
 export const DelComment = ({ id }) => {
     const [ anchorEl, setAnchorEl ] = useState(null);
@@ -185,15 +185,12 @@ export const DelComment = ({ id }) => {
 
     const delCom = (e) => {
         e.preventDefault();
-        console.log(e.target.nickName.value);
-        console.log(e.target.password.value);
-        const nickName = document.querySelector('#nickName');
-        const password = document.querySelector('#password');
-        nickName.value = '';
-        password.value = '';
+        console.log(e.target.com_Password.value);
+        const com_Password = document.querySelector('#com_Password');
+        com_Password.value = '';
         
         // api 요청할 데이터 form 
-        const delCommentObj = { nickName, password };
+        const delCommentObj = { com_Password };
         handleClose();
     }
 
@@ -202,99 +199,65 @@ export const DelComment = ({ id }) => {
             <IconButton onClick={handleClick} size="small">
                 <CloseIcon />
             </IconButton>
-            <Menu
-                anchorEl={anchorEl}
+            <Modal
                 open={open}
-                PaperProps={{
-                        elevation: 0,
-                        sx: {
-                            overflow: 'visible',
-                            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                            mt: 1.5,
-                            '& .MuiAvatar-root': {
-                            width: 32,
-                            height: 32,
-                            ml: -0.5,
-                            mr: 1,
-                            },
-                            '&:before': {
-                            content: '""',
-                            display: 'block',
-                            position: 'absolute',
-                            top: 0,
-                            right: 14,
-                            width: 10,
-                            height: 10,
-                            bgcolor: 'background.paper',
-                            transform: 'translateY(-50%) rotate(45deg)',
-                            zIndex: 0,
-                            },
-                        },
-                    }}
-                transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
             >
-                <MenuItem>
-                    <Box component="form" onSubmit={e=>delCom(e)}>
-                        <TextField id='nickName' label="닉네임" inputProps={{maxLength: 8}} required/>
-                        <TextField id='password' type='password' label="비밀번호" inputProps={{maxLength: 8}} required/><br/>
-                        <Button onClick={handleClose}>닫기</Button>
-                        <Button type="submit">삭제</Button>
-                    </Box>
-                </MenuItem>
-            </Menu>
+            
+            <Box component="form" onSubmit={e=>delCom(e)} sx={style}>
+                <TextField id='com_Password' type='password' label="비밀번호" inputProps={{maxLength: 8}} required/><br/>
+                <Button onClick={handleClose}>닫기</Button>
+                <Button type="submit">삭제</Button>
+            </Box>
+
+            </Modal>
         </>
     );
 }
 
-// const Click = () => {
-//     const [ anchorEl, setAnchorEl ] = useState(null);
-//     const open = Boolean(anchorEl);
+export const ModifyComment = ({ text }) => {
+    const [modiText, setModiText] = useState(text);
+    const [ anchorEl, setAnchorEl ] = useState(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (e) => setAnchorEl(e.currentTarget);
+    const handleClose = () => setAnchorEl(null);
 
-//     const handleClick = (e) => setAnchorEl(e.currentTarget);
-//     const handleClose = () => setAnchorEl(null);
-//     return (
-//         <>
-//         <Menu
-//                     anchorEl={anchorEl}
-//                     open={open}
-//                     PaperProps={{
-//                             elevation: 0,
-//                             sx: {
-//                                 overflow: 'visible',
-//                                 filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-//                                 mt: 1.5,
-//                                 '& .MuiAvatar-root': {
-//                                 width: 32,
-//                                 height: 32,
-//                                 ml: -0.5,
-//                                 mr: 1,
-//                                 },
-//                                 '&:before': {
-//                                 content: '""',
-//                                 display: 'block',
-//                                 position: 'absolute',
-//                                 top: 0,
-//                                 right: 14,
-//                                 width: 10,
-//                                 height: 10,
-//                                 bgcolor: 'background.paper',
-//                                 transform: 'translateY(-50%) rotate(45deg)',
-//                                 zIndex: 0,
-//                                 },
-//                             },
-//                         }}
-//                     transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-//                     anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-//                 >
-//                 </Menu>
-//                 <MenuItem>
-//                         hi
-//                 </MenuItem>
-//             </>
-//     );
-// }
+    const modiCom = (e) => {
+        e.preventDefault();
+        console.log(modiText);
+        
+        // api 요청할 데이터 form 
+        const modiCommentObj = { modiText };
+        // handleClose();
+        // 혹시 수정하고 api요청 안하고 닫기 눌렀을 경우를 대비해서 state 초기화
+        setModiText(text)
+    }
 
+    return(
+        <>
+            <IconButton onClick={handleClick} size="small">
+                <ModeEditOutlineTwoToneIcon />
+            </IconButton>
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+            
+            <Box component="form" onSubmit={e=>modiCom(e)} sx={style}>
+                <TextField id='com_Password' onChange={e=>setModiText(e.target.value)} value={modiText} label="댓글" inputProps={{maxLength: 30}} required/><br/>
+                <TextField id='com_Password' type='password' label="비밀번호" inputProps={{maxLength: 8}} required/><br/>
+                <Button onClick={handleClose}>닫기</Button>
+                <Button type="submit">수정</Button>
+            </Box>
+
+            </Modal>
+        </>
+    );
+}
 
 
 

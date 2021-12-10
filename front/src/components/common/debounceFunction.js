@@ -31,7 +31,6 @@ export const debounceCheck = debounce((e, registerData, history,setEmailText) =>
 
 // 메인페이지에서 리스트 조회시 enterKey 남발 및 광클에 의한 과도한 api요청을 막기위함
 export const debounceText = debounce((pageNum, tagSearch, searchText, setReqMain, dispatch)=>{
-    console.log("혹쉬~~ 여기오나~~");
     dispatch(chartData());
     mainListAPI(pageNum, tagSearch, searchText)
     .then(res => setReqMain(res.data))

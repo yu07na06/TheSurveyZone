@@ -114,7 +114,7 @@ const MultipleChoiceComp = ({ ReadOnlyState, ReadOnlyData, UpdateKey, realReadSt
                             }
                         />
                     }
-                    {UpdateKey&&
+                    {(!ReadOnlyState||UpdateKey)&&
                         <TextField
                             onChange={e => ReadOnlyState&&setUpdateDataAddText(e.target.value)}
                             variant="standard"

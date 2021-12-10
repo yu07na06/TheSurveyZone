@@ -18,7 +18,6 @@ const MyCalendar = ({data}) => {
             start: e.sur_StartDate,
             end : e.sur_EndDate 
         }
-         console.log(event);
          eventList.push(event);
     })
 

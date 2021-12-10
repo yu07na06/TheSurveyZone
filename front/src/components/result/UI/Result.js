@@ -6,12 +6,15 @@ import ResultSubjective from './ResultSubjective';
 import { TextField, Grid, Button } from '@mui/material';
 import ResultMultiComp from '../comp/ResultMultiComp';
 import OTL from '../../common/modules/OTL';
+import MyResponsiveBar from '../charts/MyResponsiveBar';
+import MyResponsivePie from '../charts/MyResponsivePie';
 
 const Result = ({ result, wayBackMySurvey,  }) => {
     const defaultImage = "https://surveyzone.s3.ap-northeast-2.amazonaws.com/static/b5e552ea-8d6b-4582-89ae-1d25c25027b8no-image.png";
+    
     return (
         <>
-            <Container component="main" maxWidth="md" sx={{ mb: 4 }} >
+            <Container component="main" maxWidth="lg" sx={{ mb: 4 }} >
                 <Paper elevation={3} sx={{ bgcolor: '#EFF2FB', my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
                     {
                         result.answerList && (result.answerList[0].length === 0) ?
@@ -21,6 +24,7 @@ const Result = ({ result, wayBackMySurvey,  }) => {
                                 <Paper>
                                 <Container sx={{bgcolor: '#E0ECF8', py:2}}>
                                 <Grid container spacing={1}>
+                                <Grid item xs={12} md={12} lg={8} container spacing={1}>
                                     <Grid item xs={12} md={9} lg={9}>
                                         <TextField
                                             multiline
@@ -80,7 +84,7 @@ const Result = ({ result, wayBackMySurvey,  }) => {
                                             sx={{ my: 1 }}
                                             variant="outlined"
                                             multiline
-                                            rows={4}
+                                            rows={2}
                                             rowsmax={8}
                                             name="Sur_Content"
                                             id="Sur_Content"
@@ -94,6 +98,16 @@ const Result = ({ result, wayBackMySurvey,  }) => {
                                         </Grid>
                                     }
 
+                                </Grid>
+                                <Grid item xs={12} md={12} lg={4} container>
+                                    <Paper>
+                                        {result&&console.log("result", result)}
+                                        {result&&console.log("result.partList.W", result.partList.W)}
+                                        <div style={{ height : 300, width: 350 }}>
+                                            {result&&<MyResponsivePie data={[{ 'id':'M', 'value':result.partList.M }, { 'id':'W', 'value':result.partList.W }]} />}
+                                        </div>
+                                    </Paper>
+                                </Grid>
                                 </Grid>
                                 </Container>
                                 </Paper>

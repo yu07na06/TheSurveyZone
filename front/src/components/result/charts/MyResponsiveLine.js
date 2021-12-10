@@ -13,7 +13,7 @@ const MyResponsiveLine = ({ data /* see data tab */ }) => (
         data={data}
         margin={{ top: 30, right: 40, bottom: 30, left: 60 }}
         xScale={{ type: 'point' }}
-        yScale={{ type: 'linear', min: 'auto', max: 'auto', stacked: true, reverse: false }}
+        yScale={{ type: 'linear', min: 'auto', max: 'auto', stacked: false, reverse: false }}
         yFormat=" >-.2f"
         curve="catmullRom"
         axisTop={null}
