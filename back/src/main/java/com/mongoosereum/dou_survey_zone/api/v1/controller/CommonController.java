@@ -34,7 +34,7 @@ public class CommonController {
     })
     public ResponseEntity mainTest() {
         MainInfoRes mainInfo = partService.resultMainInfo();
-        if(mainInfo == null)
+        if (mainInfo == null)
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Server Fail");
         return ResponseEntity.ok().body(partService.resultMainInfo());
     }
