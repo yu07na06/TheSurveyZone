@@ -9,11 +9,8 @@ import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.Survey_Mongo;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.Survey_MySQL;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.tag.SurveyTag;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.user.User;
-import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.InsertAnswerReq;
-import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.InsertCommentReq;
-import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.InsertSurveyReq;
+import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.*;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.*;
-import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.SurveyListPageReq;
 import com.mongoosereum.dou_survey_zone.api.v1.common.paging.PageCriteria;
 import com.mongoosereum.dou_survey_zone.api.v1.common.paging.PaginationInfo;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.tag.Tag;
@@ -410,19 +407,15 @@ public class SurveyService {
         return request.getRemoteAddr();
     }
 
-    public List<CommentListRes> getCommentList (String _id) {
+    public List<Comment> getCommentList (String _id) {
 
-        List<Comment> result = commentDAO.commentlist(_id);
-
-        System.out.println(result);
-
-        return null;
+        return commentDAO.commentlist(_id);
     }
 
-    public void insertComment (InsertCommentReq insertCommentReq) {
+    public void insertComment (String _id,InsertCommentReq insertCommentReq) {
+
         Comment comment = Comment.builder()
-                .Com_ID(insertCommentReq.getCom_ID())
-                ._id(insertCommentReq.get_id())
+                ._id(_id)
                 .Com_Nickname(insertCommentReq.getCom_Nickname())
                 .Com_Password( passwordEncoder.encode(insertCommentReq.getCom_Password()))
                 .Com_Context(insertCommentReq.getCom_Context())
@@ -430,51 +423,39 @@ public class SurveyService {
         commentDAO.insertComment(comment);
     }
 
-    public Boolean checkCommentPW (Long com_ID, String com_Password) {
+    public void updateComment(String _id ,ModifyCommentReq modifyCommentReq){
 
         Comment comment = Comment.builder()
-                .Com_ID(com_ID)
-                .Com_Password(com_Password)
+                .Com_ID(modifyCommentReq.getCom_ID())
+                ._id(_id)
+                .Com_Context(modifyCommentReq.getCom_Context())
                 .build();
 
         String result = commentDAO.checkCommentPW(comment);
 
-        if(passwordEncoder.matches(com_Password, result))
+        if(passwordEncoder.matches(modifyCommentReq.getCom_Password(), result))
         {
-            System.out.println("합격");
-//          return commentDAO.selectComment(Comment)
-            return true;
+            commentDAO.updateComment(comment);
         }
 
-        throw new UnauthorizedException(ErrorCode.UNAUTHORIZED_ACCESS);
+        else{throw new UnauthorizedException(ErrorCode.UNAUTHORIZED_ACCESS);}
     }
 
-    public void updateComment(Long com_ID ,String context){
+    public void deleteComment(String _id, DeleteCommentReq deleteCommentReq) {
 
         Comment comment = Comment.builder()
-                .Com_ID(com_ID)
-                .Com_Password(context)
-                .build();
-
-        commentDAO.updateComment(comment);
-
-    }
-
-    public void deleteComment(Long com_ID, String com_Password) {
-
-        Comment comment = Comment.builder()
-                .Com_ID(com_ID)
-                .Com_Password(com_Password)
+                .Com_ID(deleteCommentReq.getCom_ID())
+                ._id(_id)
+                .Com_Password(deleteCommentReq.getCom_Password())
                 .build();
 
         String result = commentDAO.checkCommentPW(comment);
 
-        if(passwordEncoder.matches(com_Password, result))
+        if(passwordEncoder.matches(deleteCommentReq.getCom_Password(), result))
         {
-            System.out.println("합격");
             commentDAO.deleteComment(comment);
         }
 
-        throw new UnauthorizedException(ErrorCode.UNAUTHORIZED_ACCESS);
+        else{throw new UnauthorizedException(ErrorCode.UNAUTHORIZED_ACCESS);}
     }
 }
