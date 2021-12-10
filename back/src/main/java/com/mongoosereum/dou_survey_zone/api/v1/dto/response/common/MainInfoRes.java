@@ -17,13 +17,17 @@ import java.util.Map;
 public class MainInfoRes {
     @ApiModelProperty(name="part_Total",notes = "총합 누적 이용자 수", example = "323")
     Long part_Total;
+
+    @ApiModelProperty(name="part_Total",notes = "총합 설문조사 개수", example = "100")
+    Long survey_Total;
+
     @ApiModelProperty(name="part_Age",notes = "누적 이용자 연령대 Map",
             example="{\"age_60\": 14, \"age_50\": 16, \"age_40\": 22, \"age_30\": 23, \"age_20\": 46, \"age_10\": 23}")
-    Map<String,Long> part_Age;
+    Map<String,Long> part_Age_Man;
 
     @ApiModelProperty(name="part_Gender",notes = "누적 이용자 성별 Map",
             example="{\"woman\": 0, \"man\": 1 }")
-    Map<String,Long> part_Gender;
+    Map<String,Long> part_Age_Woman;
 
     @ApiModelProperty(name="sur_Tag",notes = "게시물이 존재하는 Tag List",
             example= "[\n" +

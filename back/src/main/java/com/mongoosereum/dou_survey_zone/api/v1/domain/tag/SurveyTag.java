@@ -9,5 +9,5 @@ import lombok.Data;
 @Builder
 public class SurveyTag {
     private String _id;
-    private Long Tag_ID;
+    private Integer Tag_ID;
 }

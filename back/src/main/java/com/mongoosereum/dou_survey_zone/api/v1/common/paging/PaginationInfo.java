@@ -1,5 +1,7 @@
 package com.mongoosereum.dou_survey_zone.api.v1.common.paging;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,21 +9,23 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
+@ApiModel("페이징 관련 정보")
 public class PaginationInfo {
 
     /** 페이징 계산에 필요한 파라미터들이 담긴 클래스 */
+    @ApiModelProperty(name = "criteria", notes="페이징 계산에 필요한 정보")
     private PageCriteria criteria;
 
-    /** 전체 데이터 개수 */
+    @ApiModelProperty(name = "totalRecordCount", notes="전체 데이터 수")
     private int totalRecordCount;
 
-    /** 전체 페이지 개수 */
+    @ApiModelProperty(name = "totalPageCount", notes="전체 페이지 수")
     private int totalPageCount;
 
-    /** 페이지 리스트의 첫 페이지 번호 */
+    @ApiModelProperty(name = "firstPage", notes="첫 페이지 번호")
     private int firstPage;
 
-    /** 페이지 리스트의 마지막 페이지 번호 */
+    @ApiModelProperty(name = "lastPage", notes="마지막 페이지 번호")
     private int lastPage;
 
     /** SQL의 조건절에 사용되는 첫 RNUM */

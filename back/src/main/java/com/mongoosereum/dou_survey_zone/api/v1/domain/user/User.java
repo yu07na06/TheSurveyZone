@@ -2,8 +2,7 @@ package com.mongoosereum.dou_survey_zone.api.v1.domain.user;
 
 import lombok.*;
 
-@Getter
-@Setter
+@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

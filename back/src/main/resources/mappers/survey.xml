@@ -3,6 +3,12 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="survey">
+
+    <select id="surveyTotal"  resultType="Long">
+        select count(*)
+        from survey.survey
+    </select>
+
     <select id="findById" parameterType="String" resultType="Survey_MySQL">
         select *
         from survey.survey
@@ -25,7 +31,7 @@
             and survey.User_Email = #{criteria.user_Email}
         </if>
         group by survey._id
-        order by survey.Sur_State
+        order by survey.Sur_State,survey.Sur_StartDate
         limit #{firstRecordIndex}, #{criteria.records_Perpage};
     </select>
 
@@ -52,16 +58,15 @@
         select survey._id, survey.Sur_Title, survey.Sur_Content, survey.Sur_State, survey.Sur_StartDate, survey.Sur_EndDate, survey.Sur_Publish, survey.Sur_Img, survey.User_Email, survey.Sur_Type, surveytag.Tag_ID
         from survey.survey left OUTER JOIN survey.surveytag
         on survey.survey._id = survey.surveytag._id
-        where (survey.Sur_State = 1 or survey.Sur_State = 2)
+        where survey.User_Email = #{criteria.user_Email}
         <if test="criteria.search_Key != null">
             and  survey.Sur_Title like CONCAT("%", #{criteria.search_Key}, "%")
         </if>
         <if test="criteria.search_Tag != null">
             and  survey.surveytag.Tag_ID = #{criteria.search_Tag}
         </if>
-        and survey.User_Email = #{criteria.user_Email}
         group by survey._id
-        order by survey.Sur_State
+        order by survey.Sur_State,survey.Sur_StartDate
         limit #{firstRecordIndex}, #{criteria.records_Perpage};
     </select>
 
@@ -69,18 +74,18 @@
         select count(survey._id)
         from survey.survey left OUTER JOIN survey.surveytag
         on survey._id = surveytag._id
-        where (survey.Sur_State = 1 or survey.Sur_State = 2)
+        where survey.User_Email = #{user_Email}
         <if test="search_Key != null">
             and survey.Sur_Title like CONCAT("%", #{search_Key}, "%")
         </if>
         <if test="search_Tag != null">
             and surveytag.Tag_ID = #{search_Tag}
         </if>
-        and survey.User_Email = #{user_Email} ;
+        ;
     </select>
 
     <insert id="insertSurvey" parameterType="Survey_MySQL">
-        insert into survey.survey values (#{_id},#{sur_Title},#{sur_Content},#{sur_State},#{sur_StartDate},#{sur_EndDate},#{sur_Publish},#{sur_Image},#{user_Email},#{sur_Type} );
+        insert into survey.survey values (#{_id},#{sur_Title},#{sur_Content},#{sur_State},#{sur_StartDate},#{sur_EndDate},#{sur_Publish},#{sur_Img},#{user_Email},#{sur_Type} );
     </insert>
 
     <select id="selectOwner" parameterType="String" resultType="String">
@@ -88,14 +93,14 @@
     </select>
 
     <delete id="deleteSurvey" parameterType = "String">
-        delete from survey.Survey where _id = #{_id};
+        delete from survey.survey where _id = #{_id};
     </delete>
 
     <update id="updateSurvey" parameterType = "Survey_MySQL">
         update survey.survey
         set Sur_Title = #{sur_Title}, Sur_Content = #{sur_Content}, Sur_State = #{sur_State},
             Sur_StartDate = #{sur_StartDate}, Sur_EndDate = #{sur_EndDate},
-            Sur_Publish = #{sur_Publish}, Sur_Image = #{sur_Image},
+            Sur_Publish = #{sur_Publish}, Sur_Img = #{sur_Img},
             User_Email = #{user_Email}, Sur_Type = #{sur_Type}
         where _id = #{_id}
     </update>
@@ -103,5 +108,13 @@
     <select id="todaystartlist" parameterType = "String" resultType="Survey_MySQL">
         select * from survey.survey where (Sur_State = 0 and  Sur_StartDate like CURDATE()) or (Sur_State = 1 and  Sur_EndDate like date_add(curdate(), interval -1 day));
     </select>
+
+    <update id="todaystartUpdate" parameterType = "java.util.List">
+        <foreach collection="list" item="item" index="index">
+        update survey.survey
+        set Sur_State = #{item.sur_State}
+        where _id = #{item._id};
+        </foreach>
+    </update>
 
 </mapper>

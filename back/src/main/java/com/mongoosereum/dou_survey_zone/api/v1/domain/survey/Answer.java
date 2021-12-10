@@ -3,6 +3,8 @@ package com.mongoosereum.dou_survey_zone.api.v1.domain.survey;
 import io.swagger.annotations.ApiParam;
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
+
 @Data
 @NoArgsConstructor
 public class Answer {

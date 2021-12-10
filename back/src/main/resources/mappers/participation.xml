@@ -3,25 +3,41 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="participation">
+    <select id="findByIP" parameterType="Map" resultType="int">
+        select count(*) from survey.participation where _id = #{_id} and Part_IP = #{Part_IP};
+    </select>
+
+    <insert id="insertParticipation" parameterType="Participation">
+        insert into survey.participation (`_id`, `Part_IP`, `Part_Gender`, `Part_Age`) values(#{_id},#{Part_IP},#{Part_Gender},#{Part_Age});
+    </insert>
     <select id="countTotal" resultType="Long">
         select count(*) from survey.participation;
     </select>
 
-    <select id="countGender" resultType="Map">
-        select
-               count(case when Part_Gender='M' then 1 end) as man,
-               count(case when Part_Gender='W' then 1 end) as woman
-        from survey.participation;
-    </select>
-
-    <select id="countAge" resultType="Map">
+    <select id="part_Age_Man" resultType="Map">
         select count(case when Part_Age=10 then 1 end) as age_10,
         count(case when Part_Age=20 then 1 end) as age_20,
         count(case when Part_Age=30 then 1 end) as age_30,
         count(case when Part_Age=40 then 1 end) as age_40,
         count(case when Part_Age=50 then 1 end) as age_50,
         count(case when Part_Age=60 then 1 end) as age_60
-        from survey.participation;
+        from survey.participation where Part_Gender = "M";
     </select>
 
+    <select id="part_Age_Woman" resultType="Map">
+        select count(case when Part_Age=10 then 1 end) as age_10,
+        count(case when Part_Age=20 then 1 end) as age_20,
+        count(case when Part_Age=30 then 1 end) as age_30,
+        count(case when Part_Age=40 then 1 end) as age_40,
+        count(case when Part_Age=50 then 1 end) as age_50,
+        count(case when Part_Age=60 then 1 end) as age_60
+        from survey.participation where Part_Gender = "W";
+    </select>
+
+    <select id="ResultPart" parameterType="String" resultType="Participation">
+        SELECT *
+        FROM survey.participation
+        where _id = #{_id} order by Part_id;
+    </select>
 </mapper>
+
