@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 
 
 @Data
@@ -11,8 +12,10 @@ import lombok.Data;
 @AllArgsConstructor
 public class DeleteCommentReq {
 
+    @NotBlank
     private long Com_ID;
 
+    @NotBlank
     private String Com_Password;
 
 }

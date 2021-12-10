@@ -17,7 +17,8 @@ public enum ErrorCode {
     ALREADY_PARTICIPATION(403,"403_1","ALREADY PARTICIPATION"),         // 403 권한 없음  // 이미 설문조사 응답한 IP
     NOT_OWNER_SURVEY(403,"403_2","NOT OWNER"),                          // 403 작성자 아님 [삭제, 결과, 수정]에서
     NOT_FOUND_USER(404,"404_1","NOT FOUND USER"),                       // 404 유저(ID,PW찾기에서 유저 정보가 없을경우, Survey insert시나 user정보가 필요할때 없는 경우)
-    NOT_FOUND_SURVEY(404,"404_2","NOT FOUND SURVEY");                   // 404 설문(존재하지 않는 설문인 경우)
+    NOT_FOUND_SURVEY(404,"404_2","NOT FOUND SURVEY"),                   // 404 설문(존재하지 않는 설문인 경우)
+    NOT_FOUND_COMMENT(404, "404_3", "NOT FOUND COMMENT");
 
     private int status;
     private String errorCode;

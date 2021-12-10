@@ -408,11 +408,15 @@ public class SurveyService {
     }
 
     public List<Comment> getCommentList (String _id) {
+        surveyDAO.findById_MySQL(_id)
+                .orElseThrow(()->new NotFoundException(ErrorCode.NOT_FOUND_SURVEY));
 
         return commentDAO.commentlist(_id);
     }
 
     public void insertComment (String _id,InsertCommentReq insertCommentReq) {
+        surveyDAO.findById_MySQL(_id)
+                .orElseThrow(()->new NotFoundException(ErrorCode.NOT_FOUND_SURVEY));
 
         Comment comment = Comment.builder()
                 ._id(_id)
@@ -424,16 +428,19 @@ public class SurveyService {
     }
 
     public void updateComment(String _id ,ModifyCommentReq modifyCommentReq){
+        surveyDAO.findById_MySQL(_id)
+                .orElseThrow(()->new NotFoundException(ErrorCode.NOT_FOUND_SURVEY));
+        commentDAO.comment(modifyCommentReq.getCom_ID())
+                .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_COMMENT));
 
         Comment comment = Comment.builder()
                 .Com_ID(modifyCommentReq.getCom_ID())
                 ._id(_id)
+                .Com_Password(modifyCommentReq.getCom_Password())
                 .Com_Context(modifyCommentReq.getCom_Context())
                 .build();
 
-        String result = commentDAO.checkCommentPW(comment);
-
-        if(passwordEncoder.matches(modifyCommentReq.getCom_Password(), result))
+        if(passwordEncoder.matches(modifyCommentReq.getCom_Password(), commentDAO.checkCommentPW(comment)))
         {
             commentDAO.updateComment(comment);
         }
@@ -442,6 +449,10 @@ public class SurveyService {
     }
 
     public void deleteComment(String _id, DeleteCommentReq deleteCommentReq) {
+        surveyDAO.findById_MySQL(_id)
+                .orElseThrow(()->new NotFoundException(ErrorCode.NOT_FOUND_SURVEY));
+        commentDAO.comment(deleteCommentReq.getCom_ID())
+                .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_COMMENT));
 
         Comment comment = Comment.builder()
                 .Com_ID(deleteCommentReq.getCom_ID())
@@ -449,9 +460,7 @@ public class SurveyService {
                 .Com_Password(deleteCommentReq.getCom_Password())
                 .build();
 
-        String result = commentDAO.checkCommentPW(comment);
-
-        if(passwordEncoder.matches(deleteCommentReq.getCom_Password(), result))
+        if(passwordEncoder.matches(deleteCommentReq.getCom_Password(), commentDAO.checkCommentPW(comment)))
         {
             commentDAO.deleteComment(comment);
         }

@@ -24,4 +24,8 @@
         DELETE FROM survey.comment WHERE (Com_ID = #{Com_ID});
     </delete>
 
+    <select id="selectComment" parameterType="String" resultType="Comment">
+        select * from survey.comment where Com_ID = #{com_ID};
+    </select>
+
 </mapper>
