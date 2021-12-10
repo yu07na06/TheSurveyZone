@@ -52,7 +52,7 @@ const ResultLinear = ({ value, index, result, makeCircle , chartState, setChartS
                     </Grid>
                    
                     <Grid item xs={12} textAlign="right">
-                        <ToggleBtn fullWidth chartState={chartState} setChartState={setChartState} />
+                        <ToggleBtn fullWidth chartState={chartState} setChartState={setChartState} toggleValue={["Bar", "Doughnut", "Line"]}/>
                     </Grid>
 
                     <Grid item xs={12} style={{paddingTop:"0px"}}>
@@ -62,14 +62,12 @@ const ResultLinear = ({ value, index, result, makeCircle , chartState, setChartS
                                     {
                                         (() => {
                                             switch (chartState) {
-                                                case "BarChart":
-                                                    return <MyResponsiveBar data={newData}/>;
-                                                case "DoughnutChart":
+                                                case "Doughnut":
                                                     return <MyResponsivePie data={newData} />;
-                                                case "LineChart":
+                                                case "Line":
                                                     return <MyResponsiveLine data={[{ "id":'결과', "data":newData1}]} />;
-                                                default:
-                                                    break;
+                                                default: // Bar
+                                                    return <MyResponsiveBar data={newData}/>;
                                             }
                                         })()
                                     }

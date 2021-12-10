@@ -15,6 +15,32 @@ import MyResponsiveLine from './result/charts/MyResponsiveLine';
 import MyResponsivePie from './result/charts/MyResponsivePie';
 import { Comment } from './MainComp';
 
+
+// export const A = ({data}) => {
+//     console.log("나를 새로 부르는거니 혹시?????");
+//         return(
+//         <Paper>
+//             <Grid container>
+
+//                 <Grid item xs={2.5} style={{ backgroundColor: "#9AAFD9" }}>
+//                 </Grid>
+
+//                 <Grid item xs={9.5}>
+//                     <Typography variant="h6" style={{ fontWeight: 'bold', margin: "5px" }} >
+//                         누적 설문 응답 수
+//                     </Typography>
+//                     <Typography variant="h6" style={{ color: 'gray', margin: "5px" }}>
+//                         {data} 명
+//                     </Typography>
+//                 </Grid>
+
+//             </Grid>
+//         </Paper>
+
+//     )
+// }
+
+
 const Main = ({ data, accAgeGenderData, accAgeTotalData, accGenderTotalData, reqMain, TAGENUM, setTagSearch, tagSearch, pageNum, pageChange, setSearchText, }) => {
     const theme = useTheme()
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -39,6 +65,8 @@ const Main = ({ data, accAgeGenderData, accAgeTotalData, accGenderTotalData, req
                     accGenderTotalData={accGenderTotalData}
                 />
                 :
+	// eslint-disable-next-line react-hooks/rules-of-hooks
+                React.useMemo(()=>
                 <Container sx={{ py: 1 }} maxWidth="lg">
                     <Grid container spacing={{ xs: 1, sm: 2, md: 3 }}>
                         <Grid item xs={12} md={12} lg={12} >
@@ -67,7 +95,6 @@ const Main = ({ data, accAgeGenderData, accAgeTotalData, accGenderTotalData, req
 
 
                                 <Grid item xs={12} sm={6} md={6} lg={6}>
-
                                     <Paper>
                                         <Grid container>
 
@@ -129,9 +156,11 @@ const Main = ({ data, accAgeGenderData, accAgeTotalData, accGenderTotalData, req
 
                     </Grid>
                 </Container>
+	, [data.part_Total])
             }
 
-
+	{React.useMemo(()=>
+                <>
             <Container sx={{ py: 3 }} maxWidth="lg">
 
                 <Grid container>
@@ -241,7 +270,7 @@ const Main = ({ data, accAgeGenderData, accAgeTotalData, accGenderTotalData, req
                                             마감
                                         </Typography>
                                     }
-                                    <Comment />
+                                    <Comment _id={value._id}/>
                                     <div style={{ flexGrow: 1 }} />
                                     {value.sur_State === 1 ? <Link to={`/SurveySubmitPage/${value._id}`} style={{ textDecoration: 'none', color: 'blue', fontWeight: 'bold' }}><Button><Typography>참여</Typography></Button></Link> : null}
                                 </CardActions>
@@ -255,6 +284,8 @@ const Main = ({ data, accAgeGenderData, accAgeTotalData, accGenderTotalData, req
                     {reqMain && <Pagination count={5} shape="rounded" showFirstButton showLastButton page={pageNum} onChange={(_, page) => { pageChange(page) }} count={reqMain.paginationInfo.totalPageCount} />}
                 </Grid>
             </Container>
+	</>
+            ,[reqMain])}
         </>
     );
 };

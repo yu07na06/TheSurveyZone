@@ -42,6 +42,27 @@ export const surveyCheck = (sur_ID) =>
 export const surveySend = (_id, emailList) =>
   axios.post(`/api/v1/user/send`, { _id, emailList });
 
+//========================================================================================
+// 설문 댓글 삽입
+export function commentInsert (_id,commentObj){
+  return axios.post(`/api/v1/survey/${_id}/comment`,commentObj )
+}
+
+// 설문 댓글 조회
+export function commentSelect (_id){
+  return axios.get(`/api/v1/survey/${_id}/comment`)
+}
+
+// 설문 댓글 수정
+export function commentModify (_id, modiCommentObj){
+  return axios.put(`/api/v1/survey/${_id}/comment`, modiCommentObj)
+}
+
+// 설문 댓글 삭제
+export function commentDelete (_id, delCommentObj){
+  return axios.put(`/api/v1/survey/${_id}/comment`, delCommentObj)
+}
+
 // import axios from "axios";
 // import { objType } from "src/components/common/TypeFunction";
 

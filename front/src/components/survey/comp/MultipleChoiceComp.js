@@ -107,6 +107,7 @@ const MultipleChoiceComp = ({ ReadOnlyState, ReadOnlyData, UpdateKey, realReadSt
                                 <Checkbox
                                     disabled={realReadState}
                                     required={checkBoxEssential}
+                                    value={ReadOnlyState?ReadOnlyData.surSel_Content:null}
                                     name={`SurQueCheck_${number}_${count}`}
                                     id={`SurQueCheck_${number}_${count}`}
                                     onClick={(e)=>{ checkClick(e); checkCount(e, addMaxNum);}}

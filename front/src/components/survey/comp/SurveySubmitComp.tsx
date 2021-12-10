@@ -187,7 +187,7 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
 
         }else{
             const data = new FormData(e.currentTarget);
-                
+            
             let tempArray = [];
             let temp = '';
             let OrderNumber = 0;
@@ -195,6 +195,7 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
             
             for (const key in surAns_Content) {
                 let splitValue=surAns_Content[key].split('_');
+                
                 temp = data.get(surAns_Content[key]);
                 
                 switch(splitValue[0]){
@@ -211,6 +212,7 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
                     case 'SurQueCheck': // 객관식
                         for(let i=0; i<=Number(splitValue[2]); i++){
                             temp = data.get(`SurQueCheck_${splitValue[1]}_${i}`);
+                            
                             if(temp != null){
                                 if(splitValue[1] != OrderNumber){
                                     tempArray.push(tempString);

@@ -41,6 +41,7 @@ const Login = ({handleSubmit}) => {
                         name="User_Email"
                         autoComplete="off"
                         autoFocus
+                        value="dbsk7885@daum.net"
                         inputProps={{maxLength: 33}}
                         />
                         <TextField
@@ -51,6 +52,7 @@ const Login = ({handleSubmit}) => {
                         name="User_Password"
                         label="비밀번호"
                         id="User_Password"
+                        value="yu07na06!!"
                         autoComplete="off"
                         />
                         <Button
