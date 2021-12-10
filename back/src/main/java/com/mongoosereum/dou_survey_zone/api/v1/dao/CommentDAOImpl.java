@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CommentDAOImpl implements CommentDAO{
@@ -25,6 +26,7 @@ public class CommentDAOImpl implements CommentDAO{
         return sqlSession.selectOne("checkCommentPW", comment);
     }
 
+
     public void updateComment(Comment comment) {
         sqlSession.insert("updateComment", comment);
     }
@@ -33,4 +35,5 @@ public class CommentDAOImpl implements CommentDAO{
         sqlSession.delete("deleteComment", comment);
     }
 
+    public Optional<Comment> comment(long com_ID) { return Optional.ofNullable(sqlSession.selectOne("selcetComment",  com_ID)); }
 }
