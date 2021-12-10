@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="commnet">
+
+    <select id="commentlist" parameterType="String" resultType="Comment">
+        select * from survey.comment where _id = #{_id};
+    </select>
+
+    <insert id="insertComment" parameterType="Comment">
+        INSERT INTO `survey`.`comment` (`_id`, `Com_Nickname`, `Com_Password`, `Com_Context`, `Com_Date`) VALUES (#{_id},#{Com_Nickname}, #{Com_Password}, #{Com_Context},  now());
+    </insert>
+
+    <select id="checkCommentPW" parameterType="Comment" resultType="String">
+        select Com_Password from survey.comment where _id = #{_id} and Com_ID = #{com_ID};
+    </select>
+
+    <update id="updateComment" parameterType="Comment">
+        UPDATE survey.comment SET Com_Context = #{Com_Context} WHERE (`Com_ID` = #{Com_ID});
+    </update>
+
+    <delete id="deleteComment" parameterType="Comment">
+        DELETE FROM survey.comment WHERE (Com_ID = #{Com_ID});
+    </delete>
+
+</mapper>

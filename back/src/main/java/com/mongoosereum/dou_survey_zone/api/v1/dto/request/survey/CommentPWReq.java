@@ -4,15 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-
-
 @Data
 @Builder
 @AllArgsConstructor
-public class DeleteCommentReq {
+public class CommentPWReq {
 
     private long Com_ID;
 
     private String Com_Password;
 
 }
+

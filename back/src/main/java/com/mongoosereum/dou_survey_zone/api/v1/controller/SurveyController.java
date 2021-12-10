@@ -1,11 +1,8 @@
 package com.mongoosereum.dou_survey_zone.api.v1.controller;
 
 import com.mongoosereum.dou_survey_zone.api.v1.common.S3Uploader;
-import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.InsertCommentReq;
+import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.*;
 import com.mongoosereum.dou_survey_zone.api.v1.service.SurveyService;
-import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.InsertAnswerReq;
-import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.InsertSurveyReq;
-import com.mongoosereum.dou_survey_zone.api.v1.dto.request.survey.SurveyListPageReq;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SelectSurveyRes;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SurveyPartCheckRes;
 import com.mongoosereum.dou_survey_zone.api.v1.dto.response.survey.SurveyResultRes;
@@ -221,7 +218,7 @@ public class SurveyController {
             @ApiParam(value = "설문조사 PK (영어+숫자 24글자)", required = true, example = "619b39da46f35902f0cc7757")
                     String _id
     ) {
-        return ResponseEntity.status(HttpStatus.OK).body("ok");
+        return ResponseEntity.status(HttpStatus.OK).body(surveyService.getCommentList(_id));
     }
 
     @PostMapping(path = "/survey/{_id}/comment")
@@ -237,26 +234,10 @@ public class SurveyController {
             @RequestBody
                     InsertCommentReq insertCommentReq
             ) {
-        surveyService.insertComment(insertCommentReq);
+        System.out.println(_id);
+        surveyService.insertComment(_id,insertCommentReq);
         return ResponseEntity.status(HttpStatus.CREATED).body("Success");
     }
-
-    @PutMapping(path = "/survey/{_id}/commentPW")
-    @ApiOperation(value = "설문 댓글 비밀번호 체크")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "설문 결과", response = SurveyResultRes.class),
-            @ApiResponse(code = 404, message = "해당 설문 없음", response =ExceptionModel.class)
-    })
-    public ResponseEntity surComentCheckPW(
-            @PathVariable("_id")
-            @ApiParam(value = "설문조사 PK (영어+숫자 24글자)", required = true, example = "619b39da46f35902f0cc7757")
-                    String _id,
-            @RequestBody
-                    Long com_ID, String com_Password
-    ) {
-        return ResponseEntity.status(HttpStatus.OK).body(surveyService.checkCommentPW(com_ID,com_Password));
-    }
-
 
     @PutMapping(path = "/survey/{_id}/comment")
     @ApiOperation(value = "설문 댓글 수정")
@@ -269,9 +250,9 @@ public class SurveyController {
             @ApiParam(value = "설문조사 PK (영어+숫자 24글자)", required = true, example = "619b39da46f35902f0cc7757")
                     String _id,
             @RequestBody
-                    Long com_ID, String com_Context
+                    ModifyCommentReq modifyCommentReq
             ) {
-        surveyService.updateComment(com_ID,com_Context);
+        surveyService.updateComment(_id,modifyCommentReq);
         return ResponseEntity.status(HttpStatus.OK).body("Success");
     }
 
@@ -286,9 +267,9 @@ public class SurveyController {
             @ApiParam(value = "설문조사 PK (영어+숫자 24글자)", required = true, example = "619b39da46f35902f0cc7757")
                     String _id,
             @RequestBody
-                    Long com_ID, String com_Password
+                    DeleteCommentReq deleteCommentReq
             ) {
-        surveyService.deleteComment(com_ID,com_Password);
+        surveyService.deleteComment(_id, deleteCommentReq);
         return ResponseEntity.status(HttpStatus.OK).body("Success");
     }
 }
