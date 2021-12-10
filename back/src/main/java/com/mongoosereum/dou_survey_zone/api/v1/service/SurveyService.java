@@ -260,7 +260,16 @@ public class SurveyService {
 
         List<Question> questionList = survey_mongo.getQuestionList();
         SurveyResultRes surveyResultDTO = new SurveyResultRes();
-        surveyResultDTO.setPartList(part_mySQL);
+        Map<String, Integer> map = new LinkedHashMap<>();
+        map.put("M",0);
+        map.put("W",0);
+        for(int i=0;i<part_mySQL.size();i++) {
+            if(part_mySQL.get(i).getPart_Gender() == 'M')
+                map.put("M",map.get('M')+1);
+            else
+                map.put("W",map.get('W')+1);
+        }
+        surveyResultDTO.setPartList(map);
 
         boolean [] isMulti = new boolean[questionList.size()];
         for(int i=0;i<questionList.size();i++){

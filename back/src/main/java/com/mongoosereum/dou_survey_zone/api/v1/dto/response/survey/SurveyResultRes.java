@@ -6,6 +6,7 @@ import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.Select;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.survey.Survey_MySQL;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.models.auth.In;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -59,7 +60,7 @@ public class SurveyResultRes{
 
     private List<LinkedHashMap<String,List<Integer> > > selectResultMap;
 
-    private List<Participation> partList;
+    private Map<String, Integer> partList;
     public SurveyResultRes(){
         this.userList = new ArrayList<String>();
         this.questionList = new ArrayList<>();
