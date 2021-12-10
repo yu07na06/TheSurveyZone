@@ -13,6 +13,7 @@ import RegisterPage from './pages/RegisterPage';
 import ResultPage from './pages/ResultPage';
 import SurveySubmitPage from './pages/SurveySubmitPage';
 import UpdatePage from './pages/UpdatePage';
+import NotFound from './components/common/modules/NotFound';
 
 const App = () => {
   return (
@@ -33,6 +34,8 @@ const App = () => {
           <Route path="/ReadOnlyPage/:surveykey" component={ReadOnlyPage} /> 
           <Route path="/UpdatePage/:surveykey" component={UpdatePage} /> 
           <Route path="/ResultPage/:surveykey" component={ResultPage} />
+
+          <Route path="*" component={NotFound}/>
         </Container>
       </MakeThemeProvider>
     </>

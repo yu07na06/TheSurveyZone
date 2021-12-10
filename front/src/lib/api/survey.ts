@@ -22,6 +22,10 @@ export const getTags = () =>
 export const getMySurveyList = (page_Num: number) =>
   axios.get(`/api/v1/survey/myPage?page_Num=${page_Num}`);
 
+// S3에서 이미지 URL 들고오기
+export const getImgURL = (formData) =>
+  axios.post(`/api/v1/image`, formData);
+
 // 설문 삭제
 export const deleteSurvey = (sur_ID) =>
   axios.delete(`/api/v1/survey/${sur_ID}`);
@@ -37,8 +41,12 @@ export const resultSurvey = (sur_ID) =>
 // 설문 참여 체크
 export const surveyCheck = (sur_ID) =>
   axios.get(`/api/v1/survey/${sur_ID}/Check`);
+  
+// 설문 수정 권한 체크
+export const surveyModifyCheck = (sur_ID) =>
+  axios.get(`/api/v1/survey/${sur_ID}/ModifyCheck`);
 
-// 설문 참여 체크
+// 설문 메일 전송
 export const surveySend = (_id, emailList) =>
   axios.post(`/api/v1/user/send`, { _id, emailList });
 
@@ -60,7 +68,7 @@ export function commentModify (_id, modiCommentObj){
 
 // 설문 댓글 삭제
 export function commentDelete (_id, delCommentObj){
-  return axios.put(`/api/v1/survey/${_id}/comment`, delCommentObj)
+  return axios.delete(`/api/v1/survey/${_id}/comment`, { data: delCommentObj })
 }
 
 // import axios from "axios";

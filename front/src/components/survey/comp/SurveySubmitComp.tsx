@@ -3,7 +3,7 @@ import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
-import { getSurvey as getSurveyAPI, getTags as getTagsAPI, modifySurvey as modifySurveyAPI, postSurvey as postSurveyAPI, surveyCheck as surveyCheckAPI } from '../../../lib/api/survey';
+import { getSurvey as getSurveyAPI, getTags as getTagsAPI, modifySurvey as modifySurveyAPI, postSurvey as postSurveyAPI, surveyCheck as surveyCheckAPI, surveyModifyCheck as surveyModifyCheckAPI } from '../../../lib/api/survey';
 import { beforeAction } from '../../../modules/submitReducer';
 import ErrorSweet from '../../common/modules/ErrorSweet';
 import submitOBJ from '../../common/TypeFunction';
@@ -58,10 +58,10 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
 
     useEffect(()=>{ // 수정 시, mainSurvey 출력 및 태그 목록 불러오기
         if(UpdateKey){ 
-            axios.get(`/api/v1/survey/${surveykey}/ModifyCheck`) // 수정 시, 권한 여부 확인
+            surveyModifyCheckAPI(surveykey) // 수정 시, 권한 여부 확인
                 .then(res=>console.log("수정 권한 있음", res))
                 .catch(err=>{ ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null).then(() => history.push('/')) }) // 403 오류
-                
+            
             submitCheck.current = true
             setActiveStep(1); // mainSurveyComp 바로 이동
             getTagsAPI() // 태그 목록 불러오기

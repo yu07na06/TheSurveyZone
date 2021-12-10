@@ -13,7 +13,7 @@ import SurveyDialog from './common/modules/SurveyDialog';
 import { BackgoundColor, FontColor } from './common/modules/TagColor';
 import MyResponsiveLine from './result/charts/MyResponsiveLine';
 import MyResponsivePie from './result/charts/MyResponsivePie';
-import { Comment } from './MainComp';
+import Comment from './comment/Comment';
 
 
 // export const A = ({data}) => {
@@ -56,110 +56,111 @@ const Main = ({ data, accAgeGenderData, accAgeTotalData, accGenderTotalData, req
 
                 <hr style={{ borderWidth: 1, borderColor: "#2E2E2E" }} />
             </Container>
-
-            {isMobile ?
-                <SurveyDialog
-                    data={data}
-                    accAgeGenderData={accAgeGenderData}
-                    accAgeTotalData={accAgeTotalData}
-                    accGenderTotalData={accGenderTotalData}
-                />
+            
+            {React.useMemo(()=>   
+                isMobile ?
+                    <SurveyDialog
+                        data={data}
+                        accAgeGenderData={accAgeGenderData}
+                        accAgeTotalData={accAgeTotalData}
+                        accGenderTotalData={accGenderTotalData}
+                    />
                 :
-	// eslint-disable-next-line react-hooks/rules-of-hooks
-                React.useMemo(()=>
-                <Container sx={{ py: 1 }} maxWidth="lg">
-                    <Grid container spacing={{ xs: 1, sm: 2, md: 3 }}>
-                        <Grid item xs={12} md={12} lg={12} >
+                    // eslint-disable-next-line react-hooks/rules-of-hooks
+                    // React.useMemo(()=>
+                    <Container sx={{ py: 1 }} maxWidth="lg">
+                        <Grid container spacing={{ xs: 1, sm: 2, md: 3 }}>
+                            <Grid item xs={12} md={12} lg={12} >
 
-                            <Grid container spacing={{ xs: 1, sm: 2, md: 3 }}  >
+                                <Grid container spacing={{ xs: 1, sm: 2, md: 3 }}  >
 
-                                <Grid item xs={12} sm={6} md={6} lg={6}>
+                                    <Grid item xs={12} sm={6} md={6} lg={6}>
 
-                                    <Paper>
-                                        <Grid container                     >
-                                            <Grid item place xs={2.5} style={{ backgroundColor: "#9AAFD9" }} >
+                                        <Paper>
+                                            <Grid container                     >
+                                                <Grid item place xs={2.5} style={{ backgroundColor: "#9AAFD9" }} >
+                                                </Grid>
+
+                                                <Grid item xs={9.5} >
+                                                    <Typography variant="h6" style={{ fontWeight: 'bold', margin: "5px" }}>
+                                                        설문 조사
+                                                    </Typography>
+                                                    <Typography variant="h6" style={{ color: 'gray', margin: "5px" }}>
+                                                        {data.survey_Total} 개
+                                                    </Typography>
+                                                </Grid>
                                             </Grid>
+                                        </Paper>
 
-                                            <Grid item xs={9.5} >
-                                                <Typography variant="h6" style={{ fontWeight: 'bold', margin: "5px" }}>
-                                                    설문 조사
-                                                </Typography>
-                                                <Typography variant="h6" style={{ color: 'gray', margin: "5px" }}>
-                                                    {data.survey_Total} 개
-                                                </Typography>
+                                    </Grid>
+
+
+                                    <Grid item xs={12} sm={6} md={6} lg={6}>
+                                        <Paper>
+                                            <Grid container>
+
+                                                <Grid item xs={2.5} style={{ backgroundColor: "#9AAFD9" }}>
+                                                </Grid>
+
+                                                <Grid item xs={9.5}>
+                                                    <Typography variant="h6" style={{ fontWeight: 'bold', margin: "5px" }} >
+                                                        누적 설문 응답 수
+                                                    </Typography>
+                                                    <Typography variant="h6" style={{ color: 'gray', margin: "5px" }}>
+                                                        {data.part_Total} 명
+                                                    </Typography>
+                                                </Grid>
+
                                             </Grid>
-                                        </Grid>
-                                    </Paper>
+                                        </Paper>
 
+                                    </Grid>
                                 </Grid>
 
 
-                                <Grid item xs={12} sm={6} md={6} lg={6}>
+                            </Grid>
+
+                            <Grid item xs={12} md={12} lg={6}>
+                                <Paper>
+                                    <Typography variant="h6" marginLeft="5px" align="center" style={{ fontWeight: 'bold', backgroundColor: '#C7DBF4' }}>
+                                        연령대 별 누적 이용자 비율
+                                    </Typography>
+                                    <div style={{ height: 250 }}>
+                                        <MyResponsiveLine data={accAgeGenderData} />
+                                    </div>
+                                </Paper>
+                            </Grid>
+
+
+                            <>
+                                <Grid item xs={12} sm={6} md={6} lg={3}>
                                     <Paper>
-                                        <Grid container>
-
-                                            <Grid item xs={2.5} style={{ backgroundColor: "#9AAFD9" }}>
-                                            </Grid>
-
-                                            <Grid item xs={9.5}>
-                                                <Typography variant="h6" style={{ fontWeight: 'bold', margin: "5px" }} >
-                                                    누적 설문 응답 수
-                                                </Typography>
-                                                <Typography variant="h6" style={{ color: 'gray', margin: "5px" }}>
-                                                    {data.part_Total} 명
-                                                </Typography>
-                                            </Grid>
-
-                                        </Grid>
+                                        <Typography variant="h6" marginLeft="5px" align="center" style={{ fontWeight: 'bold', backgroundColor: '#C7DBF4' }}>
+                                            누적 이용자 연령 비율
+                                        </Typography>
+                                        <div style={{ height: 250 }}>
+                                            <MyResponsivePie data={accAgeTotalData} />
+                                        </div>
                                     </Paper>
-
                                 </Grid>
-                            </Grid>
-
+                                <Grid item xs={12} sm={6} md={6} lg={3}>
+                                    <Paper>
+                                        <Typography variant="h6" marginLeft="5px" align="center" style={{ fontWeight: 'bold', backgroundColor: '#C7DBF4' }}>
+                                            누적 이용자 성별 비율
+                                        </Typography>
+                                        <div style={{ height: 250 }}>
+                                            <MyResponsivePie data={accGenderTotalData} />
+                                        </div>
+                                    </Paper>
+                                </Grid>
+                            </>
 
                         </Grid>
+                    </Container>
+                    // , [data.part_Total])
+            ,[data.part_Total])}
 
-                        <Grid item xs={12} md={12} lg={6}>
-                            <Paper>
-                                <Typography variant="h6" marginLeft="5px" align="center" style={{ fontWeight: 'bold', backgroundColor: '#C7DBF4' }}>
-                                    연령대 별 누적 이용자 비율
-                                </Typography>
-                                <div style={{ height: 250 }}>
-                                    <MyResponsiveLine data={accAgeGenderData} />
-                                </div>
-                            </Paper>
-                        </Grid>
-
-
-                        <>
-                            <Grid item xs={12} sm={6} md={6} lg={3}>
-                                <Paper>
-                                    <Typography variant="h6" marginLeft="5px" align="center" style={{ fontWeight: 'bold', backgroundColor: '#C7DBF4' }}>
-                                        누적 이용자 연령 비율
-                                    </Typography>
-                                    <div style={{ height: 250 }}>
-                                        <MyResponsivePie data={accAgeTotalData} />
-                                    </div>
-                                </Paper>
-                            </Grid>
-                            <Grid item xs={12} sm={6} md={6} lg={3}>
-                                <Paper>
-                                    <Typography variant="h6" marginLeft="5px" align="center" style={{ fontWeight: 'bold', backgroundColor: '#C7DBF4' }}>
-                                        누적 이용자 성별 비율
-                                    </Typography>
-                                    <div style={{ height: 250 }}>
-                                        <MyResponsivePie data={accGenderTotalData} />
-                                    </div>
-                                </Paper>
-                            </Grid>
-                        </>
-
-                    </Grid>
-                </Container>
-	, [data.part_Total])
-            }
-
-	{React.useMemo(()=>
+	{/* {React.useMemo(()=> */}
                 <>
             <Container sx={{ py: 3 }} maxWidth="lg">
 
@@ -227,7 +228,7 @@ const Main = ({ data, accAgeGenderData, accAgeTotalData, accGenderTotalData, req
                                     <FiCardMedia
                                         media="picture"
                                         alt="Contemplative Reptile"
-                                        image={(value.sur_Img)}
+                                        image={value.sur_Img!=='EMPTY' && value.sur_Img}
                                         title="Contemplative Reptile"
                                     />
                                     <FiCardContent 
@@ -285,7 +286,7 @@ const Main = ({ data, accAgeGenderData, accAgeTotalData, accGenderTotalData, req
                 </Grid>
             </Container>
 	</>
-            ,[reqMain])}
+            {/* ,[reqMain])} */}
         </>
     );
 };
