@@ -157,6 +157,15 @@ public class SurveyService {
                 .build();
     }
 
+    public Boolean checkPart(String _id,String userEmail) {
+        if (!userEmail.equals(surveyDAO.selectOwner(_id)
+                .orElseThrow(() ->
+                        new NotFoundException(ErrorCode.NOT_FOUND_SURVEY))
+        ))
+        {    throw new ForbiddenException(ErrorCode.NOT_OWNER_SURVEY); }
+        return true;
+    }
+
     public SelectSurveyRes findById(String _id) {
         Survey_MySQL resultMySQL = surveyDAO.findById_MySQL(_id)
                 .orElseThrow(()-> new NotFoundException(ErrorCode.NOT_FOUND_SURVEY));
@@ -267,6 +276,7 @@ public class SurveyService {
             else
                 map.get("남성")[part_mySQL.get(i).getPart_Age()/10-1]++;
             map.get("total")[part_mySQL.get(i).getPart_Age()/10-1]++;
+
         }
         surveyResultDTO.setPartList(map);
 
@@ -373,8 +383,9 @@ public class SurveyService {
                 for(int k=0;k< surveyResultDTO.getAnswerList().get(i).get(j).length;k++){
                     if(surveyResultDTO.getAnswerList().get(i).get(j)[k].equals(""))
                         continue;
+                    System.out.println("k : "+ k);
                     System.out.println("selectResultMap" + selectResultMap.get(i).keySet());
-                    System.out.println("answerList Key : "+surveyResultDTO.getAnswerList().get(i).get(j)[k]);
+                    System.out.println("answer List :" + surveyResultDTO.getAnswerList().get(i).get(j));
                     System.out.println(selectResultMap.get(i).get(surveyResultDTO.getAnswerList().get(i).get(j)[k]));
                     System.out.println(part_mySQL.get(j).getPart_Age() + " "+ part_mySQL.get(j).getPart_Gender());
                     List<Integer> arrayList = selectResultMap.get(i).get(surveyResultDTO.getAnswerList().get(i).get(j)[k]);
@@ -412,11 +423,28 @@ public class SurveyService {
         return request.getRemoteAddr();
     }
 
-    public List<Comment> getCommentList (String _id) {
+    public CommentListRes getCommentList (String _id,  CommentListPageReq commnetlistDTO) {
         surveyDAO.findById_MySQL(_id)
                 .orElseThrow(()->new NotFoundException(ErrorCode.NOT_FOUND_SURVEY));
 
-        return commentDAO.commentlist(_id);
+        PageCriteria criteria = new PageCriteria();
+        criteria.setPage_Num(commnetlistDTO.getPage_Num());
+        criteria.set_id(_id);
+
+        // paginationInfo insert
+        PaginationInfo paginationInfo = new PaginationInfo(criteria);
+
+        // total count
+        int surveyTotalCount = commentDAO.commentlistTotalCount(criteria);
+
+        paginationInfo.setTotalRecordCount(surveyTotalCount);
+
+        List<Comment> commentList = commentDAO.commentlist(paginationInfo);
+
+        return CommentListRes.builder()
+                .paginationInfo(paginationInfo)
+                .Commentlist(commentList)
+                .build();
     }
 
     public void insertComment (String _id,InsertCommentReq insertCommentReq) {
@@ -435,8 +463,7 @@ public class SurveyService {
     public void updateComment(String _id ,ModifyCommentReq modifyCommentReq){
         surveyDAO.findById_MySQL(_id)
                 .orElseThrow(()->new NotFoundException(ErrorCode.NOT_FOUND_SURVEY));
-        commentDAO.comment(modifyCommentReq.getCom_ID())
-                .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_COMMENT));
+
 
         Comment comment = Comment.builder()
                 .Com_ID(modifyCommentReq.getCom_ID())
@@ -444,6 +471,9 @@ public class SurveyService {
                 .Com_Password(modifyCommentReq.getCom_Password())
                 .Com_Context(modifyCommentReq.getCom_Context())
                 .build();
+
+        commentDAO.comment(comment)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_COMMENT));
 
         if(passwordEncoder.matches(modifyCommentReq.getCom_Password(), commentDAO.checkCommentPW(comment)))
         {
@@ -456,14 +486,15 @@ public class SurveyService {
     public void deleteComment(String _id, DeleteCommentReq deleteCommentReq) {
         surveyDAO.findById_MySQL(_id)
                 .orElseThrow(()->new NotFoundException(ErrorCode.NOT_FOUND_SURVEY));
-        commentDAO.comment(deleteCommentReq.getCom_ID())
-                .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_COMMENT));
 
         Comment comment = Comment.builder()
                 .Com_ID(deleteCommentReq.getCom_ID())
                 ._id(_id)
                 .Com_Password(deleteCommentReq.getCom_Password())
                 .build();
+
+        commentDAO.comment(comment)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_COMMENT));
 
         if(passwordEncoder.matches(deleteCommentReq.getCom_Password(), commentDAO.checkCommentPW(comment)))
         {

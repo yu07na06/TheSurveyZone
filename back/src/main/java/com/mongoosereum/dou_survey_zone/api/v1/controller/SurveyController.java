@@ -37,9 +37,7 @@ public class SurveyController {
             @ApiResponse(code = 200, message = "성공", response = SelectSurveyRes.class)
     })
     public ResponseEntity selectSurveyList(
-
             @ApiParam(value = "페이징 처리 정보 DTO", required = true)
-
                     SurveyListPageReq surveylistDTO
     ) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -94,6 +92,22 @@ public class SurveyController {
         insertSurveyReq.setUser_Email(userEmail);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(surveyService.insertSurvey(insertSurveyReq));
+    }
+
+    @GetMapping(path = "/survey/{_id}/ModifyCheck")
+    @ApiOperation(value = "설문 수정 체크", notes = "설문 수정할때 설문 생성자 체크")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "유저 일치시", response = boolean.class),
+            @ApiResponse(code = 404, message = "설문 존재하지 않음" , response = ExceptionModel.class),
+            @ApiResponse(code = 403, message = "설문 생성자가 일치하지 않음" , response = ExceptionModel.class)
+    })
+    public ResponseEntity ModifyCheck(
+            @PathVariable("_id")
+                    String _id,
+            @AuthenticationPrincipal String userEmail
+    ) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(surveyService.checkPart(_id, userEmail));
     }
 
     // TODO 일단 보류
@@ -216,9 +230,11 @@ public class SurveyController {
     public ResponseEntity surComentList(
             @PathVariable("_id")
             @ApiParam(value = "설문조사 PK (영어+숫자 24글자)", required = true, example = "619b39da46f35902f0cc7757")
-                    String _id
+                    String _id,
+            @ApiParam(value = "페이징 처리 정보 DTO", required = true)
+                    CommentListPageReq commnetlistDTO
     ) {
-        return ResponseEntity.status(HttpStatus.OK).body(surveyService.getCommentList(_id));
+        return ResponseEntity.status(HttpStatus.OK).body(surveyService.getCommentList(_id,commnetlistDTO));
     }
 
     @PostMapping(path = "/survey/{_id}/comment")
@@ -238,7 +254,6 @@ public class SurveyController {
         surveyService.insertComment(_id,insertCommentReq);
         return ResponseEntity.status(HttpStatus.CREATED).body("Success");
     }
-
     @PutMapping(path = "/survey/{_id}/comment")
     @ApiOperation(value = "설문 댓글 수정")
     @ApiResponses({
@@ -252,6 +267,7 @@ public class SurveyController {
             @RequestBody
                     ModifyCommentReq modifyCommentReq
             ) {
+        System.out.println("설문 ID: "+_id);
         surveyService.updateComment(_id,modifyCommentReq);
         return ResponseEntity.status(HttpStatus.OK).body("Success");
     }
@@ -269,6 +285,7 @@ public class SurveyController {
             @RequestBody
                     DeleteCommentReq deleteCommentReq
             ) {
+        System.out.println("설문 ID: "+_id);
         surveyService.deleteComment(_id, deleteCommentReq);
         return ResponseEntity.status(HttpStatus.OK).body("Success");
     }

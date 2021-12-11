@@ -1,5 +1,7 @@
 package com.mongoosereum.dou_survey_zone.api.v1.dao;
 
+import com.mongoosereum.dou_survey_zone.api.v1.common.paging.PageCriteria;
+import com.mongoosereum.dou_survey_zone.api.v1.common.paging.PaginationInfo;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.comment.Comment;
 
 import java.util.List;
@@ -7,7 +9,9 @@ import java.util.Optional;
 
 public interface CommentDAO {
 
-    List<Comment> commentlist (String _id);
+    List<Comment> commentlist (PaginationInfo paginationInfo);
+
+    int commentlistTotalCount(PageCriteria pageCriteria);
 
     void insertComment(Comment comment);
 
@@ -17,5 +21,5 @@ public interface CommentDAO {
 
     void deleteComment(Comment comment);
 
-    Optional<Comment> comment(long com_ID);
+    Optional<Comment> comment(Comment comment);
 }
