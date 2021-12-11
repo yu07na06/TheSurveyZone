@@ -57,8 +57,8 @@ export function commentInsert (_id,commentObj){
 }
 
 // 설문 댓글 조회
-export function commentSelect (_id){
-  return axios.get(`/api/v1/survey/${_id}/comment`)
+export function commentSelect (_id,page_Num){
+  return axios.get(`/api/v1/survey/${_id}/comment/?page_Num=${page_Num}`)
 }
 
 // 설문 댓글 수정

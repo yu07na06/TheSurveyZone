@@ -138,7 +138,7 @@
     "customize-cra": "^1.0.0",
     "react-app-rewired": "^2.1.8"
   },
-  "proxy": "http://218.154.207.223:8080",
+  "proxy": "http://218.154.207.223:8080" ,
   "jest": {
     "roots": [
       "<rootDir>/src"

@@ -5,8 +5,9 @@ import Modal from '@mui/material/Modal';
 import { Box } from '@mui/system';
 import { Button, TextField } from '@mui/material';
 import ModeEditOutlineTwoToneIcon from '@mui/icons-material/ModeEditOutlineTwoTone';
+import ErrorSweet from '../common/modules/ErrorSweet';
 
-const ModifyComment = ({ data, _id, style, setCommentList }) => {
+const ModifyComment = ({ data, _id, style, setCommentList, currentPage, setCountPage }) => {
     const [modiText, setModiText] = useState(data.com_Context);
     const [ anchorEl, setAnchorEl ] = useState(null);
     const open = Boolean(anchorEl);
@@ -22,11 +23,11 @@ const ModifyComment = ({ data, _id, style, setCommentList }) => {
 
         // 수정 API 요청
         commentModifyAPI(_id, modiCommentObj)
-            .then(()=> commentSelectAPI(_id)
+            .then(()=> commentSelectAPI(_id, currentPage)
             // .then(res=>{console.log("성공!! : ",res.data)})
-                        .then(res=>{setCommentList(res.data)})
-                        .catch(err=>console.log("실패 : ",err)))
-            .catch(err=>console.log("실패 : ",err));
+                        .then(res=>{setCommentList(res.data.commentlist); setCountPage(res.data.paginationInfo.totalPageCount);})
+                        .catch(err=>{}))
+            .catch(err=>err.response.status==401&&alert('비밀번호 틀렸습니다.'));
         // 혹시 수정하고 api요청 안하고 닫기 눌렀을 경우를  대비해서 state 초기화
         setModiText(data.com_Context)
     }

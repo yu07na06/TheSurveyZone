@@ -19,14 +19,27 @@ import LinearMagnificationComp from '../comp/LinearMagnificationComp';
 import MultipleChoiceComp from '../comp/MultipleChoiceComp';
 import SubjectiveComp from '../comp/SubjectiveComp';
 
-const MainSurvey = ({ surveyReqForm, UpdateKey, day, setDay, tag, setTag, tags, handleClick, anchorEl, open, handleClose, question, ReadOnlyState, setUrl, setSur_Publish, }) => {
-    const [수정할때의데이터제목 , set수정할때의데이터제목] = useState();
-    const [수정할때의데이터본문 , set수정할때의데이터본문] = useState();
-    const defaultImage = "https://surveyzone.s3.ap-northeast-2.amazonaws.com/static/b5e552ea-8d6b-4582-89ae-1d25c25027b8no-image.png";  
+const MainSurvey = ({ 
+    surveyReqForm, 
+    UpdateKey, 
+    day, 
+    setDay, 
+    tag, 
+    setTag, 
+    tags, 
+    handleClick, 
+    anchorEl, 
+    open, 
+    handleClose, 
+    question, 
+    ReadOnlyState, 
+    setUrl, 
+    setSur_Publish, updateDataTitle , setUpdateDataTitle, updateDataContent , setUpdateDataContent}) => {
+    const defaultImage = "https://surveyzone.s3.ap-northeast-2.amazonaws.com/static/b5e552ea-8d6b-4582-89ae-1d25c25027b8no-image.png";
     useEffect(()=>{
           if(surveyReqForm!=null){
-              set수정할때의데이터제목(surveyReqForm.sur_Title)
-              set수정할때의데이터본문(surveyReqForm.sur_Content)
+              setUpdateDataTitle(surveyReqForm.sur_Title)
+              setUpdateDataContent(surveyReqForm.sur_Content)
           }
       },[surveyReqForm])
       surveyReqForm&&console.log("surveyReqForm.sur_State", surveyReqForm.sur_State);
@@ -48,8 +61,8 @@ const MainSurvey = ({ surveyReqForm, UpdateKey, day, setDay, tag, setTag, tags, 
                                         label="제목"
                                         placeholder="제목을 입력해주세요. (45자 이내)"
                                         inputProps={{ maxLength: 45 }}
-                                        value={수정할때의데이터제목}
-                                        onChange={e => set수정할때의데이터제목(e.target.value)}
+                                        value={updateDataTitle}
+                                        onChange={e => setUpdateDataTitle(e.target.value)}
                                     />
                                 </Grid>
                             </>
@@ -61,7 +74,7 @@ const MainSurvey = ({ surveyReqForm, UpdateKey, day, setDay, tag, setTag, tags, 
                                     {surveyReqForm.sur_Title}
                                 </Typography>
                                 <Typography color="gray" component="h6" variant="h6" align="center">
-                                    {수정할때의데이터본문}
+                                    {updateDataContent}
                                 </Typography>
                             </Grid>
                             </>
@@ -120,8 +133,8 @@ const MainSurvey = ({ surveyReqForm, UpdateKey, day, setDay, tag, setTag, tags, 
                                                 id="Sur_Content"
                                                 name="Sur_Content"
                                                 label="본문"
-                                                value={수정할때의데이터본문}
-                                                onChange={e => set수정할때의데이터본문(e.target.value)}
+                                                value={updateDataContent}
+                                                onChange={e => setUpdateDataContent(e.target.value)}
                                             />
                                         </Grid>
                                 </>
