@@ -5,15 +5,6 @@ import { useDispatch } from 'react-redux';
 import { submitAction } from '../../../modules/submitReducer';
 import LinearMagnification from '../UI/LinearMagnification';
 
-/*
-- ReadOnlyState : true / false      보기/수정/참여 시, 
-- ReadOnlyData                      보기/수정/참여 시, API에서 호출받은 데이터
-- UpdateKey                         수정일때 true, 그외에 false
-- realReadState                     보기일때 true, 그외에 false
-- number                            부모에서 카운팅한 값 ex) count+=1
-- setCheck                          부모에서 생성된 라디오 id 값만 합침 (제출 API 요청 시, 해당 데이터를 들고오기 위해 부모쪽에서 어떤 라디오가 생성되었는지 확인할 수 있어야 하기 때문에)
-- setDelIndex                       부모에서 삭제한 자식 컴포넌트를 처리 ()
-*/
 const LinearMagnificationComp = ({ ReadOnlyState, ReadOnlyData, UpdateKey, realReadState, number, setCheck, setDelIndex, }) => {
     const [ updateData, setUpdateData] = useState(ReadOnlyState ? ReadOnlyData.surQue_Content : null);
     const [ updateDataStart, setUpdateDataStart] = useState(ReadOnlyState ? ReadOnlyData.selectList[0].surSel_Content : null);
@@ -49,7 +40,7 @@ const LinearMagnificationComp = ({ ReadOnlyState, ReadOnlyData, UpdateKey, realR
     },[changeCircle])
     
     useEffect(()=>{
-        if(!ReadOnlyData || UpdateKey){ // 생성 및 수정 시
+        if(!ReadOnlyData || UpdateKey){
             setTimeout(()=>{
                 setCheck({[number]:[ `start_Step${number}`, `start_Name${number}_${minValue}`, `end_Step${number}`, `end_Name${number}_${maxValue}`]});
             },444);
@@ -81,13 +72,10 @@ const LinearMagnificationComp = ({ ReadOnlyState, ReadOnlyData, UpdateKey, realR
     
     return (
         <LinearMagnification
-            // 부모로부터
             ReadOnlyState={ReadOnlyState}
             ReadOnlyData={ReadOnlyData}
             UpdateKey={UpdateKey}
             number={number}
-
-            // 컴포넌트로부터
             updateData={updateData}
             setUpdateData={setUpdateData}
             updateDataStart={updateDataStart}

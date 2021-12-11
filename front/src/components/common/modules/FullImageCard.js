@@ -1,4 +1,3 @@
-// --- Material Ui Imports --- //
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardActions from "@material-ui/core/CardActions";
@@ -45,7 +44,6 @@ export const FiCardMedia = withStyles({
   }
 })(CardMedia);
 
-// --- Exports --- //
 export default {
   FiCard,
   FiCardActionArea,

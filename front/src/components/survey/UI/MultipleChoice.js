@@ -71,7 +71,6 @@ const MultipleChoice = ({ ReadOnlyState, ReadOnlyData, UpdateKey, count, number,
                                     label={`surQue_MaxAns${number}`}
                                     onChange={e => setMaxNum(e.target.value)}
                                 >
-                                    {/* 이거 왜 되는지는 모르겠는데, (( < )&&( < )) 이런식으로 쓰면 안되더라구요. 그래서 일단 이렇게 하면 해결이자 버그임! */}
                                     {(select.length < ReadOnlyData.selectList.length <= select.length) ?
                                         select.map((v, idx) => <option value={idx + 1}>{idx + 1}</option>)
                                         : ReadOnlyData.selectList.map((v, idx) => <option value={idx + 1}> {idx + 1} </option>)

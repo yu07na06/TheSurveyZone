@@ -1,12 +1,12 @@
-import React from 'react';
+import { Grid } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
-import { Grid } from '@mui/material';
-import ToggleBtn from '../ToggleBtn';
-import { Text } from '../comp/ResultMultiComp';
-import MyResponsivePie from '../charts/MyResponsivePie';
-import MyResponsiveLine from '../charts/MyResponsiveLine';
+import React from 'react';
 import MyResponsiveBar from '../charts/MyResponsiveBar';
+import MyResponsiveLine from '../charts/MyResponsiveLine';
+import MyResponsivePie from '../charts/MyResponsivePie';
+import { Text } from '../comp/ResultMultiComp';
+import ToggleBtn from '../ToggleBtn';
 
 const ResultMulti = ({ index, result, chartState, resultKeys, setChartState }) => {
     const newKey = Object.keys(result.resultMap[index]);
@@ -36,13 +36,11 @@ const ResultMulti = ({ index, result, chartState, resultKeys, setChartState }) =
                     <Grid item xs={12} md={6} lg={6}>
                         <Paper elevation={3} sx={{ bgcolor: '#A9D0F5', my: { xs: 1 }, p: { xs: 2 } }}>
                             <Text result={result} index={index} flag={"보기"} resultKeys={resultKeys} />
-                            {/* <Text result={result.resultMap} index={index} flag={"보기"} resultKeys={resultKeys} /> */}
                         </Paper>
                     </Grid>
                     <Grid item xs={12} md={6} lg={6}>
                         <Paper elevation={3} sx={{ bgcolor: '#81BEF7', my: { xs: 1 }, p: { xs: 2 } }}>
                             <Text result={result} index={index} flag={"결과"} resultKeys={resultKeys} />
-                            {/* <Text result={result.resultMap} index={index} flag={"결과"} resultKeys={resultKeys} /> */}
                         </Paper>
                     </Grid>
                     <Grid item xs={12} textAlign="right">
@@ -59,13 +57,11 @@ const ResultMulti = ({ index, result, chartState, resultKeys, setChartState }) =
                                                     return <MyResponsivePie data={newData} />;
                                                 case "Line":
                                                     return <MyResponsiveLine data={[{ "id":'결과', "data":newData1}]} />;
-                                                default: // Bar
+                                                default:
                                                     return <MyResponsiveBar data={newData}/>;
                                             }
                                         })()
                                     }
-                                {/* <BarChart data={result.resultMap[index]}/>
-                                <DoughnutChart data={result.resultMap[index]} /> */}
                                 </div>
                             </Paper>
                         </Paper>

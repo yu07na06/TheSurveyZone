@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { changePW as changePWAPI } from '../../../lib/api/auth';
 import ErrorSweet from '../../common/modules/ErrorSweet';
@@ -8,39 +8,36 @@ const ChangePWComp = () => {
     const [PWNOTMATCH, setPWNOTMATCH] = useState();
     const [User_Password, setUser_Password] = useState();
     const [passWordConfirm, setPassWordConfirm] = useState();
-    const pwResult = useRef(null);
-    const regexPW = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,15}$/;
+    const [pwResult,setPwResult] = useState();
+
+    const regexPW = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,16}$/;
     const history = useHistory();
 
     useEffect(() => {
         if (User_Password === passWordConfirm) {
-            // console.log("일치");
             setPWNOTMATCH(true);
         } else {
-            // console.log("불일치");
             setPWNOTMATCH(false);
         }
     },[User_Password, passWordConfirm]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("비밀번호가 서로 일치하는지의 여부 : ", PWNOTMATCH);
-        console.log("비밀번호 유효성을 만족하는지의 여부 : ", pwResult.current);
-        if(PWNOTMATCH&&pwResult.current){
+        if(PWNOTMATCH&&pwResult){
             changePWAPI({"user_Password":passWordConfirm})
-            .then(res=>console.log("성공 : ",res))
-            .catch(err=> ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null))
-            console.log("회원가입 완료!");
-            history.push('/');
+            .then(() =>{ ErrorSweet('info', null, "성공", "비밀번호 변경완료", null); history.push('/LoginPage');})
+            .catch(err => { 
+                if(err.response.data.errorCode=="400_4") ErrorSweet('error', null, "비밀번호 변경 실패", "기존 비밀번호와 동일합니다", null);
+                if(err.response.data.errorCode=="404_1") {ErrorSweet('error', null, "비정상적인 접근", "로그인 후 비밀번호 변경 부탁드립니다", null); history.push('./') }
+            });
         }
-           console.log("비밀번호 변경 양식 실패~");
     }
 
     const confirm = (e) => { 
         switch(e.target.name){
             case 'User_Password' : 
                 setUser_Password(e.target.value)
-                pwResult.current = regexPW.test(User_Password);
+                setPwResult(regexPW.test(e.target.value))
             break;
             case 'passWordConfirm' : 
                 setPassWordConfirm(e.target.value)

@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { mainList as mainListAPI } from '../lib/api/home';
 import { chartData } from '../modules/chartReducer';
+import { debounceText } from './common/debounceFunction';
 import ErrorSweet from './common/modules/ErrorSweet';
 import Main from './Main';
-import { debounceText } from './common/debounceFunction';
 
 const MainComp = ({ match }) => {
     const data = useSelector(state=>state.chartReducer.responseAcc);
@@ -16,10 +16,10 @@ const MainComp = ({ match }) => {
     const dispatch = useDispatch();
 
     const TAGENUM = {};
-    for (const value of data.sur_Tag) { TAGENUM[value.tag_ID] = value.tag_Name; } // 태그 enum으로 사용하기
+    for (const value of data.sur_Tag) { TAGENUM[value.tag_ID] = value.tag_Name; }
     
-    const [accAgeGenderData, accAgeTotalData, accGenderTotalData] = dataProcessing(data); // 차트 데이터 가공
-    const pageChange = page => setPageNum(page); // 페이징
+    const [accAgeGenderData, accAgeTotalData, accGenderTotalData] = dataProcessing(data);
+    const pageChange = page => setPageNum(page);
 
     useEffect(()=>{
         if(err !== null){
@@ -27,16 +27,14 @@ const MainComp = ({ match }) => {
         }
     },[err]);
 
-    // 홈에서 홈버튼 클릭 시,
     useEffect(()=>{
         setPageNum(1);
         setTagSearch('');
         setSearchText('');
     },[match.params, dispatch]);
 
-    // 차트 요청 및 main 리스트/태그/검색 요청
     useEffect(()=>{
-        dispatch(chartData());
+        dispatch(chartData());
         if(pageNum===undefined || tagSearch===undefined || searchText===undefined) return;
         mainListAPI(pageNum, tagSearch, searchText)
             .then(res => setReqMain(res.data))
@@ -69,10 +67,9 @@ const MainComp = ({ match }) => {
 
 export default MainComp;
 
-const dataProcessing = (data) =>{ // 차트 데이터 가공
+const dataProcessing = (data) =>{
     let accEachAgeWoman=[];
     let accEachAgeMan=[];
-    // if(data.part_Total===0)
     for (const key in data) {
         for (const childKey in data[key]) {
             switch(key){
@@ -96,5 +93,6 @@ const dataProcessing = (data) =>{ // 차트 데이터 가공
         { "id": "여성", "value": accEachAgeWoman.reduce((a,b)=>a+b), "color": "hsl(153, 70%, 50%)" },
         { "id": "남성", "value": accEachAgeMan.reduce((a,b)=>a+b), "color": "hsl(255, 70%, 50%)" },
     ]
+    
     return [accAgeGenderData, accAgeTotalData, accGenderTotalData]
 }

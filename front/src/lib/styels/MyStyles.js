@@ -1,6 +1,5 @@
 import styled from 'styled-components'
 
-// App.js
 export const Container = styled.div`
   position: absolute;
   top: 0;

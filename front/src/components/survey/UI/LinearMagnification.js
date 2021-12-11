@@ -6,9 +6,9 @@ import MenuItem from '@mui/material/MenuItem';
 import NativeSelect from '@mui/material/NativeSelect';
 import Paper from '@mui/material/Paper';
 import Select from '@mui/material/Select';
+import { debounce } from 'lodash';
 import React from 'react';
 import ReqSwitch from '../../common/modules/ReqSwitch';
-import { debounce } from 'lodash';
 
 const LinearMagnification = ({ 
     ReadOnlyState, 
@@ -78,7 +78,7 @@ const LinearMagnification = ({
                     <Grid item xs={12} md={6}>
                         <TextField
                             fullWidth
-                            onChange={(e) => { setUpdateDataStart(e.target.value); debounce(()=>{console.log('나야 나ㅎㅎㅎ좋아'); setTemp(e.target.value); },1777)(); }}
+                            onChange={(e) => { setUpdateDataStart(e.target.value); debounce(() => setTemp(e.target.value), 1777)(); }}
                             required
                             variant="filled"
                             name={`start_Step${number}`}
@@ -144,7 +144,7 @@ const LinearMagnification = ({
                         <Grid item  xs={12} md={6}  textAlign="left">
                             <TextField
                                 fullWidth
-                                onChange={(e) => { setUpdateDataEnd(e.target.value); debounce(()=>{console.log('나야 나ㅎㅎㅎ좋아끝'); setTemp(e.target.value); },1777)(); }}
+                                onChange={(e) => { setUpdateDataEnd(e.target.value); debounce(()=> setTemp(e.target.value), 1777)(); }}
                                 required
                                 variant="filled"
                                 name={`end_Step${number}`}
@@ -203,7 +203,6 @@ const LinearMagnification = ({
                                         disabled={ReadOnlyState && !UpdateKey}
                                         value={maxValue}
                                     >
-                                        {/* value = [1,2,3,4,5,6,7,8,9] */}
                                         {value.map(v =>
                                             (minValue === 0) ? <MenuItem value={v}>{v}</MenuItem> : <MenuItem value={v + 1}>{v + 1}</MenuItem>
                                         )}

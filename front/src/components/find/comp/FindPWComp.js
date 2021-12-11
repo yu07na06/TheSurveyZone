@@ -18,11 +18,6 @@ const FindPWComp = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            user_Email: data.get('user_Email'),
-            user_Name: data.get('user_Name'),
-            user_Tel: data.get('user_Tel'),
-        });
 
         const searchPWReq = ({
             user_Email: data.get('user_Email'),
@@ -31,8 +26,11 @@ const FindPWComp = () => {
         });
 
         searchPW(searchPWReq)
-            .then(res=> {console.log("성공했다 : ",res); successPW(res.data)})
-            .catch(err=> ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null));
+            .then( res => successPW(res.data) )
+            .catch(err => { 
+                if(err.response.data.errorCode=="400_3") ErrorSweet('error', null, "유효한값이 아닙니다", "이메일 형식과 성함 및 전화번호를 확인해주세요", null);
+                if(err.response.data.errorCode=="404_1") ErrorSweet('error', null, "실패", "일치하는 회원정보가 없습니다", null);
+            });
     };
 
       const onChange = (e) => {

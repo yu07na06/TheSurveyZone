@@ -15,35 +15,9 @@ import MyResponsiveLine from './result/charts/MyResponsiveLine';
 import MyResponsivePie from './result/charts/MyResponsivePie';
 import Comment from './comment/Comment';
 
-
-// export const A = ({data}) => {
-//     console.log("나를 새로 부르는거니 혹시?????");
-//         return(
-//         <Paper>
-//             <Grid container>
-
-//                 <Grid item xs={2.5} style={{ backgroundColor: "#9AAFD9" }}>
-//                 </Grid>
-
-//                 <Grid item xs={9.5}>
-//                     <Typography variant="h6" style={{ fontWeight: 'bold', margin: "5px" }} >
-//                         누적 설문 응답 수
-//                     </Typography>
-//                     <Typography variant="h6" style={{ color: 'gray', margin: "5px" }}>
-//                         {data} 명
-//                     </Typography>
-//                 </Grid>
-
-//             </Grid>
-//         </Paper>
-
-//     )
-// }
-
-
 const Main = ({ data, accAgeGenderData, accAgeTotalData, accGenderTotalData, reqMain, TAGENUM, setTagSearch, tagSearch, pageNum, pageChange, setSearchText, }) => {
     const theme = useTheme()
-    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+    const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
 
     return (
         <>
@@ -66,8 +40,6 @@ const Main = ({ data, accAgeGenderData, accAgeTotalData, accGenderTotalData, req
                         accGenderTotalData={accGenderTotalData}
                     />
                 :
-                    // eslint-disable-next-line react-hooks/rules-of-hooks
-                    // React.useMemo(()=>
                     <Container sx={{ py: 1 }} maxWidth="lg">
                         <Grid container spacing={{ xs: 1, sm: 2, md: 3 }}>
                             <Grid item xs={12} md={12} lg={12} >
@@ -157,11 +129,9 @@ const Main = ({ data, accAgeGenderData, accAgeTotalData, accGenderTotalData, req
 
                         </Grid>
                     </Container>
-                    // , [data.part_Total])
             ,[data.part_Total])}
 
-	{/* {React.useMemo(()=> */}
-                <>
+            <>
             <Container sx={{ py: 3 }} maxWidth="lg">
 
                 <Grid container>
@@ -192,7 +162,6 @@ const Main = ({ data, accAgeGenderData, accAgeTotalData, accGenderTotalData, req
                 <hr style={{ borderWidth: 1, borderColor: "#2E2E2E" }} />
             </Container>
 
-            {/* 태그 출력 */}
             <Container maxWidth="sm" align='center'  >
                 <Grid container
                     justifyContent="center"
@@ -215,7 +184,6 @@ const Main = ({ data, accAgeGenderData, accAgeTotalData, accGenderTotalData, req
 
             <Container sx={{ py: 5 }} maxWidth="lg">
                 <Grid container spacing={4} >
-                    {/* 설문 리스트 출력 */}
                     {reqMain && reqMain.surveylist.map((value) => (
                         <Grid item key={value._id} xs={12} sm={6} md={6} lg={4}>
                             <Card sx={{ display: 'flex', flexDirection: 'column' }} >
@@ -242,7 +210,6 @@ const Main = ({ data, accAgeGenderData, accAgeTotalData, accGenderTotalData, req
                                     </FiCardContent>
                                 </FiCard>
 
-                                {/* <CardMedia margin={1} style={{ height: "250px" }} image={(value.sur_Img)}/> */}
                                 {TAGENUM[value.tag_ID] != null ?
                                     <Typography align='center' style={{ borderRadius: "5px", backgroundColor: BackgoundColor({ tagid: `${value.tag_ID}` }), color: FontColor({ tagid: `${value.tag_ID}` }), width: "25%", marginLeft: "10px", marginTop: "10px" }}>
                                         {TAGENUM[value.tag_ID]}
@@ -262,7 +229,6 @@ const Main = ({ data, accAgeGenderData, accAgeTotalData, accGenderTotalData, req
                                     </div>
                                 </Paper>
                                 <CardActions style={{ height: "20px" }}>
-                                    {/* 설문 참여 링크 이동 */}
                                     {value.sur_State === 1 ?
                                         <Typography style={{ color: 'red' }}>
                                             진행중
@@ -286,7 +252,6 @@ const Main = ({ data, accAgeGenderData, accAgeTotalData, accGenderTotalData, req
                 </Grid>
             </Container>
 	</>
-            {/* ,[reqMain])} */}
         </>
     );
 };

@@ -1,14 +1,13 @@
-import React from 'react';
-import Paper from '@mui/material/Paper';
+import { Button, Grid, TextField } from '@mui/material';
 import Container from '@mui/material/Container';
-import ResultLinearComp from '../comp/ResultLinearComp';
-import ResultSubjective from './ResultSubjective';
-import { TextField, Grid, Button } from '@mui/material';
-import ResultMultiComp from '../comp/ResultMultiComp';
+import Paper from '@mui/material/Paper';
+import React from 'react';
 import OTL from '../../common/modules/OTL';
-import MyResponsiveBar from '../charts/MyResponsiveBar';
 import MyResponsivePie from '../charts/MyResponsivePie';
+import ResultLinearComp from '../comp/ResultLinearComp';
+import ResultMultiComp from '../comp/ResultMultiComp';
 import ToggleBtn from '../ToggleBtn';
+import ResultSubjective from './ResultSubjective';
 
 const Result = ({ result, wayBackMySurvey, chartState, setChartState }) => {
     const defaultImage = "https://surveyzone.s3.ap-northeast-2.amazonaws.com/static/b5e552ea-8d6b-4582-89ae-1d25c25027b8no-image.png";
@@ -21,12 +20,13 @@ const Result = ({ result, wayBackMySurvey, chartState, setChartState }) => {
                         result.answerList && (result.answerList[0].length === 0) ?
                             <OTL />
                             :
-                            <div>
+                            <>
                                 <Paper>
                                 <Container sx={{bgcolor: '#E0ECF8', py:2}}>
-                                <Grid container spacing={4}>
-                                <Grid style = {{height : 330}} sx={{py:4}} item xs={12} md={12} lg={9} container spacing={2}>
-                                    <Grid item xs={12} md={9} lg={9}>
+                                <Grid container spacing={1} >
+                                
+                                <Grid style = {{height : 330}} item xs={12} md={12} lg={9} container spacing={1}>
+                                    <Grid item xs={12} sm={9} md={9} lg={9}>
                                         <TextField
                                             multiline
                                             fullWidth
@@ -36,7 +36,7 @@ const Result = ({ result, wayBackMySurvey, chartState, setChartState }) => {
                                             focused
                                         />
                                     </Grid>
-                                    <Grid item xs={6} md={3} lg={3}>
+                                    <Grid item xs={12} sm={3} md={3} lg={3}>
                                         <TextField
                                             fullWidth
                                             label="태그"
@@ -60,7 +60,7 @@ const Result = ({ result, wayBackMySurvey, chartState, setChartState }) => {
                                             InputProps={{ readOnly: true }}
                                             focused />
                                     </Grid>
-                                    <Grid item xs={6} lg={3}>
+                                    <Grid item xs={6} sm={6} lg={3}>
                                         <TextField
                                             fullWidth
                                             label="진행상태"
@@ -68,7 +68,7 @@ const Result = ({ result, wayBackMySurvey, chartState, setChartState }) => {
                                             InputProps={{ readOnly: true }}
                                             focused />
                                     </Grid>
-                                    <Grid item xs={6} lg={3}>
+                                    <Grid item xs={6} sm={6} lg={3}>
                                         <TextField
                                             fullWidth
                                             label="공개여부"
@@ -76,7 +76,7 @@ const Result = ({ result, wayBackMySurvey, chartState, setChartState }) => {
                                             InputProps={{ readOnly: true }}
                                             focused />
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid item xs={12} sm={12} lg={12}>
                                         <TextField
                                             fullWidth
                                             value={result.sur_Content}
@@ -91,54 +91,61 @@ const Result = ({ result, wayBackMySurvey, chartState, setChartState }) => {
                                             id="Sur_Content"
                                         />
                                     </Grid>
+                                    
+                                    <Grid item xs={12}>
                                     {result.sur_Img != defaultImage || result.sur_Img == "EMPTY" &&
-                                        <Grid item xs={12}>
                                             <Paper sx={{ bgcolor: '#FFF4EF' }}>
                                                 <img src={result.sur_Img} alt="" />
                                             </Paper>
-                                        </Grid>
                                     }
+                                    </Grid>
 
-                                </Grid>
-                                <Grid item xs={12} md={12} lg={3} container>
-                                    {/* <Paper> */}
+                                    </Grid>
+
+                                <Grid item xs={12} md={12} lg={3} align='center'>
+
+                                        <Grid container>
                                         <Grid item xs={12} textAlign="right">
                                             <ToggleBtn fullWidth chartState={chartState} setChartState={setChartState} toggleValue={["성별", "연령별"]}/>
                                         </Grid>
-                                        <Grid item xs={12}>
-                                        <div style={{ height : 230, width: 250 }}>
+
+                                        <Grid item xs={12} >
+                                            <div style={{ height : 250, width: 250 }}>
                                             {result&&
                                                 ( () => {
                                                     switch(chartState){
                                                         case "연령별":
                                                             return <MyResponsivePie data={result.partList.total.reduce((acc,c,i) => { acc.push({'id':`${i+1}0대`, 'value': c }); return acc; },[]) } />
-                                                        default:
+                                                            default:
                                                             return <MyResponsivePie data={[{ 'id':'남성', 'value':result.partList.남성.reduce((a,b)=>a+b) }, { 'id':'여성', 'value':result.partList.여성.reduce((a,b)=>a+b) }]} />
                                                         }
                                                     }
-                                                )()
-                                            }
-                                        </div>
+                                                    )()
+                                                }
+                                            </div>
                                         </Grid>
-                                    {/* </Paper> */}
+
+                                        </Grid>
                                 </Grid>
+
                                 </Grid>
                                 </Container>
                                 </Paper>
+
                                 {result && result.questionList.map((value, index) => {
                                     switch (value.surQue_QType) {
-                                        case 0: // 주관식
+                                        case 0:
                                             return <ResultSubjective result={result} index={index} />
-                                        case 1: // 객관식
+                                        case 1:
                                             return <ResultMultiComp index={index} result={result} />
-                                        // return <ResultMulti index={index} result={result}/>
-                                        case 2: // 선형배율
+                                        case 2:
                                             return <ResultLinearComp value={value} index={index} result={result} />
                                         default:
                                             break;
                                     }
                                 })}
-                            </div>
+
+                            </>
                     }
                     <Button variant="contained" onClick={() => wayBackMySurvey()}>확인</Button>
                 </Paper>

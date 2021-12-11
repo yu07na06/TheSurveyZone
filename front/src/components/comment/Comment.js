@@ -1,14 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { commentInsert as commentInsertAPI, commentSelect as commentSelectAPI} from '../../lib/api/survey';
 import Tooltip from '@mui/material/Tooltip';
 import CommentIcon from '@mui/icons-material/Comment';
 import IconButton from '@mui/material/IconButton';
-import Modal from '@mui/material/Modal';
-import { Box } from '@mui/system';
-import { Button, Grid, TextField, Typography, Paper, Pagination } from '@mui/material';
+import { Button, Grid, TextField, Typography, Paper, Pagination, Dialog, DialogTitle, DialogContent, Container, List, ListItem, Menu, MenuItem, DialogActions } from '@mui/material';
 import ModifyComment from './ModifyComment';
 import DelComment from './DelComment';
-import ErrorSweet from '../common/modules/ErrorSweet';
 
 const style = {
     position: 'absolute',
@@ -31,23 +28,14 @@ const Comment = ({_id}) => {
 
     const callPaging = (page_Num) => {
         commentSelectAPI(_id,page_Num)
-        // .then(res=>{console.log("성공!! : ",res.data.commentlist)})
         .then(res=>{setCommentList(res.data.commentlist)})
-        .catch(err=>console.log("실패 : ",err));
         setCurrentPage(page_Num)
-        // getMySurveyListAPI(pageNum)
-        //   .then(res => setMysurList(res.data))
-        //   .catch(err => ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null))
       }
 
     const handleClick = (e) =>{
         setAnchorEl(e.currentTarget);
-        // 댓글 조회 API 요청
         commentSelectAPI(_id,currentPage)
-        // .then(res=>{console.log("성공!! : ",res.data)})
-        // .then(res=>{console.log("성공!! : ",res.data.commentlist)})
-        .then(res=>{console.log("성공!! : ",res.data); setCommentList(res.data.commentlist); setCountPage(res.data.paginationInfo.totalPageCount)})
-        .catch(err=>console.log("실패 : ",err));
+        .then(res=>{ setCommentList(res.data.commentlist); setCountPage(res.data.paginationInfo.totalPageCount)})
     } 
     const handleClose = () => setAnchorEl(null);
     
@@ -67,16 +55,10 @@ const Comment = ({_id}) => {
             com_Context.value = '';
         }
 
-        // 댓글 등록 API요청
         commentInsertAPI(_id,commentObj)
-        .then(()=>{init();commentSelectAPI(_id,currentPage) // 성공하면 댓글 목록 다시 요청
-            .then(res=>{console.log("성공!! : ",res.data); setCountPage(res.data.paginationInfo.totalPageCount); setCommentList(res.data.commentlist);})});
+        .then(()=>{init();commentSelectAPI(_id,currentPage)
+            .then(res=>{ setCountPage(res.data.paginationInfo.totalPageCount); setCommentList(res.data.commentlist);})});
     }
-
-    // useEffect(()=>{
-    //     console.log('변경된거 확인 했음ㅎ', commentList);
-        
-    // },[commentList])
 
     return(
         <>
@@ -86,44 +68,82 @@ const Comment = ({_id}) => {
                 </IconButton>
             </Tooltip>
 
-            <Modal
+            <Dialog
                 open={open}
                 onClose={handleClose}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
+                fullWidth
+                maxWidth="md"
             >
-                <Box sx={style}>
-                    <Paper sx={{ height: 400, width: 400 }} >
-                        <Grid container spacing={2}>
+                <DialogTitle id="form-dialog-title">설문 댓글</DialogTitle>
+                
+                <DialogContent>
+                <Container sx={{ py: 0 }}>   
+                    <List style={{height: 535, overflow: 'auto'}}>
                             {commentList.map((v, i)=>{
                                 return(
-                                <>
-                                    {/* {console.log("무슨값 ?  : ",v)} */}
-                                    <Grid item xs={9}>
-                                        <Typography>{`[${v.com_Nickname}] : ${v.com_Context} - ${v.com_Date}`}</Typography>
+                                <ListItem>  
+                                <Paper elevation={1} style={{ boxShadow: "0px 5px 6px -6px", width: "100%" }} >
+                                    <Grid container spacing={1}>
+                                    <Grid item xs={10}  sm={10} md={10} lg={10} container>
+                                    <Grid item xs={12}  sm={12} md={3} lg={3}>
+                                        <Typography variant="body1">{v.com_Nickname}</Typography>
                                     </Grid>
-                                    <Grid item xs={3}>
+                                    <Grid item xs={12}  sm={12} md={9} lg={9}>
+                                        <Typography variant="body2">{v.com_Date}</Typography>
+                                    </Grid>
+                                    </Grid>
+                                    <Grid align='center' item xs={2}  sm={2} md={2} lg={2}>
                                         <ModifyComment _id={_id} data={v} style={style} setCommentList={setCommentList} currentPage={currentPage} setCountPage={setCountPage} />
                                         <DelComment _id={_id} data={v} style={style} setCommentList={setCommentList} currentPage={currentPage} setCountPage={setCountPage} setCurrentPage={setCurrentPage}/>
                                     </Grid>
-                                </>)}
+                                    <Grid item xs={12}  sm={12} md={12} lg={12}>
+                                        <Typography style={{wordWrap:"break-word"}} variant="body2">{v.com_Context}</Typography>
+                                    </Grid>
+                                    
+                                    </Grid>
+                                </Paper >
+                                </ListItem>  
+                                )}
                             )}
-                        </Grid>
-                    </Paper>
-                    <Box component="form" onSubmit={e=>addCom(e)}>
-                        <TextField id='com_Nickname' label="닉네임" inputProps={{maxLength: 8}} required autoComplete="off"/>
-                        <TextField id='com_Password' type='password' label="비밀번호" inputProps={{maxLength: 8}} required autoComplete="off"/><br/>
-                        <TextField id='com_Context' fullWidth label="입력란" inputProps={{maxLength: 30}} required autoComplete="off"/>
-                        <Button type="submit">댓글달기</Button>
-                    </Box>
-                    <Button onClick={handleClose}>닫기</Button>
-
+                    </List>
+                        
+                    <Container sx={{ py: 1 }}>
                     <Grid container justifyContent="center">
-                        {/* {mySurList && <Pagination  count={5} shape="rounded" showFirstButton showLastButton page={currentPage} onChange={(_, page) => { callPaging(page); }} count={mySurList.paginationInfo.totalPageCount}  />} */}
                         <Pagination shape="rounded" showFirstButton showLastButton page={currentPage} onChange={(_,page) => { callPaging(page) }} count={countPage} />
                     </Grid>
-                </Box>
-            </Modal>
+                    </Container>
+
+                    <Container sx={{ py: 1 }} component="form" onSubmit={e=>addCom(e)}>
+                    <Grid container spacing={1}>
+                        <Grid item xs={12} sm={3} container spacing={1}>
+                        
+                        <Grid item xs={6} sm={12}>  
+                        <TextField id='com_Nickname' fullWidth size='small' label="닉네임" inputProps={{maxLength: 8}} required autoComplete="off"/>
+                        </Grid>
+
+                        <Grid item xs={6} sm={12}>
+                        <TextField id='com_Password' fullWidth size='small' type='password' label="비밀번호" inputProps={{maxLength: 8}} required autoComplete="off"/><br/>
+                        </Grid>
+                        </Grid>
+
+                        <Grid item xs={12} sm={9}>
+                        <TextField id='com_Context' multiline rows={3} size='small' fullWidth label="입력란" inputProps={{maxLength: 30}} required autoComplete="off"/>
+                        </Grid>
+
+                        <Grid item xs={12} align="right">
+                            <Button type="submit">댓글달기</Button>
+                        </Grid>
+                    </Grid>
+                    </Container>
+                  
+                    </Container>   
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>닫기</Button>
+                </DialogActions>
+            </Dialog>
         </>
     );
 }

@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
-import { Button, Grid, Paper, Slide } from '@mui/material';
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import { Container } from "@mui/material";
+import { Button, Container, Paper } from '@mui/material';
+import React, { useState } from 'react';
 import MyResponsiveLine from "../charts/MyResponsiveLine";
 
-// resultData => 10대 남성, 10대 여성, 20대 남성, 20대 여성, ...
 const ResultDetailChart = ({ data, resultData }) => {
     const [open, setOpen] = useState(false);
 
@@ -19,7 +17,7 @@ const ResultDetailChart = ({ data, resultData }) => {
     let sum = 0;
     resultData&&resultData.forEach((element, index) => {
         sum+=element;
-        if(index%2===0){ // 남성
+        if(index%2===0){
             resultDataMan.push({'x':`${idx}0`, 'y':element});
         }else{
             idx-=1;

@@ -22,7 +22,7 @@ const Subjective = ({
                         </Typography>
                     </Grid>
                 }
-                {(!ReadOnlyState || UpdateKey) && // 읽기 상태일때는 switch를 보여주지 않지만, 업데이트 상태일떄는 보여준다.
+                {(!ReadOnlyState || UpdateKey) &&
                     <>
                         <Grid item xs={9}>
                             <ReqSwitch number={number} flag={"qeustion"} essential={ReadOnlyData&&ReadOnlyData.surQue_Essential}/>
@@ -52,7 +52,7 @@ const Subjective = ({
                 }
                 </Grid>
 
-                {(ReadOnlyState && !UpdateKey) && // 응답상태에서만 보여주려고!
+                {(ReadOnlyState && !UpdateKey) &&
                     <Grid item xs={12}>
                         <TextField
                             name={`SurQueAnswer_${number}`}

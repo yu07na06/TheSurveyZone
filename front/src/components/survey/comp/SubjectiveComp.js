@@ -22,14 +22,11 @@ const SubjectiveComp = ({ ReadOnlyState, ReadOnlyData, UpdateKey, realReadState,
     return (
         <>
             <Subjective
-                // 부모로부터
                 ReadOnlyState={ReadOnlyState}
                 ReadOnlyData={ReadOnlyData}
                 UpdateKey={UpdateKey}
                 realReadState={realReadState}
                 number={number}
-
-                // 컴포넌트로부터
                 updateData={updateData}
                 setUpdateData={setUpdateData}
                 deleteQue={deleteQue}

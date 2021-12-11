@@ -153,7 +153,6 @@ const CreateSurvey = ({ onClick, day, setDay, question, open, anchorEl, handleCl
                 </Container>
                 
             </Box>
-            {/* </ThemeProvider> */}
         </>
     );
 };

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import ResultMulti from '../UI/ResultMulti';
 import { Grid, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import ResultDetailChart from '../UI/ResultDetailChart';
+import ResultMulti from '../UI/ResultMulti';
 
 const ResultMultiComp = ({ result, index, }) => {
     const resultKeys = Object.keys(result.resultMap[index])
@@ -24,8 +24,6 @@ const ResultMultiComp = ({ result, index, }) => {
 };
 
 export const Text = ({ result, index, flag, resultKeys }) => {
-    // console.log("resultKeys", resultKeys);
-    // console.log("Text result", result.selectResultMap[index]);
     return (
         <>
             {resultKeys.map((_, idx) =>
@@ -34,7 +32,6 @@ export const Text = ({ result, index, flag, resultKeys }) => {
                         <div>
                         {`${flag}${idx + 1} : ${flag == "보기" ? resultKeys[idx] : result.resultMap[index][resultKeys[idx]] }`}
                         {flag=="결과"&&<ResultDetailChart resultData={result.selectResultMap[index][resultKeys[idx]]} />}
-                        {/* {flag=="결과"&&<Button id={`result_${idx+1}`} style={{paddingTop:"0px", paddingBottom:"0px"}} onClick={e=>{resultDetailChart(e)}}>보기</Button>} */}
                         </div>
                     </Typography>
                 </Grid>

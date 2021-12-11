@@ -12,7 +12,7 @@ import MenuItem from '@mui/material/MenuItem';
 import NativeSelect from '@mui/material/NativeSelect';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Img } from '../../common/Function';
 import ReqSwitch from '../../common/modules/ReqSwitch';
 import LinearMagnificationComp from '../comp/LinearMagnificationComp';
@@ -28,21 +28,22 @@ const MainSurvey = ({
     setTag, 
     tags, 
     handleClick, 
-    anchorEl, 
-    open, 
-    handleClose, 
-    question, 
-    ReadOnlyState, 
-    setUrl, 
+    anchorEl,
+    open,
+    handleClose,
+    question,
+    ReadOnlyState,
+    setUrl,
     setSur_Publish, updateDataTitle , setUpdateDataTitle, updateDataContent , setUpdateDataContent}) => {
+
     const defaultImage = "https://surveyzone.s3.ap-northeast-2.amazonaws.com/static/b5e552ea-8d6b-4582-89ae-1d25c25027b8no-image.png";
     useEffect(()=>{
           if(surveyReqForm!=null){
               setUpdateDataTitle(surveyReqForm.sur_Title)
               setUpdateDataContent(surveyReqForm.sur_Content)
           }
-      },[surveyReqForm])
-      surveyReqForm&&console.log("surveyReqForm.sur_State", surveyReqForm.sur_State);
+    },[surveyReqForm])
+
     return (
         <>
             {surveyReqForm &&
@@ -174,15 +175,14 @@ const MainSurvey = ({
                         {(!UpdateKey && !ReadOnlyState) &&
                             surveyReqForm.questionList.map((value) => {
                                 switch (value.surQue_QType) {
-                                    case 0: // 주관식
+                                    case 0:
                                         return <SubjectiveComp ReadOnlyState={ReadOnlyState} ReadOnlyData={value} setDelIndex={null} number={value.surQue_Order} setCheck={null} UpdateKey={UpdateKey} />
-                                    case 1: // 객관식
+                                    case 1:
                                         return <MultipleChoiceComp ReadOnlyState={ReadOnlyState} ReadOnlyData={value} setDelIndex={null} number={value.surQue_Order} setCheck={null} UpdateKey={UpdateKey} />
-                                    case 2: // 선형배율
+                                    case 2:
                                         return <LinearMagnificationComp ReadOnlyState={ReadOnlyState} ReadOnlyData={value} setDelIndex={null} number={value.surQue_Order} setCheck={null} UpdateKey={UpdateKey} />
                                     default: break;
                                 }
-                                console.log("질문타입 확인", value);
                             })}
 
                         {question.map((value) => value)}

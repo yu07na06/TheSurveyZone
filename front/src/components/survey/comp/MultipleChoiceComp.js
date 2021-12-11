@@ -1,12 +1,11 @@
-import { Button, Grid, TextField, Typography } from '@mui/material';
-import React, { useRef, useState } from 'react';
-import MultipleChoice from '../UI/MultipleChoice';
-import {useEffect} from 'react';
+import { Button, Grid, TextField } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { submitAction } from '../../../modules/submitReducer';
 import ErrorSweet from '../../common/modules/ErrorSweet';
-import FormControlLabel from '@mui/material/FormControlLabel';
+import MultipleChoice from '../UI/MultipleChoice';
 
 const MultipleChoiceComp = ({ ReadOnlyState, ReadOnlyData, UpdateKey, realReadState, number, setCheck, setDelIndex, }) => {
     const [updateData, setUpdateData] = useState(ReadOnlyState ? ReadOnlyData.surQue_Content : null);
@@ -14,7 +13,7 @@ const MultipleChoiceComp = ({ ReadOnlyState, ReadOnlyData, UpdateKey, realReadSt
     const [deleteIndex, setDeleteIndex] = useState(null);
     const [unRequired, setUnRequired] = useState(null);
     const [maxNum, setMaxNum] = useState(null);
-    const [select, setSelect] = useState([]); // 보기 덩어리가 들어가있음
+    const [select, setSelect] = useState([]);
     const [temp, setTemp] = useState([]);
     const accChecked = useRef(0);
     const count = useRef(-1);
@@ -48,7 +47,7 @@ const MultipleChoiceComp = ({ ReadOnlyState, ReadOnlyData, UpdateKey, realReadSt
     },[ReadOnlyState])
 
     useEffect(()=>{
-        if((!ReadOnlyData || UpdateKey)&&temp.length!==0){ //생성할때 사용하고, 수정할때 사용할꺼야
+        if((!ReadOnlyData || UpdateKey)&&temp.length!==0){
             setTimeout(()=>{
                 setCheck({[number]:temp});
             },444);
@@ -67,14 +66,14 @@ const MultipleChoiceComp = ({ ReadOnlyState, ReadOnlyData, UpdateKey, realReadSt
     },[deleteIndex])
 
     useEffect(()=>{
-        setDeleteIndex(null); // 인덱스 중복될 수 있으니
+        setDeleteIndex(null);
     },[select])
 
     useEffect(()=>{
         if(surAns_Content){
             for (const key in surAns_Content) {
                     const splitValue = surAns_Content[key].split('_');
-                    if(splitValue[1]==unRequired && splitValue[0]=="SurQueCheck"){ // unRequired 는 required를 해제할 객관식 보기의 number이다.
+                    if(splitValue[1]==unRequired && splitValue[0]=="SurQueCheck"){
                         for(let i=0; i<=Number(splitValue[2]); i++){
                             let checkbox1 = document.querySelector(`input[name=SurQueCheck_${unRequired}_${i}]`);
                             checkbox1.required=false;
@@ -95,7 +94,7 @@ const MultipleChoiceComp = ({ ReadOnlyState, ReadOnlyData, UpdateKey, realReadSt
 
     const AddText = ({number, ReadOnlyData, addMaxNum, checkBoxEssential, count}) => {
         const [updateDataAddText , setUpdateDataAddText] = useState(ReadOnlyState?ReadOnlyData.surSel_Content:null);
-        !UpdateKey && setTemp([...temp, `SurQue_Ans_${number}_${count}`]); // 질문에 대한 보기 이름 덩어리 합치는 중
+        !UpdateKey && setTemp([...temp, `SurQue_Ans_${number}_${count}`]);
         dispatch(submitAction({[number]:`SurQueCheck_${number}_${count}`}))
         return(
             <Grid key={`SurQue_Ans_${number}_${count}`} container spacing={1}>
@@ -148,13 +147,10 @@ const MultipleChoiceComp = ({ ReadOnlyState, ReadOnlyData, UpdateKey, realReadSt
     return (
         <>
             <MultipleChoice 
-                // 부모로부터
                 ReadOnlyState={ReadOnlyState}
                 ReadOnlyData={ReadOnlyData}
                 UpdateKey={UpdateKey}
                 number={number}
-                
-                // 컴포넌트로부터
                 updateData={updateData}
                 setUpdateData={setUpdateData}
                 select={select}

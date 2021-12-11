@@ -1,13 +1,14 @@
-import { Button, TextField } from '@mui/material';
 import ForwardToInboxIcon from '@mui/icons-material/ForwardToInbox';
+import { Button, TextField } from '@mui/material';
 import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import React, { useState } from 'react';
-import EList from './EList';
 import { surveySend as surveySendAPI } from '../../../lib/api/survey';
+import ErrorSweet from '../../common/modules/ErrorSweet';
+import EList from './EList';
 
 const SendEmail = ({ _id }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -25,19 +26,16 @@ const SendEmail = ({ _id }) => {
   };
 
   const send = (e) => {
-    console.log(e);
     handleClose();
-    // 여기서 list 요청해야함!
     surveySendAPI(_id, emailList)
-      .then(res => console.log("성공", res))
-      .catch(err => console.log("실패", err));
+      .then(res => ErrorSweet('info', null, '메일 전송 완료', '메일을 성공적으로 전송을 완료했습니다.', null ))
+      .catch(err => ErrorSweet('error', null, '메일 전송 실패', '메일 전송에 실패했습니다.', null ));
     setEmailList([])
   }
 
   const add = (e) => {
     e.preventDefault();
-    if (email === "") return;
-    if (email === null) return;
+    if (email === "" || email === null ) return;
     setEmailList([...emailList, email])
     setEmail("")
   }
@@ -46,12 +44,11 @@ const SendEmail = ({ _id }) => {
     setEmail(e.target.value)
   }
 
-
   return (
     <>
       <Tooltip title="이메일 전송">
         <IconButton onClick={handleClick} size="small" sx={{}}>
-          <ForwardToInboxIcon onClick={(e) => console.log("나를 눌렀는가?")} />
+          <ForwardToInboxIcon />
         </IconButton>
       </Tooltip>
       <Menu
@@ -89,7 +86,7 @@ const SendEmail = ({ _id }) => {
 
         <Box component="form" onSubmit={(e) => add(e)} >
           <MenuItem>
-            <TextField onChange={(e) => checkEmail(e)} type="email" label="E-maile" id="email" name="email" value={email} />
+            <TextField onChange={(e) => checkEmail(e)} type="email" label="E-mail" id="email" name="email" value={email} />
             <Button type="submit" name="add" id="add" key="add"> + </Button>
             <Button onClick={(e) => send(e)} tname="send" id="send"> 전송 </Button>
             <Button onClick={handleClose}>닫기</Button>

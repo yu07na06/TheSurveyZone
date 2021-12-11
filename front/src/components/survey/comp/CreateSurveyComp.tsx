@@ -15,16 +15,16 @@ const CreateSurveyComp = () => {
   const [day, setDay] = useState([new Date(), new Date()]);
   const [Sur_Publish, setSur_Publish] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [question, setQuestion] = useState([]); // 질문 덩어리(객관식, 주관식, 선형배율)
-  const [question_ans, setQuestion_Ans] = useState({}); // 질문에 대한 보기 이름에 대한 배열을 보내기 위해
+  const [question, setQuestion] = useState([]);
+  const [question_ans, setQuestion_Ans] = useState({});
   const [delIndex, setDelIndex] = useState();
   const [check, setCheck] = useState({});
   const [tag, setTag] = useState('');
   const [tags, setTags] = useState();
   const open = Boolean(anchorEl);
+  const [url, setUrl] = useState(null);
   const count = useRef(0);
   const history = useHistory();
-  const [url, setUrl] = useState(null);
 
   useEffect(() => {
     if (cookies.Authorization == null) {
@@ -40,14 +40,13 @@ const CreateSurveyComp = () => {
   const handleClick = (event) => setAnchorEl(event.currentTarget);
 
   const handleClose = (e) => {
-    setAnchorEl(null); // 메뉴 닫기
+    setAnchorEl(null);
     switch (e.target.id) {
       case '객관식':
         setQuestion([...question, <div key={count.current}><MultipleChoiceComp key="Mul" ReadOnlyState={false} ReadOnlyData={null} setDelIndex={setDelIndex} number={count.current} setCheck={setCheck} UpdateKey={false} realReadState={undefined} /></div>]);
         break;
       case '주관식':
         setQuestion([...question, <div key={count.current}><SubjectiveComp key="Sub" ReadOnlyState={false} ReadOnlyData={null} setDelIndex={setDelIndex} number={count.current} setCheck={setCheck} UpdateKey={false} realReadState={undefined} /></div>]);
-        // setQuestion([...question, <div key={count.current}><div key="Sub"><SubjectiveComp ReadOnlyState={false} ReadOnlyData={null} setDelIndex={setDelIndex} number={count.current} setCheck={setCheck} UpdateKey={false} realReadState={undefined} /></div></div>]);
         break;
       case '선형배율':
         setQuestion([...question, <div key={count.current}><LinearMagnificationComp key="Lin" ReadOnlyState={false} ReadOnlyData={null} setDelIndex={setDelIndex} number={count.current} setCheck={setCheck} UpdateKey={false} realReadState={undefined} /></div>]);
@@ -58,35 +57,28 @@ const CreateSurveyComp = () => {
   };
 
   useEffect(() => {
-    setQuestion_Ans({ ...question_ans, ...check }); // 객관식, 주관식, 선형 배율의 보기들을 합치는 곳
+    setQuestion_Ans({ ...question_ans, ...check });
   }, [check]);
 
-  // 질문 삭제
-  useEffect(() => { // 객,주,선 삭제
+  useEffect(() => {
     const newQuestionList = question.filter((value) => value.key !== delIndex);
     setQuestion(newQuestionList);
     
-    for (const key in question_ans) { // 해당 객관식 보기 삭제
+    for (const key in question_ans) {
       if (key == delIndex) {
         delete question_ans[key];
       }
     }
   }, [delIndex]);
 
-  const onClick = (e) => { // 완료 버튼 클릭 시, node에게 보냄
-    e.preventDefault(); // 화면 유지
+  const onClick = (e) => {
+    e.preventDefault();
     if (question.length == 0) {
       ErrorSweet('info', null, "생성 양식 미충족", "최소 하나의 질문이 필요합니다.", null);
       return;
     }
 
     const obj = submitOBJ(e, question_ans, question, day, Sur_Publish, url);
-
-    console.log("생성 시, 객체 확인합니다.", obj);
-    console.log(JSON.stringify(obj));
-    // 설문지 생성 API
-    console.log("process.env.shareURL", process.env.REACT_APP_URL);
-    
     debounceCreate(obj, process.env.REACT_APP_URL, history);
   };
 

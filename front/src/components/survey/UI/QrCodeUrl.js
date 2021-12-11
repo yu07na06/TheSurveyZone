@@ -4,7 +4,7 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { Button } from '@mui/material';
+import { Button, Container, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import QRCode from "qrcode.react";
 import DownloadIcon from '@mui/icons-material/Download';
 import CloseIcon from '@mui/icons-material/Close';
@@ -34,51 +34,31 @@ const QrCodeUrl = ({ id }) => {
                     <QrCode2Icon/>
                 </IconButton>
             </Tooltip>
-            
-            <Menu
-                anchorEl={anchorEl}
-                open={open}
-                PaperProps={{
-                        elevation: 0,
-                        sx: {
-                            overflow: 'visible',
-                            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                            mt: 1.5,
-                            '& .MuiAvatar-root': {
-                            width: 32,
-                            height: 32,
-                            ml: -0.5,
-                            mr: 1,
-                            },
-                            '&:before': {
-                            content: '""',
-                            display: 'block',
-                            position: 'absolute',
-                            top: 0,
-                            right: 14,
-                            width: 10,
-                            height: 10,
-                            bgcolor: 'background.paper',
-                            transform: 'translateY(-50%) rotate(45deg)',
-                            zIndex: 0,
-                            },
-                        },
-                    }}
-                transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+
+            <Dialog 
+            anchorEl={anchorEl}
+            open={open}
+            maxWidth="xs"
+            aria-labelledby="modal-modal-title"
             >
-                <MenuItem>
+                <DialogTitle id="form-dialog-title">QR Code</DialogTitle>
+                <DialogContent>
+                <Container >
                     <QRCode 
                         id="qr-gen" 
                         value={process.env.REACT_APP_URL+id} 
-                        size="200"
                         level={"H"}
                         includeMargin={true}
+                        onClose={handleClose}
                     />
-                </MenuItem>
+                    </Container>
+                </DialogContent>
+                <DialogActions>
                 <Button onClick={downloadQRCode}><DownloadIcon /></Button>
                 <Button onClick={handleClose}><CloseIcon /></Button>
-            </Menu>
+                </DialogActions>
+            </Dialog>
+            
         </>
     );
 };

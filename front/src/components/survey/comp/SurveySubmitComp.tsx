@@ -1,5 +1,4 @@
 import { Typography } from '@mui/material';
-import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
@@ -20,14 +19,14 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
     const [ checkboxlistState, setCheckboxlistState ] = useState(null);
     const [activeStep, setActiveStep] = React.useState(0);
     const [surveyReqForm, setSurveyReqForm] = useState(null);
-    const [day, setDay] = useState([new Date(), new Date()]); // 수정일때 사용
-    const [tag, setTag] = useState(null); // 수정일때 사용
-    const [tags, setTags] = useState(null); // 수정일때 사용
-    const [question, setQuestion] = useState([]); // 질문 덩어리(객관식, 주관식, 선형배율)
+    const [day, setDay] = useState([new Date(), new Date()]);
+    const [tag, setTag] = useState(null);
+    const [tags, setTags] = useState(null);
+    const [question, setQuestion] = useState([]);
     const [anchorEl, setAnchorEl] = useState(null);
     const [check, setCheck] = useState({});
     const [delIndex, setDelIndex] = useState(null);
-    const [question_ans, setQuestion_Ans] = useState({}); // 질문에 대한 보기 이름에 대한 배열을 보내기 위해
+    const [question_ans, setQuestion_Ans] = useState({});
     const [sex,setSex] = useState();
     const [age,setAge] = useState();
     const submitCheck = useRef(false);
@@ -40,7 +39,6 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
     const [Sur_Publish, setSur_Publish] = useState(false);
 
     const surveyCheckFunc = (overlapIP, surState) => {
-        // 참여한 IP=false / 참여안한 IP=true
         if(!overlapIP && !realReadState){
             ErrorSweet('error', null, "중복 참여", "이미 참여한 설문입니다", "설문 보기 페이지로 이동합니다")
                 .then(() => history.push(`/ReadOnlyPage/${surveykey}`));
@@ -53,47 +51,46 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
     useEffect(()=>{
         surveyCheckAPI(surveykey)
             .then(res => surveyCheckFunc(res.data.check_IP, res.data.check_State))
-            .catch(err => ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null))
+            .catch(err =>{ ErrorSweet('error', null, "존재 하지않는 설문입니다","홈페이지로 이동합니다", null); history.push("/")})
     },[])
 
-    useEffect(()=>{ // 수정 시, mainSurvey 출력 및 태그 목록 불러오기
+    useEffect(()=>{
         if(UpdateKey){ 
-            surveyModifyCheckAPI(surveykey) // 수정 시, 권한 여부 확인
-                .then(res=>console.log("수정 권한 있음", res))
-                .catch(err=>{ ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null).then(() => history.push('/')) }) // 403 오류
+            surveyModifyCheckAPI(surveykey)
+                .catch(err=>{ ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null).then(() => history.push('/')) })
             
             submitCheck.current = true
-            setActiveStep(1); // mainSurveyComp 바로 이동
-            getTagsAPI() // 태그 목록 불러오기
+            setActiveStep(1);
+            getTagsAPI()
                 .then(res=> setTags(res.data))
                 .catch(err=> ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null));
         }
     },[])
 
-    useEffect(()=>{ // 이거 삭제해도 되는데, 확인 바람
+    useEffect(()=>{
         setCheckboxlistState(surAns_Content)
     },[surAns_Content])
 
-    useEffect(() => { // 설문 조회/수정 시 데이터 들고오는거 알지?
+    useEffect(() => { 
         if(!UpdateKey&&ReadOnlyState){
-            setActiveStep(1); // mainSurveyComp 바로 이동
+            setActiveStep(1);
         }
         getSurveyAPI(surveykey)
-           .then(res =>{ console.log("요청 결과: ",res.data); setSurveyReqForm(res.data); })
-           .catch(err => console.log("요청 오류", err)); // 설문 참여한 사람이라면, 서버쪽에서 알려주어서 튕구는 걸로 함 403
+           .then( res => { setSurveyReqForm(res.data); setSur_Publish(!res.data.sur_Publish) })
    },[surveykey])
 
-   useEffect(()=>{ // 수정/응답시 뿌려주는 용도
-       if(surveyReqForm){ // 수정할때도 쓰고~ 응답할때도 쓰는~ 그저 뿌려주는 용도의 useEffect입니다.
+   useEffect(()=>{
+       if(surveyReqForm){
            setDay([new Date(surveyReqForm.sur_StartDate), new Date(surveyReqForm.sur_EndDate)]);
            count.current = surveyReqForm.questionList.length;
-           let newOrderQuestion = surveyReqForm.questionList.map((value, index)=>{
+
+           let newOrderQuestion = surveyReqForm.questionList.map((value, index) => {
                 switch(value.surQue_QType){
-                    case 0: // 주관식
+                    case 0:
                         return <div key={index}><SubjectiveComp key="Sub" ReadOnlyState={true} ReadOnlyData={value} setDelIndex={setDelIndex} number={value.surQue_Order} setCheck={setCheck} UpdateKey={UpdateKey} realReadState={realReadState}/></div>;    
-                    case 1: // 객관식
+                    case 1:
                         return <div key={index}><MultipleChoiceComp key="Mul" ReadOnlyState={true} ReadOnlyData={value} setDelIndex={setDelIndex} number={value.surQue_Order} setCheck={setCheck} UpdateKey={UpdateKey} checkboxlistState={checkboxlistState} realReadState={realReadState} /></div>;
-                    case 2: // 선형배율
+                    case 2:
                         return <div key={index}><LinearMagnificationComp key="Lin" ReadOnlyState={true} ReadOnlyData={value} setDelIndex={setDelIndex} number={value.surQue_Order} setCheck={setCheck} UpdateKey={UpdateKey} realReadState={realReadState} /></div>;
                     default: break;
                 }
@@ -132,25 +129,20 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
                             </Typography>
                         </React.Fragment>;
             default:
-                break; // 여기로 올때, 해결해야하는데,
+                break;
         }
     }
     
     useEffect(()=>{
-        setQuestion_Ans({...question_ans, ...check}); // 객관식, 주관식, 선형 배율의 보기들을 합치는 곳
+        setQuestion_Ans({...question_ans, ...check});
     },[check]);
 
     useEffect(()=>{
-        // 객,주,선 삭제
-        
-        
         const newQuestionList = question.filter((value)=> {
-            console.log("value", value);
             return value.key!==delIndex
         } );
         setQuestion(newQuestionList);
 
-        // 해당 객관식 보기 삭제
         for (const key in question_ans) {
             if(key == delIndex)
                 delete question_ans[key];
@@ -159,7 +151,7 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
 
 
     const handleClose = (e) => {
-        setAnchorEl(null); // 메뉴 닫기
+        setAnchorEl(null);
         switch(e.target.id){
             case '객관식':
                 setQuestion([...question, <div key={count.current}><MultipleChoiceComp key="Mul" ReadOnlyState={false} ReadOnlyData={null} setDelIndex={setDelIndex} number={count.current} setCheck={setCheck} UpdateKey={false} /></div>  ]);
@@ -199,7 +191,7 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
                 temp = data.get(surAns_Content[key]);
                 
                 switch(splitValue[0]){
-                    case 'SurQueAnswer': // 주관식
+                    case 'SurQueAnswer':
                         if(tempString!="" || splitValue[1] != OrderNumber){
                             tempArray.push(tempString);
                             tempString = "";
@@ -209,7 +201,7 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
                         OrderNumber++;
                         break;
 
-                    case 'SurQueCheck': // 객관식
+                    case 'SurQueCheck':
                         for(let i=0; i<=Number(splitValue[2]); i++){
                             temp = data.get(`SurQueCheck_${splitValue[1]}_${i}`);
                             
@@ -223,7 +215,7 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
                             }
                         }
                         break;
-                    case 'radio': // 선형배율
+                    case 'radio':
                         if(tempString!="" || splitValue[1] != OrderNumber){
                             tempArray.push(tempString);    
                             tempString = "";
@@ -249,35 +241,32 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
                 return {'surAns_Content':v}
             })
 
-            if(UpdateKey){ // 수정 버튼 클릭 ----------------------------------------------------------------------------
+            if(UpdateKey){
                 const obj = submitOBJ(e, question_ans, question, day, Sur_Publish, url);
-                console.log("수정 데이터", obj);
-
                 modifySurveyAPI(surveykey, obj)
-                    .then(res=>console.log("수정 성공..?", res))
                     .catch(err=> ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null));
+
                 wayBackMySurvey();
-            }else{ // 질문 응답 버튼 클릭 시 ---------------------------------------------------------------------------------------------------------------------------
+            }else{
                 postSurveyAPI(surveykey,{"age":sexAge.age, "gender":sexAge.sex, "answerList":[...answerList]})
-                    .then(res => console.log("제출 성공..?",res))
                     .catch(err => ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null));
             }
             
             submitCheck.current = false;
         }
-        setActiveStep(activeStep + 1); // 다음 페이지로 이동
+        setActiveStep(activeStep + 1);
     }
 
     const nextPage = () => dispatch(beforeAction({age:age,sex:sex}));
 
     const wayBackHome = () =>{
         ErrorSweet('success', null, "참여 완료", "메인 페이지로 이동합니다.", null)
-        .then(() => history.push('/'));
+            .then(() => history.push('/'));
     }
 
     const wayBackMySurvey = () => {
         ErrorSweet('success', null, "완료", "내 설문지로 이동합니다.", null)
-        .then(() => history.goBack());
+            .then(() => history.goBack());
     }
 
     return (
