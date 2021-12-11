@@ -274,7 +274,7 @@ public class SurveyService {
             if(part_mySQL.get(i).getPart_Gender() == 'M')
                 map.get("남성")[part_mySQL.get(i).getPart_Age()/10-1]++;
             else
-                map.get("남성")[part_mySQL.get(i).getPart_Age()/10-1]++;
+                map.get("여성")[part_mySQL.get(i).getPart_Age()/10-1]++;
             map.get("total")[part_mySQL.get(i).getPart_Age()/10-1]++;
 
         }
@@ -383,11 +383,6 @@ public class SurveyService {
                 for(int k=0;k< surveyResultDTO.getAnswerList().get(i).get(j).length;k++){
                     if(surveyResultDTO.getAnswerList().get(i).get(j)[k].equals(""))
                         continue;
-                    System.out.println("k : "+ k);
-                    System.out.println("selectResultMap" + selectResultMap.get(i).keySet());
-                    System.out.println("answer List :" + surveyResultDTO.getAnswerList().get(i).get(j));
-                    System.out.println(selectResultMap.get(i).get(surveyResultDTO.getAnswerList().get(i).get(j)[k]));
-                    System.out.println(part_mySQL.get(j).getPart_Age() + " "+ part_mySQL.get(j).getPart_Gender());
                     List<Integer> arrayList = selectResultMap.get(i).get(surveyResultDTO.getAnswerList().get(i).get(j)[k]);
                     int idx = getIndex(part_mySQL.get(j).getPart_Gender(),part_mySQL.get(j).getPart_Age());
                     arrayList.set(idx,arrayList.get(idx)+1);

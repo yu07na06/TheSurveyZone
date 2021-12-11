@@ -60,7 +60,7 @@ public class MailService {
 //                .build()) == 0)
 //            return;
 
-        String subject = "[DouSurveyZone]비밀번호 재설정 안내 메일";
+        String subject = "[TheSurveyZone]비밀번호 재설정 안내 메일";
 
         Context context = new Context();
         context.setVariable("userName",User_Name);
@@ -85,7 +85,7 @@ public class MailService {
         System.out.println(survey_MySQL.getSur_StartDate());
 
 
-        String subject = "[DouSurveyZone] 설문시작 안내 메일";
+        String subject = "[TheSurveyZone] 설문시작 안내 메일";
 
         Context context = new Context();
         context.setVariable("mainLink", mainPageLink);
@@ -104,7 +104,7 @@ public class MailService {
 
         String sendto = survey_MySQL.getUser_Email();
 
-        String subject = "[DouSurveyZone] 설문종료 안내 메일";
+        String subject = "[TheSurveyZone] 설문종료 안내 메일";
 
         Context context = new Context();
         context.setVariable("mainLink",mainPageLink);
@@ -121,7 +121,7 @@ public class MailService {
 
     public void sendSurvey(SendSurveyReq sendSurveyReq){
 
-        String subject = "[DouSurveyZone] " + sendSurveyReq.getSurvey().getSur_Content() + " 참여 안내 메일";
+        String subject = "[TheSurveyZone] " + sendSurveyReq.getSurvey().getSur_Title() + " 참여 안내 메일";
         Context context = new Context();
         context.setVariable("mainLink",mainPageLink);
         context.setVariable("Sur_Title", sendSurveyReq.getSurvey().getSur_Title());
