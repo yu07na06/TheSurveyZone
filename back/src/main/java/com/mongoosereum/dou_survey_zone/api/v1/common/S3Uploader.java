@@ -32,7 +32,7 @@ public class S3Uploader {
         String contentType = multipartFile.getContentType();
         if(!contentType.contains("image"))
             throw new BadRequestException(ErrorCode.NOT_IMAGE);
-        if(multipartFile.getSize() > 1048576L)
+        if(multipartFile.getSize() > 10485760L)
             throw new BadRequestException(ErrorCode.OUT_OF_MEMORY_IMAGE);
         File uploadFile = convert(multipartFile)  // 파일 변환할 수 없으면 에러
                 .orElseThrow(() -> new BadRequestException(ErrorCode.CONVERT_FAIL));

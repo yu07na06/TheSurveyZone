@@ -32,6 +32,9 @@ public class PageCriteria {
 
         private String user_Email;
 
+        /** 설문 조사 */
+        private String _id;
+
         /** 시작 페이지 **/
         public int getStart_Page() {
             return (page_Num - 1) * records_Perpage;
