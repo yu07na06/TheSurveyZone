@@ -5,9 +5,10 @@ import CommentIcon from '@mui/icons-material/Comment';
 import IconButton from '@mui/material/IconButton';
 import Modal from '@mui/material/Modal';
 import { Box } from '@mui/system';
-import { Button, Grid, TextField, Typography, Paper } from '@mui/material';
+import { Button, Grid, TextField, Typography, Paper, Pagination } from '@mui/material';
 import ModifyComment from './ModifyComment';
 import DelComment from './DelComment';
+import ErrorSweet from '../common/modules/ErrorSweet';
 
 const style = {
     position: 'absolute',
@@ -25,13 +26,27 @@ const Comment = ({_id}) => {
     const [ commentList, setCommentList ] = useState([]);
     const [ anchorEl, setAnchorEl ] = useState(null);
     const open = Boolean(anchorEl);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [countPage, setCountPage] = useState(1);
+
+    const callPaging = (page_Num) => {
+        commentSelectAPI(_id,page_Num)
+        // .then(res=>{console.log("성공!! : ",res.data.commentlist)})
+        .then(res=>{setCommentList(res.data.commentlist)})
+        .catch(err=>console.log("실패 : ",err));
+        setCurrentPage(page_Num)
+        // getMySurveyListAPI(pageNum)
+        //   .then(res => setMysurList(res.data))
+        //   .catch(err => ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null))
+      }
 
     const handleClick = (e) =>{
         setAnchorEl(e.currentTarget);
         // 댓글 조회 API 요청
-        commentSelectAPI(_id)
+        commentSelectAPI(_id,currentPage)
         // .then(res=>{console.log("성공!! : ",res.data)})
-        .then(res=>{setCommentList(res.data)})
+        // .then(res=>{console.log("성공!! : ",res.data.commentlist)})
+        .then(res=>{console.log("성공!! : ",res.data); setCommentList(res.data.commentlist); setCountPage(res.data.paginationInfo.totalPageCount)})
         .catch(err=>console.log("실패 : ",err));
     } 
     const handleClose = () => setAnchorEl(null);
@@ -54,10 +69,8 @@ const Comment = ({_id}) => {
 
         // 댓글 등록 API요청
         commentInsertAPI(_id,commentObj)
-        .then(()=>{init();commentSelectAPI(_id) // 성공하면 댓글 목록 다시 요청
-             .then(res=>{setCommentList(res.data)})
-             .catch(err=>console.log("실패 : ",err))})
-        .catch(err=>console.log("실패 : ",err));
+        .then(()=>{init();commentSelectAPI(_id,currentPage) // 성공하면 댓글 목록 다시 요청
+            .then(res=>{console.log("성공!! : ",res.data); setCountPage(res.data.paginationInfo.totalPageCount); setCommentList(res.data.commentlist);})});
     }
 
     // useEffect(()=>{
@@ -90,14 +103,13 @@ const Comment = ({_id}) => {
                                         <Typography>{`[${v.com_Nickname}] : ${v.com_Context} - ${v.com_Date}`}</Typography>
                                     </Grid>
                                     <Grid item xs={3}>
-                                        <ModifyComment _id={_id} data={v} style={style} setCommentList={setCommentList}/>
-                                        <DelComment _id={_id} data={v} style={style} setCommentList={setCommentList}/>
+                                        <ModifyComment _id={_id} data={v} style={style} setCommentList={setCommentList} currentPage={currentPage} setCountPage={setCountPage} />
+                                        <DelComment _id={_id} data={v} style={style} setCommentList={setCommentList} currentPage={currentPage} setCountPage={setCountPage} setCurrentPage={setCurrentPage}/>
                                     </Grid>
                                 </>)}
                             )}
                         </Grid>
                     </Paper>
-
                     <Box component="form" onSubmit={e=>addCom(e)}>
                         <TextField id='com_Nickname' label="닉네임" inputProps={{maxLength: 8}} required autoComplete="off"/>
                         <TextField id='com_Password' type='password' label="비밀번호" inputProps={{maxLength: 8}} required autoComplete="off"/><br/>
@@ -105,6 +117,11 @@ const Comment = ({_id}) => {
                         <Button type="submit">댓글달기</Button>
                     </Box>
                     <Button onClick={handleClose}>닫기</Button>
+
+                    <Grid container justifyContent="center">
+                        {/* {mySurList && <Pagination  count={5} shape="rounded" showFirstButton showLastButton page={currentPage} onChange={(_, page) => { callPaging(page); }} count={mySurList.paginationInfo.totalPageCount}  />} */}
+                        <Pagination shape="rounded" showFirstButton showLastButton page={currentPage} onChange={(_,page) => { callPaging(page) }} count={countPage} />
+                    </Grid>
                 </Box>
             </Modal>
         </>

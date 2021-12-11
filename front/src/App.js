@@ -1,4 +1,4 @@
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { MakeThemeProvider } from './components/common/Function';
 import { Container } from './lib/styels/MyStyles';
 import ChangePWPage from './pages/ChangePWPage';
@@ -13,32 +13,32 @@ import RegisterPage from './pages/RegisterPage';
 import ResultPage from './pages/ResultPage';
 import SurveySubmitPage from './pages/SurveySubmitPage';
 import UpdatePage from './pages/UpdatePage';
-import NotFound from './components/common/modules/NotFound';
+import NotFoundPage from './pages/NotFoundPage';
 
 const App = () => {
   return (
-    <>
-      <MakeThemeProvider>
-        <Container>
-          <Route path="/" component={MainPage} exact/>
-          <Route path="/LoginPage" component={LoginPage} />
-          <Route path="/RegisterPage" component={RegisterPage} />
-          <Route path="/FindIDPage" component={FindIDPage} />
-          <Route path="/FindPWPage" component={FindPWPage} />
-          <Route path="/ChangePWPage" component={ChangePWPage} />
-          <Route path="/CreateSurveyPage" component={CreateSurveyPage} />
-          <Route path="/MySurveyPage" component={MySurveyPage} />
+    <MakeThemeProvider>
+      <Container>
+        <Switch>
+          <Route exact path="/" component={MainPage} />
+          <Route exact path="/LoginPage" component={LoginPage} />
+          <Route exact path="/RegisterPage" component={RegisterPage} />
+          <Route exact path="/FindIDPage" component={FindIDPage} />
+          <Route exact path="/FindPWPage" component={FindPWPage} />
+          <Route exact path="/ChangePWPage" component={ChangePWPage} />
+          <Route exact path="/CreateSurveyPage" component={CreateSurveyPage} />
+          <Route exact path="/MySurveyPage" component={MySurveyPage} />
           
           {/* surveykey : 응답하려는 설문지의 고유번호(PK)를 의미 */}
-          <Route path="/SurveySubmitPage/:surveykey" component={SurveySubmitPage} /> 
-          <Route path="/ReadOnlyPage/:surveykey" component={ReadOnlyPage} /> 
-          <Route path="/UpdatePage/:surveykey" component={UpdatePage} /> 
-          <Route path="/ResultPage/:surveykey" component={ResultPage} />
+          <Route exact path="/SurveySubmitPage/:surveykey" component={SurveySubmitPage} /> 
+          <Route exact path="/ReadOnlyPage/:surveykey" component={ReadOnlyPage} /> 
+          <Route exact path="/UpdatePage/:surveykey" component={UpdatePage} /> 
+          <Route exact path="/ResultPage/:surveykey" component={ResultPage} />
 
-          <Route path="*" component={NotFound}/>
-        </Container>
-      </MakeThemeProvider>
-    </>
+          <Route component={NotFoundPage}/>
+        </Switch>
+      </Container>
+    </MakeThemeProvider>
   );
 }
 

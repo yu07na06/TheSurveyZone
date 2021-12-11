@@ -5,8 +5,9 @@ import Modal from '@mui/material/Modal';
 import { Box } from '@mui/system';
 import { Button, TextField } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import ErrorSweet from '../common/modules/ErrorSweet';
 
-const DelComment = ({ _id, data, style, setCommentList }) => {
+const DelComment = ({ _id, data, style, setCommentList, currentPage, setCountPage, setCurrentPage }) => {
     const [ anchorEl, setAnchorEl ] = useState(null);
     const open = Boolean(anchorEl);
 
@@ -21,13 +22,14 @@ const DelComment = ({ _id, data, style, setCommentList }) => {
 
         const delCommentObj = {com_ID: data.com_ID,
                                com_Password: e.target.com_Password.value};
+                               
 
         console.log('delCommentObj', delCommentObj);
+        console.log('');
         commentDeleteAPI(_id, delCommentObj)
-            .then(()=> commentSelectAPI(_id)
-                        .then(res=>{setCommentList(res.data)})
-                        .catch(err=>console.log("실패 : ",err)))
-            .catch(err=> console.log("삭제 실패 : ",err ));
+            .then(()=> commentSelectAPI(_id,currentPage)
+                        .then(res=>{setCommentList(res.data.commentlist); setCountPage(res.data.paginationInfo.totalPageCount); setCurrentPage(res.data.paginationInfo.criteria.page_Num)})
+            .catch(err=> err.response.status==401&&alert('비밀번호 틀렸습니다.')))
         com_Password.value = '';
         handleClose();
     }
