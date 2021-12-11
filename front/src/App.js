@@ -8,12 +8,12 @@ import FindPWPage from './pages/FindPWPage';
 import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
 import MySurveyPage from './pages/MySurveyPage';
+import NotFoundPage from './pages/NotFoundPage';
 import ReadOnlyPage from './pages/ReadOnlyPage';
 import RegisterPage from './pages/RegisterPage';
 import ResultPage from './pages/ResultPage';
 import SurveySubmitPage from './pages/SurveySubmitPage';
 import UpdatePage from './pages/UpdatePage';
-import NotFoundPage from './pages/NotFoundPage';
 
 const App = () => {
   return (
@@ -29,7 +29,6 @@ const App = () => {
           <Route exact path="/CreateSurveyPage" component={CreateSurveyPage} />
           <Route exact path="/MySurveyPage" component={MySurveyPage} />
           
-          {/* surveykey : 응답하려는 설문지의 고유번호(PK)를 의미 */}
           <Route exact path="/SurveySubmitPage/:surveykey" component={SurveySubmitPage} /> 
           <Route exact path="/ReadOnlyPage/:surveykey" component={ReadOnlyPage} /> 
           <Route exact path="/UpdatePage/:surveykey" component={UpdatePage} /> 

@@ -18,11 +18,6 @@ const FindPWComp = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            user_Email: data.get('user_Email'),
-            user_Name: data.get('user_Name'),
-            user_Tel: data.get('user_Tel'),
-        });
 
         const searchPWReq = ({
             user_Email: data.get('user_Email'),
@@ -31,8 +26,8 @@ const FindPWComp = () => {
         });
 
         searchPW(searchPWReq)
-            .then(res=> {console.log("성공했다 : ",res); successPW(res.data)})
-            .catch(err=> ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null));
+            .then( res => successPW(res.data) )
+            .catch( err => ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null));
     };
 
       const onChange = (e) => {

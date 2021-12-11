@@ -57,7 +57,7 @@ const Header = () => {
 
           <div style={{flexGrow: 1}}/>
 
-          {isMobile ? (//Mobile일 경우
+          {isMobile ? (
             <>
               <IconButton
                 edge="start"
@@ -75,12 +75,12 @@ const Header = () => {
                 anchorOrigin={{
                   vertical: "top",
                   horizontal: "right"
-                }}
+                  }}
                 keepMounted
                 transformOrigin={{
                   vertical: "top",
                   horizontal: "right"
-                }}
+                  }}
                 open={open}
                 onClose={() => setAnchorEl(null)}
               >
@@ -128,7 +128,12 @@ const Header = () => {
                 </>
               :
                 <>
-                  <MenuItem onClick={()=>{handleMenuClick('/');logoutAPI().then(res=>{ removeCookie('Authorization', { path: '/' });console.log("로그아웃 성공", res)}).catch(err=>console.log("로그아웃 실패", err));}}>
+                  <MenuItem onClick={ () => { 
+                      handleMenuClick('/'); 
+                      logoutAPI()
+                        .then( () => removeCookie('Authorization', { path: '/' } ) )
+                    }}
+                  >
                     <LogoutIcon style={{paddingRight: "10px"}}/>
                       <Typography variant="body2" noWrap>
                         로그아웃
@@ -139,7 +144,7 @@ const Header = () => {
               </Menu>
             </>) 
           :             
-            ( //PC환경 (Width가 좁을 경우 모바일환경처럼 출력)
+            ( 
               <>
                 <Tabs opacity="1" aria-label="simple tabs example" >
                   <Link to='/CreateSurveyPage' style={{textDecoration:'none', color:'white' }}><Tab label="설문 생성" style={{fontWeight:'bold', fontSize:'17px'}}/></Link>
@@ -156,7 +161,12 @@ const Header = () => {
                 :
                   <>
                     <Tabs>
-                      <Link to='/'style={{textDecoration:'none', color:'white'}}><Tab label="로그아웃" onClick={()=>{logoutAPI().then(res=>{removeCookie('Authorization', { path: '/' });console.log("로그아웃 성공", res)}).catch(err=>console.log("로그아웃 실패", err));}} style={{fontWeight:'bold' , fontSize:'17px'}}/></Link>
+                      <Link to='/'style={{textDecoration:'none', color:'white'}}>
+                        <Tab label="로그아웃" 
+                          onClick={ () => { 
+                            logoutAPI()
+                              .then( () => removeCookie('Authorization', { path: '/' }) )
+                            }} style={{fontWeight:'bold' , fontSize:'17px'}}/></Link>
                     </Tabs>
 
                     <AccountCircle  fontSize="medium" color="action" style={{paddingRight: "5px"}}/>

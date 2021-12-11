@@ -1,5 +1,5 @@
 import { Typography } from '@mui/material';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useHistory } from 'react-router-dom';
 import { deleteSurvey as deleteSurveyAPI, getMySurveyList as getMySurveyListAPI } from '../../../lib/api/survey';
@@ -13,15 +13,12 @@ const MySurveyComp = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const history = useHistory();
 
-  // useEffect(()=>{
-  //   console.log('렌더링!!');
-  // })
-
   useEffect(()=>{
     if(cookies.Authorization==null){
       ErrorSweet('info', null, "권한 없음", "로그인이 필요한 페이지입니다.", null)
         .then(()=>history.push('/LoginPage'));
     }
+
     getMySurveyListAPI(currentPage)
       .then(res => setMysurList(res.data))
       .catch(err => ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null))
@@ -30,10 +27,6 @@ const MySurveyComp = () => {
   useEffect(()=>{
     mySurList&&setCurrentPage(mySurList.paginationInfo.criteria.page_Num);
   },[mySurList]);
-
-  // useMemo(()=>{
-  //   mySurList&&setCurrentPage(mySurList.paginationInfo.criteria.page_Num)
-  // },[mySurList]);
 
   const callPaging = (pageNum) => {
     getMySurveyListAPI(pageNum)
@@ -51,11 +44,10 @@ const MySurveyComp = () => {
         break;
       case "del" :  
         deleteSurveyAPI(id)
-          .then(res=>console.log("삭제 성공..?",res))
           .then(()=>{
                       getMySurveyListAPI(currentPage)
-                        .then(res => { console.log("리스트 재요청"); setMysurList(res.data); })
-                        .catch(err => ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null))
+                        .then( res => setMysurList(res.data) )
+                        .catch( err => ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null))
                     }
                 )
           .catch(err=> ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null))
@@ -82,32 +74,23 @@ const MySurveyComp = () => {
 
 export default MySurveyComp;
 
-
-
-
-
-
-
-
-
-
 const surStateMark = (surState) => {
   let stateText = null;
   let bgcolor = null;
   let clr = null;
 
   switch(surState){
-    case 0: // 진행전
+    case 0:
       stateText = "진행전";
       bgcolor = "#F6D8CE";
       clr = "#FE642E";
       break;
-    case 1: // 진행중
+    case 1:
       stateText="진행중";
       bgcolor = "#E0E6F8";
       clr = "#2E64FE";
       break;
-    case 2: // 마감
+    case 2:
       stateText="마감";
       bgcolor = "#E6E6E6";
       clr = "#848484";

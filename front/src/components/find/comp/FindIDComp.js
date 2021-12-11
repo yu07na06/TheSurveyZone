@@ -18,16 +18,12 @@ const FindIDComp = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            user_Name: data.get('user_Name'),
-            user_Tel: data.get('user_Tel'),
-        });
         const searchIDReq = ({
             user_Name: data.get('user_Name'),
             user_Tel: data.get('user_Tel'),
         });
         searchID(searchIDReq)
-            .then(res=>{console.log("성공했다 : ",res); successID(res.data);})
+            .then(res=> successID(res.data) )
             .catch(err=> ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null));
     };
     

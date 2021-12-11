@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { commentInsert as commentInsertAPI, commentSelect as commentSelectAPI} from '../../lib/api/survey';
-import Tooltip from '@mui/material/Tooltip';
 import CommentIcon from '@mui/icons-material/Comment';
+import { Button, Grid, Pagination, Paper, TextField, Typography } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import Modal from '@mui/material/Modal';
+import Tooltip from '@mui/material/Tooltip';
 import { Box } from '@mui/system';
-import { Button, Grid, TextField, Typography, Paper, Pagination } from '@mui/material';
-import ModifyComment from './ModifyComment';
+import React, { useState } from 'react';
+import { commentInsert as commentInsertAPI, commentSelect as commentSelectAPI } from '../../lib/api/survey';
 import DelComment from './DelComment';
-import ErrorSweet from '../common/modules/ErrorSweet';
+import ModifyComment from './ModifyComment';
 
 const style = {
     position: 'absolute',
@@ -20,63 +19,53 @@ const style = {
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
-  };
+};
 
 const Comment = ({_id}) => {
     const [ commentList, setCommentList ] = useState([]);
     const [ anchorEl, setAnchorEl ] = useState(null);
-    const open = Boolean(anchorEl);
     const [currentPage, setCurrentPage] = useState(1);
     const [countPage, setCountPage] = useState(1);
+    const open = Boolean(anchorEl);
+    
+    const handleClose = () => setAnchorEl(null);
 
     const callPaging = (page_Num) => {
         commentSelectAPI(_id,page_Num)
-        // .then(res=>{console.log("성공!! : ",res.data.commentlist)})
-        .then(res=>{setCommentList(res.data.commentlist)})
-        .catch(err=>console.log("실패 : ",err));
+            .then(res=>{setCommentList(res.data.commentlist)});
         setCurrentPage(page_Num)
-        // getMySurveyListAPI(pageNum)
-        //   .then(res => setMysurList(res.data))
-        //   .catch(err => ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null))
       }
 
     const handleClick = (e) =>{
         setAnchorEl(e.currentTarget);
-        // 댓글 조회 API 요청
+
         commentSelectAPI(_id,currentPage)
-        // .then(res=>{console.log("성공!! : ",res.data)})
-        // .then(res=>{console.log("성공!! : ",res.data.commentlist)})
-        .then(res=>{console.log("성공!! : ",res.data); setCommentList(res.data.commentlist); setCountPage(res.data.paginationInfo.totalPageCount)})
-        .catch(err=>console.log("실패 : ",err));
+            .then(res=>{ setCommentList(res.data.commentlist); setCountPage(res.data.paginationInfo.totalPageCount)});
     } 
-    const handleClose = () => setAnchorEl(null);
     
     const addCom = (e) => {
         e.preventDefault();
         const commentObj = {com_Nickname:e.target.com_Nickname.value,
                             com_Password:e.target.com_Password.value,
                             com_Context:e.target.com_Context.value };
-            
+
         const com_Nickname = document.querySelector('#com_Nickname');
         const com_Password = document.querySelector('#com_Password');
         const com_Context = document.querySelector('#com_Context');
-            
+
         const init=()=>{
             com_Nickname.value = '';
             com_Password.value = '';
             com_Context.value = '';
         }
 
-        // 댓글 등록 API요청
         commentInsertAPI(_id,commentObj)
-        .then(()=>{init();commentSelectAPI(_id,currentPage) // 성공하면 댓글 목록 다시 요청
-            .then(res=>{console.log("성공!! : ",res.data); setCountPage(res.data.paginationInfo.totalPageCount); setCommentList(res.data.commentlist);})});
+        .then(()=>{ init(); 
+            commentSelectAPI(_id,currentPage)
+                .then(res=>{ setCountPage(res.data.paginationInfo.totalPageCount); setCommentList(res.data.commentlist);})
+            }
+        );
     }
-
-    // useEffect(()=>{
-    //     console.log('변경된거 확인 했음ㅎ', commentList);
-        
-    // },[commentList])
 
     return(
         <>
@@ -98,7 +87,6 @@ const Comment = ({_id}) => {
                             {commentList.map((v, i)=>{
                                 return(
                                 <>
-                                    {/* {console.log("무슨값 ?  : ",v)} */}
                                     <Grid item xs={9}>
                                         <Typography>{`[${v.com_Nickname}] : ${v.com_Context} - ${v.com_Date}`}</Typography>
                                     </Grid>
@@ -110,16 +98,17 @@ const Comment = ({_id}) => {
                             )}
                         </Grid>
                     </Paper>
+
                     <Box component="form" onSubmit={e=>addCom(e)}>
                         <TextField id='com_Nickname' label="닉네임" inputProps={{maxLength: 8}} required autoComplete="off"/>
                         <TextField id='com_Password' type='password' label="비밀번호" inputProps={{maxLength: 8}} required autoComplete="off"/><br/>
                         <TextField id='com_Context' fullWidth label="입력란" inputProps={{maxLength: 30}} required autoComplete="off"/>
                         <Button type="submit">댓글달기</Button>
                     </Box>
+                    
                     <Button onClick={handleClose}>닫기</Button>
 
                     <Grid container justifyContent="center">
-                        {/* {mySurList && <Pagination  count={5} shape="rounded" showFirstButton showLastButton page={currentPage} onChange={(_, page) => { callPaging(page); }} count={mySurList.paginationInfo.totalPageCount}  />} */}
                         <Pagination shape="rounded" showFirstButton showLastButton page={currentPage} onChange={(_,page) => { callPaging(page) }} count={countPage} />
                     </Grid>
                 </Box>

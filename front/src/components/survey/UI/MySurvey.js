@@ -2,6 +2,7 @@ import { Button, Grid, Pagination, Paper, Tab, Typography } from '@mui/material'
 import Container from '@mui/material/Container';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
+import Tooltip from '@mui/material/Tooltip';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import ClipboardCopy from '../../common/Function';
@@ -9,10 +10,8 @@ import OTL from '../../common/modules/OTL';
 import MyCalendar from '../comp/MySurveyCalendar';
 import QrCodeUrl from './QrCodeUrl';
 import SendEmail from './SendEmail';
-import Tooltip from '@mui/material/Tooltip';
 
 const MySurvey = ({ mySurList, currentPage, callPaging, ApiClick, surStateMark, }) => {
-    // console.log('렌더링!!');
     return (
         <>
             <Container component="main" maxWidth="lg" sx={{ mb: 4 }} >
@@ -74,7 +73,6 @@ const MySurvey = ({ mySurList, currentPage, callPaging, ApiClick, surStateMark, 
 
                                                             <Grid item xs={2} md={2} lg={2} justifyContent="center" textAlign="center">
                                                                 <Button id="del" onClick={(e) => {ApiClick(e, value._id)}} style={{ margin:"5px", boxShadow : "0px 5px 6px -6px",  border:"1px solid #F2F2F2",fontWeight:'bold', borderRadius: '10px',  backgroundColor: "#FAFAFA" , color: 'Gray', height:"30px"}}>
-                                                                {/* <Button id="del" onClick={(e) => ApiClick(e, value._id)} style={{ margin:"5px", boxShadow : "0px 5px 6px -6px",  border:"1px solid #F2F2F2",fontWeight:'bold', borderRadius: '10px',  backgroundColor: "#FAFAFA" , color: 'Gray', height:"30px"}}> */}
                                                                     삭제
                                                                 </Button>
                                                             </Grid>
@@ -116,4 +114,3 @@ const MySurvey = ({ mySurList, currentPage, callPaging, ApiClick, surStateMark, 
 };
 
 export default MySurvey;
-// export default React.memo(MySurvey);

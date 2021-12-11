@@ -1,8 +1,8 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import ErrorSweet from '../components/common/modules/ErrorSweet';
 import Footer from '../components/common/modules/Footer';
 import Header from '../components/common/modules/Header';
-import ErrorSweet from '../components/common/modules/ErrorSweet';
 
 const NotFoundPage = () => {
     const history = useHistory();

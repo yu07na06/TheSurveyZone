@@ -14,26 +14,19 @@ const ChangePWComp = () => {
 
     useEffect(() => {
         if (User_Password === passWordConfirm) {
-            // console.log("일치");
             setPWNOTMATCH(true);
         } else {
-            // console.log("불일치");
             setPWNOTMATCH(false);
         }
     },[User_Password, passWordConfirm]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("비밀번호가 서로 일치하는지의 여부 : ", PWNOTMATCH);
-        console.log("비밀번호 유효성을 만족하는지의 여부 : ", pwResult.current);
         if(PWNOTMATCH&&pwResult.current){
             changePWAPI({"user_Password":passWordConfirm})
-            .then(res=>console.log("성공 : ",res))
-            .catch(err=> ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null))
-            console.log("회원가입 완료!");
+            .catch( err => ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null) )
             history.push('/');
         }
-           console.log("비밀번호 변경 양식 실패~");
     }
 
     const confirm = (e) => { 

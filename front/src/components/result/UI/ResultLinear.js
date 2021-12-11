@@ -1,11 +1,11 @@
-import React from 'react';
+import { Grid } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
-import { Grid } from '@mui/material';
-import ToggleBtn from '../ToggleBtn';
-import MyResponsivePie from '../charts/MyResponsivePie';
-import MyResponsiveLine from '../charts/MyResponsiveLine';
+import React from 'react';
 import MyResponsiveBar from '../charts/MyResponsiveBar';
+import MyResponsiveLine from '../charts/MyResponsiveLine';
+import MyResponsivePie from '../charts/MyResponsivePie';
+import ToggleBtn from '../ToggleBtn';
 
 const ResultLinear = ({ value, index, result, makeCircle , chartState, setChartState}) => {
 
@@ -66,13 +66,11 @@ const ResultLinear = ({ value, index, result, makeCircle , chartState, setChartS
                                                     return <MyResponsivePie data={newData} />;
                                                 case "Line":
                                                     return <MyResponsiveLine data={[{ "id":'결과', "data":newData1}]} />;
-                                                default: // Bar
+                                                default:
                                                     return <MyResponsiveBar data={newData}/>;
                                             }
                                         })()
                                     }
-                                    {/* <BarChart data={result.resultMap[index]}/>
-                                    <DoughnutChart data={result.resultMap[index]} /> */}
                                 </div>
                             </Paper>
                         </Paper>

@@ -1,12 +1,12 @@
-import React from 'react';
+import { Container, Grid, Paper } from '@mui/material';
+import Box from '@mui/material/Box';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import Slider from '@mui/material/Slider';
-import { Container, Grid, Paper } from '@mui/material';
+import Typography from '@mui/material/Typography';
+import React from 'react';
 
 const BeforeSurvey = ({marks, addStore}) => {
     return (
@@ -38,9 +38,9 @@ const BeforeSurvey = ({marks, addStore}) => {
                             getAriaValueText={value => `${value}`}
                             step={10}
                             valueLabelDisplay="auto"
-                            marks={marks} // 10 ~ 60까지 객체 데이터
-                            min={10} // 10대 부터
-                            max={60} // 60대 까지
+                            marks={marks}
+                            min={10}
+                            max={60}
                         />
                     </Box>
                     </Container>

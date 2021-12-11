@@ -1,14 +1,13 @@
-import React from 'react';
-import Paper from '@mui/material/Paper';
+import { Button, Grid, TextField } from '@mui/material';
 import Container from '@mui/material/Container';
-import ResultLinearComp from '../comp/ResultLinearComp';
-import ResultSubjective from './ResultSubjective';
-import { TextField, Grid, Button } from '@mui/material';
-import ResultMultiComp from '../comp/ResultMultiComp';
+import Paper from '@mui/material/Paper';
+import React from 'react';
 import OTL from '../../common/modules/OTL';
-import MyResponsiveBar from '../charts/MyResponsiveBar';
 import MyResponsivePie from '../charts/MyResponsivePie';
+import ResultLinearComp from '../comp/ResultLinearComp';
+import ResultMultiComp from '../comp/ResultMultiComp';
 import ToggleBtn from '../ToggleBtn';
+import ResultSubjective from './ResultSubjective';
 
 const Result = ({ result, wayBackMySurvey, chartState, setChartState }) => {
     const defaultImage = "https://surveyzone.s3.ap-northeast-2.amazonaws.com/static/b5e552ea-8d6b-4582-89ae-1d25c25027b8no-image.png";
@@ -101,7 +100,6 @@ const Result = ({ result, wayBackMySurvey, chartState, setChartState }) => {
 
                                 </Grid>
                                 <Grid item xs={12} md={12} lg={3} container>
-                                    {/* <Paper> */}
                                         <Grid item xs={12} textAlign="right">
                                             <ToggleBtn fullWidth chartState={chartState} setChartState={setChartState} toggleValue={["성별", "연령별"]}/>
                                         </Grid>
@@ -120,19 +118,17 @@ const Result = ({ result, wayBackMySurvey, chartState, setChartState }) => {
                                             }
                                         </div>
                                         </Grid>
-                                    {/* </Paper> */}
                                 </Grid>
                                 </Grid>
                                 </Container>
                                 </Paper>
                                 {result && result.questionList.map((value, index) => {
                                     switch (value.surQue_QType) {
-                                        case 0: // 주관식
+                                        case 0:
                                             return <ResultSubjective result={result} index={index} />
-                                        case 1: // 객관식
+                                        case 1:
                                             return <ResultMultiComp index={index} result={result} />
-                                        // return <ResultMulti index={index} result={result}/>
-                                        case 2: // 선형배율
+                                        case 2:
                                             return <ResultLinearComp value={value} index={index} result={result} />
                                         default:
                                             break;
