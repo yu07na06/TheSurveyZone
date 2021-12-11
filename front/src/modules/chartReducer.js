@@ -18,12 +18,17 @@ export function* mainViewSaga(){
 const initialState = {
     responseAcc : {
         part_Total: 0,
-        part_Gender: 
+        survey_Total : 0,
+        part_Age_Man: 
         {
-            man: 0,
-            woman: 0
+            age_10: 0,
+            age_20: 0,
+            age_30: 0,
+            age_40: 0,
+            age_50: 0,
+            age_60: 0
         },
-        part_Age: 
+        part_Age_Woman: 
         {
             age_10: 0,
             age_20: 0,
@@ -47,12 +52,7 @@ const chartReducer = handleActions ({
         ...state,
         err
     }),
-
-    // [CHARTDATA_SUCCESS]: (state, { payload: { form, key, value } }) =>
-    // produce(state, draft => {
-    //   draft[form][key] = value; // 예: state.register.username을 바꾼다
-    // }),
-    // [CHARTDATA_FAILURE]:
+    
 }, initialState)
 
 export default chartReducer

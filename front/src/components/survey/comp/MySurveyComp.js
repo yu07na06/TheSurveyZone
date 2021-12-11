@@ -1,90 +1,106 @@
+import { Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import MySurvey from '../UI/MySurvey';
 import { useCookies } from 'react-cookie';
-import Swal from 'sweetalert2';
 import { useHistory } from 'react-router-dom';
-import {modifySurvey as modifySurveyAPI, deleteSurvey as deleteSurveyAPI, getMySurveyList as getMySurveyListAPI } from '../../../lib/api/survey';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { deleteSurvey as deleteSurveyAPI, getMySurveyList as getMySurveyListAPI } from '../../../lib/api/survey';
+import ErrorSweet from '../../common/modules/ErrorSweet';
+import MySurvey from '../UI/MySurvey';
+import { debounce } from "lodash";
 
 const MySurveyComp = () => {
-  const [cookies] = useCookies(['user_Token']);
+  const [cookies] = useCookies(['Authorization']);
   const [mySurList, setMysurList] = useState();
+  const [currentPage, setCurrentPage] = useState(1);
   const history = useHistory();
-  
+
   useEffect(()=>{
-    if(cookies.user_Token==null){
-      Swal.fire({
-        icon:'info', 
-        title:'로그인이 필요한 페이지입니다.'
-      })
-      history.push('/LoginPage');
+    if(cookies.Authorization==null){
+      ErrorSweet('info', null, "권한 없음", "로그인이 필요한 페이지입니다.", null)
+        .then(()=>history.push('/LoginPage'));
     }
-    getMySurveyListAPI(1)
+
+    getMySurveyListAPI(currentPage)
       .then(res => setMysurList(res.data))
-      .catch(err => console.log(err))
+      .catch(err => ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null))
   },[])
+
+  useEffect(()=>{
+    mySurList&&setCurrentPage(mySurList.paginationInfo.criteria.page_Num);
+  },[mySurList]);
 
   const callPaging = (pageNum) => {
     getMySurveyListAPI(pageNum)
       .then(res => setMysurList(res.data))
-      .catch(err => console.log(err))
+      .catch(err => ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null))
   }
 
-  const ApiClick = (e,id) => {
+  const ApiClick = debounce((e, id) => {
     switch(e.target.id){
-      case "mod" : console.log("수정 on");
-        modifySurveyAPI(id)
-        .then(res=>console.log("수정 성공..?",res))
-        .catch(res=>console.log("수정 실패..?",res))
+      case "read":
+        history.push(`/ReadOnlyPage/${id}`);
         break;
-      case "del" :  console.log("삭제 on");
-          deleteSurveyAPI(id)
-          .then(res=>console.log("삭제 성공..?",res))
-          // .then(res=>setMysurList(res.data))
-          .catch(res=>console.log("삭제 실패..?",res))
+      case "mod" : 
+        history.push(`/UpdatePage/${id}`);
         break;
-      case "result" :  console.log("결과 on");
+      case "del" :  
+        deleteSurveyAPI(id)
+          .then(()=>{
+                      getMySurveyListAPI(currentPage)
+                        .then( res => setMysurList(res.data) )
+                        .catch( err => ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null))
+                    }
+                )
+          .catch(err=> ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null))
         break;
-      default:
+      case "result" :
+        history.push(`/ResultPage/${id}`)
         break;
+      default: break;
     }
-  }
-
-  const ClipboardCopy = (url) =>{
-    const doCopy = text => {
-        if (!document.queryCommandSupported("copy")) {
-            return alert("복사하기가 지원되지 않는 브라우저입니다.");
-        }
-        const textarea = document.createElement("textarea");
-        textarea.value = text;
-        textarea.style.top = 0;
-        textarea.style.left = 0;
-        textarea.style.position = "fixed";
-        document
-            .body
-            .appendChild(textarea);
-        textarea.focus();
-        textarea.select();
-        document.execCommand("copy");
-        document
-            .body
-            .removeChild(textarea);
-            Swal.fire('URL 복사 성공');
-    };
-    return (<ContentCopyIcon onClick={()=>doCopy(url)}/>);
-
-}
+  },444);
 
   return (
-      <>
-          <MySurvey 
-            ApiClick={ApiClick}
+    <>
+        <MySurvey 
             mySurList={mySurList}
+            currentPage={currentPage}
             callPaging={callPaging}
-            ClipboardCopy={ClipboardCopy}
-          />
-      </>
+            ApiClick={ApiClick}
+            surStateMark={surStateMark}
+        />
+    </>
   );
 };
 
 export default MySurveyComp;
+
+const surStateMark = (surState) => {
+  let stateText = null;
+  let bgcolor = null;
+  let clr = null;
+
+  switch(surState){
+    case 0:
+      stateText = "진행전";
+      bgcolor = "#F6D8CE";
+      clr = "#FE642E";
+      break;
+    case 1:
+      stateText="진행중";
+      bgcolor = "#E0E6F8";
+      clr = "#2E64FE";
+      break;
+    case 2:
+      stateText="마감";
+      bgcolor = "#E6E6E6";
+      clr = "#848484";
+      break;
+    default: break;
+  }
+
+  return(
+    <Typography align= 'center'variant="body2" style={{ borderRadius: "5px", backgroundColor : bgcolor , color : clr, fontWeight: 'bold'}}>
+      {stateText}
+    </Typography>
+  );
+}

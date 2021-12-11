@@ -1,44 +1,64 @@
 import { Button, Grid, TextField } from '@mui/material';
-import React, { useRef, useState } from 'react';
-import MultipleChoice from '../UI/MultipleChoice';
-import {useEffect} from 'react';
 import Checkbox from '@mui/material/Checkbox';
-import { useDispatch } from 'react-redux';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { submitAction } from '../../../modules/submitReducer';
+import ErrorSweet from '../../common/modules/ErrorSweet';
+import MultipleChoice from '../UI/MultipleChoice';
 
-const MultipleChoiceComp = ({number, setCheck, setDelIndex, ReadOnlyState, ReadOnlyData, }) => {
-
-    const [select, setSelect] = useState([]); // 보기 덩어리가 들어가있음
+const MultipleChoiceComp = ({ ReadOnlyState, ReadOnlyData, UpdateKey, realReadState, number, setCheck, setDelIndex, }) => {
+    const [updateData, setUpdateData] = useState(ReadOnlyState ? ReadOnlyData.surQue_Content : null);
+    const surAns_Content = useSelector(state=>state.submitReducer.surAns_Content)
     const [deleteIndex, setDeleteIndex] = useState(null);
+    const [unRequired, setUnRequired] = useState(null);
+    const [maxNum, setMaxNum] = useState(null);
+    const [select, setSelect] = useState([]);
     const [temp, setTemp] = useState([]);
-    const [maxNum, setMaxNum] = useState();
-    const dispatch = useDispatch();
+    const accChecked = useRef(0);
     const count = useRef(-1);
-    
-    useEffect(()=>{
-        console.log("======================================");
-        console.log(ReadOnlyData);
-        
-        
-    },[])
+    const dispatch = useDispatch();
+
+    const deleteBtn = e => setDeleteIndex(e.target.id);
+    const deleteQue = e => setDelIndex(e.target.id);
+    const checkClick = e => setUnRequired((e.target.name).split('_')[1]);
 
     useEffect(()=>{
-        let newAddText = null;
         if(ReadOnlyState){
-            newAddText = ReadOnlyData.selectList.map(value=>{
-                    return addText(number, value, ReadOnlyData.surQue_MaxAns)
-            })
-            setSelect([...select , newAddText]);
+            let newAddText = ReadOnlyData.selectList.map((value)=>{
+                count.current+=1;
+                    return <div key={`SurQue_Ans_${number}_${count.current}`}>
+                                <AddText
+                                    number={number}
+                                    ReadOnlyData={value}
+                                    addMaxNum={ReadOnlyData.surQue_MaxAns}
+                                    checkBoxEssential={ReadOnlyData.surQue_Essential}
+                                    count={count.current}
+                                />
+                            </div>
+                })
+            setSelect(newAddText);
+
+            let newAddTextId = ReadOnlyData.selectList.map((value, index)=>{
+                return `SurQue_Ans_${number}_${index}`;
+                })
+            setTemp(newAddTextId);
         }
     },[ReadOnlyState])
 
     useEffect(()=>{
-        !ReadOnlyState&&setCheck({[number]:temp});
+        if((!ReadOnlyData || UpdateKey)&&temp.length!==0){
+            setTimeout(()=>{
+                setCheck({[number]:temp});
+            },444);
+        }
     },[temp]);
 
     useEffect(()=>{
         if(deleteIndex != null){
-            let newSelect = select.filter((value)=> value.key !== deleteIndex)
+            let newSelect = select.filter((value)=> {
+                return value.key !== deleteIndex
+            })
             setSelect(newSelect);
             let newTemp = temp.filter((value)=> value !== deleteIndex)
             setTemp(newTemp);
@@ -46,57 +66,80 @@ const MultipleChoiceComp = ({number, setCheck, setDelIndex, ReadOnlyState, ReadO
     },[deleteIndex])
 
     useEffect(()=>{
-        setDeleteIndex(null); // 인덱스 중복될 수 있으니
+        setDeleteIndex(null);
     },[select])
 
-        
-    const deleteBtn = (e) => {
-        setDeleteIndex(e.target.id);
-    }
-
-    const deleteQue = (e) => {
-        console.log('삭제할 컴포넌트 id', e.target.id);
-        setDelIndex(e.target.id);
-    }
-
-    const ccc = useRef(0);
+    useEffect(()=>{
+        if(surAns_Content){
+            for (const key in surAns_Content) {
+                    const splitValue = surAns_Content[key].split('_');
+                    if(splitValue[1]==unRequired && splitValue[0]=="SurQueCheck"){
+                        for(let i=0; i<=Number(splitValue[2]); i++){
+                            let checkbox1 = document.querySelector(`input[name=SurQueCheck_${unRequired}_${i}]`);
+                            checkbox1.required=false;
+                        }
+                    }
+            }
+        }
+    },[unRequired])
 
     const checkCount = (e, addMaxNum) => {
-        ccc.current += (e.target.checked)? 1 : -1;
-        if(ccc.current>addMaxNum){
-            alert('놉!');
+        accChecked.current += (e.target.checked)? 1 : -1;
+        if(accChecked.current > addMaxNum){
+            ErrorSweet('info', null, "응답 불가", "최대 응답 가능 범위를 초과했습니다.", null)
             e.target.checked = false;
-            ccc.current -= 1;
+            accChecked.current -= 1;
         }
-    } 
-    
-    const addText = (number, ReadOnlyData, addMaxNum) => {
-        count.current+=1;
-        setTemp([...temp, `SurQue_Ans_${number}_${count.current}`]); // 질문에 대한 보기 이름 덩어리 합치는 중
-        console.log("지금 이 순서대로 합치고 있다. 분명히", `SurQueCheck_${number}_${count.current}`);
-        dispatch(submitAction(`SurQueCheck_${number}_${count.current}`))
+    }
+
+    const AddText = ({number, ReadOnlyData, addMaxNum, checkBoxEssential, count}) => {
+        const [updateDataAddText , setUpdateDataAddText] = useState(ReadOnlyState?ReadOnlyData.surSel_Content:null);
+        !UpdateKey && setTemp([...temp, `SurQue_Ans_${number}_${count}`]);
+        dispatch(submitAction({[number]:`SurQueCheck_${number}_${count}`}))
         return(
-            <Grid key={`SurQue_Ans_${number}_${count.current}`} container spacing={2}>
-                <Grid item xs={11} key={`SurQue_Ans_${number}_${count.current}`}>
-                {ReadOnlyState&&<Checkbox value={ReadOnlyState?ReadOnlyData.surSel_Content:null} name={`SurQueCheck_${number}_${count.current}`} id={`SurQueCheck_${number}_${count.current}`} onClick={(e)=>checkCount(e, addMaxNum)}/>}
-                <TextField
-                    variant="standard"
-                    required
-                    fullWidth
-                    disabled={ReadOnlyState}
-                    name={`SurQue_Ans_${number}_${count.current}`}
-                    id={`SurQue_Ans_${number}_${count.current}`}
-                    label={`선택지${number}_${count.current}`}
-                    value={ReadOnlyState?ReadOnlyData.surSel_Content:null}
-                    >
-                </TextField>
+            <Grid key={`SurQue_Ans_${number}_${count}`} container spacing={1}>
+                <Grid item xs={9} sm={10} key={`SurQue_Ans_${number}_${count}`}>
+                    {(ReadOnlyState&&!UpdateKey)&&
+                        <FormControlLabel
+                            label={ReadOnlyState?ReadOnlyData.surSel_Content:null}
+                            control={
+                                <Checkbox
+                                    disabled={realReadState}
+                                    required={checkBoxEssential}
+                                    value={ReadOnlyState?ReadOnlyData.surSel_Content:null}
+                                    name={`SurQueCheck_${number}_${count}`}
+                                    id={`SurQueCheck_${number}_${count}`}
+                                    onClick={(e)=>{ checkClick(e); checkCount(e, addMaxNum);}}
+                                />
+                            }
+                        />
+                    }
+                    {(!ReadOnlyState||UpdateKey)&&
+                        <TextField
+                            onChange={e => ReadOnlyState&&setUpdateDataAddText(e.target.value)}
+                            variant="standard"
+                            required
+                            fullWidth
+                            InputProps={{ readOnly: (ReadOnlyState&&!UpdateKey)}}
+                            name={`SurQue_Ans_${number}_${count}`}
+                            id={`SurQue_Ans_${number}_${count}`}
+                            label={`선택지${number}_${count}`}
+                            value={updateDataAddText}
+                        >
+                        </TextField>
+                    }
                 </Grid>
-                {!ReadOnlyState&&<Grid item xs={1}>
-                <Button 
-                    id={`SurQue_Ans_${number}_${count.current}`}
-                    onClick={(e)=>deleteBtn(e)}
-                    >삭제</Button><br/>
-                </Grid>}
+
+                {(!ReadOnlyState||UpdateKey)&&
+                    <Grid item textAlign = "right" xs={3} sm={2} >
+                        <Button
+                            id={`SurQue_Ans_${number}_${count}`}
+                            onClick={(e)=>deleteBtn(e)}
+                        >
+                        삭제
+                        </Button><br/>
+                    </Grid>
+                }
             </Grid>
         );
     }
@@ -104,15 +147,19 @@ const MultipleChoiceComp = ({number, setCheck, setDelIndex, ReadOnlyState, ReadO
     return (
         <>
             <MultipleChoice 
+                ReadOnlyState={ReadOnlyState}
+                ReadOnlyData={ReadOnlyData}
+                UpdateKey={UpdateKey}
                 number={number}
+                updateData={updateData}
+                setUpdateData={setUpdateData}
                 select={select}
                 setSelect={setSelect}
-                addText={addText}
+                AddText={AddText}
                 maxNum={maxNum}
                 setMaxNum={setMaxNum}
                 deleteQue={deleteQue}
-                ReadOnlyState={ReadOnlyState}
-                ReadOnlyData={ReadOnlyData}
+                count={count}
             />
         </>
     );
