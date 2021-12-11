@@ -10,6 +10,6 @@
         <typeAlias type="com.mongoosereum.dou_survey_zone.api.v1.domain.tag.SurveyTag" alias="SurveyTag"/>
         <typeAlias type="com.mongoosereum.dou_survey_zone.api.v1.domain.tag.Tag" alias="Tag"/>
         <typeAlias type="com.mongoosereum.dou_survey_zone.api.v1.domain.participation.Participation" alias="Participation"/>
+        <typeAlias type="com.mongoosereum.dou_survey_zone.api.v1.domain.comment.Comment" alias="Comment"/>
     </typeAliases>
-
 </configuration>

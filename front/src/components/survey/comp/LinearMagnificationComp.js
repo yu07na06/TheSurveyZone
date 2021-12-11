@@ -1,99 +1,100 @@
-import React, { useState, useEffect } from 'react';
-import LinearMagnification from '../UI/LinearMagnification';
-import Radio from "@mui/material/Radio";
 import { FormControlLabel, Grid } from '@mui/material';
+import Radio from "@mui/material/Radio";
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { submitAction } from '../../../modules/submitReducer';
+import LinearMagnification from '../UI/LinearMagnification';
 
-
-const LinearMagnificationComp = ({number, setCheck, setDelIndex, ReadOnlyState, ReadOnlyData, }) => {
-    const [minValue, setMinValue] = useState(0);
-    const [maxValue, setMaxValue] = useState(null);
-    const [temp, setTemp] = useState('');
-    const [makeCircles, setMakeCircles] = useState([]);
-
-    let value = [1,2,3,4,5,6,7,8,9];
-    const valuetext = (value) => {
-        return `${value}`;
-    }
-
-    const deleteQue = (e) => {
-        setDelIndex(e.target.id);
-    }
-
-    useEffect(()=>{
-        !ReadOnlyState&&setCheck({[number]:[ `start_Step${number}`, `start_Name${number}_${minValue}`, `end_Step${number}`, `end_Name${number}_${maxValue}`]});
-    },[minValue, maxValue, temp])
-
+const LinearMagnificationComp = ({ ReadOnlyState, ReadOnlyData, UpdateKey, realReadState, number, setCheck, setDelIndex, }) => {
+    const [ updateData, setUpdateData] = useState(ReadOnlyState ? ReadOnlyData.surQue_Content : null);
+    const [ updateDataStart, setUpdateDataStart] = useState(ReadOnlyState ? ReadOnlyData.selectList[0].surSel_Content : null);
+    const [ updateDataStartValue, setUpdateDataStartValue] = useState(ReadOnlyState ? Number(ReadOnlyData.selectList[1].surSel_Content) : null);
+    const [ updateDataEnd, setUpdateDataEnd] = useState(ReadOnlyState ? ReadOnlyData.selectList[2].surSel_Content : null);
+    const [ updateDataEndValue, setUpdateDataEndValue] = useState(ReadOnlyState ? Number(ReadOnlyData.selectList[3].surSel_Content) : null);
+    const [ minValue, setMinValue ] = useState(null);
+    const [ maxValue, setMaxValue ] = useState(null);
+    const [ makeCircles, setMakeCircles ] = useState([]);
     const [ changeCircle, setChangeCircle ] = useState(null);
+    const [ temp, setTemp ] = useState('');
+    const dispatch = useDispatch();
+    
+    const value = [1,2,3,4,5,6,7,8,9];
 
-    const circle = (id, number, size) => {
-        return(
-            <Grid item xs={1}>
-                <FormControlLabel
-                
-                style={{marginLeft:"0", marginRight:"0"}}
-                value="top"
-                control={<Radio
-                    required
-                    onChange={(e)=>setChangeCircle(e.target.value)}
-                    value={`radio_${number}_${id}`}
-                    name={`radio_${number}`}
-                    id={`radio_${number}`}
-                    checked={ changeCircle === `radio_${number}_${id}` }
-                    sx={{
-                        "& .MuiSvgIcon-root": {
-                            fontSize: size
-                        }
-                    }}
-                />}
-                label={id}
-                labelPlacement="top"
-            />
-            </Grid>
-
-        );
-    }
-
+    const deleteQue = e => setDelIndex(e.target.id);
+    
+    useEffect(()=>{
+        if(ReadOnlyState)
+            dispatch(submitAction({[number]:`radio_${number}`}))
+    },[])
+    
     useEffect(()=>{
         if(ReadOnlyState){
-            let newCircle = [];
-            let num =  Number(ReadOnlyData.selectList[3].surSel_Content)-Number(ReadOnlyData.selectList[1].surSel_Content);
-            for(let i=0; i<=num; i++){
+            const newCircle = [];
+            const lowNum = Number(ReadOnlyData.selectList[1].surSel_Content);
+            const maxNum = Number(ReadOnlyData.selectList[3].surSel_Content);
+            for(let i=lowNum; i<=maxNum; i++){
                 newCircle.push(circle(i, number, i+20));
             }
             setMakeCircles([...newCircle])
         }
     },[changeCircle])
-
-
     
-    const dispatch = useDispatch();
     useEffect(()=>{
-        if(ReadOnlyState)
-            console.log("선형배율은 여기서 했다.",`radio_${number}` );
-            dispatch(submitAction(`radio_${number}`))
-            
-    },[])
+        if(!ReadOnlyData || UpdateKey){
+            setTimeout(()=>{
+                setCheck({[number]:[ `start_Step${number}`, `start_Name${number}_${minValue}`, `end_Step${number}`, `end_Name${number}_${maxValue}`]});
+            },444);
+        }
+    },[minValue, maxValue, temp])
+
+    const circle = (id, number, size) => {
+        return(
+            <Grid item xs={1}>
+                <FormControlLabel
+                    style={{ marginLeft:"0", marginRight:"0" }}
+                    value="top"
+                    control={<Radio
+                                disabled={realReadState}
+                                required={ReadOnlyData.surQue_Essential}
+                                onChange={(e)=>setChangeCircle(e.target.value)}
+                                value={`radio_${number}_${id}`}
+                                name={`radio_${number}`}
+                                id={`radio_${number}`}
+                                checked={ changeCircle === `radio_${number}_${id}` }
+                                sx={{ "& .MuiSvgIcon-root": { fontSize: size } }}
+                            />}
+                    label={id}
+                    labelPlacement="top"
+                />
+            </Grid>
+        );
+    }
     
     return (
-        <>
-            <LinearMagnification 
-                number={number}
-                minValue={minValue}
-                setMinValue={setMinValue}
-                maxValue={maxValue}
-                setMaxValue={setMaxValue}
-                value={value}
-                valuetext={valuetext}
-                setTemp={setTemp}
-                deleteQue={deleteQue}
-                ReadOnlyState={ReadOnlyState}
-                ReadOnlyData={ReadOnlyData}
-                makeCircles={makeCircles}
-
-            />
-        </>
+        <LinearMagnification
+            ReadOnlyState={ReadOnlyState}
+            ReadOnlyData={ReadOnlyData}
+            UpdateKey={UpdateKey}
+            number={number}
+            updateData={updateData}
+            setUpdateData={setUpdateData}
+            updateDataStart={updateDataStart}
+            setUpdateDataStart={setUpdateDataStart}
+            updateDataStartValue={updateDataStartValue}
+            setUpdateDataStartValue={setUpdateDataStartValue}
+            updateDataEnd={updateDataEnd}
+            setUpdateDataEnd={setUpdateDataEnd}
+            updateDataEndValue={updateDataEndValue}
+            setUpdateDataEndValue={setUpdateDataEndValue}
+            value={value}
+            minValue={minValue}
+            setMinValue={setMinValue}
+            maxValue={maxValue}
+            setMaxValue={setMaxValue}
+            makeCircles={makeCircles}
+            setTemp={setTemp}
+            deleteQue={deleteQue}
+        />
     );
 };
 

@@ -1,13 +1,13 @@
 import React from 'react';
-import Footer from '../components/common/UI/Footer';
-import Header from '../components/common/UI/Header';
-import ReadOnlyComp from '../components/survey/comp/ReadOnlyComp';
+import Footer from '../components/common/modules/Footer';
+import Header from '../components/common/modules/Header';
+import SurveySubmitComp from '../components/survey/comp/SurveySubmitComp';
 
-const ReadOnlyPage = () => {
+const ReadOnlyPage = (props) => {
     return (
         <>
             <Header />
-                <ReadOnlyComp />
+                <SurveySubmitComp surveykey={props.match.params.surveykey} ReadOnlyState={true} UpdateKey={false} realReadState={true} />
             <Footer />
         </>
     );

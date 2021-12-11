@@ -10,6 +10,7 @@ import lombok.*;
 public class PageCriteria {
         /** 생성자 **/
         public PageCriteria() {
+
         this.page_Size=5;
         this.records_Perpage =12;
         }
@@ -30,6 +31,9 @@ public class PageCriteria {
         private Integer search_Tag;
 
         private String user_Email;
+
+        /** 설문 조사 */
+        private String _id;
 
         /** 시작 페이지 **/
         public int getStart_Page() {

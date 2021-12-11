@@ -3,31 +3,41 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="user">
-    <select id="existsByEmail" parameterType="String" resultType="String">
+
+    <select id="emailCheck" parameterType="String" resultType="String">
         select User_Email from survey.user where User_Email = #{param}
     </select>
 
+    <select id="existsByEmail" parameterType="String" resultType="User_MySQL">
+        select * from survey.user where User_Email = #{param}
+    </select>
+
     <insert id="createUser" parameterType="User_MySQL">
-        insert into survey.User values(#{user_Email},#{user_Password},#{user_Name},#{user_Tel})
+        insert into survey.user values(#{user_Email},#{user_Password},#{user_Name},#{user_Tel})
     </insert>
 
     <select id="findByEmailAndPassword" parameterType="String" resultType="User_MySQL">
-        select User_Email, User_Password, User_Name from survey.user where User_Email = #{param};
+        select User_Email, User_Password, User_Name
+        from survey.user
+        where User_Email = #{param};
     </select>
 
     <select id="findByEmail" parameterType="User_MySQL" resultType="String">
         select User_Email from survey.user where User_Name = #{user_Name} and User_Tel = #{user_Tel};
     </select>
-    <select id="findByEmail_Name_Tel" parameterType="User_MySQL" resultType="int">
-        select count(*)
+
+    <select id="findByEmail_Name_Tel" parameterType="User_MySQL" resultType="User_MySQL">
+        select User_Email, User_Name, User_Tel
         from survey.user
         where User_Email = #{user_Email} and
               User_Name = #{user_Name} and
               User_Tel = #{user_Tel};
     </select>
-    <update id="setPW" parameterType="User_MySQL">
+
+    <update id="changePW" parameterType="User_MySQL">
         update survey.user
         set User_Password = #{user_Password}
         where User_Email = #{user_Email};
     </update>
+
 </mapper>

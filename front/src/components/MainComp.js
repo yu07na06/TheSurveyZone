@@ -1,82 +1,98 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Swal from 'sweetalert2';
-import { mainList as mainListAPI, mainListPage as mainListPageAPI } from '../lib/api/home';
+import { mainList as mainListAPI } from '../lib/api/home';
 import { chartData } from '../modules/chartReducer';
+import { debounceText } from './common/debounceFunction';
+import ErrorSweet from './common/modules/ErrorSweet';
 import Main from './Main';
 
-const MainComp = () => {
+const MainComp = ({ match }) => {
     const data = useSelector(state=>state.chartReducer.responseAcc);
     const err = useSelector(state=>state.chartReducer.err);
     const [ reqMain, setReqMain ] = useState(null);
+    const [ pageNum, setPageNum ] = useState(1);
+    const [ tagSearch, setTagSearch ] = useState('');
+    const [ searchText, setSearchText ] = useState('');
     const dispatch = useDispatch();
 
-    const accUserData = [ 
-        ['day', 'people'],
-        ['18일', 3],
-        ['19일', 8],
-        ['20일', 9],
-        ['21일', 10],
-        ['22일', 12],
-        ['23일', data.part_Total],
-    ];
-
-    const accAgeData = [
-        ['연령', '연령수'],
-        ['10대', data.part_Age.age_10],
-        ['20대', data.part_Age.age_20],
-        ['30대', data.part_Age.age_30],
-        ['40대', data.part_Age.age_40],
-        ['50대', data.part_Age.age_50],
-        ['60대', data.part_Age.age_60],
-    ];
-
-    const accSexData = [
-        ['성별', '성별수'],
-        ['여성', data.part_Gender.woman],
-        ['남성', data.part_Gender.man],
-    ];
+    const TAGENUM = {};
+    for (const value of data.sur_Tag) { TAGENUM[value.tag_ID] = value.tag_Name; }
+    
+    const [accAgeGenderData, accAgeTotalData, accGenderTotalData] = dataProcessing(data);
+    const pageChange = page => setPageNum(page);
 
     useEffect(()=>{
         if(err !== null){
-            Swal.fire({
-                icon: 'error',
-                title: '명백한 백잘못',
-                text: err
-            })
+            ErrorSweet('error', null, "네트워크 오류", err, null);
         }
     },[err]);
 
-    // main 차트 요청
+    useEffect(()=>{
+        setPageNum(1);
+        setTagSearch('');
+        setSearchText('');
+    },[match.params, dispatch]);
+
     useEffect(()=>{
         dispatch(chartData());
-    },[dispatch]);
-
-    // main 리스트 요청
-    useEffect(()=>{
-        mainListAPI()
-            .then( res => setReqMain(res.data) )
-            .catch( error => console.log("메인 리스트 요청 오류", error) )
-    },[dispatch]);
-
-    const callPage = (page_Num) => {
-        mainListPageAPI(page_Num)
-            .then(res => setReqMain(res.data))
-            .catch(err => console.log("메인 페이지 요청 오류", err));
-    }
+        if(pageNum===undefined || tagSearch===undefined || searchText===undefined) return;
+        mainListAPI(pageNum, tagSearch, searchText)
+            .then(res => setReqMain(res.data))
+            .catch(err => ErrorSweet('error', null, "네트워크 오류", err, null))
+    },[pageNum, tagSearch])
+        
+    useEffect(()=>{
+        if(pageNum===undefined || tagSearch===undefined || searchText===undefined) return;
+        debounceText(pageNum, tagSearch, searchText, setReqMain, dispatch);
+    },[searchText])
 
     return (
         <>
             <Main
                 data={data}
-                accUserData={accUserData}
-                accAgeData={accAgeData}
-                accSexData={accSexData}
+                accAgeGenderData={accAgeGenderData}
+                accAgeTotalData={accAgeTotalData}
+                accGenderTotalData={accGenderTotalData}
                 reqMain={reqMain}
-                callPage={callPage}
+                TAGENUM={TAGENUM}
+                setTagSearch={setTagSearch}
+                tagSearch={tagSearch}
+                pageNum={pageNum}
+                pageChange={pageChange}
+                setSearchText={setSearchText}
              />      
         </>
     );
 };
 
 export default MainComp;
+
+const dataProcessing = (data) =>{
+    let accEachAgeWoman=[];
+    let accEachAgeMan=[];
+    for (const key in data) {
+        for (const childKey in data[key]) {
+            switch(key){
+                case "part_Age_Man":
+                    accEachAgeMan.push(data[key][childKey]);
+                    break;
+                case "part_Age_Woman":
+                    accEachAgeWoman.push(data[key][childKey]);
+                    break;
+                default: break;
+            }
+        }
+    }
+    const accAgeGenderData = [
+        { "id" : "Woman", "data" : accEachAgeWoman.map((v, i)=> ({ 'x': `${i+1}0대`, 'y': accEachAgeWoman[5-i] })) },
+        { "id" : "Man", "data" : accEachAgeMan.map((v, i)=> ({ 'x': `${i+1}0대`, 'y': accEachAgeMan[5-i] })) },
+        { "id" : "Total", "data" : accEachAgeMan.map((v, i)=> ({ 'x': `${i+1}0대`, 'y': accEachAgeMan[5-i]+accEachAgeWoman[5-i]})) },
+    ]
+    const accAgeTotalData = accEachAgeMan.map((_, i)=>({ "id": `${i+1}0대`, "value": accEachAgeMan[5-i]+accEachAgeWoman[5-i] }));
+    const accGenderTotalData = [
+        { "id": "여성", "value": accEachAgeWoman.reduce((a,b)=>a+b), "color": "hsl(153, 70%, 50%)" },
+        { "id": "남성", "value": accEachAgeMan.reduce((a,b)=>a+b), "color": "hsl(255, 70%, 50%)" },
+    ]
+    
+    return [accAgeGenderData, accAgeTotalData, accGenderTotalData]
+}

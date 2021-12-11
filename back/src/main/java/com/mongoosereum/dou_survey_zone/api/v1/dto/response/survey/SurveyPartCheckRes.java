@@ -6,9 +6,6 @@ import lombok.Data;
 @Data
 @Builder
 public class SurveyPartCheckRes {
-
     private int check_State;
-
     private boolean check_IP;
-
 }

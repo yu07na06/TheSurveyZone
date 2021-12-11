@@ -1,5 +1,8 @@
 package com.mongoosereum.dou_survey_zone.security;
 
+import com.mongoosereum.dou_survey_zone.api.v1.exception.ErrorCode;
+import com.mongoosereum.dou_survey_zone.api.v1.exception.ForbiddenException;
+import com.mongoosereum.dou_survey_zone.api.v1.exception.UnauthorizedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -35,34 +38,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private RedisTemplate redisTemplate;
 
-//    @Override
-//    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-//        try {
-//            //요청에서 토큰 가져오기
-//            String token = parseBearerToken(request);
-//
-//            log.info("Filter is running...");
-//            // 토큰 검사하기.  JWT이므로 인가 서버에 요청하지 않고도 검증이 가능
-//            if (token != null && !token.equalsIgnoreCase("null")) {
-//                //userEmail 가져오기. 위조된 경우 예외 처리된다.
-//                String userEmail = tokenProvider.validateAndGetUserEmail(token);
-//                log.info("Authenticated user Email :" + userEmail);
-//                //인증 완료. SecurityContextHolder에 등록해야 인증된 사용자라고 생각한다
-//                AbstractAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-//                        userEmail, // 인증된 사용자의 정보, 무자열리 아니여도 아무것이나 넣을 수 있다. 보퉁 UserDetail라는 오브젝트를 넣는 것이 과반수
-//                        null, //
-//                        AuthorityUtils.NO_AUTHORITIES
-//                );
-//                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-//                SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-//                securityContext.setAuthentication(authentication);
-//                SecurityContextHolder.setContext(securityContext);
-//            }
-//        }catch (Exception e){
-//                logger.error("Could not set user authentication in security context" , e);
-//            }
-//        filterChain.doFilter(request, response);
-//        }
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
@@ -72,9 +47,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             log.info("Filter is running...");
             // 토큰 검사하기.  JWT이므로 인가 서버에 요청하지 않고도 검증이 가능
             if (token != null && !token.equalsIgnoreCase("null")) {
-
-                Long isLogout = (Long) redisTemplate.opsForValue().get("BT:" + token);
-                System.out.println( ObjectUtils.isEmpty(isLogout)? "this token is not black list" : "this token is black list");
+                String isLogout = (String) redisTemplate.opsForValue().get("BT:" + token);
+                log.info(ObjectUtils.isEmpty(isLogout)? "this token is not black list" : "this token is black list");
 
                 if(ObjectUtils.isEmpty(isLogout)) {
                     //userEmail 가져오기. 위조된 경우 예외 처리된다.
@@ -93,8 +67,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
         }catch (Exception e){
-                logger.error("Could not set user authentication in security context" , e);
-            }
+            logger.error("Could not set user authentication in security context" , e);
+        }
         filterChain.doFilter(request, response);
         }
 

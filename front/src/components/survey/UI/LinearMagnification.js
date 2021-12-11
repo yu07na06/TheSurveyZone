@@ -1,54 +1,126 @@
-import React from 'react';
-import Paper from '@mui/material/Paper';
-import { Button, Grid, TextField } from '@mui/material';
-import Switch from '@mui/material/Switch';
+import { Button, Grid, TextField, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
+import NativeSelect from '@mui/material/NativeSelect';
+import Paper from '@mui/material/Paper';
+import Select from '@mui/material/Select';
+import { debounce } from 'lodash';
+import React from 'react';
+import ReqSwitch from '../../common/modules/ReqSwitch';
 
-const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxValue, value, setTemp, deleteQue, ReadOnlyState, ReadOnlyData, makeCircles}) => {
-    console.log('혼내러 갑니다!!!!!!!!!!!!!', ReadOnlyData);
-    
+const LinearMagnification = ({ 
+    ReadOnlyState, 
+    ReadOnlyData, 
+    UpdateKey, 
+    number,
+
+    updateData,
+    setUpdateData,
+    updateDataStart,
+    setUpdateDataStart,
+    updateDataStartValue,
+    setUpdateDataStartValue,
+    updateDataEnd,
+    setUpdateDataEnd,
+    updateDataEndValue,
+    setUpdateDataEndValue,
+    value, 
+    minValue, 
+    setMinValue, 
+    maxValue, 
+    setMaxValue, 
+    makeCircles, 
+    setTemp, 
+    deleteQue, }) => {
     return (
-        <>
-            <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-                <Grid container spacing={2}>
-                {!ReadOnlyState&&
-                <><Switch id={`SurQue_Essential${number}`} name={`SurQue_Essential${number}`} sx={{ left: '92%' }} defaultChecked color="secondary" />
-                <Button id={number} sx={{ left: '74%' }} onClick={(e)=>deleteQue(e)}>삭제</Button></>}
-                    <br/>
-                    <Grid item xs={12}>
-                        <TextField
-                            variant="outlined"
-                            required
-                            fullWidth
-                            disabled={ReadOnlyState}
-                            name={`SurQue_Content${number}`}
-                            id={`SurQue_Content${number}`}
-                            label={`선형배율${number}`}
-                            value={ReadOnlyState?ReadOnlyData.surQue_Content:null} // 객체 참조 안함
-                        />
+        <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+            <Grid container spacing={2}>
+                {(ReadOnlyState && !UpdateKey) && 
+                    <Grid item xs={12} >
+                        <Typography style={{ color: "red" }} >
+                            {ReadOnlyData.surQue_Essential && "*필수항목"}
+                        </Typography>
                     </Grid>
+                }
+                {(!ReadOnlyState || UpdateKey) &&
+                    <>
+                        <Grid item xs={9}>
+                            <ReqSwitch number={number} flag={"qeustion"} essential={ReadOnlyData&&ReadOnlyData.surQue_Essential}/>
 
-                    <Grid item xs={2}>
+                        </Grid>
+                        <Grid item xs={3} textAlign="right">
+                            <Button id={number} onClick={(e) => deleteQue(e)}>삭제</Button>
+                        </Grid>
+                    </>
+                }
+
+                <Grid item xs={12}>
+                {UpdateKey||!ReadOnlyState?
+                    <TextField
+                        onChange={(e) => setUpdateData(e.target.value)}
+                        variant="outlined"
+                        required
+                        fullWidth
+                        InputProps={{ readOnly: (ReadOnlyState && !UpdateKey) }}
+                        name={`SurQue_Content${number}`}
+                        id={`SurQue_Content${number}`}
+                        label={`선형배율${number}`}
+                        value={updateData}
+                    />
+                :
+                    <Typography component="h6" variant="h6" >{updateData}</Typography>
+                }
+                </Grid>
+
+                {UpdateKey||!ReadOnlyState?
+                    <Grid item xs={12} md={6}>
                         <TextField
+                            fullWidth
+                            onChange={(e) => { setUpdateDataStart(e.target.value); debounce(() => setTemp(e.target.value), 1777)(); }}
                             required
                             variant="filled"
                             name={`start_Step${number}`}
                             label="시작"
-                            onChange={e=>setTemp(e.target.value)}
-                            disabled={ReadOnlyState}
-                            value={ReadOnlyState?ReadOnlyData.selectList[0].surSel_Content:null} // 객체 참조 안함
+                            InputProps={{ readOnly: (ReadOnlyState && !UpdateKey) }}
+                            value={updateDataStart}
                         />
                     </Grid>
-                    
-                    {!ReadOnlyState&&
-                    <Grid item xs={4}>
-                        <Box>
-                            <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label">시작 값</InputLabel>
+                :   
+                    <Grid item xs={6} md={6}>
+                        <Typography >{updateDataStart}</Typography>
+                    </Grid>
+                }
+                
+
+                {(!ReadOnlyState || UpdateKey) &&
+                    <Grid item xs={12} md={6}>
+                        {UpdateKey ?
+                            <Box>
+                                <FormControl fullWidth>
+                                    <InputLabel id="demo-simple-select-label">시작 값</InputLabel>
+                                    {value &&
+                                        <NativeSelect
+                                            labelId={`start_Name${number}_${minValue}`}
+                                            id={`start_Name${number}_${minValue}`}
+                                            name={`start_Name${number}_${minValue}`}
+                                            label={`start_Name${number}_${minValue}`}
+                                            onChange={e => setUpdateDataStartValue(e.target.value)}
+                                            InputProps={{ readOnly: (ReadOnlyState && !UpdateKey) }}
+                                            value={minValue}
+                                            defaultValue={updateDataStartValue}
+                                        >
+                                            <option value={0}>0</option>
+                                            <option value={1}>1</option>
+                                        </NativeSelect>
+                                    }
+                                </FormControl>
+                            </Box>
+                        :
+                            <Box>
+                                <FormControl fullWidth>
+                                    <InputLabel id="demo-simple-select-label">시작 값</InputLabel>
                                     <Select
                                         required
                                         labelId={`start_Name${number}_${minValue}`}
@@ -56,40 +128,71 @@ const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxVal
                                         name={`start_Name${number}_${minValue}`}
                                         label={`start_Name${number}_${minValue}`}
                                         onChange={e => setMinValue(e.target.value)}
-                                        disabled={ReadOnlyState}
-                                        value={minValue} // 객체 참조 안함
-                                        >
-                                    <MenuItem value="0">0</MenuItem>
-                                    <MenuItem value="1">1</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Box>
-                    </Grid>}
+                                        InputProps={{ readOnly: (ReadOnlyState && !UpdateKey) }}
+                                        value={minValue}
+                                    >
+                                        <MenuItem value="0">0</MenuItem>
+                                        <MenuItem value="1">1</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </Box>
+                        }
+                    </Grid>
+                }
 
-                    {ReadOnlyState&&
-                    <Grid container xs={8} 
+                    {UpdateKey||!ReadOnlyState?
+                        <Grid item  xs={12} md={6}  textAlign="left">
+                            <TextField
+                                fullWidth
+                                onChange={(e) => { setUpdateDataEnd(e.target.value); debounce(()=> setTemp(e.target.value), 1777)(); }}
+                                required
+                                variant="filled"
+                                name={`end_Step${number}`}
+                                label="끝"
+                                InputProps={{ readOnly: (ReadOnlyState && !UpdateKey) }}
+                                value={updateDataEnd}
+                            />
+                        </Grid>
+                    :
+                        <Grid item xs={6} md={6}>
+                            <Typography sx={{ textAlign: "right" }}>{updateDataEnd}</Typography>
+                        </Grid>
+                    }
+                    
+                {(ReadOnlyState && !UpdateKey) &&
+                    <Grid container xs={12}
                         justifyContent="center"
                         alignItems="center">
-                    {ReadOnlyState&&
-                        makeCircles.map(value=>value)}
-                    </Grid>}
-
-                    <Grid item xs={2}>
-                        <TextField
-                            required
-                            variant="filled"
-                            name={`end_Step${number}`}
-                            label="끝"
-                            onChange={e=>setTemp(e.target.value)}
-                            disabled={ReadOnlyState}
-                            value={ReadOnlyState?ReadOnlyData.selectList[2].surSel_Content:null} // 객체 참조 안함
-                        />
+                        {ReadOnlyState &&
+                            makeCircles.map(value => value)}
                     </Grid>
-                    {!ReadOnlyState&&
-                    <Grid item xs={4}>
-                        <Box>
-                            <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label">끝 값</InputLabel>
+                }
+
+                {(!ReadOnlyState || UpdateKey) &&
+                    <Grid item xs={12} md={6}>
+                        {UpdateKey ?
+                            <Box>
+                                <FormControl fullWidth>
+                                    <InputLabel id="demo-simple-select-label">끝 값</InputLabel>
+                                    {value && <NativeSelect
+                                        labelId={`end_Name${number}_${maxValue}`}
+                                        id={`end_Name${number}_${maxValue}`}
+                                        name={`end_Name${number}_${maxValue}`}
+                                        label={`end_Name${number}_${maxValue}`}
+                                        onChange={e => setUpdateDataEndValue(e.target.value)}
+                                        value={maxValue}                                              
+                                        defaultValue={updateDataEndValue}
+                                    >
+                                        {value.map(v =>
+                                            (minValue === 0) ? <option value={v}>{v}</option> : <option value={v + 1}>{v + 1}</option>
+                                        )}
+                                    </NativeSelect>}
+                                </FormControl>
+                            </Box>
+                            :
+                            <Box>
+                                <FormControl fullWidth>
+                                    <InputLabel id="demo-simple-select-label">끝 값</InputLabel>
                                     <Select
                                         required
                                         labelId={`end_Name${number}_${maxValue}`}
@@ -97,19 +200,20 @@ const LinearMagnification = ({number, minValue, setMinValue, maxValue, setMaxVal
                                         name={`end_Name${number}_${maxValue}`}
                                         label={`end_Name${number}_${maxValue}`}
                                         onChange={e => setMaxValue(e.target.value)}
-                                        disabled={ReadOnlyState}
-                                        value={maxValue} // 객체 참조 안함
-                                        >
-                                    {value.map((v,i)=>
-                                        (minValue===0)?<MenuItem value={v}>{v}</MenuItem>:<MenuItem value={v+1}>{v+1}</MenuItem>
-                                    )}
-                                </Select>
-                            </FormControl>
-                        </Box>
-                    </Grid>}
-                </Grid>
-            </Paper>
-        </>
+                                        disabled={ReadOnlyState && !UpdateKey}
+                                        value={maxValue}
+                                    >
+                                        {value.map(v =>
+                                            (minValue === 0) ? <MenuItem value={v}>{v}</MenuItem> : <MenuItem value={v + 1}>{v + 1}</MenuItem>
+                                        )}
+                                    </Select>
+                                </FormControl>
+                            </Box>
+                        }
+                    </Grid>
+                }
+            </Grid>
+        </Paper>
     );
 };
 
