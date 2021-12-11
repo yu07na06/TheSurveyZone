@@ -51,7 +51,7 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
     useEffect(()=>{
         surveyCheckAPI(surveykey)
             .then(res => surveyCheckFunc(res.data.check_IP, res.data.check_State))
-            .catch(err => ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null))
+            .catch(err =>{ ErrorSweet('error', null, "존재 하지않는 설문입니다","홈페이지로 이동합니다", null); history.push("/")})
     },[])
 
     useEffect(()=>{

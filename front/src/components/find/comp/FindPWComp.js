@@ -28,7 +28,8 @@ const FindPWComp = () => {
         searchPW(searchPWReq)
             .then( res => successPW(res.data) )
             .catch(err => { 
-                if(err.response.data.errorCode=="400_3") ErrorSweet('error', null, "유효한값이 아닙니다", "이메일 형식과 비밀번호를 확인해주세요", null);
+                if(err.response.data.errorCode=="400_3") ErrorSweet('error', null, "유효한값이 아닙니다", "이메일 형식과 성함 및 전화번호를 확인해주세요", null);
+                if(err.response.data.errorCode=="404_1") ErrorSweet('error', null, "실패", "일치하는 회원정보가 없습니다", null);
             });
     };
 

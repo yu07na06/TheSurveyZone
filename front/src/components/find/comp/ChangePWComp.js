@@ -28,6 +28,7 @@ const ChangePWComp = () => {
             .then(() =>{ ErrorSweet('info', null, "성공", "비밀번호 변경완료", null); history.push('/LoginPage');})
             .catch(err => { 
                 if(err.response.data.errorCode=="400_4") ErrorSweet('error', null, "비밀번호 변경 실패", "기존 비밀번호와 동일합니다", null);
+                if(err.response.data.errorCode=="404_1") {ErrorSweet('error', null, "비정상적인 접근", "로그인 후 비밀번호 변경 부탁드립니다", null); history.push('./') }
             });
         }
     }

@@ -7,6 +7,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import Slider from '@mui/material/Slider';
 import Typography from '@mui/material/Typography';
 import React from 'react';
+import { Gongback } from '../../common/Function';
 
 const BeforeSurvey = ({marks, addStore}) => {
     return (
@@ -14,7 +15,7 @@ const BeforeSurvey = ({marks, addStore}) => {
             <Container sx={{ py: 2 }} maxWidth="md">
             <Paper>
             <Grid container align='center' justifyContent="center">
-                <Grid item lg={12}>
+                <Grid item xs={12}>
                     <Container sx={{ py: 2 }} maxWidth="sm">
                     <Typography style={{ fontWeight:'bold',textAlign:'left' }} sx={{ mt:5 }} >성별</Typography>
                     <FormControl onChange={ (e) => addStore(e) } component="fieldset" name ="zzz">
@@ -25,11 +26,11 @@ const BeforeSurvey = ({marks, addStore}) => {
                     </FormControl>
                     </Container>
                 </Grid>
-                <Grid item lg={12}>
+                <Grid item xs={12}>
                     <Container sx={{ py: 2 }} maxWidth="sm">
                     <Typography style={{ fontWeight:'bold', textAlign:'left'}} sx={{ mt:5 }} >연령대</Typography>
-                    <Box sx={{ mx:4,  width: 300 }}>
                         <Slider
+                            fullWidth
                             onChange={(e)=>addStore(e)} 
                             name="연령대"
                             track={false}
@@ -42,7 +43,7 @@ const BeforeSurvey = ({marks, addStore}) => {
                             min={10}
                             max={60}
                         />
-                    </Box>
+                        <Gongback num={3}/>
                     </Container>
                 </Grid>
             </Grid>

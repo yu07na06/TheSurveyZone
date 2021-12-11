@@ -37,7 +37,7 @@ const ModifyComment = ({ data, _id, style, setCommentList, currentPage, setCount
             fullWidth
             maxWidth="xs"
             >
-            <DialogTitle id="form-dialog-title">삭제</DialogTitle>
+            <DialogTitle id="form-dialog-title">수정</DialogTitle>
             <DialogContent>
             <Container sx={{ py: 1 }} maxWidth="md">   
             
