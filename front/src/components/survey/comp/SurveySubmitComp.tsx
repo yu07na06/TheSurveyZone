@@ -76,7 +76,7 @@ const SurveySubmitComp = ({surveykey, UpdateKey, ReadOnlyState, realReadState}) 
             setActiveStep(1);
         }
         getSurveyAPI(surveykey)
-           .then( res => setSurveyReqForm(res.data) )
+           .then( res => { setSurveyReqForm(res.data); setSur_Publish(!res.data.sur_Publish) })
    },[surveykey])
 
    useEffect(()=>{

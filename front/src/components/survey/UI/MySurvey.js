@@ -42,7 +42,7 @@ const MySurvey = ({ mySurList, currentPage, callPaging, ApiClick, surStateMark, 
                                                 <ListItem  >
                                                     <Paper elevation={1} style={{ boxShadow: "0px 5px 6px -6px", width: "100%" }}>
                                                         <Grid container alignItems="center">
-                                                            <Grid item align='center' xs={2} sm={1} md={1} lg={1}>
+                                                            <Grid item align='center' xs={2} sm={2} md={1} lg={1}>
                                                                 {surStateMark(value.sur_State)}
                                                             </Grid>
                                                             
@@ -52,13 +52,15 @@ const MySurvey = ({ mySurList, currentPage, callPaging, ApiClick, surStateMark, 
                                                                 </Link>
                                                             </Grid>
 
-                                                            <Grid item xs={2} md={2} lg={2} justifyContent="center" textAlign="center">
+                                                            <Grid item xs={12} container spacing={1}>
+
+                                                            <Grid item xs={4} md={2} lg={2} justifyContent="center" textAlign="center">
                                                                 <Button id="read" onClick={(e) => ApiClick(e, value._id)} style={{ boxShadow : "0px 5px 6px -6px",  border:"1px solid #F2F2F2",fontWeight:'bold', borderRadius: '10px',  backgroundColor: "#FAFAFA" , color: 'Gray' , height:"30px"}}>
                                                                     보기
                                                                 </Button>
                                                             </Grid>
                                                         
-                                                            <Grid item xs={2} md={2} lg={2} justifyContent="center" textAlign="center">
+                                                            <Grid item xs={4} md={2} lg={2} justifyContent="center" textAlign="center">
                                                                 {value.sur_State === 0
                                                                 ? 
                                                                     <Button id="mod" onClick={(e) => ApiClick(e, value._id)} style={{ boxShadow : "0px 5px 6px -6px",  border:"1px solid #F2F2F2",fontWeight:'bold', borderRadius: '10px',  backgroundColor: "#FAFAFA" , color: 'Gray' , height:"30px"}}>
@@ -71,26 +73,29 @@ const MySurvey = ({ mySurList, currentPage, callPaging, ApiClick, surStateMark, 
                                                                 }
                                                             </Grid>
 
-                                                            <Grid item xs={2} md={2} lg={2} justifyContent="center" textAlign="center">
-                                                                <Button id="del" onClick={(e) => {ApiClick(e, value._id)}} style={{ margin:"5px", boxShadow : "0px 5px 6px -6px",  border:"1px solid #F2F2F2",fontWeight:'bold', borderRadius: '10px',  backgroundColor: "#FAFAFA" , color: 'Gray', height:"30px"}}>
+                                                            <Grid item xs={4} md={2} lg={2} justifyContent="center" textAlign="center">
+                                                                
+                                                                <Button id="del" onClick={(e) => {ApiClick(e, value._id)}} style={{ boxShadow : "0px 5px 6px -6px",  border:"1px solid #F2F2F2",fontWeight:'bold', borderRadius: '10px',  backgroundColor: "#FAFAFA" , color: 'Gray', height:"30px"}}>
                                                                     삭제
                                                                 </Button>
+                                                            
                                                             </Grid>
                                                                 
-                                                            <Grid item xs={2} md={2} lg={2} justifyContent="center" textAlign="center">
+                                                            <Grid item xs={4} md={2} lg={2} justifyContent="center" textAlign="center">
                                                                 <SendEmail _id={value._id} />
                                                             </Grid>
                                                                 
-                                                            <Grid item xs={2} md={2} lg={2} justifyContent="center" textAlign="center">
+                                                            <Grid item xs={4} md={2} lg={2} justifyContent="center" textAlign="center">
                                                                 <QrCodeUrl id={value._id} />
                                                             </Grid>
 
-                                                            <Grid item xs={2} md={2} lg={2} justifyContent="center" textAlign="center">
+                                                            <Grid item xs={4} md={2} lg={2} justifyContent="center" textAlign="center">
                                                                 <Tooltip title="url 복사">
                                                                     {ClipboardCopy("icon", process.env.REACT_APP_URL+value._id)}
                                                                 </Tooltip>
                                                             </Grid>
-
+                                                            
+                                                            </Grid>
                                                         </Grid>
                                                     </Paper>
                                                 </ListItem>

@@ -13,7 +13,7 @@ export const debounceCheck = debounce((e, registerData, history,setEmailText) =>
           .then(res => setEmailText(!res.data))
     }else if(e._reactName==='onSubmit'){
         registerAPI(registerData)
-          .then(() => history.push('/LoginPage'))
+          .then(() => {history.push('/LoginPage'); ErrorSweet('info', null, '회원가입 성공', '정상적으로 회원가입에 성공하셨습니다.', '로그인 페이지로 이동합니다.')})
           .catch( err => ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null) );
     }
 }, 444);

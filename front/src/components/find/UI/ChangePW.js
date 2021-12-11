@@ -44,7 +44,7 @@ const ChangePW = ({handleSubmit, confirm, PWNOTMATCH, }) => {
                         autoComplete="off"
                         autoFocus
                         />
-
+                        <Typography variant="h7" style={{color:"#FF5555"}}>숫자, 영문, 특수문자를 포함한 8자이상 작성해주세요</Typography>
                         <TextField
                         margin="normal"
                         required

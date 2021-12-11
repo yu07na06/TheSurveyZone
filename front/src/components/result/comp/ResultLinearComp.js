@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import ResultLinear from '../UI/ResultLinear';
 import Radio from "@mui/material/Radio";
 import { FormControlLabel } from '@mui/material';
-import ResultDetailChart from '../UI/ResultDetailChart';
 
 const ResultLinearComp = ({ value, index, result, }) => {
     const [ makeCircle, setMakeCircle ] = useState([]);
@@ -14,7 +13,7 @@ const ResultLinearComp = ({ value, index, result, }) => {
             <FormControlLabel
                 style={{ marginLeft:"0", marginRight:"0" }}
                 value="top"
-                control={<label><Radio
+                control={<Radio
                             key={`result_${index}_${idx}`}
                             onChange={(e)=>setChangeCircle(e.target.value)}
                             value={`radio_1_1`}
@@ -22,8 +21,8 @@ const ResultLinearComp = ({ value, index, result, }) => {
                             id={`radio_1`}
                             checked={ changeCircle === `radio_1_1` }
                             sx={{ "& .MuiSvgIcon-root": { fontSize: size } }}
-                        />{result.resultMap[index][idx]}</label>}
-                label={<ResultDetailChart data={idx}/>}
+                        />}
+                label={result.resultMap[index][idx]}
                 labelPlacement={"top"}
             />
         );

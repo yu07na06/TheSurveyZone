@@ -28,12 +28,12 @@ const MainSurvey = ({
     setTag, 
     tags, 
     handleClick, 
-    anchorEl, 
-    open, 
-    handleClose, 
-    question, 
-    ReadOnlyState, 
-    setUrl, 
+    anchorEl,
+    open,
+    handleClose,
+    question,
+    ReadOnlyState,
+    setUrl,
     setSur_Publish, updateDataTitle , setUpdateDataTitle, updateDataContent , setUpdateDataContent}) => {
 
     const defaultImage = "https://surveyzone.s3.ap-northeast-2.amazonaws.com/static/b5e552ea-8d6b-4582-89ae-1d25c25027b8no-image.png";
@@ -43,7 +43,7 @@ const MainSurvey = ({
               setUpdateDataContent(surveyReqForm.sur_Content)
           }
     },[surveyReqForm])
-    
+
     return (
         <>
             {surveyReqForm &&

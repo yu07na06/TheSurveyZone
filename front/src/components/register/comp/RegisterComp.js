@@ -10,6 +10,7 @@ const RegisterComp = () => {
     const [phoneNumber, setPhoneNumber] = useState();
     const [errorText, setErrorText] = useState();
     const [emailText, setEmailText] = useState(true);
+    const [pwResult,setPwResult] = useState();
     const history = useHistory();
 
     const onSubmit = (e) => {
@@ -20,8 +21,7 @@ const RegisterComp = () => {
         const user_Name = data.get('User_Name');
         const user_Tel = data.get('User_Tel');
         const registerData = {user_Email, user_Password, user_Name, user_Tel}
-
-        if(pwResult.current&& emailResult.current&&phoneResult.current&&checkResult.current&&PWNOTMATCH&&emailText){
+        if(pwResult&& emailResult.current&&phoneResult.current&&checkResult.current&&PWNOTMATCH&&emailText){
             setEmailText(debounceCheck(e, registerData, history));
             setErrorText();
             return true;
@@ -41,7 +41,6 @@ const RegisterComp = () => {
     const regexPW = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,16}$/;
     const regexEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
     const regexPhone = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
-    const pwResult = useRef(null);
     const emailResult = useRef(null);
     const phoneResult = useRef(null);
     const checkResult = useRef(null);
@@ -53,8 +52,8 @@ const RegisterComp = () => {
                 debounceCheck(e,null,history,setEmailText);
                 break;
             case 'User_Password' : 
-                setUser_Password(e.target.value)
-                pwResult.current = regexPW.test(User_Password);
+                setUser_Password(e.target.value);
+                setPwResult(regexPW.test(e.target.value));
                 break;
             case 'passWordConfirm' : 
                 setPassWordConfirm(e.target.value)

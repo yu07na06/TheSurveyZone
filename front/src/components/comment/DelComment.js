@@ -1,12 +1,10 @@
-import CloseIcon from '@mui/icons-material/Close';
-import { Button, TextField } from '@mui/material';
-import IconButton from '@mui/material/IconButton';
-import Modal from '@mui/material/Modal';
-import { Box } from '@mui/system';
 import React, { useState } from 'react';
 import { commentDelete as commentDeleteAPI, commentSelect as commentSelectAPI } from '../../lib/api/survey';
+import IconButton from '@mui/material/IconButton';
+import { Button, Container, Dialog, DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
-const DelComment = ({ _id, data, style, setCommentList, currentPage, setCountPage, setCurrentPage, }) => {
+const DelComment = ({ _id, data, style, setCommentList, currentPage, setCountPage, setCurrentPage }) => {
     const [ anchorEl, setAnchorEl ] = useState(null);
     const open = Boolean(anchorEl);
 
@@ -21,8 +19,8 @@ const DelComment = ({ _id, data, style, setCommentList, currentPage, setCountPag
                                
         commentDeleteAPI(_id, delCommentObj)
             .then(()=> commentSelectAPI(_id,currentPage)
-                        .then(res=>{setCommentList(res.data.commentlist); setCountPage(res.data.paginationInfo.totalPageCount); setCurrentPage(res.data.paginationInfo.criteria.page_Num)})
-            .catch(err=> err.response.status==401&&alert('비밀번호 틀렸습니다.')))
+                        .then(res=>{ setCommentList(res.data.commentlist); setCountPage(res.data.paginationInfo.totalPageCount); setCurrentPage(res.data.paginationInfo.criteria.page_Num)}))
+            .catch(err=> { err.response.status==401&&alert('비밀번호 틀렸습니다.')})
         com_Password.value = '';
         handleClose();
     }
@@ -33,18 +31,35 @@ const DelComment = ({ _id, data, style, setCommentList, currentPage, setCountPag
                 <CloseIcon />
             </IconButton>
 
-            <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
+            <Dialog
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="form-dialog-title"
+            fullWidth
+            maxWidth="xs"
             >
-                <Box component="form" onSubmit={e=>delCom(e)} sx={style}>
-                    <TextField id='com_Password' type='password' label="비밀번호" inputProps={{maxLength: 8}} required/><br/>
-                    <Button onClick={handleClose}>닫기</Button>
-                    <Button type="submit">삭제</Button>
-                </Box>
-            </Modal>
+            <DialogTitle id="form-dialog-title">삭제</DialogTitle>
+            <DialogContent>
+            <Container sx={{ py: 1 }} maxWidth="md">   
+            
+            <Grid container spacing={1} component="form" onSubmit={e=>delCom(e)}>
+            
+            <Grid item xs = {12}>
+                <TextField size='small' fullWidth id='com_Password' type='password' label="비밀번호" inputProps={{maxLength: 8}} required/><br/>
+            </Grid>
+
+            <Grid item xs = {6} align="center" >
+                <Button type="submit">삭제</Button>
+            </Grid>
+            
+            <Grid item xs = {6} align="center" >
+                <Button onClick={handleClose}>닫기</Button>
+            </Grid>
+
+            </Grid>
+            </Container>
+            </DialogContent>
+            </Dialog>
         </>
     );
 }

@@ -86,7 +86,7 @@ const SendEmail = ({ _id }) => {
 
         <Box component="form" onSubmit={(e) => add(e)} >
           <MenuItem>
-            <TextField onChange={(e) => checkEmail(e)} type="email" label="E-maile" id="email" name="email" value={email} />
+            <TextField onChange={(e) => checkEmail(e)} type="email" label="E-mail" id="email" name="email" value={email} />
             <Button type="submit" name="add" id="add" key="add"> + </Button>
             <Button onClick={(e) => send(e)} tname="send" id="send"> 전송 </Button>
             <Button onClick={handleClose}>닫기</Button>

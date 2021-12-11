@@ -27,7 +27,9 @@ const FindPWComp = () => {
 
         searchPW(searchPWReq)
             .then( res => successPW(res.data) )
-            .catch( err => ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null));
+            .catch(err => { 
+                if(err.response.data.errorCode=="400_3") ErrorSweet('error', null, "유효한값이 아닙니다", "이메일 형식과 비밀번호를 확인해주세요", null);
+            });
     };
 
       const onChange = (e) => {

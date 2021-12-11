@@ -29,7 +29,10 @@ const LoginComp = () => {
                 localStorage.setItem('user_Name', res.data.user_Name);
                 newPassword(res.data.login_Type);}) 
             .then(() => history.push('/') )
-            .catch(err => ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null))
+            .catch(err => { 
+                if(err.response.data.errorCode=="404_1") ErrorSweet('error', null, "실패", "일치하는 회원정보가 없습니다", null);
+                if(err.response.data.errorCode=="400_3") ErrorSweet('error', null, "유효한값이 아닙니다", "이메일 형식과 비밀번호를 확인해주세요", null);
+            });
     };
 
     return (

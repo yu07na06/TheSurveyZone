@@ -9,8 +9,9 @@ const ReqSwitch = ({number, flag, setSur_Publish, essential, }) => {
         if(essential!==undefined&&essential==false){
             if(flag==="qeustion")
                 setCheckText("     ");
-            else
+            else{
                 setCheckText("비공개 설문");
+            }
         }
     },[])
 
