@@ -60,7 +60,7 @@ public class SurveyResultRes{
 
     private List<LinkedHashMap<String,List<Integer> > > selectResultMap;
 
-    private Map<String, Integer> partList;
+    private Map<String, Integer[]> partList;
     public SurveyResultRes(){
         this.userList = new ArrayList<String>();
         this.questionList = new ArrayList<>();
