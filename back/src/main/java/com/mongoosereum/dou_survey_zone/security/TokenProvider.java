@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -22,9 +21,9 @@ public class TokenProvider {
     public static final String SECRET_KEY = "DOUSURVEYZONE";
 
     public String create(User user_mySQL){
-        //TODO 유효기간 현재 작업 편하게 10시간 해둠 1시간으로 변경 필요!
+        // 기한은 지금부터 1일
         Date expiryDate = Date.from(
-                Instant.now().plus(10, ChronoUnit.HOURS));
+                Instant.now().plus(1, ChronoUnit.HOURS));
 
         /*
         { //header
@@ -66,16 +65,18 @@ public class TokenProvider {
 
     // Request의 Header에서 token 값을 가져옵니다. "X-AUTH-TOKEN" : "TOKEN값'
     public String resolveToken(HttpServletRequest request) {
-        Cookie token =  WebUtils.getCookie(request, "Authorization");
-        if(token != null) {
-            return token.getValue();
+        Cookie name = WebUtils.getCookie(request, "Authorization");
+        if(name != null) {
+            return name.getValue();
         }else {
             return null;
         }
+//        return request.getHeader("X-AUTH-TOKEN");
     }
 
     // 토큰의 유효성 + 만료일자 확인
     public Jws<Claims> confirmToken(String jwtToken) {
+
         Jws<Claims> claims = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(jwtToken);
         return claims;
 

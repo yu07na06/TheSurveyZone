@@ -2,14 +2,31 @@ package com.mongoosereum.dou_survey_zone.api.v1.dao;
 
 import com.mongoosereum.dou_survey_zone.api.v1.domain.tag.SurveyTag;
 import com.mongoosereum.dou_survey_zone.api.v1.domain.tag.Tag;
-import java.util.List;
-import java.util.Optional;
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
-public interface TagDAO {
-    List<Tag> selectTagList();
-    List<Tag> findById(String _id);
-    void insertTag(SurveyTag surveyTag);
-    Optional<SurveyTag> selectSurveyTag(String _id);
-    void updateSurveyTag(SurveyTag surveyTag);
-    void deleteSurveyTag(SurveyTag surveyTag);
+import java.util.List;
+
+@Service
+@Repository
+public class TagDAO {
+    @Autowired
+    private SqlSession sqlSession;
+
+    /* 존재하는 태그들 */
+    public List<Tag> selectTagList(){
+        return sqlSession.selectList("selectTagList");
+    }
+
+    /* survey에 사용된 태그들  */
+    public List<Tag> findById(String _id){
+        return sqlSession.selectList("selectExistTagList",_id);
+    }
+
+    /*태그 생성*/
+    public int insertTag(SurveyTag surveyTag){
+        return sqlSession.insert("insertSurveyTag",surveyTag);
+    }
 }

@@ -1,13 +1,13 @@
 import React from 'react';
-import Footer from '../components/common/modules/Footer';
-import Header from '../components/common/modules/Header';
+import Footer from '../components/common/UI/Footer';
+import Header from '../components/common/UI/Header';
 import MainComp from '../components/MainComp';
 
-const MainPage = (match) => {
+const MainPage = () => {
     return (
         <>
             <Header />
-                <MainComp match={match.match} />
+                <MainComp />
             <Footer />
         </>
     );

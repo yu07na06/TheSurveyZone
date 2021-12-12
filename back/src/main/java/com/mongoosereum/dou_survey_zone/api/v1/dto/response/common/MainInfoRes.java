@@ -23,11 +23,11 @@ public class MainInfoRes {
 
     @ApiModelProperty(name="part_Age",notes = "누적 이용자 연령대 Map",
             example="{\"age_60\": 14, \"age_50\": 16, \"age_40\": 22, \"age_30\": 23, \"age_20\": 46, \"age_10\": 23}")
-    Map<String,Long> part_Age_Man;
+    Map<String,Long> part_Age;
 
     @ApiModelProperty(name="part_Gender",notes = "누적 이용자 성별 Map",
             example="{\"woman\": 0, \"man\": 1 }")
-    Map<String,Long> part_Age_Woman;
+    Map<String,Long> part_Gender;
 
     @ApiModelProperty(name="sur_Tag",notes = "게시물이 존재하는 Tag List",
             example= "[\n" +

@@ -31,7 +31,7 @@
             and survey.User_Email = #{criteria.user_Email}
         </if>
         group by survey._id
-        order by survey.Sur_State,survey.Sur_StartDate
+        order by survey.Sur_State
         limit #{firstRecordIndex}, #{criteria.records_Perpage};
     </select>
 
@@ -66,7 +66,7 @@
             and  survey.surveytag.Tag_ID = #{criteria.search_Tag}
         </if>
         group by survey._id
-        order by survey.Sur_State,survey.Sur_StartDate
+        order by survey.Sur_State
         limit #{firstRecordIndex}, #{criteria.records_Perpage};
     </select>
 
@@ -85,7 +85,7 @@
     </select>
 
     <insert id="insertSurvey" parameterType="Survey_MySQL">
-        insert into survey.survey values (#{_id},#{sur_Title},#{sur_Content},#{sur_State},#{sur_StartDate},#{sur_EndDate},#{sur_Publish},#{sur_Img},#{user_Email},#{sur_Type} );
+        insert into survey.survey values (#{_id},#{sur_Title},#{sur_Content},#{sur_State},#{sur_StartDate},#{sur_EndDate},#{sur_Publish},#{sur_Image},#{user_Email},#{sur_Type} );
     </insert>
 
     <select id="selectOwner" parameterType="String" resultType="String">
@@ -93,14 +93,14 @@
     </select>
 
     <delete id="deleteSurvey" parameterType = "String">
-        delete from survey.survey where _id = #{_id};
+        delete from survey.Survey where _id = #{_id};
     </delete>
 
     <update id="updateSurvey" parameterType = "Survey_MySQL">
         update survey.survey
         set Sur_Title = #{sur_Title}, Sur_Content = #{sur_Content}, Sur_State = #{sur_State},
             Sur_StartDate = #{sur_StartDate}, Sur_EndDate = #{sur_EndDate},
-            Sur_Publish = #{sur_Publish}, Sur_Img = #{sur_Img},
+            Sur_Publish = #{sur_Publish}, Sur_Img = #{sur_Image},
             User_Email = #{user_Email}, Sur_Type = #{sur_Type}
         where _id = #{_id}
     </update>
@@ -118,3 +118,4 @@
     </update>
 
 </mapper>
+

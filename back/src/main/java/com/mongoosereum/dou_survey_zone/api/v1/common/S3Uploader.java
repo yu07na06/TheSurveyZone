@@ -3,9 +3,6 @@ package com.mongoosereum.dou_survey_zone.api.v1.common;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.mongoosereum.dou_survey_zone.api.v1.domain.participation.Participation;
-import com.mongoosereum.dou_survey_zone.api.v1.exception.BadRequestException;
-import com.mongoosereum.dou_survey_zone.api.v1.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,13 +26,8 @@ public class S3Uploader {
     public String bucket;  // S3 버킷 이름
 
     public String upload(MultipartFile multipartFile, String dirName) throws IOException {
-        String contentType = multipartFile.getContentType();
-        if(!contentType.contains("image"))
-            throw new BadRequestException(ErrorCode.NOT_IMAGE);
-        if(multipartFile.getSize() > 10485760L)
-            throw new BadRequestException(ErrorCode.OUT_OF_MEMORY_IMAGE);
         File uploadFile = convert(multipartFile)  // 파일 변환할 수 없으면 에러
-                .orElseThrow(() -> new BadRequestException(ErrorCode.CONVERT_FAIL));
+                .orElseThrow(() -> new IllegalArgumentException("error: MultipartFile -> File convert fail"));
 
         return upload(uploadFile, dirName);
     }

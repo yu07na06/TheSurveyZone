@@ -8,7 +8,6 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor
 public class Participation {
-    private int Part_ID;
     private String _id;
     private String Part_IP;
     private char Part_Gender;

@@ -10,29 +10,21 @@ import java.util.List;
 import java.util.Optional;
 
 public interface SurveyDAO {
-    // CREATE
-    Survey_Mongo surveyInsert_Mongo(final Survey_Mongo survey);
-    void surveyInsert_MySQL(final Survey_MySQL survey);
-    void insertAnswer(final String _id, final List<Answer> answerList);
-
-    // READ - paging
     long surveyTotal();
-    int selectSurveyTotalCount(PageCriteria Criteria);
-    int selectMySurveyTotalCount(PageCriteria Criteria);
     List<Survey_MySQL> selectSurveyList(PaginationInfo paginationInfo);
+    int selectSurveyTotalCount(PageCriteria Criteria);
     List<Survey_MySQL> selectMySurveyList(PaginationInfo paginationInfo);
-    // READ
+    int selectMySurveyTotalCount(PageCriteria Criteria);
+    Survey_Mongo surveyInsert_Mongo(final Survey_Mongo survey);
+    int surveyInsert_MySQL(final Survey_MySQL survey);
     Optional<Survey_MySQL> findById_MySQL(String _id);
     Optional<Survey_Mongo> findById_Mongo(String _id);
-    Optional<String> selectOwner(String _id);
-
-    // UPDATE
-    void updateSurvey_Mongo(Survey_Mongo survey);
-    void updateSurvey_MySQL(Survey_MySQL survey);
+    Integer insertAnswer(final String _id, final List<Answer> answerList);
+    String selectOwner(String _id);
+    int deleteSurvey_MySQL(String _id);
+    Long deleteSurvey_Mongo(String _id);
+    Long updateSurvey_Mongo(Survey_Mongo survey);
+    Integer updateSurvey_MySQL(Survey_MySQL survey);
     List<Survey_MySQL> todaySurveyList();
     Integer todaySurveyUpdate(List<? extends Survey_MySQL> list);
-
-    // DELETE
-    void deleteSurvey_MySQL(String _id);
-    void deleteSurvey_Mongo(String _id);
 }

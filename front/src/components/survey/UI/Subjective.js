@@ -1,66 +1,36 @@
-import { Button, Grid, TextField, Typography } from '@mui/material';
-import Paper from '@mui/material/Paper';
 import React from 'react';
-import ReqSwitch from '../../common/modules/ReqSwitch';
+import Paper from '@mui/material/Paper';
+import { Button, Grid, TextField } from '@mui/material';
+import Switch from '@mui/material/Switch';
 
-const Subjective = ({ 
-    ReadOnlyState, 
-    ReadOnlyData, 
-    UpdateKey, 
-    realReadState, 
-    number, 
-    updateData, 
-    setUpdateData, 
-    deleteQue, }) => {
+const Subjective = ({number, deleteQue, ReadOnlyState, ReadOnlyData, }) => {
     return (
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-            <Grid container spacing={2} alignItems="center"><br />
-                {(ReadOnlyState && !UpdateKey) && 
-                    <Grid item xs={12} >
-                        <Typography style={{ color: "red" }} >
-                            {ReadOnlyData.surQue_Essential && "*필수항목"}
-                        </Typography>
-                    </Grid>
-                }
-                {(!ReadOnlyState || UpdateKey) &&
-                    <>
-                        <Grid item xs={9}>
-                            <ReqSwitch number={number} flag={"qeustion"} essential={ReadOnlyData&&ReadOnlyData.surQue_Essential}/>
-
-                        </Grid>
-                        <Grid item xs={3} textAlign="right">
-                            <Button id={number} onClick={(e) => deleteQue(e)}>삭제</Button>
-                        </Grid>
-                    </>
-                }
+            <Grid container spacing={2}><br/>
+                {!ReadOnlyState&&
+                <><Switch id={`SurQue_Essential${number}`} name={`SurQue_Essential${number}`} sx={{ left: '92%' }} defaultChecked color="secondary" />
+                <Button id={number} sx={{ left: '74%' }} onClick={(e)=>deleteQue(e)}>삭제</Button></>}
                 <Grid item xs={12}>
-                {UpdateKey||!ReadOnlyState?
                     <TextField
-                        variant="outlined"
-                        required
-                        fullWidth
-                        name={`SurQue_Content${number}`}
-                        id={`SurQue_Content${number}`}
-                        label={`주관식${number}`}
-                        autoComplete="userId"
-                        onChange={(e) => setUpdateData(e.target.value)}
-                        InputProps={{ readOnly: (ReadOnlyState && !UpdateKey) }}
-                        value={updateData}
+                    variant="outlined"
+                    required
+                    fullWidth
+                    name={`SurQue_Content${number}`}
+                    id={`SurQue_Content${number}`}
+                    label={`주관식${number}`}
+                    autoComplete="userId"
+                    disabled={ReadOnlyState}
+                    value={ReadOnlyState?ReadOnlyData.surQue_Content:null} // 객체 참조 안함
                     />
-                :
-                    <Typography component="h6" variant="h6" >{updateData}</Typography>
-                }
                 </Grid>
-
-                {(ReadOnlyState && !UpdateKey) &&
+                {ReadOnlyState&&
                     <Grid item xs={12}>
                         <TextField
                             name={`SurQueAnswer_${number}`}
                             id={`SurQueAnswer_${number}`}
                             variant="outlined"
-                            required={ReadOnlyData.surQue_Essential}
+                            required
                             fullWidth
-                            InputProps={{ readOnly: (realReadState) }}
                         />
                     </Grid>
                 }
