@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tag">
+    <select id="selectTagList" resultType="Tag">
+        select * from survey.tag;
+    </select>
+    <select id="selectExistTagList" resultType="Tag" parameterType="String">
+    <choose>
+        <when test='_id == ""'>
+            select * from survey.tag where Tag_ID in (select surveytag.Tag_ID as Tag_ID
+            from survey.survey left OUTER JOIN survey.surveytag
+            on survey.survey._id = survey.surveytag._id
+            where Sur_Publish = true
+            and (survey.Sur_State = 1 or survey.Sur_State = 2));
+        </when>
+        <otherwise>
+            select * from survey.tag where Tag_ID in (select Tag_ID from survey.surveytag where _id = #{_id});
+        </otherwise>
+    </choose>
+    </select>
+
+    <select id="selectSurveyTag" parameterType="PaginationInfo" resultType="SurveyTag">
+        select *
+        from survey.surveytag
+        where _id = #{_id}
+    </select>
+
+    <insert id="insertSurveyTag" parameterType="SurveyTag">
+        insert into survey.surveytag values(#{_id},#{Tag_ID});
+    </insert>
+
+    <update id="updateSurveyTag" parameterType="SurveyTag">
+        update survey.surveytag set survey.surveytag.Tag_ID = #{Tag_ID} where _id = #{_id};
+    </update>
+
+    <delete id="deleteSurveyTag" parameterType="SurveyTag">
+        delete from survey.surveytag where _id = #{_id};
+    </delete>
+</mapper>

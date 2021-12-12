@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0/EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <typeAliases>
+        <typeAlias type="com.mongoosereum.dou_survey_zone.api.v1.domain.user.User" alias="User_MySQL"/>
+        <typeAlias type="com.mongoosereum.dou_survey_zone.api.v1.domain.survey.Survey_MySQL" alias="Survey_MySQL"/>
+        <typeAlias type="com.mongoosereum.dou_survey_zone.api.v1.common.paging.PageCriteria" alias="PageCriteria"/>
+        <typeAlias type="com.mongoosereum.dou_survey_zone.api.v1.common.paging.PaginationInfo" alias="PaginationInfo"/>
+        <typeAlias type="com.mongoosereum.dou_survey_zone.api.v1.domain.tag.SurveyTag" alias="SurveyTag"/>
+        <typeAlias type="com.mongoosereum.dou_survey_zone.api.v1.domain.tag.Tag" alias="Tag"/>
+        <typeAlias type="com.mongoosereum.dou_survey_zone.api.v1.domain.participation.Participation" alias="Participation"/>
+        <typeAlias type="com.mongoosereum.dou_survey_zone.api.v1.domain.comment.Comment" alias="Comment"/>
+    </typeAliases>
+</configuration>
