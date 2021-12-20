@@ -53,7 +53,7 @@ export const Img = ({ setUrl, imageSRC, showBtn }) => {
         
         getImgURLAPI(formData)
           .then(res => setUrl(res.data))
-          .catch(err => ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null));
+          .catch(err => ErrorSweet('error', null, "실패", "이미지 업로드를 실패했습니다", null));
       }
     }, [selectedFile])
   

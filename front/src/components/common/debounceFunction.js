@@ -3,7 +3,6 @@ import Swal from 'sweetalert2';
 import { email as emailAPI, register as registerAPI } from '../../lib/api/auth';
 import { mainList as mainListAPI } from '../../lib/api/home';
 import { createSurvey as createSurveyAPI } from '../../lib/api/survey';
-import { chartData } from '../../modules/chartReducer';
 import ClipboardCopy from "./Function";
 import ErrorSweet from './modules/ErrorSweet';
 
@@ -18,8 +17,7 @@ export const debounceCheck = debounce((e, registerData, history,setEmailText) =>
     }
 }, 444);
 
-export const debounceText = debounce((pageNum, tagSearch, searchText, setReqMain, dispatch)=>{
-  dispatch(chartData());
+export const debounceText = debounce((pageNum, tagSearch, searchText, setReqMain)=>{
   mainListAPI(pageNum, tagSearch, searchText)
     .then(res => setReqMain(res.data))
     .catch(err => ErrorSweet('error', err.response.status, err.response.statusText, err.response.data.message, null));
