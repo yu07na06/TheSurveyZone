@@ -4,11 +4,6 @@
   "private": true,
   "dependencies": {
     "@babel/core": "^7.16.0",
-    "@date-io/date-fns-jalali": "^2.11.0",
-    "@devexpress/dx-core": "^2.7.6",
-    "@devexpress/dx-react-chart": "^2.7.6",
-    "@devexpress/dx-react-chart-material-ui": "^2.7.6",
-    "@devexpress/dx-react-core": "^2.7.6",
     "@emotion/react": "^11.5.0",
     "@emotion/styled": "^11.3.0",
     "@fullcalendar/core": "^5.10.1",
@@ -29,7 +24,6 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
-    "@types/lodash": "^4.14.177",
     "@typescript-eslint/eslint-plugin": "^4.5.0",
     "@typescript-eslint/parser": "^4.5.0",
     "axios": "^0.24.0",
@@ -37,7 +31,6 @@
     "babel-jest": "^26.6.0",
     "babel-loader": "^8.2.3",
     "babel-plugin-named-asset-import": "^0.3.7",
-    "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "babel-preset-react-app": "^10.0.0",
     "bfj": "^7.0.2",
     "camelcase": "^6.1.0",
@@ -67,7 +60,6 @@
     "jest-resolve": "26.6.0",
     "jest-watch-typeahead": "0.6.1",
     "lodash": "^4.17.21",
-    "material-ui-image": "^3.3.2",
     "mini-css-extract-plugin": "0.11.3",
     "optimize-css-assets-webpack-plugin": "5.0.4",
     "pnp-webpack-plugin": "1.6.4",
@@ -83,8 +75,6 @@
     "react-cookie": "^4.1.1",
     "react-dev-utils": "^11.0.3",
     "react-dom": "^17.0.2",
-    "react-google-charts": "^3.0.15",
-    "react-minimal-pie-chart": "^8.2.0",
     "react-redux": "^7.2.6",
     "react-refresh": "^0.8.3",
     "react-router-dom": "^5.3.0",
@@ -103,7 +93,6 @@
     "ts-pnp": "1.2.0",
     "typescript": "^4.5.2",
     "url-loader": "4.1.1",
-    "web-vitals": "^1.0.1",
     "webpack": "4.44.2",
     "webpack-dev-server": "3.11.1",
     "webpack-manifest-plugin": "2.2.0",
@@ -138,7 +127,7 @@
     "customize-cra": "^1.0.0",
     "react-app-rewired": "^2.1.8"
   },
-  "proxy": "http://10.0.3.135:8080"  ,
+  "proxy": "http://10.0.3.135:8080",
   "jest": {
     "roots": [
       "<rootDir>/src"

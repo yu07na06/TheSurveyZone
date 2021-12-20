@@ -31,7 +31,7 @@ const Main = ({ data, accAgeGenderData, accAgeTotalData, accGenderTotalData, req
                 <hr style={{ borderWidth: 1, borderColor: "#2E2E2E" }} />
             </Container>
             
-            {React.useMemo(()=>   
+            {React.useMemo(()=>
                 isMobile ?
                     <SurveyDialog
                         data={data}
@@ -126,11 +126,11 @@ const Main = ({ data, accAgeGenderData, accAgeTotalData, accGenderTotalData, req
                                     </Paper>
                                 </Grid>
                             </>
-
                         </Grid>
                     </Container>
-            ,[data.part_Total])}
+            ,[data.survey_Total])}
 
+            {React.useMemo(()=>  
             <>
             <Container sx={{ py: 3 }} maxWidth="lg">
 
@@ -252,6 +252,7 @@ const Main = ({ data, accAgeGenderData, accAgeTotalData, accGenderTotalData, req
                 </Grid>
             </Container>
 	</>
+    ,[reqMain])}
         </>
     );
 };
