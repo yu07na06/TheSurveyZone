@@ -22,6 +22,10 @@ const MainComp = ({ match }) => {
     const pageChange = page => setPageNum(page);
 
     useEffect(()=>{
+        dispatch(chartData());
+    },[])
+
+    useEffect(()=>{
         if(err !== null){
             ErrorSweet('error', null, "네트워크 오류", err, null);
         }
@@ -34,7 +38,6 @@ const MainComp = ({ match }) => {
     },[match.params, dispatch]);
 
     useEffect(()=>{
-        dispatch(chartData());
         if(pageNum===undefined || tagSearch===undefined || searchText===undefined) return;
         mainListAPI(pageNum, tagSearch, searchText)
             .then(res => setReqMain(res.data))
