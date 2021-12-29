@@ -22,26 +22,26 @@
   
 ## **🛠 Tech stack**
 <div align=center>
-<img src = "https://github.com/Domo9610/thesurveyzone_readme_sample/blob/main/ReadMe_Img/TheSurveyZone_Stack.jpg" width="60%" height="60%">
+<img src = "https://github.com/yu07na06/TheSurveyZone/blob/main/TheSurveyZone_Document/README_IMG/TheSurveyZone_Stack.jpg" width="60%" height="60%">
 </div>
 
 
 ## 😏 미리보기
 **1. 서비스 소개_WEB**
 <div align=center>
-<img src = "https://github.com/Domo9610/thesurveyzone_readme_sample/blob/main/ReadMe_Img/TheSurveyZone_web.gif" width="85%" height="80%">
+<img src = "https://github.com/yu07na06/TheSurveyZone/blob/main/TheSurveyZone_Document/README_IMG/TheSurveyZone_web.gif" width="85%" height="80%">
 </br></br>
 </div>
 
 **2. 서비스 소개_Mobile**
 <div align=center>
-<img src = "https://github.com/Domo9610/thesurveyzone_readme_sample/blob/main/ReadMe_Img/TheSurveyZone_mobile.gif" width="30%" height="40%">
+<img src = "https://github.com/yu07na06/TheSurveyZone/blob/main/TheSurveyZone_Document/README_IMG/TheSurveyZone_mobile.gif" width="30%" height="40%">
 </br></br>
 </div>
 
 **3. 결과 조회**
 <div align=center>
-<img src = "https://github.com/Domo9610/thesurveyzone_readme_sample/blob/main/ReadMe_Img/TheSurveyZone_result.gif" width="60%" height="70%">
+<img src = "https://github.com/yu07na06/TheSurveyZone/blob/main/TheSurveyZone_Document/README_IMG/TheSurveyZone_result.gif" width="60%" height="70%">
 </br></br>
 </div>
 
