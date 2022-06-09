@@ -46,9 +46,10 @@
 </div>
 
 **4. 인프라**</br>
+<div align = center>
 ![image](https://user-images.githubusercontent.com/69469529/172889680-4f0bebf6-5a41-4030-80f7-cb83dd707f1d.png)
-
-- Public Subnet, Private Subnet 분리를 통한 웹 서버로만 접속 가능하도록 구성
+</div>
+- Public Subnet, Private Subnet 분리를 통한 외부 접속은 웹서버만 허용
 - 가용성 보장을 위한 이중화 설정, Redis, MySQL, MongoDB 클러스터 구성을 통한 장애 대응
 - AWS VPC 가용영역 a,c 구분, 한 가용 영역의 장애 발생 시 다른 가용 영역의 사용으로 정상 동작 의도
 - ALB, Nginx LoadBalancing으로 부하 분산 고려
