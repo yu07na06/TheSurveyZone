@@ -45,7 +45,7 @@
 </br></br>
 </div>
 
-**4. 인프라**
+**4. 인프라**</br>
 ![image](https://user-images.githubusercontent.com/69469529/172889680-4f0bebf6-5a41-4030-80f7-cb83dd707f1d.png)
 
 - Public Subnet, Private Subnet 분리를 통한 웹 서버로만 접속 가능하도록 구성
