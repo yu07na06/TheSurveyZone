@@ -47,7 +47,8 @@
 
 **4. 인프라**</br>
 <div align = center>
-![image](https://user-images.githubusercontent.com/69469529/172889680-4f0bebf6-5a41-4030-80f7-cb83dd707f1d.png)
+<img src ="https://user-images.githubusercontent.com/69469529/172889680-4f0bebf6-5a41-4030-80f7-cb83dd707f1d.png">
+  </br>
 </div>
 - Public Subnet, Private Subnet 분리를 통한 외부 접속은 웹서버만 허용
 - 가용성 보장을 위한 이중화 설정, Redis, MySQL, MongoDB 클러스터 구성을 통한 장애 대응
