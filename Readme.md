@@ -45,6 +45,14 @@
 </br></br>
 </div>
 
+**4. 인프라**
+![image](https://user-images.githubusercontent.com/69469529/172889680-4f0bebf6-5a41-4030-80f7-cb83dd707f1d.png)
+
+- Public Subnet, Private Subnet 분리를 통한 웹 서버로만 접속 가능하도록 구성
+- 가용성 보장을 위한 이중화 설정, Redis, MySQL, MongoDB 클러스터 구성을 통한 장애 대응
+- AWS VPC 가용영역 a,c 구분, 한 가용 영역의 장애 발생 시 다른 가용 영역의 사용으로 정상 동작 의도
+- ALB, Nginx LoadBalancing으로 부하 분산 고려
+
 ## ✨ 기대효과
 #### - 설문 조사를 통한 피드백
 기업이나 개인 단체는 설문 조사를 통해 개선점과 만족도 조사 등 앞으로 나아갈 방향에 대해 조정이 가능합니다.
